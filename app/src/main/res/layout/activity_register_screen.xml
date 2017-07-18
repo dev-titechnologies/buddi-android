@@ -107,6 +107,8 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:id="@+id/first_name"
+                        android:singleLine="true"
+                        android:maxLength="25"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
@@ -125,7 +127,8 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:id="@+id/last_name"
-
+                        android:singleLine="true"
+                        android:maxLength="25"
 
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -146,6 +149,9 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:id="@+id/email"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true"
+                    android:maxLength="30"
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
@@ -174,10 +180,7 @@
                         app:ccp_textSize="16sp"
                         app:ccp_defaultPhoneCode="1"/>
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                     </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -194,6 +197,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
+                        android:inputType="phone"
                         android:id="@+id/mobile"/>
                 </LinearLayout>
             </LinearLayout>
@@ -237,6 +241,9 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="20"
+                    android:singleLine="true"
+                    android:inputType="textPassword"
                     android:id="@+id/password" />
             </LinearLayout>
 
