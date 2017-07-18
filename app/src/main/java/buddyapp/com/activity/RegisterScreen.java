@@ -173,6 +173,6 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Toast.makeText(this, "Google Connection Failed!", Toast.LENGTH_SHORT).show();
     }
 }
