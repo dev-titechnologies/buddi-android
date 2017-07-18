@@ -43,9 +43,10 @@
 
                 <TextView
                     android:id="@+id/googleplus"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Google"
+                    android:gravity="center"
                     android:textColor="#fff" />
             </LinearLayout>
 
@@ -70,9 +71,10 @@
 
                 <TextView
                     android:id="@+id/facebook"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="facebook"
+                    android:gravity="center"
                     android:textColor="#fff" />
             </LinearLayout>
         </LinearLayout>
@@ -104,6 +106,7 @@
 
                     <EditText
                         android:layout_width="match_parent"
+                        android:id="@+id/first_name"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
@@ -121,6 +124,9 @@
 
                     <EditText
                         android:layout_width="match_parent"
+                        android:id="@+id/last_name"
+
+
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>
@@ -139,6 +145,7 @@
 
                 <EditText
                     android:layout_width="match_parent"
+                    android:id="@+id/email"
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
@@ -166,6 +173,10 @@
                         app:ccp_countryPreference="US,IN"
                         app:ccp_textSize="16sp"
                         app:ccp_defaultPhoneCode="1"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -226,7 +237,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"/>
+                    android:id="@+id/password" />
             </LinearLayout>
 
 

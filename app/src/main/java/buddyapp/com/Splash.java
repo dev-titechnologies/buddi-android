@@ -9,6 +9,7 @@ import java.util.TimerTask;
 
 import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.MainActivity;
+import buddyapp.com.activity.RegisterScreen;
 
 public class Splash extends AppCompatActivity {
 
@@ -21,7 +22,7 @@ public class Splash extends AppCompatActivity {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                startActivity(new Intent(getApplicationContext(), RegisterScreen.class));
             }
         }, 3000);
 
