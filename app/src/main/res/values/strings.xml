@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Buddy App</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    /** facebook **/
+    <string name="facebook_app_id">1934978090076246</string>
+    <string name="fb_login_protocol_scheme">fb1934978090076246</string>
+
 </resources>
