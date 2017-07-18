@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BuddyApp.iml" filepath="$PROJECT_DIR$/BuddyApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/buddy-android.iml" filepath="$PROJECT_DIR$/buddy-android.iml" />
     </modules>
   </component>
 </project>
