@@ -26,5 +26,7 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
+    compile 'com.hbb20:ccp:2.0.1'
+    compile files('src/main/lib/libphonenumber-8.6.0.jar')
     compile 'com.google.android.gms:play-services-auth:11.0.2'
 }
