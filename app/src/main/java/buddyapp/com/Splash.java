@@ -7,6 +7,7 @@ import android.os.Bundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.MainActivity;
 
 public class Splash extends AppCompatActivity {
@@ -20,7 +21,7 @@ public class Splash extends AppCompatActivity {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
             }
         }, 3000);
 
