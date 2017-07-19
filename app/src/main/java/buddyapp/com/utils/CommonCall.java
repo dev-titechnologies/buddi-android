@@ -1,5 +1,7 @@
 package buddyapp.com.utils;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
@@ -266,11 +268,21 @@ public class CommonCall {
 
 
 
+    public static   ProgressDialog pd;
 
+public static void showLoader(Activity yourActivity){
 
+     pd = new ProgressDialog(yourActivity);
+    pd.setMessage("loading");
+    pd.show();
+}
 
+public static void hideLoader(){
+    if (pd!=null){
 
-
+        pd.dismiss();
+    }
+}
 
 
 

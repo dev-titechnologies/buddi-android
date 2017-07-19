@@ -1,6 +1,9 @@
 package buddyapp.com.activity;
 
 import android.content.Intent;
+
+import android.os.AsyncTask;
+
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -51,12 +54,15 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
     GoogleApiClient mGoogleApiClient;
     GoogleSignInOptions gso;
     int RC_SIGN_IN = 101;
+
     RadioGroup rg; RadioButton rbmale, rbfemale;
     EditText firstName,lastName,eMail,password,mobile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_screen);
+
         firstName =(EditText)findViewById(R.id.first_name);
         lastName =(EditText)findViewById(R.id.last_name);
         eMail =(EditText)findViewById(R.id.email);
@@ -65,6 +71,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         rg = (RadioGroup) findViewById(R.id.radioGroup);
         rbmale = (RadioButton) findViewById(R.id.male);
         rbfemale = (RadioButton) findViewById(R.id.female);
+
 
         ccp = (CountryCodePicker) findViewById(R.id.ccp);
         next = (TextView) findViewById(R.id.next);
@@ -106,7 +113,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         ccp.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
             @Override
             public void onCountrySelected() {
-                Toast.makeText(getApplicationContext(),ccp.getSelectedCountryCode()+ "Updated " + ccp.getSelectedCountryName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), ccp.getSelectedCountryCode() + "Updated " + ccp.getSelectedCountryName(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -125,27 +132,36 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
             @Override
             public void onClick(View view) {
                 try {
-                scountrycode = ccp.getSelectedCountryCode();
-                smobilenumber = String.valueOf(mobile.getText());
-                PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
-                Phonenumber.PhoneNumber swissNumberProto = phoneUtil.parse(smobilenumber, ccp.getSelectedCountryNameCode());
-                boolean isValid = phoneUtil.isValidNumber(swissNumberProto); // returns true
-                if(isValid)
-                  CommonCall.PrintLog("Phone number", swissNumberProto+"");
-                else
-                CommonCall.PrintLog("Invalid", "Invalid");
+                    scountrycode = ccp.getSelectedCountryCode();
+                    smobilenumber = String.valueOf(mobile.getText());
+                    PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+
+                    Phonenumber.PhoneNumber swissNumberProto = phoneUtil.parse(smobilenumber, ccp.getSelectedCountryNameCode());
+                    boolean isValid = phoneUtil.isValidNumber(swissNumberProto); // returns true
+                    if (isValid)
+                        CommonCall.PrintLog("Phone number", swissNumberProto + "");
+                    else
+                        CommonCall.PrintLog("Invalid", "Invalid");
                 } catch (NumberParseException e) {
                     System.err.println("NumberParseException was thrown: " + e.toString());
                 }
-                if(validateFeelds())
-                {
-//                    new checkuserexists().execute();
-                }
-                Intent mobReg = new Intent(getApplicationContext(),MobileVerificationActivity.class);
-                startActivity(mobReg);
-           }
+                validateFeelds();
+
+
+                Intent mobReg = new Intent(getApplicationContext(), MobileVerificationActivity.class);
+                startActivityForResult(mobReg, 156);//for otp verification handling
+
+            }
         });
     }
+
+
+
+
+
+
+
+
 
     private boolean validateFeelds() {
         View focusView = null;
@@ -297,19 +313,54 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 sgoogleplusId = acct.getId();
 
 
+
                 if (acct.getEmail()!=null)
                 eMail.setText(acct.getEmail());
+
                 Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 Toast.makeText(this, "Login Failed!", Toast.LENGTH_SHORT).show();
             }
-        }else
+        } else if (requestCode == 156) { // otp verification post process
 
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+
+        } else
+
+            callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(this, "Google Connection Failed!", Toast.LENGTH_SHORT).show();
     }
+
+    class register extends AsyncTask<String, String, String> {
+
+        JSONObject reqData = new JSONObject();
+
+
+
+        @Override
+        protected void onPreExecute() {
+            CommonCall.showLoader(RegisterScreen.this);
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            CommonCall.hideLoader();
+
+        }
+    }
+
 }

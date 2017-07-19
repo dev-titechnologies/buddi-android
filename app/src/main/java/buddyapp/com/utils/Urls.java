@@ -10,13 +10,21 @@ public class Urls {
 
     public static String LOGIN= "/login/login";
 
-    public static String REGISTER= "";
+    public static String REGISTER= "/register/Register";
+
+    public static String UPLOAD= "/upload/Upload";
 
 
     public static String SENDOTP= "";
 
 
     public static String VERIFYOTP= "";
+
+    public static String getUPLOADURL(){
+
+        return BASEURL+UPLOAD;
+    }
+
 
     public static String getLoginURL(){
 
