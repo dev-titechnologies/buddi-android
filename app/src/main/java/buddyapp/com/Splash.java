@@ -10,12 +10,9 @@ import java.util.TimerTask;
 
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
-import buddyapp.com.activity.HomeActivity;
-import buddyapp.com.activity.MainActivity;
-import buddyapp.com.activity.RegisterScreen;
-import buddyapp.com.utils.CommonCall;
 
-import static java.security.AccessController.getContext;
+import buddyapp.com.activity.IntroScreen;
+import buddyapp.com.activity.WelcomeActivity;
 
 public class Splash extends AppCompatActivity {
 
@@ -29,7 +26,8 @@ public class Splash extends AppCompatActivity {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                startActivity(new Intent(getApplicationContext(), RegisterScreen.class));
+                startActivity(new Intent(getApplicationContext(), IntroScreen.class));
+                finish();
             }
         }, 3000);
 

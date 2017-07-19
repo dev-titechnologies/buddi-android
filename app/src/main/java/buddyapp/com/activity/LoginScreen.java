@@ -35,6 +35,8 @@ import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.utils.CommonCall;
+import buddyapp.com.utils.NetworkCalls;
+import buddyapp.com.utils.Urls;
 
 public class LoginScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     TextView Google, facebook, login;
@@ -207,6 +209,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
 /******************* Login *******************/
     class login extends AsyncTask<String,String,String>{
         JSONObject reqData = new JSONObject();
+        String loginResponse="";
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -222,10 +225,11 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 reqData.put("facebook_id",sfacebookId);
                 reqData.put("google_id",sgoogleplusId);
                 reqData.put("user_type", PreferencesUtils.getData(Constants.user_type,getApplicationContext(),""));
+                loginResponse = NetworkCalls.POST(Urls.getLoginURL(),reqData.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return null;
+            return loginResponse;
         }
         @Override
         protected void onPostExecute(String s) {
