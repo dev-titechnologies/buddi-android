@@ -36,6 +36,8 @@ import org.json.JSONObject;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
+import buddyapp.com.utils.CommonCall;
+
 public class RegisterScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     TextView Google, facebook, next;
     String email, fname, lname, gender, countrycode, mobilenumber;
@@ -110,13 +112,19 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                     Phonenumber.PhoneNumber swissNumberProto = phoneUtil.parse(mobilenumber, ccp.getSelectedCountryNameCode());
                     boolean isValid = phoneUtil.isValidNumber(swissNumberProto); // returns true
                     if(isValid)
-                        Log.e("Phone number", swissNumberProto+"");
+                     CommonCall.PrintLog("Phone number", swissNumberProto+"");
                     else
-                        Log.e("Invalid ", "Invalid");
+                        CommonCall.PrintLog("Invalid", "Invalid");
                 } catch (NumberParseException e) {
                     System.err.println("NumberParseException was thrown: " + e.toString());
                 }
             validateFeelds();
+
+
+
+                Intent mobReg = new Intent(getApplicationContext(),MobileVerificationActivity.class);
+                startActivity(mobReg);
+
             }
         });
     }
