@@ -41,9 +41,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import buddyapp.com.R;
+
+import buddyapp.com.utils.CommonCall;
 public class RegisterScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     TextView Google, facebook, next;
-    String semail, sfname, slname, sgender="", scountrycode, smobilenumber, spassword;
+    String semail, sfname, slname, sgender="", scountrycode, smobilenumber, spassword, sfacebookId,sgoogleplusId;
     CountryCodePicker ccp;
     boolean isValid = false;
     LoginButton facebook_loginbutton;
@@ -129,8 +131,11 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 smobilenumber = String.valueOf(mobile.getText());
                 PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
                 Phonenumber.PhoneNumber swissNumberProto = phoneUtil.parse(smobilenumber, ccp.getSelectedCountryNameCode());
-                isValid = phoneUtil.isValidNumber(swissNumberProto); // returns true
-
+                boolean isValid = phoneUtil.isValidNumber(swissNumberProto); // returns true
+                if(isValid)
+                  CommonCall.PrintLog("Phone number", swissNumberProto+"");
+                else
+                CommonCall.PrintLog("Invalid", "Invalid");
                 } catch (NumberParseException e) {
                     System.err.println("NumberParseException was thrown: " + e.toString());
                 }
@@ -138,7 +143,9 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 {
 //                    new checkuserexists().execute();
                 }
-            }
+                Intent mobReg = new Intent(getApplicationContext(),MobileVerificationActivity.class);
+                startActivity(mobReg);
+           }
         });
     }
 
@@ -244,6 +251,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                                                 eMail.setText(semail);
                                             }
                                         }
+                                        sfacebookId = object.getString("id");
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -288,6 +296,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
 //                mEmail = acct.getEmail();
                 firstName.setText(acct.getDisplayName());
                 lastName.setText(acct.getDisplayName());
+                sgoogleplusId = acct.getId();
 
 
                 if (acct.getEmail()!=null)

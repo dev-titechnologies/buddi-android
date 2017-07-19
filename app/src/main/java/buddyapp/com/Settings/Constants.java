@@ -12,5 +12,8 @@ public class Constants {
     public static String lname= "last_name";
     public static String email = "email";
     public static String gender = "gender";
-
+    public static String token = "token";
+    public static String device_id = "device_id";
+    public static String server_error_message = "Server";
+    public static String message = "msg";
 }

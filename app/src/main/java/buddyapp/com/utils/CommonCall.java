@@ -1,0 +1,278 @@
+package buddyapp.com.utils;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Handler;
+import android.text.format.DateUtils;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.Toast;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
+
+import buddyapp.com.Settings.Constants;
+import buddyapp.com.Settings.PreferencesUtils;
+
+/**
+ * Created by Ajay on 15/6/16.
+ */
+public class CommonCall {
+    public static DisplayImageOptions getOptions(int loadingImage, int errorImageResourse) {
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(loadingImage) // resource or drawable
+                .showImageForEmptyUri(errorImageResourse) // resource or drawable
+                .showImageOnFail(errorImageResourse) // resource or drawable
+                .resetViewBeforeLoading(false)  // default
+                .cacheInMemory(true) // default
+                .cacheOnDisk(true) // default
+                .considerExifParams(true) // default
+
+                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2) // default
+                .bitmapConfig(Bitmap.Config.RGB_565) // default
+                .displayer(new SimpleBitmapDisplayer()) // default
+                .handler(new Handler()) // default
+
+                .build();
+        return options;
+
+    }
+
+
+    public static void LoadImage(final Context context, final String path,
+                                 final ImageView imgView, int loadingImage, int errorImageResourse) {
+        try {
+            DisplayImageOptions options = new DisplayImageOptions.Builder()
+                    .showImageOnLoading(loadingImage) // resource or drawable
+                    .showImageForEmptyUri(errorImageResourse) // resource or drawable
+                    .showImageOnFail(errorImageResourse) // resource or drawable
+                    .resetViewBeforeLoading(false)  // default
+                    .cacheInMemory(true) // default
+                    .cacheOnDisk(true) // default
+                    .considerExifParams(true) // default
+
+                    .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2) // default
+                    .bitmapConfig(Bitmap.Config.RGB_565) // default
+                    .displayer(new SimpleBitmapDisplayer()) // default
+                    .handler(new Handler()) // default
+
+                    .build();
+
+            ImageLoader.getInstance().displayImage(path, imgView, options);
+
+
+        } catch (OutOfMemoryError e) {
+            ImageLoader.getInstance().clearDiskCache();
+            ImageLoader.getInstance().clearMemoryCache();
+            System.gc();
+            Runtime.getRuntime().gc();
+
+            Toast.makeText(context, "MEMORY FULL", 2000).show();
+
+//            CommonCall.PrintLog("OUT OF MEMORY CAUGHT", "OUT OF MEMORY CAUGHT");
+
+
+//            reload image if out of memory occur
+            DisplayImageOptions options = new DisplayImageOptions.Builder()
+                    .showImageOnLoading(loadingImage) // resource or drawable
+                    .showImageForEmptyUri(errorImageResourse) // resource or drawable
+                    .showImageOnFail(errorImageResourse) // resource or drawable
+                    .resetViewBeforeLoading(false)  // default
+                    .cacheInMemory(true) // default
+                    .cacheOnDisk(true) // default
+                    .considerExifParams(true) // default
+
+                    .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2) // default
+                    .bitmapConfig(Bitmap.Config.RGB_565) // default
+                    .displayer(new SimpleBitmapDisplayer()) // default
+                    .handler(new Handler()) // default
+
+                    .build();
+
+            ImageLoader.getInstance().displayImage(path, imgView, options);
+
+
+        }
+
+        /*CommonMethods.getUniversalImageLoader().displayImage(path,imgView);*/
+    }
+
+
+    public static void clearCache() {
+        ImageLoader.getInstance().clearDiskCache();
+        ImageLoader.getInstance().clearMemoryCache();
+    }
+
+    public static void PrintLog(String s1,String s2){
+
+        Log.e(s1,s2);
+
+    }
+
+    public static String getToken(Context context) {
+        return PreferencesUtils.getData(Constants.token, context, "");
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public static int timeDifference(String date) {
+        Date formattedDate;
+        Date deviceDate;
+        long mills;
+        int time = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy HH:mm");
+        try {
+            formattedDate = sdf.parse(sdf.format((Iso8601.toCalendar(date).getTime())));
+            deviceDate = Calendar.getInstance().getTime();
+            mills = deviceDate.getTime() - formattedDate.getTime();
+            int Hours = (int) (mills / (1000 * 60 * 60));
+            int Mins = (int) (mills / (1000 * 60)) % 60;
+            if(Hours>=48)
+                Hours=Hours+Mins;
+            time = Hours;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return time;
+    }
+
+    public static long convertTime1(String date) {
+
+        long formattedDate = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy HH:mm");
+        try {
+//            formattedDate = sdf.format((Iso8601.toCalendar(date).getTime()));
+
+//            formattedDate = Long.parseLong(getTimeAgo(Iso8601.toCalendar(date).getTimeInMillis()));
+            formattedDate = Iso8601.toCalendar(date).getTimeInMillis();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formattedDate;
+    }
+
+    private static final int SECOND_MILLIS = 1000;
+    private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
+    private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
+    private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+
+    public static String getTimeAgo(long time) {
+        if (time < 1000000000000L) {
+            // if timestamp given in seconds, convert to millis
+            time *= 1000;
+        }
+
+        long now = System.currentTimeMillis();
+        if (time > now || time <= 0) {
+            return "just now.";
+//            return null;
+        }
+
+        // TODO: localize
+        final long diff = now - time;
+        if (diff < MINUTE_MILLIS) {
+            return "just now";
+        } else if (diff < 2 * MINUTE_MILLIS) {
+            return "a minute ago";
+        } else if (diff < 50 * MINUTE_MILLIS) {
+            return diff / MINUTE_MILLIS + " minutes ago";
+        } else if (diff < 90 * MINUTE_MILLIS) {
+            return "an hour ago";
+        } else if (diff < 24 * HOUR_MILLIS) {
+            return diff / HOUR_MILLIS + " hours ago";
+        } else if (diff < 48 * HOUR_MILLIS) {
+            return "yesterday";
+        } else {
+            return diff / DAY_MILLIS + " days ago";
+        }
+    }
+
+    public static String convertTime(String date) {
+        long now = System.currentTimeMillis();
+        String res="";
+        if (convertTime1(date) > now || convertTime1(date) <= 0) {
+            res= "just now.";
+//            return null;
+        }else {
+             res = DateUtils.getRelativeTimeSpanString(
+                    convertTime1(date),
+                    now,
+                    DateUtils.MINUTE_IN_MILLIS,
+                    DateUtils.FORMAT_ABBREV_RELATIVE) + "";
+            if (res.equals("0 min. ago"))
+                res = "just now";
+         else   if (res.equals("0 mins ago"))
+                res = "just now";
+        }
+                return res;
+    }
+
+
+
+
+
+
+
+
+    private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
+
+    static {
+        suffixes.put(1_000L, "k");
+        suffixes.put(1_000_000L, "M");
+        suffixes.put(1_000_000_000L, "G");
+        suffixes.put(1_000_000_000_000L, "T");
+        suffixes.put(1_000_000_000_000_000L, "P");
+        suffixes.put(1_000_000_000_000_000_000L, "E");
+    }
+
+    /*
+    *
+    * 1000 to 1K Converter
+    *
+    * */
+    public static String format(long value) {
+        //Long.MIN_VALUE == -Long.MIN_VALUE so we need an adjustment here
+        if (value == Long.MIN_VALUE) return format(Long.MIN_VALUE + 1);
+        if (value < 0) return "-" + format(-value);
+        if (value < 1000) return Long.toString(value); //deal with easy case
+
+        Map.Entry<Long, String> e = suffixes.floorEntry(value);
+        Long divideBy = e.getKey();
+        String suffix = e.getValue();
+
+        long truncated = value / (divideBy / 10); //the number part of the output times 10
+        boolean hasDecimal = truncated < 100 && (truncated / 10d) != (truncated / 10);
+        return hasDecimal ? (truncated / 10d) + suffix : (truncated / 10) + suffix;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
