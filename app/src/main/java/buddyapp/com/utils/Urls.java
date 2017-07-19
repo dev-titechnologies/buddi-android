@@ -20,6 +20,15 @@ public class Urls {
 
     public static String VERIFYOTP= "/register/verifyOTP";
 
+    public static String CATEGORYLIST= "/category/listCategory";
+
+
+    public static String getCATEGORYURL(){
+
+        return BASEURL+CATEGORYLIST;
+    }
+
+
     public static String getUPLOADURL(){
 
         return BASEURL+UPLOAD;

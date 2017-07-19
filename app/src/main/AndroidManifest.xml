@@ -56,7 +56,8 @@
         <activity android:name=".activity.LoginScreen" />
         <activity android:name=".activity.MobileVerificationActivity" />
         <activity android:name=".activity.IntroScreen" />
-        <activity android:name=".activity.WelcomeActivity"></activity>
+        <activity android:name=".activity.WelcomeActivity" />
+        <activity android:name=".activity.ChooseCategory"></activity>
     </application>
 
 </manifest>

@@ -1,8 +1,14 @@
 package buddyapp.com.database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -14,12 +20,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Buddy";
 
     // Contacts table name
-    private static final String TABLE_CONTACTS = "Trainee";
+    private static final String TABLE_CATEGORY = "Category";
 
     // Contacts Table Columns names
     private static final String KEY_ID = "id";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_PH_NO = "phone_number";
+
+    private static final String CAT_ID = "cat_id";
+    private static final String CAT_NAME = "cat_name";
+    private static final String CAT_IMAGE = "cat_image";
+    private static final String CAT_DESC = "cat_desc";
+    private static final String CAT_STATUS = "cat_status";
+
+
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -28,9 +40,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_CONTACTS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_PH_NO + " TEXT" + ")";
+        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_CATEGORY + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," + CAT_ID + " TEXT,"
+                + CAT_NAME + " TEXT,"
+                + CAT_IMAGE + " TEXT,"
+                + CAT_DESC + " TEXT,"
+                + CAT_STATUS + " TEXT" +
+                ")";
+
+
+
+
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -38,9 +58,76 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
 
         // Create tables again
         onCreate(db);
     }
+
+
+
+    void insertCategory(JSONArray category){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for (int i=0;i<category.length();i++) {
+            try {
+                JSONObject item = category.getJSONObject(i);
+
+
+
+            ContentValues values = new ContentValues();
+
+
+            values.put(CAT_ID, item.getString(""));
+            values.put(CAT_NAME, item.getString(""));
+                values.put(CAT_DESC, item.getString(""));
+            values.put(CAT_IMAGE, item.getString(""));
+            values.put(CAT_STATUS, item.getString(""));
+            // Inserting Row
+            db.insert(TABLE_CATEGORY, null, values);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        db.close(); // Closing database connection
+    }
+
+
+    public JSONArray getAllContacts() {
+     JSONArray categoryList = new JSONArray();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_CATEGORY;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                JSONObject contact = new JSONObject();
+
+                try {
+                    contact.put("",cursor.getString(1));
+
+                contact.put("",cursor.getString(2));
+                contact.put("",cursor.getString(3));
+
+
+                    categoryList.put(contact);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return contactList;
+    }
+
+
+
+
 }
