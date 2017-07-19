@@ -46,16 +46,20 @@ import java.util.regex.Pattern;
 
 import buddyapp.com.R;
 
+import buddyapp.com.Settings.Constants;
+import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.utils.CommonCall;
+
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
 public class RegisterScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     TextView Google, facebook, next;
-    String user_type,semail, sfname,  slname, sgender="", scountrycode, smobilenumber, spassword, sfacebookId,sgoogleplusId;
-    int register_type= 3;
+    String semail, sfname,  slname, sgender="", scountrycode, smobilenumber, spassword, sfacebookId="",sgoogleplusId="";
+    String register_type= "normal";
 
     String user_image;
+
     CountryCodePicker ccp;
     boolean isValid = false;
     LoginButton facebook_loginbutton;
@@ -64,8 +68,9 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
     GoogleSignInOptions gso;
     int RC_SIGN_IN = 101;
 
-    RadioGroup rg; RadioButton rbmale, rbfemale;
-    EditText firstName,lastName,eMail,password,mobile;
+    RadioGroup rg;
+    RadioButton rbmale, rbfemale;
+    EditText firstName, lastName, eMail, password, mobile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +78,11 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         setContentView(R.layout.activity_register_screen);
 
 
-        firstName =(EditText)findViewById(R.id.first_name);
-        lastName =(EditText)findViewById(R.id.last_name);
-        eMail =(EditText)findViewById(R.id.email);
-        password =(EditText)findViewById(R.id.password);
-        mobile =(EditText)findViewById(R.id.mobile);
+        firstName = (EditText) findViewById(R.id.first_name);
+        lastName = (EditText) findViewById(R.id.last_name);
+        eMail = (EditText) findViewById(R.id.email);
+        password = (EditText) findViewById(R.id.password);
+        mobile = (EditText) findViewById(R.id.mobile);
         rg = (RadioGroup) findViewById(R.id.radioGroup);
         rbmale = (RadioButton) findViewById(R.id.male);
         rbfemale = (RadioButton) findViewById(R.id.female);
@@ -130,11 +135,10 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                if(i==R.id.male){
-                sgender = "male";
-                }
-                else if(i==R.id.female){
-                sgender = "female";
+                if (i == R.id.male) {
+                    sgender = "male";
+                } else if (i == R.id.female) {
+                    sgender = "female";
                 }
             }
         });
@@ -159,17 +163,12 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 } catch (NumberParseException e) {
                     System.err.println("NumberParseException was thrown: " + e.toString());
                 }
-                if(validateFeelds()){
-                    new register().execute();
+                if(validateFeelds()) {
+
+                    Intent mobReg = new Intent(getApplicationContext(), MobileVerificationActivity.class);
+                    mobReg.putExtra("MOBILE", smobilenumber);
+                    startActivityForResult(mobReg, 156);//for otp verification handling
                 }
-
-/*
-
-                Intent mobReg = new Intent(getApplicationContext(), MobileVerificationActivity.class);
-                mobReg.putExtra("MOBILE",smobilenumber);
-                startActivityForResult(mobReg, 156);//for otp verification handling
-*/
-
             }
         });
     }
@@ -178,59 +177,56 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
 
     private boolean validateFeelds() {
         View focusView = null;
-        if(firstName.getText().length()== 0 ){
+        if (firstName.getText().length() == 0) {
             firstName.setError("Invalid Firstname");
             focusView = firstName;
             focusView.requestFocus();
             return false;
-        }else if(lastName.getText().length()== 0 ) {
+        } else if (lastName.getText().length() == 0) {
             lastName.setError("Invalid Lastname");
             focusView = lastName;
             focusView.requestFocus();
             return false;
-        }else if(eMail.getText().length()==0){
+        } else if (eMail.getText().length() == 0) {
             eMail.setError("Please enter your email");
             focusView = eMail;
             focusView.requestFocus();
             return false;
-        }else if(!isEmailValid(eMail.getText().toString())){
+        } else if (!isEmailValid(eMail.getText().toString())) {
             eMail.setError("Invalid email");
             focusView = eMail;
             focusView.requestFocus();
             return false;
-        }else if(mobile.getText().length()==0){
+        } else if (mobile.getText().length() == 0) {
             mobile.setError("Please enter your mobile number");
             focusView = mobile;
             focusView.requestFocus();
             return false;
-        }else if(!isValid){
+        } else if (!isValid) {
             mobile.setError("Please check your mobile number and country code");
             focusView = mobile;
             focusView.requestFocus();
             return false;
-        }else if(sgender.length()==0){
-            Toast.makeText(getApplicationContext(),"Please select gender",Toast.LENGTH_SHORT).show();
+        } else if (sgender.length() == 0) {
+            Toast.makeText(getApplicationContext(), "Please select gender", Toast.LENGTH_SHORT).show();
             focusView = rg;
             focusView.requestFocus();
             return false;
-        }else if(password.getText().length()==0)
-        {
+        } else if (password.getText().length() == 0) {
             password.setError("Please enter password");
             focusView = password;
             focusView.requestFocus();
             return false;
-        }else if(password.getText().length()<8)
-        {
+        } else if (password.getText().length() < 8) {
             password.setError("Password must be 8 characters or more");
             focusView = password;
             focusView.requestFocus();
             return false;
-        }
-        else{
-            sfname =firstName.getText().toString();
-            slname =lastName.getText().toString();
-            semail =eMail.getText().toString();
-            spassword =password.getText().toString();
+        } else {
+            sfname = firstName.getText().toString();
+            slname = lastName.getText().toString();
+            semail = eMail.getText().toString();
+            spassword = password.getText().toString();
             return true;
         }
     }
@@ -263,7 +259,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                                 public void onCompleted(JSONObject object, GraphResponse response) {
                                     try {
                                         CommonCall.PrintLog("facebookresponsse",object.toString());
-                                        register_type=1;
+                                        register_type="facebook";
                                         if(object.getString("first_name").length()!=0)
                                         {sfname = object.getString("first_name");
                                         firstName.setText(sfname);}
@@ -278,7 +274,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                                             rbfemale.setChecked(true);}
                                         if ((object.has("email"))) {
                                             if ((object.getString("email")).trim().length() > 0) {
-                                                semail= object.getString("email");
+                                                semail = object.getString("email");
                                                 eMail.setText(semail);
                                             }
                                         }
@@ -303,13 +299,13 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 @Override
                 public void onCancel() {
                     facebook.setEnabled(true);
-                    Toast.makeText(getApplicationContext(),"Login Failed", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Login Failed", Toast.LENGTH_SHORT);
                 }
 
                 @Override
                 public void onError(FacebookException exception) {
                     facebook.setEnabled(true);
-                    Toast.makeText(getApplicationContext(),"Login Failed", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Login Failed", Toast.LENGTH_SHORT);
                     exception.printStackTrace();
                 }
             });
@@ -327,7 +323,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
-                register_type=2;
+                register_type="google";
                 GoogleSignInAccount acct = result.getSignInAccount();
                 // Get account information
 //                mFullName = acct.getDisplayName();
@@ -336,7 +332,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 lastName.setText(acct.getDisplayName());
                 sgoogleplusId = acct.getId();
 
-                user_image = acct.getPhotoUrl().toString();
+               user_image = acct.getPhotoUrl().toString();
 
                 if (acct.getEmail()!=null)
                 eMail.setText(acct.getEmail());
@@ -346,8 +342,11 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 Toast.makeText(this, "Login Failed!", Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == 156) { // otp verification post process
+            if (resultCode == RESULT_OK) {
+                CommonCall.PrintLog("otp", "done");
+                new register().execute();
 
-
+            }
         } else
 
             callbackManager.onActivityResult(requestCode, resultCode, data);
@@ -358,11 +357,11 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         Toast.makeText(this, "Google Connection Failed!", Toast.LENGTH_SHORT).show();
     }
 
+/***** register user ****/
     class register extends AsyncTask<String, String, String> {
 
         JSONObject reqData = new JSONObject();
         String registerResponse;
-
 
         @Override
         protected void onPreExecute() {
@@ -382,8 +381,8 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 reqData.put("mobile",smobilenumber);
                 reqData.put("gender",sgender);
                 reqData.put("user_image", user_image);
-                reqData.put("user_type", user_type);
-
+                reqData.put("user_type", PreferencesUtils.getData(Constants.user_type,getApplicationContext(),""));
+                reqData.put("profile_desc","Description");
                 reqData.put("facebook_id",sfacebookId);
                 reqData.put("google_id",sgoogleplusId);
 
@@ -401,6 +400,21 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            try {
+                JSONObject obj= new JSONObject(s);
+                if(obj.getInt("status")==1){
+                PreferencesUtils.saveData(Constants.token,obj.getString(Constants.token),getApplicationContext());
+                }else if(obj.getInt("status")==2){
+                    Toast.makeText(RegisterScreen.this,obj.getString("message"), Toast.LENGTH_SHORT).show();
+                }else if(obj.getInt("status")==3){
+
+                }else{
+
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             CommonCall.hideLoader();
 
         }

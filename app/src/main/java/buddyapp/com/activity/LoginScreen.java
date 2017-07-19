@@ -32,10 +32,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import buddyapp.com.R;
+import buddyapp.com.Settings.Constants;
+import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.utils.CommonCall;
 
 public class LoginScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     TextView Google, facebook, login;
-    String semail, sfname, slname, sgender="", scountrycode, smobilenumber, spassword, sfacebookId, sgoogleplusId;
+    String semail, sfname, slname, sgender="", scountrycode, smobilenumber, spassword, sfacebookId="", sgoogleplusId="";
 
     boolean isValid = false;
     LoginButton facebook_loginbutton;
@@ -43,7 +46,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
     GoogleApiClient mGoogleApiClient;
     GoogleSignInOptions gso;
     int RC_SIGN_IN = 101;
-
+    String login_type="normal";
     EditText eMail,password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +101,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 else{
                     semail = eMail.getText().toString();
                     spassword = password.getText().toString();
-//                    new checkuserexists().execute()
+                    new login().execute();
                 }
 
             }catch (Exception e){
@@ -135,6 +138,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                                             }
                                         }
                                         sfacebookId = object.getString("id");
+                                        new login().execute();
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -199,22 +203,47 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
         Toast.makeText(this, "Google Connection Failed!", Toast.LENGTH_SHORT).show();
     }
 
+/******************* Login *******************/
     class login extends AsyncTask<String,String,String>{
-
-
+        JSONObject reqData = new JSONObject();
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-        }
+            CommonCall.showLoader(LoginScreen.this);
 
+        }
         @Override
         protected String doInBackground(String... strings) {
+            try {
+                reqData.put("login_type",login_type);
+                reqData.put("email",semail);
+                reqData.put("password",spassword);
+                reqData.put("facebook_id",sfacebookId);
+                reqData.put("google_id",sgoogleplusId);
+                reqData.put("user_type", PreferencesUtils.getData(Constants.user_type,getApplicationContext(),""));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return null;
         }
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-        }
+            try {
+            JSONObject obj= new JSONObject(s);
+            if(obj.getInt("status")==1){
+                PreferencesUtils.saveData(Constants.token,obj.getString(Constants.token),getApplicationContext());
+            }else if(obj.getInt("status")==2){
+                Toast.makeText(LoginScreen.this,obj.getString("message"), Toast.LENGTH_SHORT).show();
+            }else if(obj.getInt("status")==3){
 
+            }else{
+
+            }
+
+            } catch (JSONException e) {
+              e.printStackTrace();}
+            CommonCall.hideLoader();
+        }
     }
 }
