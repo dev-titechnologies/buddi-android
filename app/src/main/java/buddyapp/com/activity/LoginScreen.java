@@ -189,6 +189,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
 
                 if (acct.getEmail()!=null)
                     eMail.setText(acct.getEmail());
+                new login().execute();
                 Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(this, "Login Failed!", Toast.LENGTH_SHORT).show();
