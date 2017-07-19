@@ -15,7 +15,7 @@ public class Urls {
     public static String UPLOAD= "/upload/Upload";
 
 
-    public static String SENDOTP= "";
+    public static String SENDOTP= "/register/sendOTP";
 
 
     public static String VERIFYOTP= "";

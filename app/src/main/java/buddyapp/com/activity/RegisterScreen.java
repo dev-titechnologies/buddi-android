@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +64,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_screen);
+
 
         firstName =(EditText)findViewById(R.id.first_name);
         lastName =(EditText)findViewById(R.id.last_name);
@@ -150,6 +152,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
 
 
                 Intent mobReg = new Intent(getApplicationContext(), MobileVerificationActivity.class);
+                mobReg.putExtra("MOBILE",smobilenumber);
                 startActivityForResult(mobReg, 156);//for otp verification handling
 
             }
