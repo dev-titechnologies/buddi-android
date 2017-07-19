@@ -106,34 +106,4 @@ public class SmsVerifyCatcher {
             return true;
         }
     }
-
-
-    class register extends AsyncTask<String, String, String> {
-
-        JSONObject reqData = new JSONObject();
-
-
-
-        @Override
-        protected void onPreExecute() {
-            CommonCall.showLoader(RegisterScreen.this);
-
-
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-
-            return null;
-        }
-
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            CommonCall.hideLoader();
-
-        }
-    }
 }

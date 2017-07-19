@@ -2,6 +2,7 @@ package buddyapp.com.activity;
 
 import android.content.Intent;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import android.support.annotation.IdRes;
@@ -38,15 +39,22 @@ import com.hbb20.CountryCodePicker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import buddyapp.com.R;
 
 import buddyapp.com.utils.CommonCall;
+import buddyapp.com.utils.NetworkCalls;
+import buddyapp.com.utils.Urls;
+
 public class RegisterScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     TextView Google, facebook, next;
-    String semail, sfname, slname, sgender="", scountrycode, smobilenumber, spassword, sfacebookId,sgoogleplusId;
+    String user_type,semail, sfname,  slname, sgender="", scountrycode, smobilenumber, spassword, sfacebookId,sgoogleplusId;
+    int register_type= 3;
+
+    String user_image;
     CountryCodePicker ccp;
     boolean isValid = false;
     LoginButton facebook_loginbutton;
@@ -132,36 +140,35 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
             @Override
             public void onClick(View view) {
                 try {
+
                     scountrycode = ccp.getSelectedCountryCode();
                     smobilenumber = String.valueOf(mobile.getText());
                     PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
 
                     Phonenumber.PhoneNumber swissNumberProto = phoneUtil.parse(smobilenumber, ccp.getSelectedCountryNameCode());
                     boolean isValid = phoneUtil.isValidNumber(swissNumberProto); // returns true
-                    if (isValid)
+                    if (isValid) {
                         CommonCall.PrintLog("Phone number", swissNumberProto + "");
-                    else
+                        smobilenumber = "+"+scountrycode+"-"+smobilenumber;
+                    }
+                        else
                         CommonCall.PrintLog("Invalid", "Invalid");
                 } catch (NumberParseException e) {
                     System.err.println("NumberParseException was thrown: " + e.toString());
                 }
                 validateFeelds();
 
+/*
 
                 Intent mobReg = new Intent(getApplicationContext(), MobileVerificationActivity.class);
                 startActivityForResult(mobReg, 156);//for otp verification handling
-
+*/
+                new register().execute();
             }
         });
     }
 
-
-
-
-
-
-
-
+/********************** Field validation *******************/
 
     private boolean validateFeelds() {
         View focusView = null;
@@ -233,7 +240,9 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         return matcher.matches();
 
     }
-     /** facebook login**/
+
+     /*********************** facebook login *********************/
+
     private void fblogin() {
         try {
             callbackManager = CallbackManager.Factory.create();
@@ -247,6 +256,8 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                                 @Override
                                 public void onCompleted(JSONObject object, GraphResponse response) {
                                     try {
+                                        CommonCall.PrintLog("facebookresponsse",object.toString());
+                                        register_type=1;
                                         if(object.getString("first_name").length()!=0)
                                         {sfname = object.getString("first_name");
                                         firstName.setText(sfname);}
@@ -266,6 +277,12 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                                             }
                                         }
                                         sfacebookId = object.getString("id");
+                                        try {
+                                            URL image_url = new URL("https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
+                                            user_image = image_url.toString();
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -304,6 +321,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
+                register_type=2;
                 GoogleSignInAccount acct = result.getSignInAccount();
                 // Get account information
 //                mFullName = acct.getDisplayName();
@@ -312,7 +330,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 lastName.setText(acct.getDisplayName());
                 sgoogleplusId = acct.getId();
 
-
+                user_image = acct.getPhotoUrl().toString();
 
                 if (acct.getEmail()!=null)
                 eMail.setText(acct.getEmail());
@@ -337,7 +355,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
     class register extends AsyncTask<String, String, String> {
 
         JSONObject reqData = new JSONObject();
-
+        String registerResponse;
 
 
         @Override
@@ -349,8 +367,27 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
 
         @Override
         protected String doInBackground(String... strings) {
+            try {
+                reqData.put("register_type", register_type);
+                reqData.put("email",semail);
+                reqData.put("password",spassword);
+                reqData.put("first_name",sfname);
+                reqData.put("last_name",slname);
+                reqData.put("mobile",smobilenumber);
+                reqData.put("gender",sgender);
+                reqData.put("user_image", user_image);
+                reqData.put("user_type", user_type);
 
+                reqData.put("facebook_id",sfacebookId);
+                reqData.put("google_id",sgoogleplusId);
 
+                registerResponse = NetworkCalls.POST(Urls.getRegisterURL(),reqData.toString());
+                CommonCall.PrintLog("register Response", registerResponse);
+
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
             return null;
         }
 
