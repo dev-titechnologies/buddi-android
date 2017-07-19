@@ -18,7 +18,7 @@ public class Urls {
     public static String SENDOTP= "/register/sendOTP";
 
 
-    public static String VERIFYOTP= "";
+    public static String VERIFYOTP= "/register/verifyOTP";
 
     public static String getUPLOADURL(){
 
