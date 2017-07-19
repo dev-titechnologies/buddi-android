@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +71,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_screen);
+
 
         firstName =(EditText)findViewById(R.id.first_name);
         lastName =(EditText)findViewById(R.id.last_name);
@@ -146,7 +148,8 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                     PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
 
                     Phonenumber.PhoneNumber swissNumberProto = phoneUtil.parse(smobilenumber, ccp.getSelectedCountryNameCode());
-                    boolean isValid = phoneUtil.isValidNumber(swissNumberProto); // returns true
+                    CommonCall.PrintLog("Phone number++", swissNumberProto + "");
+                    isValid = phoneUtil.isValidNumber(swissNumberProto); // returns true
                     if (isValid) {
                         CommonCall.PrintLog("Phone number", swissNumberProto + "");
                         smobilenumber = "+"+scountrycode+"-"+smobilenumber;
@@ -156,14 +159,17 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 } catch (NumberParseException e) {
                     System.err.println("NumberParseException was thrown: " + e.toString());
                 }
-                validateFeelds();
+                if(validateFeelds()){
+                    new register().execute();
+                }
 
 /*
 
                 Intent mobReg = new Intent(getApplicationContext(), MobileVerificationActivity.class);
+                mobReg.putExtra("MOBILE",smobilenumber);
                 startActivityForResult(mobReg, 156);//for otp verification handling
 */
-                new register().execute();
+
             }
         });
     }
@@ -382,13 +388,13 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 reqData.put("google_id",sgoogleplusId);
 
                 registerResponse = NetworkCalls.POST(Urls.getRegisterURL(),reqData.toString());
-                CommonCall.PrintLog("register Response", registerResponse);
+
 
             }
             catch (JSONException e) {
                 e.printStackTrace();
             }
-            return null;
+            return registerResponse;
         }
 
 

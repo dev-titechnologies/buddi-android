@@ -259,14 +259,14 @@ public class NetworkCalls {
             OkHttpClient client;
 
             client = new OkHttpClient.Builder()
-                    .connectTimeout(5, TimeUnit.MINUTES)
-                    .readTimeout(5, TimeUnit.MINUTES)
+                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
 
                     .build();
 
 
-            client.newBuilder().readTimeout(5, TimeUnit.MINUTES).
-                    connectTimeout(5, TimeUnit.MINUTES).build();
+            client.newBuilder().readTimeout(30, TimeUnit.SECONDS).
+                    connectTimeout(30, TimeUnit.SECONDS).build();
 
             RequestBody body = RequestBody.create(JSON, params);
 
