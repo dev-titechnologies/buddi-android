@@ -20,13 +20,14 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        getSupportActionBar().hide();
         String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         PreferencesUtils.saveData(Constants.device_id,android_id,getApplicationContext());
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                startActivity(new Intent(getApplicationContext(), IntroScreen.class));
+                startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
                 finish();
             }
         }, 3000);

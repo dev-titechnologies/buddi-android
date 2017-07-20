@@ -28,6 +28,7 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        getSupportActionBar().hide();
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         // layouts of all welcome sliders
@@ -79,14 +80,16 @@ public class WelcomeActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), LoginScreen.class);
+                Intent i = new Intent(getApplicationContext(), IntroScreen.class);
+                i.putExtra("login_type","login");
                 startActivity(i);
             }
         });
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), RegisterScreen.class);
+                Intent i = new Intent(getApplicationContext(), IntroScreen.class);
+                i.putExtra("login_type","register");
                 startActivity(i);
             }
         });

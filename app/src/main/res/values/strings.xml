@@ -15,4 +15,7 @@
         we will send you the password reset instructions.
     </string>
 
+    <string name="mobile_verification">We are unable to auto verify your mobile number.\n
+    please enter the code</string>
+
 </resources>

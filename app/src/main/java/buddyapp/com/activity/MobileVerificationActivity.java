@@ -36,6 +36,7 @@ public class MobileVerificationActivity extends AppCompatActivity {
 
     EditText otp;
     TextView timmer;
+    Button resend, changenumber;
     String mobile;
     LinearLayout root;
 
@@ -51,7 +52,7 @@ Button retry;
         timmer = (TextView) findViewById(R.id.timmer);
         otp = (EditText) findViewById(R.id.otp);
         retry = (Button) findViewById(R.id.retry);
-
+        changenumber = (Button) findViewById(R.id.chanegnumber);
         mobile = getIntent().getStringExtra("MOBILE");
         new sendOtp().execute();
 
@@ -87,9 +88,14 @@ if (otp.getText().toString().trim().length()>3){
                 //then you can send verification code to server
             }
         });
+        changenumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
-
 
     void startCountDown(){
 

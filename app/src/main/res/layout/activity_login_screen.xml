@@ -29,7 +29,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
-                    android:background="@color/googleplus"
+                    android:background="@drawable/round_corner_googleplus"
                     android:gravity="center"
                     android:layout_weight="1"
                     android:orientation="horizontal">
@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
-                    android:background="@color/facebook"
+                    android:background="@drawable/round_corner_facebook"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -118,7 +118,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:layout_marginTop="20dp"
-                android:background="@color/colorAccent">
+                android:background="@drawable/round_corner_next">
 
                 <TextView
                     android:id="@+id/next"

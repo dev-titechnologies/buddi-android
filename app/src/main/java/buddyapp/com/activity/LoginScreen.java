@@ -55,7 +55,6 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
-//        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         eMail =(EditText)findViewById(R.id.email);
         password =(EditText)findViewById(R.id.password);
         login = (TextView) findViewById(R.id.next);
@@ -247,7 +246,8 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
             try {
             JSONObject obj= new JSONObject(s);
             if(obj.getInt("status")==1){
-                PreferencesUtils.saveData(Constants.token,obj.getString(Constants.token),getApplicationContext());
+                JSONObject jsonObject = obj.getJSONObject("data");
+                PreferencesUtils.saveData(Constants.token,jsonObject.getString(Constants.token),getApplicationContext());
                 Intent intent= new Intent(getApplicationContext(),HomeActivity.class);
                 startActivity(intent);
                 finish();
