@@ -50,7 +50,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:background="@color/white"
+        android:background="@drawable/button_bg"
         android:id="@+id/login"
         android:text="LOGIN"
         android:layout_height="wrap_content" />
@@ -58,7 +58,7 @@
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:id="@+id/register"
-        android:background="@color/white"
+        android:background="@drawable/button_bg"
         android:textColorHighlight="#f11a1a"
         android:text="REGISTER"
         android:layout_height="wrap_content" />

@@ -51,12 +51,28 @@
         <activity
             android:name=".activity.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.RegisterScreen" />
-        <activity android:name=".activity.LoginScreen" />
-        <activity android:name=".activity.MobileVerificationActivity" />
-        <activity android:name=".activity.WelcomeActivity" />
-        <activity android:name=".activity.IntroScreen"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.RegisterScreen"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.LoginScreen"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MobileVerificationActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.WelcomeActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.IntroScreen"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ForgotPassword"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
     </application>
 
 </manifest>
