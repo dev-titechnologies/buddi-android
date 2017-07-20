@@ -248,6 +248,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
             if(obj.getInt("status")==1){
                 JSONObject jsonObject = obj.getJSONObject("data");
                 PreferencesUtils.saveData(Constants.token,jsonObject.getString(Constants.token),getApplicationContext());
+                PreferencesUtils.saveData("login_data",obj.getJSONObject("data").toString(),getApplicationContext());
                 Intent intent= new Intent(getApplicationContext(),HomeActivity.class);
                 startActivity(intent);
                 finish();

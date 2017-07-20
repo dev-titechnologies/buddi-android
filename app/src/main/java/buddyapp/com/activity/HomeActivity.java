@@ -3,6 +3,7 @@ package buddyapp.com.activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,12 +13,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import buddyapp.com.R;
+import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.utils.CommonCall;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    ImageView userImageView;
+    TextView name;
+    JSONObject data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,23 +36,39 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+
+
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
+// ********************* navigation view *****************8
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View hView =  navigationView.getHeaderView(0);
+
+        userImageView = (ImageView) hView.findViewById(R.id.userImageView);
+        name = (TextView) hView.findViewById(R.id.name);
+
+        try {
+            data = new JSONObject(PreferencesUtils.getData("login_data",getApplicationContext(),""));
+            Log.e("data", String.valueOf(data));
+            name.setText(data.getString("name"));
+            CommonCall.LoadImage(getApplicationContext(),data.getString("userpic"), userImageView,R.drawable.ic_no_image,R.drawable.ic_broken_image);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
