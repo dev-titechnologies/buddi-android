@@ -14,13 +14,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = "Buddy";
 
     // Contacts table name
     private static final String TABLE_CATEGORY = "Category";
+
+    private static final String Category_Sub = "Category_Sub";
 
     // Contacts Table Columns names
     private static final String KEY_ID = "id";
@@ -32,6 +34,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String CAT_STATUS = "cat_status";
 
 
+    private static final String SUB_CAT_ID = "sub_cat_id";
+    private static final String SUBCAT_NAME = "sub_cat_name";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -48,9 +52,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + CAT_STATUS + " TEXT" +
                 ")";
 
+        String CREATE_SUB_CAT_TABLE = "CREATE TABLE " + Category_Sub + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," + CAT_ID + " TEXT,"
+                + SUB_CAT_ID + " TEXT,"
+                + SUBCAT_NAME + " TEXT" +
+                ")";
 
-
-
+        db.execSQL(CREATE_SUB_CAT_TABLE);
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -58,10 +66,44 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
-//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORY);
+        db.execSQL("DROP TABLE IF EXISTS " + Category_Sub);
 
         // Create tables again
         onCreate(db);
+    }
+
+
+
+    public void insertSubCategory(String cat_id,JSONArray category){
+
+        deleteSubContact();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for (int i=0;i<category.length();i++) {
+            try {
+                JSONObject item = category.getJSONObject(i);
+
+
+
+                ContentValues values = new ContentValues();
+
+
+                values.put(CAT_ID, cat_id);
+                values.put(SUB_CAT_ID, item.getString("category_id"));
+                values.put(SUBCAT_NAME, item.getString("category_name"));
+
+
+                // Inserting Row
+                db.insert(Category_Sub, null, values);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        db.close(); // Closing database connection
     }
 
 
@@ -96,6 +138,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.close(); // Closing database connection
     }
+
+    public void deleteSubContact() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(Category_Sub, null,
+                null);
+        db.close();
+    }
+
 
     public void deleteContact() {
         SQLiteDatabase db = this.getWritableDatabase();
