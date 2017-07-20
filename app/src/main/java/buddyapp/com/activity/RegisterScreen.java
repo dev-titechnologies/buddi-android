@@ -402,10 +402,11 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 JSONObject obj= new JSONObject(s);
                 if(obj.getInt("status")==1){
                 PreferencesUtils.saveData(Constants.token,obj.getString(Constants.token),getApplicationContext());
-                   if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equalsIgnoreCase("trainer")){
-//                       Intent intent = new Intent(getApplicationContext(), *********);
-//                       startActivity(intent);
-//                       finish();
+                   if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
+
+                       Intent intent = new Intent(getApplicationContext(),ChooseCategory.class);
+                       startActivity(intent);
+                       finish();
 
                    }else {
                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);

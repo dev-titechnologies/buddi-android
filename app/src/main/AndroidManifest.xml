@@ -53,6 +53,11 @@
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ChooseCategory"
+            android:screenOrientation="portrait"
+            ></activity>
+
+
         <activity android:name=".activity.RegisterScreen"
             android:configChanges="orientation|keyboardHidden"
             android:windowSoftInputMode="adjustResize|stateHidden"
@@ -73,6 +78,7 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
+>>>>>>> a39475c8c8ca8a537ff34094a5e9693bd9438cb3
     </application>
 
 </manifest>

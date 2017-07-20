@@ -33,6 +33,9 @@
     <color name="googleplus">#d34836</color>
     <color name="facebook">#3b5998</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="OFFblack">#373737</color>
+
     <color name="button_bgcolor">#363F45</color>
     <color name="button_text">#a6a8ac</color>
     <color name="login_bgcolor">#47CBFB</color>
