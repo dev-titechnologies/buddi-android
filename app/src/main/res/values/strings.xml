@@ -11,4 +11,8 @@
     <string name="facebook_app_id">1934978090076246</string>
     <string name="fb_login_protocol_scheme">fb1934978090076246</string>
 
+    <string name="forgotpassword_desc">Do not worry just enter your email id below \n
+        we will send you the password reset instructions.
+    </string>
+
 </resources>

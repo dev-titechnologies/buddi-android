@@ -1,5 +1,7 @@
 package buddyapp.com.utils;
 
+import java.security.PublicKey;
+
 /**
  * Created by root on 19/7/17.
  */
@@ -20,6 +22,7 @@ public class Urls {
 
     public static String VERIFYOTP= "/register/verifyOTP";
 
+
     public static String CATEGORYLIST= "/category/listCategory";
 
 
@@ -27,6 +30,9 @@ public class Urls {
 
         return BASEURL+CATEGORYLIST;
     }
+
+
+    public static String FORGOTPASSWORD= "/login/forgotPassword";
 
 
     public static String getUPLOADURL(){
@@ -53,6 +59,10 @@ public class Urls {
     public static String getVerifyOTPURL(){
 
         return BASEURL+VERIFYOTP;
+    }
+
+    public static String getResetURL(){
+        return BASEURL+FORGOTPASSWORD;
     }
 
 }

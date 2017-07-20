@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -39,7 +40,7 @@ import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
 public class LoginScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    TextView Google, facebook, login;
+    TextView Google, facebook, login, forgotpassword;
     String semail, sfname, slname, sgender="", scountrycode, smobilenumber, spassword, sfacebookId="", sgoogleplusId="";
 
     boolean isValid = false;
@@ -54,10 +55,11 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
-
+//        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         eMail =(EditText)findViewById(R.id.email);
         password =(EditText)findViewById(R.id.password);
         login = (TextView) findViewById(R.id.next);
+        forgotpassword = (TextView) findViewById(R.id.forgotpassword);
         Google = (TextView) findViewById(R.id.googleplus);
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -112,6 +114,13 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
             }
         });
 
+        forgotpassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent =new Intent(getApplicationContext(), ForgotPassword.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /** facebook login**/
@@ -128,6 +137,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                                 @Override
                                 public void onCompleted(JSONObject object, GraphResponse response) {
                                     try {
+                                        login_type = "facebook";
                                         if(object.getString("first_name").length()!=0)
                                         {sfname = object.getString("first_name");}
                                         if(object.getString("last_name").length()!=0)
@@ -188,7 +198,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 sfname = split[0];
                 slname = split[1];
                 sgoogleplusId = acct.getId();
-
+                login_type = "google";
                 if (acct.getEmail()!=null)
                     eMail.setText(acct.getEmail());
                 new login().execute();
@@ -238,10 +248,15 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
             JSONObject obj= new JSONObject(s);
             if(obj.getInt("status")==1){
                 PreferencesUtils.saveData(Constants.token,obj.getString(Constants.token),getApplicationContext());
+                Intent intent= new Intent(getApplicationContext(),HomeActivity.class);
+                startActivity(intent);
+                finish();
             }else if(obj.getInt("status")==2){
                 Toast.makeText(LoginScreen.this,obj.getString("message"), Toast.LENGTH_SHORT).show();
             }else if(obj.getInt("status")==3){
-
+                Intent intent= new Intent(getApplicationContext(),RegisterScreen.class);
+                startActivity(intent);
+                finish();
             }else{
 
             }

@@ -4,7 +4,9 @@ import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import org.json.JSONArray;
@@ -27,7 +29,7 @@ public class ChooseCategory extends AppCompatActivity {
 GridView grid;
     CategoryAdapter categoryAdapter;
 
-
+ImageView errorImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +38,7 @@ GridView grid;
         root = (RelativeLayout) findViewById(R.id.root);
         grid = (GridView) findViewById(R.id.grid);
 
-
+        errorImage = (ImageView) findViewById(R.id.errorImage);
         new getCategoryList().execute();
     }
 
@@ -75,7 +77,7 @@ void loadData(JSONArray data){
                 final JSONObject response = new JSONObject(s);
 
                 if (response.getInt(Constants.status) == 1) {
-
+                    errorImage.setVisibility(View.GONE);
                     db.insertCategory(response.getJSONArray("data"));
                     CommonCall.PrintLog("cat", db.getAllCAT().toString());
 
@@ -84,12 +86,25 @@ void loadData(JSONArray data){
                     loadData(db.getAllCAT());
 
                 } else if (response.getInt(Constants.status) == 2) {
-                    Snackbar snackbar1 = null;
+                    errorImage.setVisibility(View.VISIBLE);
+                    Snackbar snackbar = Snackbar
+                            .make(root, response.getString(Constants.message), Snackbar.LENGTH_INDEFINITE)
+                            .setAction("RETRY", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
 
-                    snackbar1 = Snackbar.make(root, response.getString(Constants.message), Snackbar.LENGTH_SHORT);
 
-                    snackbar1.show();
+                                    Snackbar snackbar1 = null;
 
+                                    snackbar1 = Snackbar.make(root, "Loading", Snackbar.LENGTH_SHORT);
+
+                                    snackbar1.show();
+                                    new getCategoryList().execute();
+
+                                }
+                            });
+
+                    snackbar.show();
                 } else if (response.getInt(Constants.status) == 3) {
 
 
