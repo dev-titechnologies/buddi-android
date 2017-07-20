@@ -14,6 +14,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import buddyapp.com.R;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
@@ -26,6 +29,8 @@ public class CategoryAdapter extends BaseAdapter {
 
     JSONArray cat;
     Context context;
+ArrayList<String> selectedID = new ArrayList<>();
+
 
     public CategoryAdapter(Context context, JSONArray category) {
         this.context = context;
@@ -78,17 +83,32 @@ public class CategoryAdapter extends BaseAdapter {
 
 
             );
+            holder.cat_card.setTag(catItem.getString("category_id"));
+
 
             holder.cat_card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+if (selectedID.contains(view.getTag().toString())){
 
+    selectedID.remove(view.getTag().toString());
+}else
+                    selectedID.add(view.getTag().toString());
 
-                    ((CardView) view).setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
-
+                    CommonCall.PrintLog("data cat ",selectedID.toString());
+                   notifyDataSetChanged();
                 }
             });
 
+            if (selectedID.contains(catItem.getString("category_id"))){
+                ( holder.cat_card ) .setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+
+                holder.catName.setTextColor(context.getResources().getColor(R.color.white));
+
+            }else{
+                ( holder.cat_card ) .setCardBackgroundColor(context.getResources().getColor(R.color.white));
+                holder.catName.setTextColor(context.getResources().getColor(R.color.black));
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -34,6 +34,8 @@ ImageView errorImage;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_category);
+
+        getSupportActionBar().setTitle("Choose a Category");
         db = new DatabaseHandler(getApplicationContext());
         root = (RelativeLayout) findViewById(R.id.root);
         grid = (GridView) findViewById(R.id.grid);
