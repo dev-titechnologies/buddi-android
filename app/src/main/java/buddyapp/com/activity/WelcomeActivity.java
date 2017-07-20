@@ -1,14 +1,17 @@
 package buddyapp.com.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,6 +23,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private TextView[] dots;
     private int[] layouts;
     private MyViewPagerAdapter myViewPagerAdapter;
+    Button login, register;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +72,24 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         };
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+
+        login = (Button) findViewById(R.id.login);
+        register = (Button) findViewById(R.id.register);
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), LoginScreen.class);
+                startActivity(i);
+            }
+        });
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), RegisterScreen.class);
+                startActivity(i);
+            }
+        });
     }
 
 

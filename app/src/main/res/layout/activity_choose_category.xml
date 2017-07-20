@@ -7,4 +7,10 @@
     android:id="@+id/root"
     tools:context="buddyapp.com.activity.ChooseCategory">
 
+
+    <GridView
+        android:layout_width="match_parent"
+        android:numColumns="2"
+        android:id="@+id/grid"
+        android:layout_height="match_parent"></GridView>
 </RelativeLayout>

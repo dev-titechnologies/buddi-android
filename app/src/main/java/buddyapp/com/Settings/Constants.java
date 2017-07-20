@@ -17,4 +17,13 @@ public class Constants {
     public static String server_error_message = "Server not responding";
     public static String message = "message";
     public static String status = "status";
+    public static String user_type = "user_type";
+    public static String trainer = "trainer";
+
+    public static String trainer_status = "trainer_status";
+
+    public static String approved = "approved";
+
+
+    public static String trainee = "trainee";
 }

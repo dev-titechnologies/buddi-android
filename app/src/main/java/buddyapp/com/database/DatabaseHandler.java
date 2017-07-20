@@ -66,7 +66,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
 
-    void insertCategory(JSONArray category){
+    public void insertCategory(JSONArray category){
+
+        deleteContact();
+
         SQLiteDatabase db = this.getWritableDatabase();
 
         for (int i=0;i<category.length();i++) {
@@ -78,11 +81,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
 
 
-            values.put(CAT_ID, item.getString(""));
-            values.put(CAT_NAME, item.getString(""));
-                values.put(CAT_DESC, item.getString(""));
-            values.put(CAT_IMAGE, item.getString(""));
-            values.put(CAT_STATUS, item.getString(""));
+            values.put(CAT_ID, item.getString("category_id"));
+            values.put(CAT_NAME, item.getString("category_name"));
+                values.put(CAT_DESC, item.getString("category_desc"));
+            values.put(CAT_IMAGE, item.getString("category_image"));
+            values.put(CAT_STATUS,("1"));
             // Inserting Row
             db.insert(TABLE_CATEGORY, null, values);
             } catch (JSONException e) {
@@ -94,8 +97,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
+    public void deleteContact() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_CATEGORY, null,
+                null);
+        db.close();
+    }
 
-    public JSONArray getAllContacts() {
+    public JSONArray getAllCAT() {
      JSONArray categoryList = new JSONArray();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_CATEGORY;
@@ -109,10 +118,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 JSONObject contact = new JSONObject();
 
                 try {
-                    contact.put("",cursor.getString(1));
+                    contact.put("category_id",cursor.getString(1));
 
-                contact.put("",cursor.getString(2));
-                contact.put("",cursor.getString(3));
+                contact.put("category_name",cursor.getString(2));
+                contact.put("category_image",cursor.getString(3));
 
 
                     categoryList.put(contact);
@@ -124,7 +133,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         // return contact list
-        return contactList;
+        return categoryList;
     }
 
 

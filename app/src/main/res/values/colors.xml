@@ -4,8 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="googleplus">#d34836</color>
-    <color name="facebook">#3b5998</color>
+
     <!-- dots inactive colors -->
     <color name="dot_dark_screen1">#ff8a33</color>
     <color name="dot_dark_screen2">#ff8a33</color>
@@ -30,4 +29,10 @@
         <item>@color/dot_dark_screen3</item>
         <item>@color/dot_dark_screen4</item>
     </array>
+
+    <color name="googleplus">#d34836</color>
+    <color name="facebook">#3b5998</color>
+    <color name="white">#FFFFFF</color>
+
+
 </resources>
