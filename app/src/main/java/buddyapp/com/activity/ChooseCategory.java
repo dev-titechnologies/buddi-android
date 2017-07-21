@@ -37,7 +37,7 @@ public class ChooseCategory extends AppCompatActivity {
     DatabaseHandler db;
 GridView grid;
     CategoryAdapter categoryAdapter;
- public static   ArrayList<String> selectedID = new ArrayList<>();
+ public static   ArrayList<String> cat_selectedID = new ArrayList<>();
 
 ImageView errorImage;
     @Override
@@ -153,7 +153,7 @@ void loadData(JSONArray data){
 
 
 
-                if (selectedID.size()>0){
+                if (cat_selectedID.size()>0){
                     startActivity(new Intent(getApplicationContext(), Question1.class));
 
                 }else{
