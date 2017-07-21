@@ -1,20 +1,29 @@
 package buddyapp.com.activity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
+import buddyapp.com.activity.questions.Question1;
+import buddyapp.com.activity.questions.Question2;
 import buddyapp.com.adapter.CategoryAdapter;
 import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.utils.CommonCall;
@@ -28,14 +37,18 @@ public class ChooseCategory extends AppCompatActivity {
     DatabaseHandler db;
 GridView grid;
     CategoryAdapter categoryAdapter;
+ public static   ArrayList<String> selectedID = new ArrayList<>();
 
 ImageView errorImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_category);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("  Choose a Category");
+        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
-        getSupportActionBar().setTitle("Choose a Category");
+
         db = new DatabaseHandler(getApplicationContext());
         root = (RelativeLayout) findViewById(R.id.root);
         grid = (GridView) findViewById(R.id.grid);
@@ -118,6 +131,38 @@ void loadData(JSONArray data){
             }
 
 
+        }
+    }
+
+    /**
+     * the menu layout has the 'add/new' menu item
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.choose_category, menu);
+        return true;
+    }
+    /**
+     * react to the user tapping/selecting an options menu item
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.next:
+                // TODO put your code here to respond to the button tap
+
+
+
+                if (selectedID.size()>0){
+                    startActivity(new Intent(getApplicationContext(), Question1.class));
+
+                }else{
+
+                    Toast.makeText(this, "Please choose a category to continue.", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

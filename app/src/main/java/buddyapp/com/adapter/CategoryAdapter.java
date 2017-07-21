@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import buddyapp.com.R;
+import buddyapp.com.activity.ChooseCategory;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 
@@ -29,7 +30,7 @@ public class CategoryAdapter extends BaseAdapter {
 
     JSONArray cat;
     Context context;
-ArrayList<String> selectedID = new ArrayList<>();
+
 
 
     public CategoryAdapter(Context context, JSONArray category) {
@@ -89,18 +90,18 @@ ArrayList<String> selectedID = new ArrayList<>();
             holder.cat_card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-if (selectedID.contains(view.getTag().toString())){
+if (ChooseCategory.selectedID.contains(view.getTag().toString())){
 
-    selectedID.remove(view.getTag().toString());
+    ChooseCategory.selectedID.remove(view.getTag().toString());
 }else
-                    selectedID.add(view.getTag().toString());
+    ChooseCategory.selectedID.add(view.getTag().toString());
 
-                    CommonCall.PrintLog("data cat ",selectedID.toString());
+                    CommonCall.PrintLog("data cat ",ChooseCategory.selectedID.toString());
                    notifyDataSetChanged();
                 }
             });
 
-            if (selectedID.contains(catItem.getString("category_id"))){
+            if (ChooseCategory.selectedID.contains(catItem.getString("category_id"))){
                 ( holder.cat_card ) .setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
 
                 holder.catName.setTextColor(context.getResources().getColor(R.color.white));

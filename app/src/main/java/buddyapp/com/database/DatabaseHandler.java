@@ -77,7 +77,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void insertSubCategory(String cat_id,JSONArray category){
 
-        deleteSubContact();
+
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -91,8 +91,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
                 values.put(CAT_ID, cat_id);
-                values.put(SUB_CAT_ID, item.getString("category_id"));
-                values.put(SUBCAT_NAME, item.getString("category_name"));
+                values.put(SUB_CAT_ID, item.getString("subCat_id"));
+                values.put(SUBCAT_NAME, item.getString("subCat_name"));
 
 
                 // Inserting Row
@@ -103,14 +103,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         }
 
-        db.close(); // Closing database connection
+//        db.close(); // Closing database connection
     }
 
 
 
     public void insertCategory(JSONArray category){
 
-        deleteContact();
+        deleteCat();
+        deleteSubContact();
+
+
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -128,8 +131,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 values.put(CAT_DESC, item.getString("category_desc"));
             values.put(CAT_IMAGE, item.getString("category_image"));
             values.put(CAT_STATUS,("1"));
-            // Inserting Row
+            // Inserting main cat
             db.insert(TABLE_CATEGORY, null, values);
+                // Inserting sub cat
+
+                insertSubCategory(item.getString("category_id"),item.getJSONArray("sub_categories"));
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -147,7 +154,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
-    public void deleteContact() {
+    public void deleteCat() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CATEGORY, null,
                 null);

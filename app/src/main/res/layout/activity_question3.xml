@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="buddyapp.com.activity.questions.Question3">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+<TextView
+    android:layout_width="match_parent"
+    android:text="@string/text_training_history"
+    android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/text_how_long_training"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:layout_width="match_parent"
+android:id="@+id/training_exp"
+
+                android:maxLines="4"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/have_cometed_category"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:id="@+id/yes_competed_category"
+                    android:text="@string/yes"
+                    android:layout_height="wrap_content" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/no"
+                    android:id="@+id/no_competed_category"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/have_coached_category"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:id="@+id/yes_coached_anybody"
+                    android:text="@string/yes"
+                    android:layout_height="wrap_content" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/no"
+                    android:id="@+id/no_coached_anybody"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@string/certified_personal"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:id="@+id/yes_certified_trainer"
+                    android:text="@string/yes"
+                    android:layout_height="wrap_content" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/no"
+                    android:id="@+id/no_certified_trainer"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:text="@string/next"
+                android:id="@+id/next"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
