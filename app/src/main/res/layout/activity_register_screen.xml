@@ -106,6 +106,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="FIRST NAME"
+                        android:layout_marginLeft="5dp"
                         android:textSize="12dp" />
 
                     <EditText
@@ -126,6 +127,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="LAST NAME"
+                        android:layout_marginLeft="5dp"
                         android:textSize="12dp" />
 
                     <EditText
@@ -148,6 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="EMAIL"
+                    android:layout_marginLeft="5dp"
                     android:textSize="12dp" />
 
                 <EditText
@@ -174,7 +177,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mobile" />
+                        android:text="Mobile"
+                        android:layout_marginLeft="5dp"/>
 
                     <com.hbb20.CountryCodePicker
                         android:id="@+id/ccp"
@@ -216,6 +220,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:text="Gender"/>
                 <RadioGroup
                     android:layout_width="match_parent"
@@ -246,7 +251,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Password" />
+                    android:text="Password"
+                    android:layout_marginLeft="5dp"/>
 
                 <EditText
                     android:layout_width="match_parent"

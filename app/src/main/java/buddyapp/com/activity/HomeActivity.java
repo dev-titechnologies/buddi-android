@@ -1,9 +1,7 @@
 package buddyapp.com.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,21 +11,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONException;
+import com.facebook.login.LoginManager;
+
 import org.json.JSONObject;
 
 import buddyapp.com.R;
+import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    ImageView userImageView;
-    TextView name;
+    CircleImageView userImageView;
+    TextView name, email,rating;
     JSONObject data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,17 +58,28 @@ public class HomeActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         View hView =  navigationView.getHeaderView(0);
 
-        userImageView = (ImageView) hView.findViewById(R.id.userImageView);
+        userImageView = (CircleImageView) hView.findViewById(R.id.userImageView);
         name = (TextView) hView.findViewById(R.id.name);
+        email = (TextView) hView.findViewById(R.id.email);
+        rating = (TextView) hView.findViewById(R.id.rating);
+
 
         try {
-            data = new JSONObject(PreferencesUtils.getData("login_data",getApplicationContext(),""));
-            Log.e("data", String.valueOf(data));
-            name.setText(data.getString("name"));
-            CommonCall.LoadImage(getApplicationContext(),data.getString("userpic"), userImageView,R.drawable.ic_no_image,R.drawable.ic_broken_image);
-        } catch (JSONException e) {
+
+            name.setText(PreferencesUtils.getData(Constants.fname,getApplicationContext(),"")+" "+PreferencesUtils.getData(Constants.lname,getApplicationContext(),""));
+            CommonCall.LoadImage(getApplicationContext(),PreferencesUtils.getData(Constants.user_image,getApplicationContext(),""), userImageView,R.drawable.ic_no_image,R.drawable.ic_broken_image);
+            email.setText(PreferencesUtils.getData(Constants.email,getApplicationContext(),""));
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+        userImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),ProfileScreen.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -109,18 +120,24 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_home) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_settings) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_payment) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_trainer) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_invite) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_help) {
 
+        } else if (id == R.id.nav_legal) {
+
+        } else if (id == R.id.nav_logout) {
+            PreferencesUtils.saveData(Constants.token,"", getApplicationContext());
+            LoginManager.getInstance().logOut();
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

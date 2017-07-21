@@ -25,6 +25,10 @@ public class Urls {
 
     public static String CATEGORYLIST= "/category/listCategory";
 
+    public static  String TRAINEEPROFILE= "/profile/viewProfile";
+
+    public static String EDITTRAINEEPROFILE= "/profile/editProfile";
+
 
     public static String getCATEGORYURL(){
 
@@ -63,6 +67,15 @@ public class Urls {
 
     public static String getResetURL(){
         return BASEURL+FORGOTPASSWORD;
+    }
+
+    public static String getTraineeProfileURL(){
+        return BASEURL+TRAINEEPROFILE;
+    }
+
+    public static String getEditTraineeProfileURL()
+    {
+        return BASEURL+EDITTRAINEEPROFILE;
     }
 
 }
