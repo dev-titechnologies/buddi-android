@@ -1,24 +1,23 @@
 package buddyapp.com.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 import buddyapp.com.R;
 import buddyapp.com.activity.ChooseCategory;
+import buddyapp.com.activity.questions.Question4;
+import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 
@@ -26,22 +25,23 @@ import buddyapp.com.utils.CommonCall;
  * Created by root on 20/7/17.
  */
 
-public class CategoryAdapter extends BaseAdapter {
+public class SubCategoryAdapter extends BaseAdapter {
 
-    JSONArray cat;
+    HashSet cat;
     Context context;
 
+DatabaseHandler db;
 
-
-    public CategoryAdapter(Context context, JSONArray category) {
+    public SubCategoryAdapter(Context context, HashSet category, DatabaseHandler db) {
         this.context = context;
         this.cat = category;
+        this.db = db;
     }
 
 
     @Override
     public int getCount() {
-        return cat.length();
+        return cat.size();
     }
 
     @Override
@@ -59,11 +59,11 @@ public class CategoryAdapter extends BaseAdapter {
         CustomViewHolder holder = null;
         if (view == null) {
             view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.category_item, parent, false);
+                    .inflate(R.layout.sub_cat_item, parent, false);
             holder = new CustomViewHolder();
-            holder.catImage = (CircleImageView) view.findViewById(R.id.cat_image);
-            holder.catName = (TextView) view.findViewById(R.id.cat_name);
-            holder.cat_card = (CardView) view.findViewById(R.id.cat_card);
+
+            holder.catName = (TextView) view.findViewById(R.id.sub_cat_name);
+            holder.cat_card = (CardView) view.findViewById(R.id.sub_cat_card);
 
 //            holder.    hover = (SquareLayout) view.findViewById(R.id.hover);
             view.setTag(holder);
@@ -74,34 +74,30 @@ public class CategoryAdapter extends BaseAdapter {
 
         }
         try {
-            JSONObject catItem = cat.getJSONObject(i);
+            JSONObject catItem = db.getSubCat(cat.toArray()[i].toString());
 
-            holder.catName.setText(catItem.getString("category_name"));
-
-
-            CommonCall.LoadImage(context, catItem.getString("category_image"), holder.catImage
-                    , R.drawable.ic_no_image, R.drawable.ic_broken_image
+            holder.catName.setText(catItem.getString("subCat_name"));
 
 
-            );
-            holder.cat_card.setTag(catItem.getString("category_id"));
+
+            holder.cat_card.setTag(catItem.getString("subCat_id"));
 
 
             holder.cat_card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-if (ChooseCategory.cat_selectedID.contains(view.getTag().toString())){
+if (Question4.sub_cat_selectedID.contains(view.getTag().toString())){
 
-    ChooseCategory.cat_selectedID.remove(view.getTag().toString());
+    Question4.sub_cat_selectedID.remove(view.getTag().toString());
 }else
-    ChooseCategory.cat_selectedID.add(view.getTag().toString());
+    Question4.sub_cat_selectedID.add(view.getTag().toString());
 
-                    CommonCall.PrintLog("data cat ",ChooseCategory.cat_selectedID.toString());
+                    CommonCall.PrintLog("data cat ",Question4.sub_cat_selectedID.toString());
                    notifyDataSetChanged();
                 }
             });
 
-            if (ChooseCategory.cat_selectedID.contains(catItem.getString("category_id"))){
+            if (Question4.sub_cat_selectedID.contains(catItem.getString("subCat_id"))){
                 ( holder.cat_card ) .setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
 
                 holder.catName.setTextColor(context.getResources().getColor(R.color.white));
@@ -118,7 +114,7 @@ if (ChooseCategory.cat_selectedID.contains(view.getTag().toString())){
     }
 
     public class CustomViewHolder {
-        public CircleImageView catImage;
+
         TextView catName;
         CardView cat_card;
 

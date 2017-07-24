@@ -17,5 +17,25 @@
 
     <string name="mobile_verification">We are unable to auto verify your mobile number.\n
     please enter the code</string>
+    <string name="next">Next</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <string name="list_gym_sub">List any current gym subscriptions you currently have</string>
+    <string name="what_zipcode">What is your zipcode?</string>
+    <string name="access_military_instalations">Do you have access to military installations?</string>
+    <string name="text_training_history">Nice! Now tell us about your training history.</string>
+    <string name="text_how_long_training">How long have you been training seriously?</string>
+    <string name="have_cometed_category">Have you ever competed in the category that you choose?</string>
+
+    <string name="have_coached_category">Have you ever coached anybody in this category?</string>
+
+    <string name="certified_personal">Are you currently a certified personal trainer?</string>
+
+
+    <string name="more_information">Just a little more information:</string>
+    <string name="list_1rep_movement">List your 1 rep max for each movement that applies to the category you wish to coach:</string>
+    <string name="current_weight_text">What is your current weight?</string>
+    <string name="pounds_text">Have you ever lost or gained 20+ pounds within a6 months perios?</string>
 
 </resources>

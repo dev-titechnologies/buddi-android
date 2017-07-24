@@ -89,6 +89,7 @@ public class ProfileScreen extends AppCompatActivity {
         rbmale = (RadioButton) findViewById(R.id.male);
         rbfemale = (RadioButton) findViewById(R.id.female);
         userImageView = (CircleImageView) findViewById(R.id.userImageView);
+        userImageView.setClickable(false);
         trainerCategory = (LinearLayout) findViewById(R.id.trainer_category);
         if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")){
             trainerCategory.setVisibility(View.VISIBLE);
@@ -113,12 +114,12 @@ public class ProfileScreen extends AppCompatActivity {
 
                         if (items[item].equals("Take Photo")) {
                             userChoosenTask ="Take Photo";
-                            if(result)
+
                                 cameraIntent();
 
                         } else if (items[item].equals("Choose from Library")) {
                             userChoosenTask ="Choose from Library";
-                            if(result)
+
                                 galleryIntent();
 
                         } else if (items[item].equals("Cancel")) {
@@ -147,7 +148,7 @@ public class ProfileScreen extends AppCompatActivity {
         image_uri = getOutputMediaFileUri(1);
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
-        startActivityForResult(intent, 0);
+        startActivityForResult(intent, CAMERA_REQUEST);
 
     }
     private void onCaptureImageResult() {
@@ -170,7 +171,7 @@ public class ProfileScreen extends AppCompatActivity {
         File mediaStorageDir = new File(
                 Environment
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                "Dither/Profile");
+                "BuddyApp.com/Profile");
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
@@ -221,6 +222,7 @@ public class ProfileScreen extends AppCompatActivity {
                 {
                     item.setIcon(R.mipmap.ic_launcher);
                     editflag=true;
+                    userImageView.setClickable(true);
                     editProfile();
                     Toast.makeText(this, "Edit Profile", Toast.LENGTH_SHORT).show();
 
@@ -228,8 +230,10 @@ public class ProfileScreen extends AppCompatActivity {
                     item.setIcon(R.mipmap.ic_launcher_round);
                     editflag=false;
                     Toast.makeText(this, "Saving Please wait...", Toast.LENGTH_SHORT).show();
-                    if(validateFeelds())
-                    new updateProfile().execute();
+                    if(validateFeelds()) {
+                        userImageView.setClickable(false);
+                        new updateProfile().execute();
+                    }
                 }
                 break;
             default: return super.onOptionsItemSelected(item);
@@ -275,6 +279,8 @@ public class ProfileScreen extends AppCompatActivity {
             firstName.setText(PreferencesUtils.getData(Constants.fname, getApplicationContext(), ""));
             lastName.setText(PreferencesUtils.getData(Constants.lname, getApplicationContext(), ""));
             eMail.setText(PreferencesUtils.getData(Constants.email, getApplicationContext(), ""));
+            imageurl = PreferencesUtils.getData(Constants.user_image, getApplicationContext(), "");
+
             String combined = PreferencesUtils.getData(Constants.mobile, getApplicationContext(), "");
             if (combined.contains("-")) {
                 String[] parts = combined.split("-");
@@ -461,7 +467,11 @@ public class ProfileScreen extends AppCompatActivity {
             focusView = rg;
             focusView.requestFocus();
             return false;
-        }/* else if (password.getText().length() == 0) {
+        } else if(imageurl.length()== 0) {
+            Toast.makeText(getApplicationContext(), "Please select profile image", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        /* else if (password.getText().length() == 0) {
             password.setError("Please enter password");
             focusView = password;
             focusView.requestFocus();
@@ -475,6 +485,7 @@ public class ProfileScreen extends AppCompatActivity {
             sfname = firstName.getText().toString();
             slname = lastName.getText().toString();
             semail = eMail.getText().toString();
+            user_image = imageurl;
 //            spassword = password.getText().toString();
             return true;
         }
@@ -484,29 +495,14 @@ public class ProfileScreen extends AppCompatActivity {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
 
-        System.out.println(resultCode+ " resultt");
-
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
 
 
             try {
-                String picturePath = getPathFromCamera();
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inJustDecodeBounds = true;
+                imageurl = image_uri.getPath();
+                userImageView.setImageURI(Uri.parse(imageurl));
 
-                //Returns null, sizes are in the options variable
-                Bitmap bitmap = BitmapFactory.decodeFile(picturePath, options);
-                //System.out.println("wistdh"+options.outWidth);
-
-                    imageurl = picturePath;
-
-
-//                    CommonMethods.createAlert(CommentsPage.this, "Please select an image with minimum width of 580"
-//                            , "Alert");
-
-
-
-            } catch (Exception e) {
+                } catch (Exception e) {
                 // TODO Auto-generated catch block
                 System.out.println("imageeeeeeeeee exception");
                 e.printStackTrace();
@@ -540,25 +536,12 @@ public class ProfileScreen extends AppCompatActivity {
             //Returns null, sizes are in the options variable
             Bitmap bitmap=  BitmapFactory.decodeFile(picturePath, options);
             System.out.println("wistdh"+options.outWidth);
-            if( options.outWidth>=580){
-
-
-
-
-                // checking image orientation
-
-
                 imageurl=picturePath;
 
                 Log.e("CUrent source","gallery");
                 checkOrientation(imageurl);
 
-
-                /////////////////////////////
-
-            }
-
-
+                userImageView.setImageURI(Uri.parse(imageurl));
 //                CommonMethods.createAlert(CommentsPage.this, "Please select an image with minimum width of 580"
 //                        , "Alert");
 

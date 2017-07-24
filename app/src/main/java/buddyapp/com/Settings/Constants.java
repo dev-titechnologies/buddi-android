@@ -29,4 +29,16 @@ public class Constants {
 
 
     public static String trainee = "trainee";
+
+    public static String zipcode = "zipcode";
+
+    public static String gym_subscriptions = "gym_subscriptions";
+
+    public static String military_installations = "military_installations";
+
+
+    public static String training_exp = "training_exp";
+    public static String competed_category = "competed_category";
+    public static String coached_anybody = "coached_anybody";
+    public static String certified_trainer = "certified_trainer";
 }
