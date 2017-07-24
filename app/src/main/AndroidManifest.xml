@@ -87,7 +87,8 @@
         <activity android:name=".activity.questions.Question2" />
         <activity android:name=".activity.questions.Question3" />
         <activity android:name=".activity.questions.Question4" />
-        <activity android:name=".activity.questions.VideoUploadActivity"></activity>
+        <activity android:name=".activity.questions.VideoUploadActivity" />
+        <activity android:name=".activity.questions.BeforeVideoActivity"></activity>
     </application>
 
 </manifest>

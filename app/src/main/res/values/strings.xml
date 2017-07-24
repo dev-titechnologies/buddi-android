@@ -38,4 +38,46 @@
     <string name="current_weight_text">What is your current weight?</string>
     <string name="pounds_text">Have you ever lost or gained 20+ pounds within a6 months perios?</string>
 
+    <string name="before_video_titile">Sweet! Now its time for you to show us what you have got!</string>
+
+    <string name="before_video_desc">This is the most important part of this process. You will now record or upload (a recent video) of you doing each movement that you listed a 1 rep max for. Be sure to follow the rules for each video (listed on each respective screen). Standards will be uniform for males and uniform for females. These videos will be used to screen you for your qualifiaction to coach others in these movements. Good luck!
+-The Buddy team </string>
+    <string name="video_desc">*Videos should be anywhere between 30-90 seconds long. Try to keep them as short and to the point as possible.It would be beneficial to have someone record the videos for you.
+</string>
+
+
+    <string name="male_squat_desc">Males:
+-Video 1:Record yourself doing 1 rep with 135lb.on the bar from 2 different angles.
+-Video 2:Record yourself doing 1 rep with your bodyweight on the bar from 2 different angles.
+</string>
+    <string name="female_squat_desc">Females:
+-Video 1:Record yourself doing 1 rep with 95lb.on the bar from 2 different angles.
+-Video 2:Record yourself doing 1 rep with your bodyweight on the bar form 2 different angles.</string>
+
+
+
+    <string name="male_deadlift_desc">Males: -Video 1: Record yourself doing 1 rep with 1551b. on the bar from 2 different angles. -Video 2: Record yourself doing 1 rep with your bodyweight on the bar from 2 different angles.
+</string>
+    <string name="female_deadlift_desc">Females: -Video 1: Record yourself doing 1 rep with 1351b. on the bar from 2 different angles. -Video 2: Record yourself doing 1 rep with your bodyweight on the bar from 2 different angles. </string>
+
+
+
+    <string name="male_bench_press_desc">Males: -Video 1: Record yourself doing 1 rep with 1351b. on the bar from 2 different angles. -Video 2: Record yourself doing 1 rep with your bodyweight on the bar from 2 different angles.
+</string>
+    <string name="female_bench_press_desc">Females: -Video 1: Record yourself doing 1 rep with 651b. on the bar from 2 different angles. -Video 2: Record yourself doing 1 rep with 951b. on the bar from 2 different angles. </string>
+
+
+
+    <string name="male_snatch_desc">Males: -Video 1: Record yourself doing 1 rep with 1351b. on the bar from 2 different angles. -Video 2: Record yourself doing 1 rep with your bodyweight on the bar from 2 different angles.
+</string>
+    <string name="female_snatch_desc">Females: -Video 1: Record yourself doing 1 rep with 951b. on the bar from 2 different angles. -Video 2: Record yourself doing 1 rep with your body weight on the bar from 2 different angles. </string>
+
+
+
+    <string name="male_cleanandjerk_desc">Males: -Video 1: Record yourself doing 1 rep with your bodyweight on the bar from 2 different angles. -Video 2: Record yourself doing 1 rep with 1.5 your bodyweight on the bar from 2 different angles.
+</string>
+    <string name="female_cleanandjerk_desc">Females: -Video 1: Record yourself doing 1 rep with 951b. on the bar from 2 different angles. -Video 2: Record yourself doing 1 rep with your body weight on the bar from 2 different angles. </string>
+
+
+
 </resources>

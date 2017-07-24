@@ -1,6 +1,7 @@
 package buddyapp.com.activity.questions;
 
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -124,6 +125,9 @@ sub_list=(ListView)findViewById(R.id.sub_list);
                         e.printStackTrace();
                     }
 
+
+
+                    startActivity(new Intent(getApplicationContext(), BeforeVideoActivity.class));
 
                 }
 
