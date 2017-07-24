@@ -1,8 +1,10 @@
 package buddyapp.com.activity.questions;
 
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,6 +54,10 @@ EditText weight;
         next=(Button)findViewById(R.id.next);
         weight=(EditText)findViewById(R.id.weight);
 sub_list=(ListView)findViewById(R.id.sub_list);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(getResources().getString(R.string.more_information));
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
 
         yes_pounds.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,5 +137,16 @@ sub_list=(ListView)findViewById(R.id.sub_list);
 
             }
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+
+            default: return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 }

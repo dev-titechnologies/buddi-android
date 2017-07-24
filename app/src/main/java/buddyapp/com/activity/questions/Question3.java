@@ -1,8 +1,11 @@
 package buddyapp.com.activity.questions;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,54 +34,10 @@ public class Question3 extends AppCompatActivity {
         no_coached_anybody=(Button)findViewById(R.id.no_coached_anybody);
         yes_certified_trainer=(Button)findViewById(R.id.yes_certified_trainer);
         no_certified_trainer=(Button)findViewById(R.id.no_certified_trainer);
-
-
-
-        yes_competed_category.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                competed_category ="yes";
-            }
-        });
-        no_competed_category.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                competed_category ="no";
-            }
-        });
-
-
-        yes_coached_anybody.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                coached_anybody ="yes";
-            }
-        });
-        no_coached_anybody.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                coached_anybody ="no";
-            }
-        });
-
-
-        yes_certified_trainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                certified_trainer ="yes";
-            }
-        });
-        no_certified_trainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                certified_trainer ="no";
-            }
-        });
-
-
-
-
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(getResources().getString(R.string.text_training_history));
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,5 +75,78 @@ if (training_exp.getText().toString().trim().length()==0){
 
 }    }
         });
+
+        yes_competed_category.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                competed_category ="yes";
+                yes_competed_category.setPressed(true);
+                no_competed_category.setPressed(false);
+                return true;
+            }
+        });
+        no_competed_category.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                competed_category ="no";
+                no_competed_category.setPressed(true);
+                yes_competed_category.setPressed(false);
+                return true;
+            }
+        });
+        yes_coached_anybody.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                coached_anybody ="yes";
+                yes_coached_anybody.setPressed(true);
+                no_coached_anybody.setPressed(false);
+                return true;
+            }
+        });
+        no_coached_anybody.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                coached_anybody ="no";
+                no_coached_anybody.setPressed(true);
+                yes_coached_anybody.setPressed(false);
+                return true;
+            }
+        });
+        yes_certified_trainer.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                certified_trainer ="yes";
+                yes_certified_trainer.setPressed(true);
+                no_certified_trainer.setPressed(false);
+                return true;
+            }
+        });
+        no_certified_trainer.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                certified_trainer ="no";
+                no_certified_trainer.setPressed(true);
+                yes_certified_trainer.setPressed(false);
+                return true;
+            }
+        });
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+
+            default: return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 }

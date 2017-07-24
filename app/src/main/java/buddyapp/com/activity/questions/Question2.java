@@ -1,11 +1,20 @@
 package buddyapp.com.activity.questions;
 
 import android.content.Intent;
+import android.os.Build;
+import android.provider.MediaStore;
+import android.support.annotation.IdRes;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import buddyapp.com.R;
@@ -13,9 +22,9 @@ import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 
 public class Question2 extends AppCompatActivity {
-    Button next,yes_military_installations,no_military_installations;
+    Button next;
+    TextView yes_military_installations,no_military_installations;
     EditText gym_sub;
-
     String military_installations_selected = "";
 
     @Override
@@ -24,22 +33,37 @@ public class Question2 extends AppCompatActivity {
         setContentView(R.layout.activity_question2);
 
         next=(Button)findViewById(R.id.next);
-        yes_military_installations=(Button)findViewById(R.id.yes_military_installations);
-        no_military_installations=(Button)findViewById(R.id.no_military_installations);
+        yes_military_installations=(TextView)findViewById(R.id.yes_military_installations);
+        no_military_installations=(TextView)findViewById(R.id.no_military_installations);
         gym_sub=(EditText)findViewById(R.id.gym);
 
-        yes_military_installations.setOnClickListener(new View.OnClickListener() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(getResources().getString(R.string.list_gym_sub));
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+
+        yes_military_installations.setOnTouchListener(new View.OnTouchListener() {
+
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View v, MotionEvent event) {
                 military_installations_selected ="yes";
+                yes_military_installations.setPressed(true);
+                no_military_installations.setPressed(false);
+                return true;
             }
         });
-        no_military_installations.setOnClickListener(new View.OnClickListener() {
+        no_military_installations.setOnTouchListener(new View.OnTouchListener() {
+
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View v, MotionEvent event) {
                 military_installations_selected ="no";
+                no_military_installations.setPressed(true);
+                yes_military_installations.setPressed(false);
+                return true;
             }
         });
+
+
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,5 +86,16 @@ public class Question2 extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+
+            default: return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 }

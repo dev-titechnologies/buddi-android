@@ -1,62 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="buddyapp.com.activity.questions.Question2">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_height="wrap_content">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/gym"
+        android:layout_height="wrap_content" />
 
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
         <TextView
             android:layout_width="wrap_content"
-            android:text="@string/list_gym_sub"
-            android:layout_height="wrap_content" />
-
-<EditText
-    android:layout_width="match_parent"
-    android:id="@+id/gym"
-    android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="10dp"
             android:text="@string/access_military_instalations"
             android:layout_height="wrap_content" />
 
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:orientation="horizontal"
-       android:layout_height="wrap_content">
-       <Button
+       <LinearLayout
            android:layout_width="match_parent"
-           android:layout_weight="1"
+           android:orientation="horizontal"
+           android:layout_height="30dp">
+
+       <Button
+           android:layout_width="wrap_content"
            android:id="@+id/yes_military_installations"
            android:text="@string/yes"
+           android:background="@drawable/pressed"
            android:layout_height="wrap_content" />
+           <View
+               android:layout_width="5dp"
+               android:layout_height="10dp"/>
        <Button
-           android:layout_width="match_parent"
-           android:layout_weight="1"
+           android:layout_width="wrap_content"
            android:text="@string/no"
+           android:background="@drawable/pressed"
            android:id="@+id/no_military_installations"
            android:layout_height="wrap_content" />
 
-   </LinearLayout>
-
-
-
-
+     </LinearLayout>
     </LinearLayout>
-
-
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_marginTop="50dp">
     <Button
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/next"
-        android:layout_alignParentBottom="true"
+        android:textColor="@color/white"
+        android:layout_marginTop="20dp"
         android:id="@+id/next"
-        android:layout_height="wrap_content" />
+        android:background="@color/button_bgcolor"/>
 
-</RelativeLayout>
+ </LinearLayout>
+</LinearLayout>
