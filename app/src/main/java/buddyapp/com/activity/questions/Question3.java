@@ -1,5 +1,6 @@
 package buddyapp.com.activity.questions;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,16 +10,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 
-public class Question3 extends AppCompatActivity {
+public class Question3 extends Activity {
     Button next,yes_competed_category,no_competed_category,yes_coached_anybody,no_coached_anybody
        ,yes_certified_trainer,no_certified_trainer;
-
+    ImageView back;
     String competed_category="",coached_anybody="",certified_trainer ="";
     EditText training_exp;
     @Override
@@ -34,10 +36,14 @@ public class Question3 extends AppCompatActivity {
         no_coached_anybody=(Button)findViewById(R.id.no_coached_anybody);
         yes_certified_trainer=(Button)findViewById(R.id.yes_certified_trainer);
         no_certified_trainer=(Button)findViewById(R.id.no_certified_trainer);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(getResources().getString(R.string.text_training_history));
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
+        back = (ImageView) findViewById(R.id.back);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override

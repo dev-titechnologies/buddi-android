@@ -40,6 +40,10 @@
     <color name="button_text">#a6a8ac</color>
     <color name="login_bgcolor">#47CBFB</color>
     <color name="black">#000000</color>
+
+    <color name="grey">#2F2F2F
+    </color>
+
     <color name="transparent">#00ffffff</color>
 
 

@@ -32,6 +32,8 @@ public class Urls {
     public static String EDITTRAINEEPROFILE= "/profile/editProfile";
 
 
+
+
     public static String getCATEGORYURL(){
 
         return BASEURL+CATEGORYLIST;

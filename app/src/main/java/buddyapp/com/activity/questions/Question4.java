@@ -1,13 +1,19 @@
 package buddyapp.com.activity.questions;
 
 
+
+import android.app.Activity;
 import android.support.v7.app.ActionBar;
+
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -29,7 +35,7 @@ import buddyapp.com.adapter.SubCategoryAdapter;
 import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.utils.CommonCall;
 
-public class Question4 extends AppCompatActivity {
+public class Question4 extends Activity {
     Button next,yes_pounds,no_pounds;
 
 ListView sub_list;
@@ -39,7 +45,7 @@ SubCategoryAdapter subCategoryAdapter;
     public static   ArrayList<String> sub_cat_selectedID;
 EditText weight;
     HashSet subCats;
-
+    ImageView back;
     String pounds="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,21 +60,32 @@ EditText weight;
         next=(Button)findViewById(R.id.next);
         weight=(EditText)findViewById(R.id.weight);
 sub_list=(ListView)findViewById(R.id.sub_list);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(getResources().getString(R.string.more_information));
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
+        back = (ImageView) findViewById(R.id.back);
 
-        yes_pounds.setOnClickListener(new View.OnClickListener() {
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pounds="yes";
+                finish();
             }
         });
-        no_pounds.setOnClickListener(new View.OnClickListener() {
+        yes_pounds.setOnTouchListener(new View.OnTouchListener() {
+
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View v, MotionEvent event) {
+                pounds="yes";
+                yes_pounds.setPressed(true);
+                no_pounds.setPressed(false);
+                return true;
+            }
+        });
+        no_pounds.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
                 pounds="no";
+                no_pounds.setPressed(true);
+                yes_pounds.setPressed(false);
+                return true;
             }
         });
 
@@ -131,6 +148,9 @@ sub_list=(ListView)findViewById(R.id.sub_list);
                     }
 
 
+
+                    startActivity(new Intent(getApplicationContext(), BeforeVideoActivity.class));
+
                 }
 
 
@@ -138,15 +158,5 @@ sub_list=(ListView)findViewById(R.id.sub_list);
             }
         });
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
 
-            default: return super.onOptionsItemSelected(item);
-        }
-        return true;
-    }
 }

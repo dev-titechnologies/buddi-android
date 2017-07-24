@@ -1,11 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="buddyapp.com.activity.questions.Question2">
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:id="@+id/toolbar"
+        android:background="@color/colorPrimary"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/back"
+                android:layout_gravity="start"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:padding="@dimen/small"
+                android:layout_toRightOf="@id/back"
+                android:textSize="21sp"
+                android:text="@string/list_gym_sub"/>
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/toolbar">
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
@@ -30,7 +66,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_marginLeft="5dp"
-            android:textColor="@color/black"
             android:layout_marginBottom="10dp"
             android:text="@string/access_military_instalations"
             android:layout_height="wrap_content" />
@@ -58,18 +93,21 @@
 
      </LinearLayout>
     </LinearLayout>
- <LinearLayout
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:layout_marginTop="50dp">
-    <Button
+      </LinearLayout>
+</ScrollView>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/next"
-        android:textColor="@color/white"
-        android:layout_marginTop="20dp"
-        android:id="@+id/next"
-        android:background="@color/button_bgcolor"/>
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true">
 
- </LinearLayout>
-</LinearLayout>
+        <Button
+            android:id="@+id/next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/button_bgcolor"
+            android:text="@string/next"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+</RelativeLayout>

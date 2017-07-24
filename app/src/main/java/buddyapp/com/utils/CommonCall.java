@@ -274,6 +274,7 @@ public static void showLoader(Activity yourActivity){
 
      pd = new ProgressDialog(yourActivity);
     pd.setMessage("loading");
+    pd.setCancelable(false);
     pd.show();
 }
 

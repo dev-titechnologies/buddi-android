@@ -81,8 +81,8 @@ public class NetworkCalls {
     }
 
 
-    public static String UPLOAD(JSONArray files, String url) {
-        CommonCall.PrintLog("REQUEST", files.toString());
+    public static String UPLOADVideo(JSONObject  file, String url) {
+        CommonCall.PrintLog("REQUEST", file.toString());
         CommonCall.PrintLog("URL", url);
 
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
@@ -99,10 +99,14 @@ public class NetworkCalls {
             requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
 
-                    .addFormDataPart("REQUEST", files.toString())
 
-                    .addFormDataPart("comment_image", "comment_image" + files.get(0).toString().substring(files.get(0).toString().lastIndexOf(".")),
-                            RequestBody.create(MEDIA_TYPE_PNG, (new File(files.get(0).toString()))))
+                    .addFormDataPart("file_type", "vid")
+                    .addFormDataPart("upload_type", "other")
+
+
+
+                    .addFormDataPart("file_name", "comment_image" + file.getString("file").substring(file.getString("file").lastIndexOf(".")),
+                            RequestBody.create(MEDIA_TYPE_PNG, (new File(file.getString("file")))))
 
                     .build();
 
@@ -141,7 +145,66 @@ public class NetworkCalls {
         }
         return createResponse().toString();
     }
+    public static String UPLOAD(String  file, String url) {
+        CommonCall.PrintLog("REQUEST", file.toString());
+        CommonCall.PrintLog("URL", url);
 
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+
+        final OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
+        RequestBody requestBody = null;
+        //case to handle multiple images
+
+        // path == >files.get(0).toString()
+        try {
+            requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+
+//                    .addFormDataPart("REQUEST", file.toString())
+
+                    .addFormDataPart("file_name", "comment_image" + file.substring(file.lastIndexOf(".")),
+                            RequestBody.create(MEDIA_TYPE_PNG, (new File(file))))
+
+                    .build();
+
+
+            Request request = new Request.Builder()
+//                .header("token","8fa138e211e08db26b7c8f98")
+                    .header("device_imei", getdevice())
+                    .header("token", PreferencesUtils.getData(Constants.token, Controller.getAppContext(), "0"))
+                    .header("device_type", "android")
+                    .header("device_id", PreferencesUtils.getData(Constants.device_id, Controller.getAppContext(), "0"))
+                    .url(url)
+                    .post(requestBody)
+                    .build();
+
+            Response response = null;
+
+            if (call != null && call.isExecuted()) {
+                call.cancel();
+            }
+            call = client.newCall(request);
+            response = call.execute();
+
+            if (!response.isSuccessful())
+                throw new IOException("Unexpected code " + response);
+
+            String returnREsponse = response.body().string();
+//          CommonCall.PrintLog("response ",response.body().string());
+
+            CommonCall.PrintLog("response", returnREsponse);
+            return returnREsponse;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return createResponse().toString();
+        }
+        return createResponse().toString();
+    }
 
     public static String GET(String url) {
 

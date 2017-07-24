@@ -334,7 +334,7 @@ public class ProfileScreen extends AppCompatActivity {
             super.onPostExecute(s);
             try {
                 JSONObject obj= new JSONObject(s);
-                    if(obj.getInt("status")==1) {
+                    if(obj.getInt(Constants.status)==1) {
                         JSONObject jsonObject = obj.getJSONObject("data");
                         PreferencesUtils.saveData(Constants.email, jsonObject.getString(Constants.email), getApplicationContext());
                         PreferencesUtils.saveData(Constants.fname, jsonObject.getString(Constants.fname), getApplicationContext());
@@ -346,13 +346,13 @@ public class ProfileScreen extends AppCompatActivity {
 
                         loadProfile();
 
-                    }else if(obj.getInt("status")==2){
+                    }else if(obj.getInt(Constants.status)==2){
                         Toast.makeText(ProfileScreen.this,obj.getString("message"), Toast.LENGTH_SHORT).show();
                     }else{
                         //session out
                     }
                 }catch (JSONException e){
-
+e.printStackTrace();
             }
         }
     }

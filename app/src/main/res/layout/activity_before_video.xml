@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="buddyapp.com.activity.questions.BeforeVideoActivity">
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:id="@+id/toolbar"
+        android:background="@color/colorPrimary"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/back"
+                android:layout_gravity="start"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:padding="@dimen/small"
+                android:layout_toRightOf="@id/back"
+                android:textSize="21sp"
+                android:text="@string/text_training_history"/>
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+    <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+    <TextView
+    android:layout_width="wrap_content"
+    android:text="@string/before_video_desc"
+    android:gravity="center"
+    android:layout_height="match_parent" />
+
+
+        </LinearLayout>
+</ScrollView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/next"
+        android:textColor="@color/white"
+        android:layout_marginTop="20dp"
+        android:id="@+id/next"
+        android:layout_alignParentBottom="true"
+        android:background="@color/button_bgcolor"/>
+</RelativeLayout>

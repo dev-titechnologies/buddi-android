@@ -82,17 +82,19 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-
-        <activity android:name=".activity.ProfileScreen"
+        <activity
+            android:name=".activity.ProfileScreen"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".utils.CropActivity" />
         <activity android:name=".activity.questions.Question1" />
         <activity android:name=".activity.questions.Question2" />
         <activity android:name=".activity.questions.Question3" />
         <activity android:name=".activity.questions.Question4" />
-        <activity android:name=".activity.questions.VideoUploadActivity"></activity>
+        <activity android:name=".activity.questions.VideoUploadActivity" />
+        <activity android:name=".activity.questions.BeforeVideoActivity" />
+        <activity android:name=".activity.questions.DoneActivity"></activity>
     </application>
 
 </manifest>

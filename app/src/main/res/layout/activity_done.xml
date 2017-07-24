@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="buddyapp.com.activity.questions.DoneActivity">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_centerInParent="true"
+    android:layout_height="wrap_content">
+<TextView
+    android:layout_width="match_parent"
+    android:text="You're Done!"
+    android:textStyle="bold"
+    android:textSize="25sp"
+    android:padding="@dimen/small"
+    android:gravity="center"
+    android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:padding="@dimen/small"
+        android:text="Thanks for your application! You will now be screened by the team, and we will get back to you as soon as possible!
+Talk soon.
+-The Buddy team "
+        android:layout_height="wrap_content" />
+</LinearLayout>
+<Button
+    android:layout_width="wrap_content"
+    android:layout_gravity="bottom"
+    android:text="Exit"
+    android:id="@+id/exit"
+    android:layout_centerHorizontal="true"
+    android:layout_alignParentBottom="true"
+    android:layout_height="wrap_content" />
+</RelativeLayout>

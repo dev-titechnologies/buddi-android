@@ -1,5 +1,6 @@
 package buddyapp.com.activity.questions;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -13,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,12 +23,12 @@ import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 
-public class Question2 extends AppCompatActivity {
+public class Question2 extends Activity {
     Button next;
     TextView yes_military_installations,no_military_installations;
     EditText gym_sub;
     String military_installations_selected = "";
-
+    ImageView back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +38,14 @@ public class Question2 extends AppCompatActivity {
         yes_military_installations=(TextView)findViewById(R.id.yes_military_installations);
         no_military_installations=(TextView)findViewById(R.id.no_military_installations);
         gym_sub=(EditText)findViewById(R.id.gym);
+        back = (ImageView) findViewById(R.id.back);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(getResources().getString(R.string.list_gym_sub));
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         yes_military_installations.setOnTouchListener(new View.OnTouchListener() {
 
@@ -87,15 +92,5 @@ public class Question2 extends AppCompatActivity {
             }
         });
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
 
-            default: return super.onOptionsItemSelected(item);
-        }
-        return true;
-    }
 }
