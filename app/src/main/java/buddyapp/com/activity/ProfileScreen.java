@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -33,6 +35,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,6 +45,7 @@ import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
+import buddyapp.com.utils.CropActivity;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 import buddyapp.com.utils.Utility;
@@ -64,6 +69,7 @@ public class ProfileScreen extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private static int RESULT_LOAD_IMAGE = 1;
     int REQUEST_CROP_PICTURE = 222;
+    String  imageurl="" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,12 +104,12 @@ public class ProfileScreen extends AppCompatActivity {
                 final CharSequence[] items = { "Take Photo", "Choose from Library",
                         "Cancel" };
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfileScreen.this);
                 builder.setTitle("Add Photo!");
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
-                        boolean result= Utility.checkPermission(getApplicationContext());
+                        boolean result= Utility.checkPermission(ProfileScreen.this);
 
                         if (items[item].equals("Take Photo")) {
                             userChoosenTask ="Take Photo";
@@ -480,41 +486,23 @@ public class ProfileScreen extends AppCompatActivity {
 
         System.out.println(resultCode+ " resultt");
 
-        if(resultCode == RESULT_OK && mCustomSelected){
-            Constantss.ecardtype="Upload Photo";
-
-        }	else
-            mCustomSelected=false;
-
-
-
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
 
 
-            //System.out.println("imageeeeeeeeee inside camera");
-
-
             try {
-//					Bitmap thumbnail = MediaStore.Images.Media.getBitmap(
-//                         getContentResolver(), imageUri);
-                String picturePath=getPathFromCamera();
+                String picturePath = getPathFromCamera();
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
 
                 //Returns null, sizes are in the options variable
-                Bitmap bitmap=  BitmapFactory.decodeFile(picturePath, options);
+                Bitmap bitmap = BitmapFactory.decodeFile(picturePath, options);
                 //System.out.println("wistdh"+options.outWidth);
-                if( options.outWidth>=580){
-                    System.out.println("imageeeeeeeeee"+picturePath);
 
-                    imageurl=picturePath;
+                    imageurl = picturePath;
 
-                }
-                else
 
-                    CommonMethods.createAlert(CommentsPage.this, "Please select an image with minimum width of 580"
-                            , "Alert");
-
+//                    CommonMethods.createAlert(CommentsPage.this, "Please select an image with minimum width of 580"
+//                            , "Alert");
 
 
 
@@ -569,10 +557,10 @@ public class ProfileScreen extends AppCompatActivity {
                 /////////////////////////////
 
             }
-            else
 
-                CommonMethods.createAlert(CommentsPage.this, "Please select an image with minimum width of 580"
-                        , "Alert");
+
+//                CommonMethods.createAlert(CommentsPage.this, "Please select an image with minimum width of 580"
+//                        , "Alert");
 
 
         }
@@ -583,6 +571,90 @@ public class ProfileScreen extends AppCompatActivity {
 //		    }
 
     }
+    public String getPathFromCamera(){
 
+        String path="";
+        Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media.DATA, MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.ImageColumns.ORIENTATION}, MediaStore.Images.Media.DATE_ADDED, null, "date_added ASC");
+        if(cursor != null && cursor.moveToFirst())
+        {
+            do {
+
+                path=(Uri.parse(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))).toString());
+            }while(cursor.moveToNext());
+
+        }
+        cursor.close();
+        return path;
+    }
+/*
+	 * check orientation for images from gallery
+	 */
+
+    public void checkOrientation(String picturePath){
+
+
+        try{
+            BitmapFactory.Options options = new BitmapFactory.Options();
+
+
+            //Returns null, sizes are in the options variable
+            Bitmap bmp=  BitmapFactory.decodeFile(picturePath, options);
+
+            ExifInterface exif = new ExifInterface(picturePath);
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+
+            System.out.println("image orientation "+orientation);
+
+            if(orientation==6){
+
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                Bitmap rotatedBitmap = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
+                //previewimg.setImageBitmap(rotatedBitmap);
+
+                File sdfile=new File(Environment.getExternalStorageDirectory()+"/orientedbitmaps/");
+                if(!sdfile.exists())
+
+                    sdfile.mkdirs();
+
+                imageurl=sdfile.toString()+new File(picturePath).getName();
+
+                saveBitmapPNG(sdfile.toString()+new File(picturePath).getName(),rotatedBitmap);
+
+
+
+            }
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+
+    }
+    /*
+ * save rotaed bitmap to device
+ *
+ *
+ */
+    private  Bitmap saveBitmapPNG(String strFileName, Bitmap bmp){FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(strFileName);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            imageurl=strFileName;
+            //System.out.println("actual path savebmp1"+imageurl);
+
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return bmp;
+    }
 
 }
