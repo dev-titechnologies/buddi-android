@@ -126,7 +126,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         ccp.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
             @Override
             public void onCountrySelected() {
-                Toast.makeText(getApplicationContext(), ccp.getSelectedCountryCode() + "Updated " + ccp.getSelectedCountryName(), Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -405,11 +405,13 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                    if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
 
                        Intent intent = new Intent(getApplicationContext(),ChooseCategory.class);
+                       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);
                        startActivity(intent);
                        finish();
 
                    }else {
                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);
                        startActivity(intent);
                        finish();
                    }

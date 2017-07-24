@@ -244,25 +244,43 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             try {
-            JSONObject obj= new JSONObject(s);
-            if(obj.getInt("status")==1){
-                JSONObject jsonObject = obj.getJSONObject("data");
-                PreferencesUtils.saveData(Constants.token,jsonObject.getString(Constants.token),getApplicationContext());
-                Intent intent= new Intent(getApplicationContext(),HomeActivity.class);
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt("status") == 1) {
+                    JSONObject jsonObject = obj.getJSONObject("data");
+                    PreferencesUtils.saveData(Constants.token, jsonObject.getString(Constants.token), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.user_id, jsonObject.getString(Constants.user_id), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.email, jsonObject.getString(Constants.email), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.fname, jsonObject.getString(Constants.fname), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.lname, jsonObject.getString(Constants.lname), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.user_image,jsonObject.getString(Constants.user_image), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.gender,jsonObject.getString(Constants.gender), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.mobile,jsonObject.getString(Constants.mobile),getApplicationContext());
+                    PreferencesUtils.saveData(Constants.approved, jsonObject.getString(Constants.approved),getApplicationContext());
+//            if(PreferencesUtils.getData(Constants.approved,getApplicationContext(), "").length()==0){
+                Intent intent = new Intent(getApplicationContext(), ChooseCategory.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
-            }else if(obj.getInt("status")==2){
-                Toast.makeText(LoginScreen.this,obj.getString("message"), Toast.LENGTH_SHORT).show();
-            }else if(obj.getInt("status")==3){
-                Intent intent= new Intent(getApplicationContext(),RegisterScreen.class);
-                startActivity(intent);
-                finish();
-            }else{
+//            }else {
+//                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(intent);
+//                finish();
+//            }
+            } else if (obj.getInt("status") == 2) {
+                    Toast.makeText(LoginScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                } else if (obj.getInt("status") == 3) {
+                    Intent intent = new Intent(getApplicationContext(), RegisterScreen.class);
+                    startActivity(intent);
+                    finish();
+                } else {
 
-            }
+                }
 
             } catch (JSONException e) {
-              e.printStackTrace();}
+                e.printStackTrace();
+            }
+        catch (Exception e){}
             CommonCall.hideLoader();
         }
     }

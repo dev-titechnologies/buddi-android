@@ -18,7 +18,10 @@ public class Constants {
     public static String message = "message";
     public static String status = "status";
     public static String user_type = "user_type";
+    public static String user_id = "user_id";
     public static String trainer = "trainer";
+    public static String user_image = "user_image";
+    public static String mobile = "mobile";
 
     public static String trainer_status = "trainer_status";
 

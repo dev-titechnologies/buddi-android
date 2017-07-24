@@ -44,6 +44,7 @@
 
         <ImageView
             android:layout_width="50dp"
+            android:id="@+id/loadVideo"
             android:src="@drawable/ic_no_image"
             android:layout_height="50dp" />
 
@@ -54,12 +55,22 @@
             android:src="@drawable/ic_camera_click"
             android:layout_height="50dp" />
 
-
+<TextView
+    android:layout_width="wrap_content"
+    android:text="@string/upload"
+    android:gravity="center"
+    android:textAllCaps="true"
+    android:id="@+id/upload"
+    android:visibility="gone"
+    android:textColor="@color/white"
+    android:layout_alignParentRight="true"
+    android:layout_height="50dp" />
         <ImageView
             android:layout_width="50dp"
             android:layout_alignParentRight="true"
             android:src="@drawable/ic_next"
             android:id="@+id/next"
+            android:visibility="gone"
             android:layout_height="50dp" />
 
 
