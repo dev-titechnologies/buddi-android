@@ -32,6 +32,15 @@ public class Urls {
     public static String EDITTRAINEEPROFILE= "/profile/editProfile";
 
 
+    public static String ADDTRAINERCAT= "/profile/addTrainerCategory";
+
+
+    public static String getADDTRAINECATEGORYURL(){
+
+        return BASEURL+ADDTRAINERCAT;
+    }
+
+
 
 
     public static String getCATEGORYURL(){

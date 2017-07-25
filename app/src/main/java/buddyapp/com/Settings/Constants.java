@@ -1,6 +1,7 @@
 package buddyapp.com.Settings;
 
 
+import org.json.JSONObject;
 
 /**
  * Created by titech on 18/7/17.
@@ -41,4 +42,8 @@ public class Constants {
     public static String competed_category = "competed_category";
     public static String coached_anybody = "coached_anybody";
     public static String certified_trainer = "certified_trainer";
+
+
+    public static JSONObject questionData = new JSONObject();
+
 }

@@ -47,6 +47,9 @@ public class VideoUploadActivity extends AppCompatActivity {
     boolean allVideoUpload = false;
     int currentPos = 0;
 
+
+    JSONObject videoUpload = new JSONObject();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +84,8 @@ public class VideoUploadActivity extends AppCompatActivity {
                     currentPos++;
 
 
+
+
                     setData(currentPos);
                     next.setVisibility(View.GONE);
                     upload.setVisibility(View.GONE);
@@ -90,7 +95,14 @@ public class VideoUploadActivity extends AppCompatActivity {
 
 
                 } else {
+                    try {
+                        Constants.questionData.put("video data",videoUpload);
 
+                        CommonCall.PrintLog("video data",Constants.questionData.toString());
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     Intent exit = new Intent(getApplicationContext(), DoneActivity.class);
                     startActivity(exit);
                 }
@@ -447,6 +459,15 @@ try {
 
                     upload.setVisibility(View.GONE);
                     next.setVisibility(View.VISIBLE);
+
+
+                    /*
+                    * save data
+                    *
+                    * */
+
+                    videoUpload.put("video_url",obj.getString("Url"));
+                    videoUpload.put("subCat_name",currentSubCat.getString("subCat_name"));
 
                 } else if (obj.getInt(Constants.status) == 2) {
                     Toast.makeText(VideoUploadActivity.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
