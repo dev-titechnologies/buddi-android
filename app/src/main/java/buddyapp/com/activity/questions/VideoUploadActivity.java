@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -173,13 +174,16 @@ public class VideoUploadActivity extends AppCompatActivity {
     }//onActivityResult
 
     public long checkVideoDurationValidation(Uri uri) {
-
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        long timeInMillisec =0;
+try {
+    MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 //use one of overloaded setDataSource() functions to set your data source
-        retriever.setDataSource(getApplicationContext(), uri);
-        String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        long timeInMillisec = Long.parseLong(time);
-
+    retriever.setDataSource(getApplicationContext(), uri);
+    String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+     timeInMillisec = Long.parseLong(time);
+}catch (Exception e){
+    e.printStackTrace();
+}
         return TimeUnit.MILLISECONDS.toSeconds(timeInMillisec);
     }
 
@@ -454,4 +458,16 @@ public class VideoUploadActivity extends AppCompatActivity {
             }
         }
     }
+
+
+    /**
+     * need for Android 6 real time permissions
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    }
+
+
 }

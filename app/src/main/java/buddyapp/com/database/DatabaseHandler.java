@@ -167,7 +167,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public JSONArray getAllCAT() {
      JSONArray categoryList = new JSONArray();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_CATEGORY;
+        String selectQuery = "SELECT  * FROM " + TABLE_CATEGORY+" WHERE "+CAT_STATUS+" = 1";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
