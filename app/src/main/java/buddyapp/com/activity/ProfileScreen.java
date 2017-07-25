@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -53,7 +54,7 @@ import buddyapp.com.utils.Utility;
 public class ProfileScreen extends AppCompatActivity {
     CountryCodePicker ccp;
     String smobile;
-    boolean editflag=false;
+    boolean editflag = false;
     private String userChoosenTask;
     boolean isValid = false;
     Uri image_uri;
@@ -62,14 +63,15 @@ public class ProfileScreen extends AppCompatActivity {
     EditText firstName, lastName, eMail, password, mobile;
     CircleImageView userImageView;
     LinearLayout trainerCategory;
-    String semail, sfname,  slname, sgender="", scountrycode, spassword, sfacebookId="",sgoogleplusId="";
-    String register_type= "normal";
+    String semail, sfname, slname, sgender = "", scountrycode, spassword, sfacebookId = "", sgoogleplusId = "";
+    String register_type = "normal";
     private PopupMenu popupMenu;
     String user_image;
     private static final int CAMERA_REQUEST = 1888;
     private static int RESULT_LOAD_IMAGE = 1;
     int REQUEST_CROP_PICTURE = 222;
-    String  imageurl="" ;
+    String imageurl = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,10 +90,9 @@ public class ProfileScreen extends AppCompatActivity {
         rg = (RadioGroup) findViewById(R.id.radioGroup);
         rbmale = (RadioButton) findViewById(R.id.male);
         rbfemale = (RadioButton) findViewById(R.id.female);
-        userImageView = (CircleImageView) findViewById(R.id.userImageView);
-        userImageView.setClickable(false);
+        userImageView = (CircleImageView) findViewById(R.id.userimageView);
         trainerCategory = (LinearLayout) findViewById(R.id.trainer_category);
-        if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")){
+        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
             trainerCategory.setVisibility(View.VISIBLE);
         }
 
@@ -102,25 +103,25 @@ public class ProfileScreen extends AppCompatActivity {
         userImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final CharSequence[] items = { "Take Photo", "Choose from Library",
-                        "Cancel" };
+                final CharSequence[] items = {"Take Photo", "Choose from Library",
+                        "Cancel"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(ProfileScreen.this);
                 builder.setTitle("Add Photo!");
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
-                        boolean result= Utility.checkPermission(ProfileScreen.this);
+                        boolean result = Utility.checkPermission(ProfileScreen.this);
 
                         if (items[item].equals("Take Photo")) {
-                            userChoosenTask ="Take Photo";
+                            userChoosenTask = "Take Photo";
 
-                                cameraIntent();
+                            cameraIntent();
 
                         } else if (items[item].equals("Choose from Library")) {
-                            userChoosenTask ="Choose from Library";
+                            userChoosenTask = "Choose from Library";
 
-                                galleryIntent();
+                            galleryIntent();
 
                         } else if (items[item].equals("Cancel")) {
                             dialog.dismiss();
@@ -132,7 +133,7 @@ public class ProfileScreen extends AppCompatActivity {
         });
     }
 
-    private void galleryIntent(){
+    private void galleryIntent() {
 				/*Intent i = new Intent(
                         Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);*/
@@ -142,8 +143,7 @@ public class ProfileScreen extends AppCompatActivity {
         startActivityForResult(getIntent, RESULT_LOAD_IMAGE);
     }
 
-    private void cameraIntent()
-    {
+    private void cameraIntent() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         image_uri = getOutputMediaFileUri(1);
 
@@ -151,19 +151,24 @@ public class ProfileScreen extends AppCompatActivity {
         startActivityForResult(intent, CAMERA_REQUEST);
 
     }
+
     private void onCaptureImageResult() {
 
-        String img_url= image_uri.getPath();
+        String img_url = image_uri.getPath();
         Intent crop = new Intent(getApplicationContext(), CropActivity.class);
-        crop.putExtra("url",img_url);
+        crop.putExtra("url", img_url);
 
         startActivityForResult(crop, REQUEST_CROP_PICTURE);
- }
+    }
+
     /*Create a file Uri for saving an image or video */
     private Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
     }
-    /** Create a File for saving an image or video */
+
+    /**
+     * Create a File for saving an image or video
+     */
     private File getOutputMediaFile(int type) {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
@@ -200,47 +205,48 @@ public class ProfileScreen extends AppCompatActivity {
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.edit_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu){
+    public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.menu_item).setEnabled(true);
 
         return super.onPrepareOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                 finish();
-                 break;
+                finish();
+                break;
             case R.id.menu_item:
-                if(!editflag)
-                {
+                if (!editflag) {
                     item.setIcon(R.mipmap.ic_launcher);
-                    editflag=true;
+                    editflag = true;
                     userImageView.setClickable(true);
                     editProfile();
                     Toast.makeText(this, "Edit Profile", Toast.LENGTH_SHORT).show();
 
-                }else{
+                } else {
                     item.setIcon(R.mipmap.ic_launcher_round);
-                    editflag=false;
+                    editflag = false;
                     Toast.makeText(this, "Saving Please wait...", Toast.LENGTH_SHORT).show();
-                    if(validateFeelds()) {
+                    if (validateFeelds()) {
                         userImageView.setClickable(false);
                         new updateProfile().execute();
                     }
                 }
                 break;
-            default: return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
         return true;
     }
-
 
 
     private void editProfile() {
@@ -264,7 +270,7 @@ public class ProfileScreen extends AppCompatActivity {
         finish();
     }
 
-// loading profile from db
+    // loading profile from db
     private void loadProfile() {
 
         firstName.setFocusable(false);
@@ -294,36 +300,49 @@ public class ProfileScreen extends AppCompatActivity {
             if (gender.equalsIgnoreCase("male")) {
                 rbmale.setVisibility(View.VISIBLE);
                 rbmale.setChecked(true);
+                sgender = "male";
             } else {
                 rbfemale.setVisibility(View.VISIBLE);
                 rbfemale.setChecked(true);
+                sgender = "female";
             }
             CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView, R.drawable.ic_no_image, R.drawable.ic_broken_image);
-        }catch (Exception e){
+
+            // ********************* navigation view *****************8
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//            navigationView.setNavigationItemSelectedListener();
+            View hView =  navigationView.getHeaderView(0);
+
+            CircleImageView userImage = (CircleImageView) hView.findViewById(R.id.userImageView);
+            CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImage, R.drawable.ic_no_image, R.drawable.ic_broken_image);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-// getting profile details from server
-    class getProfile extends AsyncTask<String,String,String> {
+    // getting profile details from server
+    class getProfile extends AsyncTask<String, String, String> {
         JSONObject reqData = new JSONObject();
         String response;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            CommonCall.showLoader(ProfileScreen.this);
         }
 
         @Override
         protected String doInBackground(String... strings) {
             try {
-                reqData.put(Constants.token, PreferencesUtils.getData(Constants.token,getApplicationContext(),""));
-                reqData.put(Constants.user_type,PreferencesUtils.getData(Constants.user_type,getApplicationContext(),""));
-                reqData.put(Constants.user_id,PreferencesUtils.getData(Constants.user_id,getApplicationContext(),""));
-                response = NetworkCalls.POST(Urls.getTraineeProfileURL(),reqData.toString());
+                reqData.put(Constants.token, PreferencesUtils.getData(Constants.token, getApplicationContext(), ""));
+                reqData.put(Constants.user_type, PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
+                reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
+                response = NetworkCalls.POST(Urls.getTraineeProfileURL(), reqData.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
-            } catch (Exception e){
+            } catch (Exception e) {
 
             }
             return response;
@@ -332,97 +351,100 @@ public class ProfileScreen extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            CommonCall.hideLoader();
             try {
-                JSONObject obj= new JSONObject(s);
-                    if(obj.getInt(Constants.status)==1) {
-                        JSONObject jsonObject = obj.getJSONObject("data");
-                        PreferencesUtils.saveData(Constants.email, jsonObject.getString(Constants.email), getApplicationContext());
-                        PreferencesUtils.saveData(Constants.fname, jsonObject.getString(Constants.fname), getApplicationContext());
-                        PreferencesUtils.saveData(Constants.lname, jsonObject.getString(Constants.lname), getApplicationContext());
-                        PreferencesUtils.saveData(Constants.user_image,jsonObject.getString(Constants.user_image), getApplicationContext());
-                        PreferencesUtils.saveData(Constants.gender,jsonObject.getString(Constants.gender), getApplicationContext());
-                        PreferencesUtils.saveData(Constants.user_type,jsonObject.getString(Constants.user_type), getApplicationContext());
-                        PreferencesUtils.saveData(Constants.mobile,jsonObject.getString(Constants.mobile),getApplicationContext());
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt(Constants.status) == 1) {
+                    JSONObject jsonObject = obj.getJSONObject("data");
+                    PreferencesUtils.saveData(Constants.email, jsonObject.getString(Constants.email), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.fname, jsonObject.getString(Constants.fname), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.lname, jsonObject.getString(Constants.lname), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.user_image, jsonObject.getString(Constants.user_image), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.user_type, jsonObject.getString(Constants.user_type), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
 
-                        loadProfile();
+                    loadProfile();
 
-                    }else if(obj.getInt(Constants.status)==2){
-                        Toast.makeText(ProfileScreen.this,obj.getString("message"), Toast.LENGTH_SHORT).show();
-                    }else{
-                        //session out
-                    }
-                }catch (JSONException e){
-e.printStackTrace();
+                } else if (obj.getInt(Constants.status) == 2) {
+                    Toast.makeText(ProfileScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                } else {
+                    //session out
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
     }
 
-// Updating profile
-    class updateProfile extends AsyncTask<String,String,String> {
-    JSONObject reqData = new JSONObject();
-    String registerResponse;
+    // Updating profile
+    class updateProfile extends AsyncTask<String, String, String> {
+        JSONObject reqData = new JSONObject();
+        String registerResponse;
 
-    @Override
-    protected void onPreExecute() {
-        CommonCall.showLoader(ProfileScreen.this);
-
-
-    }
-
-    @Override
-    protected String doInBackground(String... strings) {
-        try {
-            reqData.put("first_name", sfname);
-            reqData.put("last_name", slname);
-            reqData.put("mobile", smobile);
-            reqData.put("gender", sgender);
-            reqData.put("user_image", user_image);
-            reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
-            reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
-            reqData.put("profile_desc", "Description");
-
-            registerResponse = NetworkCalls.POST(Urls.getEditTraineeProfileURL(), reqData.toString());
+        @Override
+        protected void onPreExecute() {
+            CommonCall.showLoader(ProfileScreen.this);
 
 
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-        return registerResponse;
-    }
 
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-        try {
-            JSONObject obj = new JSONObject(s);
-            if (obj.getInt("status") == 1) {
-                PreferencesUtils.saveData(Constants.email, obj.getString(Constants.email), getApplicationContext());
-                PreferencesUtils.saveData(Constants.fname, obj.getString(Constants.fname), getApplicationContext());
-                PreferencesUtils.saveData(Constants.lname, obj.getString(Constants.lname), getApplicationContext());
-                PreferencesUtils.saveData(Constants.user_image, obj.getString(Constants.user_image), getApplicationContext());
-                PreferencesUtils.saveData(Constants.gender, obj.getString(Constants.gender), getApplicationContext());
-                PreferencesUtils.saveData(Constants.mobile, obj.getString(Constants.mobile), getApplicationContext());
-                loadProfile();
-            } else if (obj.getInt("status") == 2) {
-                Toast.makeText(ProfileScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
-            } else if (obj.getInt("status") == 3) {
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                reqData.put("first_name", sfname);
+                reqData.put("last_name", slname);
+                reqData.put("mobile", smobile);
+                reqData.put("gender", sgender);
+                reqData.put("user_image", user_image);
+                reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
+                reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
+                reqData.put("profile_desc", "Description");
 
-            } else {
+                registerResponse = NetworkCalls.POST(Urls.getEditTraineeProfileURL(), reqData.toString());
 
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return registerResponse;
         }
-        CommonCall.hideLoader();
 
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt("status") == 1) {
+                    JSONObject jsonObject = obj.getJSONObject("data");
+                    PreferencesUtils.saveData(Constants.email, jsonObject.getString(Constants.email), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.fname, jsonObject.getString(Constants.fname), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.lname, jsonObject.getString(Constants.lname), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.user_image, jsonObject.getString(Constants.user_image), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
+                    loadProfile();
+                } else if (obj.getInt("status") == 2) {
+                    Toast.makeText(ProfileScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                } else if (obj.getInt("status") == 3) {
+
+                } else {
+
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            CommonCall.hideLoader();
+
+        }
     }
-}
+
     /********************** Field validation *******************/
 
     private boolean validateFeelds() {
 
-    try {
+        try {
 
             scountrycode = ccp.getSelectedCountryCode();
             smobile = String.valueOf(mobile.getText());
@@ -433,9 +455,8 @@ e.printStackTrace();
             isValid = phoneUtil.isValidNumber(swissNumberProto); // returns true
             if (isValid) {
                 CommonCall.PrintLog("Phone number", swissNumberProto + "");
-                smobile = "+"+scountrycode+"-"+smobile;
-            }
-            else
+                smobile = "+" + scountrycode + "-" + smobile;
+            } else
                 CommonCall.PrintLog("Invalid", "Invalid");
         } catch (NumberParseException e) {
             System.err.println("NumberParseException was thrown: " + e.toString());
@@ -467,7 +488,7 @@ e.printStackTrace();
             focusView = rg;
             focusView.requestFocus();
             return false;
-        } else if(imageurl.length()== 0) {
+        } else if (imageurl.length() == 0) {
             Toast.makeText(getApplicationContext(), "Please select profile image", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -481,7 +502,8 @@ e.printStackTrace();
             focusView = password;
             focusView.requestFocus();
             return false;
-        } */else {
+        } */
+        else {
             sfname = firstName.getText().toString();
             slname = lastName.getText().toString();
             semail = eMail.getText().toString();
@@ -490,6 +512,7 @@ e.printStackTrace();
             return true;
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
@@ -501,16 +524,12 @@ e.printStackTrace();
             try {
                 imageurl = image_uri.getPath();
                 userImageView.setImageURI(Uri.parse(imageurl));
-
-                } catch (Exception e) {
+                new upLoad().execute();
+            } catch (Exception e) {
                 // TODO Auto-generated catch block
                 System.out.println("imageeeeeeeeee exception");
                 e.printStackTrace();
             }
-
-
-
-
 
 
         }
@@ -518,7 +537,7 @@ e.printStackTrace();
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
 
             Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
             Cursor cursor = getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
@@ -529,19 +548,18 @@ e.printStackTrace();
             cursor.close();
 
 
-
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
 
             //Returns null, sizes are in the options variable
-            Bitmap bitmap=  BitmapFactory.decodeFile(picturePath, options);
-            System.out.println("wistdh"+options.outWidth);
-                imageurl=picturePath;
+            Bitmap bitmap = BitmapFactory.decodeFile(picturePath, options);
+            System.out.println("wistdh" + options.outWidth);
+            imageurl = picturePath;
 
-                Log.e("CUrent source","gallery");
-                checkOrientation(imageurl);
+            Log.e("CUrent source", "gallery");
 
-                userImageView.setImageURI(Uri.parse(imageurl));
+            userImageView.setImageURI(Uri.parse(imageurl));
+            new upLoad().execute();
 //                CommonMethods.createAlert(CommentsPage.this, "Please select an image with minimum width of 580"
 //                        , "Alert");
 
@@ -554,90 +572,45 @@ e.printStackTrace();
 //		    }
 
     }
-    public String getPathFromCamera(){
-
-        String path="";
-        Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media.DATA, MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.ImageColumns.ORIENTATION}, MediaStore.Images.Media.DATE_ADDED, null, "date_added ASC");
-        if(cursor != null && cursor.moveToFirst())
-        {
-            do {
-
-                path=(Uri.parse(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))).toString());
-            }while(cursor.moveToNext());
-
-        }
-        cursor.close();
-        return path;
-    }
-/*
-	 * check orientation for images from gallery
-	 */
-
-    public void checkOrientation(String picturePath){
 
 
-        try{
-            BitmapFactory.Options options = new BitmapFactory.Options();
+    class upLoad extends AsyncTask<String, String, String> {
+        JSONObject reqData = new JSONObject();
+        String response;
 
-
-            //Returns null, sizes are in the options variable
-            Bitmap bmp=  BitmapFactory.decodeFile(picturePath, options);
-
-            ExifInterface exif = new ExifInterface(picturePath);
-            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-
-            System.out.println("image orientation "+orientation);
-
-            if(orientation==6){
-
-                Matrix matrix = new Matrix();
-                matrix.postRotate(90);
-                Bitmap rotatedBitmap = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
-                //previewimg.setImageBitmap(rotatedBitmap);
-
-                File sdfile=new File(Environment.getExternalStorageDirectory()+"/orientedbitmaps/");
-                if(!sdfile.exists())
-
-                    sdfile.mkdirs();
-
-                imageurl=sdfile.toString()+new File(picturePath).getName();
-
-                saveBitmapPNG(sdfile.toString()+new File(picturePath).getName(),rotatedBitmap);
-
-
-
-            }
-        }
-        catch(IOException e){
-            e.printStackTrace();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            CommonCall.showLoader(ProfileScreen.this);
         }
 
-    }
-    /*
- * save rotaed bitmap to device
- *
- *
- */
-    private  Bitmap saveBitmapPNG(String strFileName, Bitmap bmp){FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(strFileName);
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            imageurl=strFileName;
-            //System.out.println("actual path savebmp1"+imageurl);
+        @Override
+        protected String doInBackground(String... strings) {
+            response = NetworkCalls.UPLOAD(imageurl,Urls.getUPLOADURL());
+            return response;
+        }
 
-            // PNG is a lossless format, the compression factor (100) is ignored
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            CommonCall.hideLoader();
             try {
-                if (out != null) {
-                    out.close();
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt("status") == 1) {
+                imageurl = obj.getString("Url");
+                    if(validateFeelds())
+                    new updateProfile().execute();
+                }else if (obj.getInt("status") == 2) {
+                    Toast.makeText(ProfileScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                } else if (obj.getInt("status") == 3) {
+
+                } else {
+
                 }
-            } catch (IOException e) {
+
+            }catch (JSONException e){
                 e.printStackTrace();
             }
         }
-        return bmp;
     }
-
 }

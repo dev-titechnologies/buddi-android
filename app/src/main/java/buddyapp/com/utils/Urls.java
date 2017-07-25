@@ -31,6 +31,9 @@ public class Urls {
 
     public static String EDITTRAINEEPROFILE= "/profile/editProfile";
 
+    public static String LOGOUT= "/login/logout";
+
+    public static String BOOKINGHISTORY= "/booking/viewBookingHistory";
 
 
 
@@ -80,6 +83,14 @@ public class Urls {
     public static String getEditTraineeProfileURL()
     {
         return BASEURL+EDITTRAINEEPROFILE;
+    }
+
+    public static String getLogoutURL(){
+        return BASEURL+LOGOUT;
+    }
+
+    public static String getBookingHistoryURL(){
+        return BASEURL+BOOKINGHISTORY;
     }
 
 }

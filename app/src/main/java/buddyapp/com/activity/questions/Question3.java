@@ -2,6 +2,7 @@ package buddyapp.com.activity.questions;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -81,67 +82,71 @@ if (training_exp.getText().toString().trim().length()==0){
 
 }    }
         });
-
-        yes_competed_category.setOnTouchListener(new View.OnTouchListener() {
-
+        yes_competed_category.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View view) {
                 competed_category ="yes";
-                yes_competed_category.setPressed(true);
-                no_competed_category.setPressed(false);
-                return true;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    yes_competed_category.setBackground(getResources().getDrawable(R.drawable.round_blue));
+                    no_competed_category.setBackground(getResources().getDrawable(R.drawable.pressed));
+                }
             }
         });
-        no_competed_category.setOnTouchListener(new View.OnTouchListener() {
-
+        no_competed_category.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View view) {
                 competed_category ="no";
-                no_competed_category.setPressed(true);
-                yes_competed_category.setPressed(false);
-                return true;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    no_competed_category.setBackground(getResources().getDrawable(R.drawable.round_blue));
+                    yes_competed_category.setBackground(getResources().getDrawable(R.drawable.pressed));
+                }
             }
         });
-        yes_coached_anybody.setOnTouchListener(new View.OnTouchListener() {
 
+
+        yes_coached_anybody.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View view) {
                 coached_anybody ="yes";
-                yes_coached_anybody.setPressed(true);
-                no_coached_anybody.setPressed(false);
-                return true;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    yes_coached_anybody.setBackground(getResources().getDrawable(R.drawable.round_blue));
+                    no_coached_anybody.setBackground(getResources().getDrawable(R.drawable.pressed));
+                }
             }
         });
-        no_coached_anybody.setOnTouchListener(new View.OnTouchListener() {
-
+        no_coached_anybody.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View view) {
                 coached_anybody ="no";
-                no_coached_anybody.setPressed(true);
-                yes_coached_anybody.setPressed(false);
-                return true;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    no_coached_anybody.setBackground(getResources().getDrawable(R.drawable.round_blue));
+                    yes_coached_anybody.setBackground(getResources().getDrawable(R.drawable.pressed));
+                }
             }
         });
-        yes_certified_trainer.setOnTouchListener(new View.OnTouchListener() {
 
+
+        yes_certified_trainer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View view) {
                 certified_trainer ="yes";
-                yes_certified_trainer.setPressed(true);
-                no_certified_trainer.setPressed(false);
-                return true;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    yes_certified_trainer.setBackground(getResources().getDrawable(R.drawable.round_blue));
+                    no_certified_trainer.setBackground(getResources().getDrawable(R.drawable.pressed));
+                }
             }
         });
-        no_certified_trainer.setOnTouchListener(new View.OnTouchListener() {
-
+        no_certified_trainer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View view) {
                 certified_trainer ="no";
-                no_certified_trainer.setPressed(true);
-                yes_certified_trainer.setPressed(false);
-                return true;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    no_certified_trainer.setBackground(getResources().getDrawable(R.drawable.round_blue));
+                    yes_certified_trainer.setBackground(getResources().getDrawable(R.drawable.pressed));
+                }
             }
         });
+
 
     }
     @Override

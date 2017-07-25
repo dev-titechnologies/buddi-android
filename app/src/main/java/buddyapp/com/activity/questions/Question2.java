@@ -47,24 +47,28 @@ public class Question2 extends Activity {
             }
         });
 
-        yes_military_installations.setOnTouchListener(new View.OnTouchListener() {
-
+        yes_military_installations.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View view) {
                 military_installations_selected ="yes";
-                yes_military_installations.setPressed(true);
-                no_military_installations.setPressed(false);
-                return true;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    yes_military_installations.setBackground(getResources().getDrawable(R.drawable.round_blue));
+                    no_military_installations.setBackground(getResources().getDrawable(R.drawable.pressed));
+
+                }
+
             }
         });
-        no_military_installations.setOnTouchListener(new View.OnTouchListener() {
-
+        no_military_installations.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    no_military_installations.setBackground(getResources().getDrawable(R.drawable.round_blue));
+                    yes_military_installations.setBackground(getResources().getDrawable(R.drawable.pressed));
+
+                }
                 military_installations_selected ="no";
-                no_military_installations.setPressed(true);
-                yes_military_installations.setPressed(false);
-                return true;
+
             }
         });
 

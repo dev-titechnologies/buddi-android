@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -52,10 +53,10 @@ import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
 public class RegisterScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    TextView Google, facebook, next;
+    TextView  next;
     String semail, sfname,  slname, sgender="", scountrycode, smobilenumber, spassword, sfacebookId="",sgoogleplusId="";
     String register_type= "normal";
-
+    ImageView Google, facebook;
     String user_image;
 
     CountryCodePicker ccp;
@@ -90,7 +91,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         next = (TextView) findViewById(R.id.next);
         mobile = (EditText) findViewById(R.id.mobile);
 
-        Google = (TextView) findViewById(R.id.googleplus);
+        Google = (ImageView) findViewById(R.id.googleplus);
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -113,7 +114,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
 
         facebook_loginbutton = (LoginButton) findViewById(R.id.login_button);
         LoginManager.getInstance().logOut();
-        facebook = (TextView) findViewById(R.id.facebook);
+        facebook = (ImageView) findViewById(R.id.facebook);
         facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,6 +1,9 @@
 package buddyapp.com.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -40,9 +44,9 @@ import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
 public class LoginScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    TextView Google, facebook, login, forgotpassword;
+    TextView login, forgotpassword;
     String semail, sfname, slname, sgender="", scountrycode, smobilenumber, spassword, sfacebookId="", sgoogleplusId="";
-
+    ImageView Google, facebook;
     boolean isValid = false;
     LoginButton facebook_loginbutton;
     CallbackManager callbackManager;
@@ -59,9 +63,10 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
         password =(EditText)findViewById(R.id.password);
         login = (TextView) findViewById(R.id.next);
         forgotpassword = (TextView) findViewById(R.id.forgotpassword);
-        Google = (TextView) findViewById(R.id.googleplus);
+        Google = (ImageView) findViewById(R.id.googleplus);
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -81,13 +86,17 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
         });
         facebook_loginbutton = (LoginButton) findViewById(R.id.login_button);
         LoginManager.getInstance().logOut();
-        facebook = (TextView) findViewById(R.id.facebook);
+        facebook = (ImageView) findViewById(R.id.facebook);
         facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                facebook.setEnabled(false);
-                facebook_loginbutton.performClick();
-                fblogin();
+                if(isNetworkAvailable()) {
+                    facebook.setEnabled(false);
+                    facebook_loginbutton.performClick();
+                    fblogin();
+                }else {
+                    Toast.makeText(getApplicationContext(), " Please check your internet connection", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -104,8 +113,12 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 else{
                     semail = eMail.getText().toString();
                     spassword = password.getText().toString();
+                    if(isNetworkAvailable())
                     new login().execute();
-                }
+                    else {
+                        Toast.makeText(getApplicationContext(), " Please check your internet connection", Toast.LENGTH_SHORT).show();
+                    }
+                    }
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -149,7 +162,11 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                                             }
                                         }
                                         sfacebookId = object.getString("id");
+                                        if(isNetworkAvailable())
                                         new login().execute();
+                                        else {
+                                            Toast.makeText(getApplicationContext(), " Please check your internet connection", Toast.LENGTH_SHORT).show();
+                                        }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -164,13 +181,13 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 @Override
                 public void onCancel() {
                     facebook.setEnabled(true);
-                    Toast.makeText(getApplicationContext(),"Login Failed", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(),"Login Failed", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onError(FacebookException exception) {
                     facebook.setEnabled(true);
-                    Toast.makeText(getApplicationContext(),"Login Failed", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(),"Login Failed", Toast.LENGTH_SHORT).show();
                     exception.printStackTrace();
                 }
             });
@@ -200,7 +217,11 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 login_type = "google";
                 if (acct.getEmail()!=null)
                     eMail.setText(acct.getEmail());
+                if(isNetworkAvailable())
                 new login().execute();
+                else {
+                    Toast.makeText(getApplicationContext(), " Please check your internet connection", Toast.LENGTH_SHORT).show();
+                }
                 Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(this, "Login Failed!", Toast.LENGTH_SHORT).show();
@@ -280,8 +301,17 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        catch (Exception e){}
+        catch (Exception e){
+            e.printStackTrace();
+        }
             CommonCall.hideLoader();
         }
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

@@ -1,7 +1,9 @@
 package buddyapp.com.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,16 +14,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.activity.Fragment.BookingHistory;
+import buddyapp.com.activity.Fragment.Legal;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
+import buddyapp.com.utils.NetworkCalls;
+import buddyapp.com.utils.Urls;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,8 +43,6 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -125,6 +131,9 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_payment) {
+            Fragment fragment = new BookingHistory();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         } else if (id == R.id.nav_trainer) {
 
@@ -133,15 +142,47 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_help) {
 
         } else if (id == R.id.nav_legal) {
+            Fragment fragment = new Legal();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         } else if (id == R.id.nav_logout) {
-            PreferencesUtils.saveData(Constants.token,"", getApplicationContext());
-            LoginManager.getInstance().logOut();
-            finish();
+
+            new LogOutTask().execute();
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    class LogOutTask extends AsyncTask<String,String,String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String response = NetworkCalls.POST(Urls.getLogoutURL(),"");
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt("status") == 1) {
+                    PreferencesUtils.saveData(Constants.token,"", getApplicationContext());
+                    LoginManager.getInstance().logOut();
+                    Intent intent = new Intent(getApplicationContext(),WelcomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else if(obj.getInt("status") == 2){
+                    Toast.makeText(getApplicationContext(),obj.getString("message"),Toast.LENGTH_SHORT);
+                }
+            }catch (JSONException e){
+               e.printStackTrace();
+            }
+
+        }
     }
 }

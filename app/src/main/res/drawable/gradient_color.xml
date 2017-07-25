@@ -4,15 +4,15 @@
         android:centerX="45%"
         android:startColor="#FF003333"
         android:centerColor="#FF05C1FF"
-        android:endColor="#FF169C95"
+        android:endColor="#6fcaff"
         android:angle="315"/>
 
 <gradient
     android:type="radial"
     android:centerX="50%"
     android:centerY="50%"
-    android:startColor="#FF003333"
+    android:startColor="#1aafaf"
     android:centerColor="#FF05C1FF"
-    android:endColor="#FF169C95"
+    android:endColor="#2daeca"
     android:gradientRadius="45"/>
 </shape>

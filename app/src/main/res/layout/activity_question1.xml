@@ -62,6 +62,7 @@
     android:layout_width="match_parent"
     android:id="@+id/zipcode"
     android:inputType="number"
+    android:backgroundTint="@color/colorPrimary"
     android:layout_height="wrap_content" />
 </LinearLayout>
 

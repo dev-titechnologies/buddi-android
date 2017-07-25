@@ -3,6 +3,7 @@ package buddyapp.com.activity.questions;
 
 
 import android.app.Activity;
+import android.os.Build;
 import android.support.v7.app.ActionBar;
 
 import android.content.Intent;
@@ -74,27 +75,24 @@ sub_list=(ListView)findViewById(R.id.sub_list);
                 finish();
             }
         });
-        yes_pounds.setOnTouchListener(new View.OnTouchListener() {
-
+        yes_pounds.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View view) {
                 pounds="yes";
-                yes_pounds.setPressed(true);
-                no_pounds.setPressed(false);
-                return true;
-
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    yes_pounds.setBackground(getResources().getDrawable(R.drawable.round_blue));
+                    no_pounds.setBackground(getResources().getDrawable(R.drawable.pressed));
+                }
             }
         });
-        no_pounds.setOnTouchListener(new View.OnTouchListener() {
-
+        no_pounds.setOnClickListener(new View.OnClickListener() {
             @Override
-
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View view) {
                 pounds="no";
-                no_pounds.setPressed(true);
-                yes_pounds.setPressed(false);
-                return true;
-
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    no_pounds.setBackground(getResources().getDrawable(R.drawable.round_blue));
+                    yes_pounds.setBackground(getResources().getDrawable(R.drawable.pressed));
+                }
             }
         });
 
