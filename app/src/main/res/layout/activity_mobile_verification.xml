@@ -58,18 +58,18 @@
         android:weightSum="2"
         android:orientation="horizontal">
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
+            android:layout_weight="1"
             android:background="@color/white"
             android:textColor="@color/button_text"
             android:id="@+id/chanegnumber"
             android:text="CHANGE NUMBER"/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.2"
+            android:layout_weight="1"
             android:gravity="center"
             android:visibility="invisible"
             android:textColor="@color/button_text"

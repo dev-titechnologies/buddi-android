@@ -5,21 +5,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="buddyapp.com.activity.questions.Question3">
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:id="@+id/toolbar"
+        android:background="@color/colorPrimary"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/back"
+                android:layout_gravity="start"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:padding="@dimen/small"
+                android:layout_toRightOf="@id/back"
+                android:textSize="21sp"
+                android:text="@string/more_information"/>
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
     <ScrollView
         android:layout_width="match_parent"
-
+        android:layout_below="@id/toolbar"
         android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="10dp"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:text="@string/more_information"
-                android:layout_height="wrap_content" />
-
 
             <TextView
                 android:layout_width="match_parent"
@@ -27,12 +51,15 @@
                 android:layout_height="wrap_content" />
           <LinearLayout
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:layout_margin="20dp"
+              android:gravity="center">
              <buddyapp.com.utils.FullHeightListView
-                 android:layout_width="match_parent"
+                 android:layout_width="wrap_content"
                  android:id="@+id/sub_list"
-
-                 android:layout_height="match_parent"></buddyapp.com.utils.FullHeightListView>
+                 android:padding="5dp"
+                 android:background="@drawable/round_corner_next_border"
+                 android:layout_height="match_parent"/>
 
 
 
@@ -45,40 +72,47 @@
 
             <EditText
                 android:layout_width="match_parent"
-                android:text="weight"
+                android:hint="weight"
                 android:id="@+id/weight"
                 android:inputType="number"
                 android:layout_height="wrap_content" />
             <TextView
                 android:layout_width="match_parent"
                 android:text="@string/pounds_text"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
-                android:layout_height="wrap_content">
+                android:layout_height="30dp">
                 <Button
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
                     android:id="@+id/yes_pounds"
+                    android:background="@drawable/pressed"
                     android:text="@string/yes"
                     android:layout_height="wrap_content" />
+                <View
+                android:layout_width="5dp"
+                android:layout_height="10dp"/>
                 <Button
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
                     android:text="@string/no"
+                    android:background="@drawable/pressed"
                     android:id="@+id/no_pounds"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
 
-            <Button
-                android:layout_width="match_parent"
-                android:text="@string/next"
-                android:id="@+id/next"
-                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </ScrollView>
-
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/next"
+        android:textColor="@color/white"
+        android:layout_marginTop="20dp"
+        android:id="@+id/next"
+        android:layout_alignParentBottom="true"
+        android:background="@color/button_bgcolor"/>
 </RelativeLayout>

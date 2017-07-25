@@ -1,12 +1,19 @@
 package buddyapp.com.activity.questions;
 
 
+
+import android.app.Activity;
+import android.support.v7.app.ActionBar;
+
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -26,8 +33,9 @@ import buddyapp.com.adapter.SubCategoryAdapter;
 import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.utils.CommonCall;
 
-public class Question4 extends AppCompatActivity {
-    Button next, yes_pounds, no_pounds;
+
+public class Question4 extends Activity {
+    Button next,yes_pounds,no_pounds;
 
     ListView sub_list;
     DatabaseHandler db;
@@ -37,8 +45,8 @@ public class Question4 extends AppCompatActivity {
     EditText weight;
     HashSet subCats;
 
-    String pounds = "";
-
+    ImageView back;
+    String pounds="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,23 +54,47 @@ public class Question4 extends AppCompatActivity {
 
 
         sub_cat_selectedID = new ArrayList<>();
-        db = new DatabaseHandler(getApplicationContext());
-        yes_pounds = (Button) findViewById(R.id.yes_pounds);
-        no_pounds = (Button) findViewById(R.id.no_pounds);
-        next = (Button) findViewById(R.id.next);
-        weight = (EditText) findViewById(R.id.weight);
-        sub_list = (ListView) findViewById(R.id.sub_list);
 
-        yes_pounds.setOnClickListener(new View.OnClickListener() {
+
+        db=new DatabaseHandler(getApplicationContext());
+        yes_pounds=(Button)findViewById(R.id.yes_pounds);
+        no_pounds=(Button)findViewById(R.id.no_pounds);
+        next=(Button)findViewById(R.id.next);
+        weight=(EditText)findViewById(R.id.weight);
+sub_list=(ListView)findViewById(R.id.sub_list);
+        back = (ImageView) findViewById(R.id.back);
+
+
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 pounds = "yes";
+
+                finish();
             }
         });
-        no_pounds.setOnClickListener(new View.OnClickListener() {
+        yes_pounds.setOnTouchListener(new View.OnTouchListener() {
+
             @Override
-            public void onClick(View view) {
-                pounds = "no";
+            public boolean onTouch(View v, MotionEvent event) {
+                pounds="yes";
+                yes_pounds.setPressed(true);
+                no_pounds.setPressed(false);
+                return true;
+
+            }
+        });
+        no_pounds.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+
+            public boolean onTouch(View v, MotionEvent event) {
+                pounds="no";
+                no_pounds.setPressed(true);
+                yes_pounds.setPressed(false);
+                return true;
+
             }
         });
 
@@ -128,4 +160,5 @@ public class Question4 extends AppCompatActivity {
             }
         });
     }
+
 }

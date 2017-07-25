@@ -255,7 +255,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                     PreferencesUtils.saveData(Constants.user_image,jsonObject.getString(Constants.user_image), getApplicationContext());
                     PreferencesUtils.saveData(Constants.gender,jsonObject.getString(Constants.gender), getApplicationContext());
                     PreferencesUtils.saveData(Constants.mobile,jsonObject.getString(Constants.mobile),getApplicationContext());
-                    PreferencesUtils.saveData(Constants.approved, jsonObject.getString(Constants.approved),getApplicationContext());
+//                    PreferencesUtils.saveData(Constants.approved, jsonObject.getString(Constants.approved),getApplicationContext());
 //            if(PreferencesUtils.getData(Constants.approved,getApplicationContext(), "").length()==0){
                 Intent intent = new Intent(getApplicationContext(), ChooseCategory.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);

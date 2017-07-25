@@ -1,5 +1,6 @@
 package buddyapp.com.activity.questions;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +12,7 @@ import buddyapp.com.R;
 import static buddyapp.com.activity.questions.Question4.sub_cat_selectedID;
 
 
-public class BeforeVideoActivity extends AppCompatActivity {
+public class BeforeVideoActivity extends Activity {
 
 
 Button next;
@@ -31,6 +32,5 @@ Button next;
             }
         });
 
-        getSupportActionBar().setTitle(R.string.before_video_titile);
     }
 }

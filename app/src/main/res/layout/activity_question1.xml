@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
+
     tools:context="buddyapp.com.activity.questions.Question1">
-<LinearLayout
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="50dp"
+        android:weightSum="5">
+    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="100dp"
+    android:layout_weight="1"
     android:gravity="center">
     <ImageView
         android:layout_width="wrap_content"
@@ -20,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_weight="1"
         android:gravity="center">
         <TextView
             android:layout_width="wrap_content"
@@ -29,21 +41,41 @@
             android:gravity="center"
             android:text="What  codeWhat is your is your zip codeWhat is your zip codeWhat is your zip code"/>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_weight="1"
+    android:padding="10dp"
     android:orientation="vertical">
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:textSize="12dp"
+        android:text="@string/enter_zipcode"/>
 <EditText
     android:layout_width="match_parent"
     android:id="@+id/zipcode"
+    android:inputType="number"
     android:layout_height="wrap_content" />
 </LinearLayout>
 
 
+    </LinearLayout>
+    </LinearLayout>
+</ScrollView>
     <Button
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/next"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/white"
+        android:layout_marginTop="20dp"
         android:id="@+id/next"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:background="@color/button_bgcolor"/>
+</RelativeLayout>

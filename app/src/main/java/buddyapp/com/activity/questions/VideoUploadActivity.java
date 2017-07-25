@@ -174,13 +174,16 @@ public class VideoUploadActivity extends AppCompatActivity {
     }//onActivityResult
 
     public long checkVideoDurationValidation(Uri uri) {
-
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        long timeInMillisec =0;
+try {
+    MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 //use one of overloaded setDataSource() functions to set your data source
-        retriever.setDataSource(getApplicationContext(), uri);
-        String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        long timeInMillisec = Long.parseLong(time);
-
+    retriever.setDataSource(getApplicationContext(), uri);
+    String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+     timeInMillisec = Long.parseLong(time);
+}catch (Exception e){
+    e.printStackTrace();
+}
         return TimeUnit.MILLISECONDS.toSeconds(timeInMillisec);
     }
 
