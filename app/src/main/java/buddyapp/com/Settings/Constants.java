@@ -26,8 +26,8 @@ public class Constants {
 
     public static String trainer_status = "trainer_status";
 
-    public static String approved = "approved";
-
+    public static String approved = "category_approved";
+    public static String pending = "category_pending";
 
     public static String trainee = "trainee";
 

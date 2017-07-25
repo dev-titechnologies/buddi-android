@@ -163,7 +163,8 @@ public class NetworkCalls {
             requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
 
-//                    .addFormDataPart("REQUEST", file.toString())
+                    .addFormDataPart("file_type", "img")
+                    .addFormDataPart("upload_type", "profile")
 
                     .addFormDataPart("file_name", "comment_image" + file.substring(file.lastIndexOf(".")),
                             RequestBody.create(MEDIA_TYPE_PNG, (new File(file))))

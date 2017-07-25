@@ -2,14 +2,13 @@ package buddyapp.com.activity.questions;
 
 
 import android.app.Activity;
+
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBar;
+
+import android.os.Build;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -79,26 +78,27 @@ public class Question4 extends Activity {
                 finish();
             }
         });
-        yes_pounds.setOnTouchListener(new View.OnTouchListener() {
-
+        yes_pounds.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                pounds = "yes";
-                yes_pounds.setPressed(true);
-                no_pounds.setPressed(false);
-                return true;
+
+            public void onClick(View view) {
+                pounds="yes";
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    yes_pounds.setBackground(getResources().getDrawable(R.drawable.round_blue));
+                    no_pounds.setBackground(getResources().getDrawable(R.drawable.pressed));
+                }
 
             }
         });
-        no_pounds.setOnTouchListener(new View.OnTouchListener() {
-
+        no_pounds.setOnClickListener(new View.OnClickListener() {
             @Override
 
-            public boolean onTouch(View v, MotionEvent event) {
-                pounds = "no";
-                no_pounds.setPressed(true);
-                yes_pounds.setPressed(false);
-                return true;
+            public void onClick(View view) {
+                pounds="no";
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    no_pounds.setBackground(getResources().getDrawable(R.drawable.round_blue));
+                    yes_pounds.setBackground(getResources().getDrawable(R.drawable.pressed));
+                }
 
             }
         });
@@ -144,6 +144,11 @@ public class Question4 extends Activity {
                         question.put("training_exp", PreferencesUtils.getData(Constants.training_exp, getApplicationContext(), ""));
 
                         question.put("competed_category", PreferencesUtils.getData(Constants.competed_category, getApplicationContext(), ""));
+
+
+                        question.put("coached_anybody", PreferencesUtils.getData(Constants.coached_anybody, getApplicationContext(), ""));
+
+
                         question.put("certified_trainer", PreferencesUtils.getData(Constants.certified_trainer, getApplicationContext(), ""));
 
                         question.put("weight", weight.getText().toString());
@@ -155,7 +160,7 @@ public class Question4 extends Activity {
                         questionData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
 
 
-                        questionData.put("questions", question);
+                        questionData.put("questions", question.toString());
 
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -123,12 +125,6 @@ public class CommonCall {
         return PreferencesUtils.getData(Constants.token, context, "");
 
     }
-
-
-
-
-
-
 
 
 
