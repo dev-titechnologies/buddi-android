@@ -185,4 +185,11 @@ public class HomeActivity extends AppCompatActivity
 
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CommonCall.LoadImage(getApplicationContext(),PreferencesUtils.getData(Constants.user_image,getApplicationContext(),""), userImageView,R.drawable.ic_no_image,R.drawable.ic_broken_image);
+
+    }
 }

@@ -40,6 +40,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
@@ -95,6 +97,8 @@ public class ProfileScreen extends AppCompatActivity {
         if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
             trainerCategory.setVisibility(View.VISIBLE);
         }
+
+        CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView, R.drawable.ic_no_image, R.drawable.ic_broken_image);
 
         loadProfile();
 
@@ -306,15 +310,8 @@ public class ProfileScreen extends AppCompatActivity {
                 rbfemale.setChecked(true);
                 sgender = "female";
             }
+
             CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView, R.drawable.ic_no_image, R.drawable.ic_broken_image);
-
-            // ********************* navigation view *****************8
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//            navigationView.setNavigationItemSelectedListener();
-            View hView =  navigationView.getHeaderView(0);
-
-            CircleImageView userImage = (CircleImageView) hView.findViewById(R.id.userImageView);
-            CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImage, R.drawable.ic_no_image, R.drawable.ic_broken_image);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -361,7 +358,7 @@ public class ProfileScreen extends AppCompatActivity {
                     PreferencesUtils.saveData(Constants.lname, jsonObject.getString(Constants.lname), getApplicationContext());
                     PreferencesUtils.saveData(Constants.user_image, jsonObject.getString(Constants.user_image), getApplicationContext());
                     PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.user_type, jsonObject.getString(Constants.user_type), getApplicationContext());
+//                    PreferencesUtils.saveData(Constants.user_type, jsonObject.getString(Constants.user_type), getApplicationContext());
                     PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
 
                     loadProfile();
@@ -423,7 +420,15 @@ public class ProfileScreen extends AppCompatActivity {
                     PreferencesUtils.saveData(Constants.user_image, jsonObject.getString(Constants.user_image), getApplicationContext());
                     PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
                     PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
+
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+
                     loadProfile();
+                        }
+                    }, 3000);
+
                 } else if (obj.getInt("status") == 2) {
                     Toast.makeText(ProfileScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
                 } else if (obj.getInt("status") == 3) {
@@ -439,6 +444,7 @@ public class ProfileScreen extends AppCompatActivity {
 
         }
     }
+
 
     /********************** Field validation *******************/
 
@@ -598,8 +604,10 @@ public class ProfileScreen extends AppCompatActivity {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
                 imageurl = obj.getString("Url");
-                    if(validateFeelds())
+                   if(validateFeelds())
                     new updateProfile().execute();
+
+
                 }else if (obj.getInt("status") == 2) {
                     Toast.makeText(ProfileScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
                 } else if (obj.getInt("status") == 3) {
