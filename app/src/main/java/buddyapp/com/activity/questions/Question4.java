@@ -1,16 +1,14 @@
 package buddyapp.com.activity.questions;
 
 
-
 import android.app.Activity;
+
+import android.os.AsyncTask;
+
 import android.os.Build;
-import android.support.v7.app.ActionBar;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,10 +31,14 @@ import buddyapp.com.activity.ChooseCategory;
 import buddyapp.com.adapter.SubCategoryAdapter;
 import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.utils.CommonCall;
+import buddyapp.com.utils.NetworkCalls;
+import buddyapp.com.utils.Urls;
+
+import static buddyapp.com.Settings.Constants.questionData;
 
 
 public class Question4 extends Activity {
-    Button next,yes_pounds,no_pounds;
+    Button next, yes_pounds, no_pounds;
 
     ListView sub_list;
     DatabaseHandler db;
@@ -47,7 +49,8 @@ public class Question4 extends Activity {
     HashSet subCats;
 
     ImageView back;
-    String pounds="";
+    String pounds = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,12 +60,12 @@ public class Question4 extends Activity {
         sub_cat_selectedID = new ArrayList<>();
 
 
-        db=new DatabaseHandler(getApplicationContext());
-        yes_pounds=(Button)findViewById(R.id.yes_pounds);
-        no_pounds=(Button)findViewById(R.id.no_pounds);
-        next=(Button)findViewById(R.id.next);
-        weight=(EditText)findViewById(R.id.weight);
-sub_list=(ListView)findViewById(R.id.sub_list);
+        db = new DatabaseHandler(getApplicationContext());
+        yes_pounds = (Button) findViewById(R.id.yes_pounds);
+        no_pounds = (Button) findViewById(R.id.no_pounds);
+        next = (Button) findViewById(R.id.next);
+        weight = (EditText) findViewById(R.id.weight);
+        sub_list = (ListView) findViewById(R.id.sub_list);
         back = (ImageView) findViewById(R.id.back);
 
 
@@ -77,22 +80,26 @@ sub_list=(ListView)findViewById(R.id.sub_list);
         });
         yes_pounds.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View view) {
                 pounds="yes";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     yes_pounds.setBackground(getResources().getDrawable(R.drawable.round_blue));
                     no_pounds.setBackground(getResources().getDrawable(R.drawable.pressed));
                 }
+
             }
         });
         no_pounds.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View view) {
                 pounds="no";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     no_pounds.setBackground(getResources().getDrawable(R.drawable.round_blue));
                     yes_pounds.setBackground(getResources().getDrawable(R.drawable.pressed));
                 }
+
             }
         });
 
@@ -124,39 +131,111 @@ sub_list=(ListView)findViewById(R.id.sub_list);
                 } else {
 
 
-                    JSONObject questionData = new JSONObject();
+                    JSONObject question = new JSONObject();
 
                     try {
-                        questionData.put("zipcode", PreferencesUtils.getData(Constants.zipcode, getApplicationContext(), ""));
 
-                        questionData.put("military_installations", PreferencesUtils.getData(Constants.military_installations, getApplicationContext(), ""));
-                        questionData.put("gym_subscriptions", PreferencesUtils.getData(Constants.gym_subscriptions, getApplicationContext(), ""));
 
-                        questionData.put("training_exp", PreferencesUtils.getData(Constants.training_exp, getApplicationContext(), ""));
+                        question.put("zipcode", PreferencesUtils.getData(Constants.zipcode, getApplicationContext(), ""));
 
-                        questionData.put("competed_category", PreferencesUtils.getData(Constants.competed_category, getApplicationContext(), ""));
-                        questionData.put("certified_trainer", PreferencesUtils.getData(Constants.certified_trainer, getApplicationContext(), ""));
+                        question.put("military_installations", PreferencesUtils.getData(Constants.military_installations, getApplicationContext(), ""));
+                        question.put("gym_subscriptions", PreferencesUtils.getData(Constants.gym_subscriptions, getApplicationContext(), ""));
 
-                        questionData.put("weight", weight.getText().toString());
+                        question.put("training_exp", PreferencesUtils.getData(Constants.training_exp, getApplicationContext(), ""));
 
-                        questionData.put("pounds", pounds);
+                        question.put("competed_category", PreferencesUtils.getData(Constants.competed_category, getApplicationContext(), ""));
+
+
+                        question.put("coached_anybody", PreferencesUtils.getData(Constants.coached_anybody, getApplicationContext(), ""));
+
+
+                        question.put("certified_trainer", PreferencesUtils.getData(Constants.certified_trainer, getApplicationContext(), ""));
+
+                        question.put("weight", weight.getText().toString());
+
+                        question.put("pounds", pounds);
                         questionData.put("category", ChooseCategory.cat_selectedID);
                         questionData.put("sub_cat", sub_cat_selectedID.toString());
+                        questionData.put("user_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
+                        questionData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
 
 
-                        CommonCall.PrintLog("data", questionData.toString());
+                        questionData.put("questions", question.toString());
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
-
-                    startActivity(new Intent(getApplicationContext(), BeforeVideoActivity.class));
+                  new  saveQuestionS().execute();
 
                 }
 
 
             }
         });
+    }
+
+
+    class saveQuestionS extends AsyncTask<String, String, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            CommonCall.showLoader(Question4.this);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String response = NetworkCalls.POST(Urls.getADDTRAINECATEGORYURL(), Constants.questionData.toString());
+
+            return response;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+
+                CommonCall.hideLoader();
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt(Constants.status) == 1) {
+
+
+                    Toast.makeText(Question4.this, "  Success.", Toast.LENGTH_SHORT).show();
+
+
+
+                    startActivity(new Intent(getApplicationContext(), BeforeVideoActivity.class));
+
+
+
+
+
+
+
+                } else if (obj.getInt(Constants.status) == 2) {
+
+
+                    Toast.makeText(Question4.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+
+
+
+                } else {
+
+
+                    //session out
+
+
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

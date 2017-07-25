@@ -7,7 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import buddyapp.com.R;
+import buddyapp.com.utils.CommonCall;
 
 import static buddyapp.com.activity.questions.Question4.sub_cat_selectedID;
 
@@ -16,7 +20,6 @@ public class BeforeVideoActivity extends Activity {
 
 
 Button next;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,5 +35,8 @@ Button next;
             }
         });
 
+
+
     }
 }
+
