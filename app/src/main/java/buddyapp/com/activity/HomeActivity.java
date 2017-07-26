@@ -131,17 +131,20 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_payment) {
+
+        } else if (id == R.id.nav_trainer) {
+            Intent intent = new Intent(getApplicationContext(),ChooseCategory.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_invite) {
+
+        } else if (id == R.id.nav_history) {
             Fragment fragment = new BookingHistory();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
-        } else if (id == R.id.nav_trainer) {
+        }else if (id == R.id.nav_help) {
 
-        } else if (id == R.id.nav_invite) {
-
-        } else if (id == R.id.nav_help) {
-
-        } else if (id == R.id.nav_legal) {
+        }else if (id == R.id.nav_legal) {
             Fragment fragment = new Legal();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();

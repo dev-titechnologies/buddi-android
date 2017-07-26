@@ -210,7 +210,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:id="@+id/trainer_category"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="match_parent"
