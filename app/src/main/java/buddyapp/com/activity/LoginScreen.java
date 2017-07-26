@@ -33,6 +33,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.hbb20.CountryCodePicker;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -285,30 +286,34 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                     PreferencesUtils.saveData(Constants.user_image, jsonObject.getString(Constants.user_image), getApplicationContext());
                     PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
                     PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.approved, jsonObject.getString(Constants.approved), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.pending, jsonObject.getString(Constants.pending), getApplicationContext());
 
 
-                    if (PreferencesUtils.getData(Constants.approved, getApplicationContext(), "").length() == 0) {
+                    if (!PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee")) {
+
+                        PreferencesUtils.saveData(Constants.approved, jsonObject.getString(Constants.approved), getApplicationContext());
+                        PreferencesUtils.saveData(Constants.pending, jsonObject.getString(Constants.pending), getApplicationContext());
 
 
-                        if (PreferencesUtils.getData(Constants.pending, getApplicationContext(), "").length() == 0) {
+                        if (new JSONArray( PreferencesUtils.getData(Constants.approved, getApplicationContext(), "")).length() == 0) {
 
 
-                            Intent intent = new Intent(getApplicationContext(), ChooseCategory.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
-
-                        }else {
+                            if (new JSONArray(PreferencesUtils.getData(Constants.pending, getApplicationContext(), "")).length() == 0) {
 
 
-                            Intent intent = new Intent(getApplicationContext(), DoneActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
-                        }
-                    } else {
+                                Intent intent = new Intent(getApplicationContext(), ChooseCategory.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+
+                            }else {
+
+
+                                Intent intent = new Intent(getApplicationContext(), DoneActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+                        } else {
 
 //                        if (PreferencesUtils.getData(Constants.pending, getApplicationContext(), "").length() == 0) {
 //
@@ -323,14 +328,23 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                             {
 
 
-                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
+                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
 
 
+                            }
                         }
+
+
+                    }else{
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
                     }
+
                 } else if (obj.getInt("status") == 2) {
                     Toast.makeText(LoginScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
                 } else if (obj.getInt("status") == 3) {
