@@ -48,7 +48,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:orientation="vertical">
                <TextView
                 android:layout_width="match_parent"
@@ -60,10 +63,18 @@
 
                 android:maxLines="4"
                 android:layout_height="wrap_content" />
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_margin="@dimen/large"
+                android:gravity="center"
                 android:text="@string/have_cometed_category"
                 android:layout_height="wrap_content" />
 
@@ -71,28 +82,40 @@
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_height="30dp">
+                android:layout_height="wrap_content">
                 <Button
                     android:layout_width="wrap_content"
                     android:id="@+id/yes_competed_category"
                     android:text="@string/yes"
-                    android:background="@drawable/pressed"
+                    android:layout_weight="1"
+                    android:background="@color/transparent"
                     android:layout_height="wrap_content" />
-                <View
-                    android:layout_width="5dp"
-                    android:layout_height="10dp"/>
+
                 <Button
                     android:layout_width="wrap_content"
                     android:text="@string/no"
-                    android:background="@drawable/pressed"
                     android:id="@+id/no_competed_category"
+                    android:layout_weight="1"
+                    android:background="@color/transparent"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:elevation="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_margin="@dimen/large"
+                android:gravity="center"
                 android:text="@string/have_coached_category"
                 android:layout_height="wrap_content" />
 
@@ -100,28 +123,42 @@
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_height="30dp">
+                android:layout_height="match_parent">
                 <Button
                     android:layout_width="wrap_content"
                     android:id="@+id/yes_coached_anybody"
                     android:text="@string/yes"
-                    android:background="@drawable/pressed"
-                    android:layout_height="wrap_content" />
+                    android:layout_weight="1"
+                    android:background="@color/transparent"
+                    android:layout_height="wrap_content"  />
                 <View
                     android:layout_width="5dp"
                     android:layout_height="10dp"/>
                 <Button
                     android:layout_width="wrap_content"
                     android:text="@string/no"
-                    android:background="@drawable/pressed"
                     android:id="@+id/no_coached_anybody"
-                    android:layout_height="wrap_content" />
+                    android:layout_weight="1"
+                    android:background="@color/transparent"
+                    android:layout_height="wrap_content"  />
 
             </LinearLayout>
-            <TextView
+        </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:elevation="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        <TextView
                 android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_margin="@dimen/large"
+                android:gravity="center"
                 android:text="@string/certified_personal"
                 android:layout_height="wrap_content" />
 
@@ -129,24 +166,26 @@
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_height="30dp">
+                android:layout_height="match_parent">
                 <Button
                     android:layout_width="wrap_content"
                     android:id="@+id/yes_certified_trainer"
                     android:text="@string/yes"
-                    android:background="@drawable/pressed"
+                    android:layout_weight="1"
+                    android:background="@color/transparent"
                     android:layout_height="wrap_content" />
-                <View
-                    android:layout_width="5dp"
-                    android:layout_height="10dp"/>
+
                 <Button
                     android:layout_width="wrap_content"
                     android:text="@string/no"
-                    android:background="@drawable/pressed"
                     android:id="@+id/no_certified_trainer"
-                    android:layout_height="wrap_content" />
+                    android:layout_weight="1"
+                    android:background="@color/transparent"
+                    android:layout_height="wrap_content"  />
 
             </LinearLayout>
+        </LinearLayout>
+        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 

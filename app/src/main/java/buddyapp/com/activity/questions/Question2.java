@@ -52,9 +52,11 @@ public class Question2 extends Activity {
             public void onClick(View view) {
                 military_installations_selected ="yes";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    yes_military_installations.setBackground(getResources().getDrawable(R.drawable.round_blue));
-                    no_military_installations.setBackground(getResources().getDrawable(R.drawable.pressed));
+                    yes_military_installations.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    no_military_installations.setBackgroundColor(getResources().getColor(R.color.white));
 
+                    no_military_installations.setTextColor(getResources().getColor(R.color.black));
+                    yes_military_installations.setTextColor(getResources().getColor(R.color.white));
                 }
 
             }
@@ -63,8 +65,12 @@ public class Question2 extends Activity {
             @Override
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    no_military_installations.setBackground(getResources().getDrawable(R.drawable.round_blue));
-                    yes_military_installations.setBackground(getResources().getDrawable(R.drawable.pressed));
+                    yes_military_installations.setBackgroundColor(getResources().getColor(R.color.white));
+                    no_military_installations.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+                    yes_military_installations.setTextColor(getResources().getColor(R.color.black));
+
+                    no_military_installations.setTextColor(getResources().getColor(R.color.white));
 
                 }
                 military_installations_selected ="no";

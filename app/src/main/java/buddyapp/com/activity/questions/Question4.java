@@ -84,8 +84,13 @@ public class Question4 extends Activity {
             public void onClick(View view) {
                 pounds="yes";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    yes_pounds.setBackground(getResources().getDrawable(R.drawable.round_blue));
-                    no_pounds.setBackground(getResources().getDrawable(R.drawable.pressed));
+
+                    yes_pounds.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    no_pounds.setBackgroundColor(getResources().getColor(R.color.white));
+
+                    no_pounds.setTextColor(getResources().getColor(R.color.black));
+                    yes_pounds.setTextColor(getResources().getColor(R.color.white));
+
                 }
 
             }
@@ -96,8 +101,14 @@ public class Question4 extends Activity {
             public void onClick(View view) {
                 pounds="no";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    no_pounds.setBackground(getResources().getDrawable(R.drawable.round_blue));
-                    yes_pounds.setBackground(getResources().getDrawable(R.drawable.pressed));
+
+                    yes_pounds.setBackgroundColor(getResources().getColor(R.color.white));
+                    no_pounds.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+                    yes_pounds.setTextColor(getResources().getColor(R.color.black));
+
+                    no_pounds.setTextColor(getResources().getColor(R.color.white));
+
                 }
 
             }
