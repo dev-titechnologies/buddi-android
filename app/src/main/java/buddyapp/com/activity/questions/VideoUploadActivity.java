@@ -70,8 +70,13 @@ public class VideoUploadActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (videoUrl.length() > 1) {
+                    if (CommonCall.isNetworkAvailable())
+                        new uploadVideo().execute();
+                    else {
+                        Toast.makeText(getApplicationContext(), " Please check your internet connection", Toast.LENGTH_SHORT).show();
+                    }
 
-                    new uploadVideo().execute();
+
 
                 }
             }
@@ -103,8 +108,12 @@ public class VideoUploadActivity extends AppCompatActivity {
 
                         CommonCall.PrintLog("video data",Constants.questionData.toString());
 
+                        if (CommonCall.isNetworkAvailable())
+                            new completeQuestions().execute();
+                        else {
+                            Toast.makeText(getApplicationContext(), " Please check your internet connection", Toast.LENGTH_SHORT).show();
+                        }
 
-                        new completeQuestions().execute();
 
 
                     } catch (JSONException e) {
@@ -222,7 +231,8 @@ try {
     private void recordVideo() {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 90);
-        intent.putExtra("EXTRA_VIDEO_QUALITY", 0);
+//        intent.putExtra("EXTRA_VIDEO_QUALITY", 1);
+        intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
         startActivityForResult(intent, 1337);
     }
 
@@ -476,6 +486,7 @@ try {
 
                     videoUpload.put("video_url",obj.getString("Url"));
                     videoUpload.put("subCat_name",currentSubCat.getString("subCat_name"));
+                    videoUpload.put("subCat_id",currentSubCat.getString("subCat_id"));
 
                 } else if (obj.getInt(Constants.status) == 2) {
                     Toast.makeText(VideoUploadActivity.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
