@@ -15,6 +15,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="3"
+    android:layout_marginTop="10dp"
     android:orientation="vertical">
     <buddyapp.com.utils.CircleImageView
         android:id="@+id/userImageView"
@@ -22,7 +23,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_weight="1.5"
-        android:paddingTop="@dimen/medium"
+        android:layout_marginTop="@dimen/large"
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
     <TextView
@@ -30,7 +31,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/name"
         android:layout_weight="1"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView

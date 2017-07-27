@@ -93,7 +93,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
         facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isNetworkAvailable()) {
+                if (CommonCall.isNetworkAvailable()) {
                     facebook.setEnabled(false);
                     facebook_loginbutton.performClick();
                     fblogin();
@@ -115,7 +115,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                     } else {
                         semail = eMail.getText().toString();
                         spassword = password.getText().toString();
-                        if (isNetworkAvailable())
+                        if (CommonCall.isNetworkAvailable())
                             new login().execute();
                         else {
                             Toast.makeText(getApplicationContext(), " Please check your internet connection", Toast.LENGTH_SHORT).show();
@@ -169,7 +169,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                                             }
                                         }
                                         sfacebookId = object.getString("id");
-                                        if (isNetworkAvailable())
+                                        if (CommonCall.isNetworkAvailable())
                                             new login().execute();
                                         else {
                                             Toast.makeText(getApplicationContext(), " Please check your internet connection", Toast.LENGTH_SHORT).show();
@@ -224,7 +224,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 login_type = "google";
                 if (acct.getEmail() != null)
                     semail=acct.getEmail();
-                if (isNetworkAvailable())
+                if (CommonCall.isNetworkAvailable())
                     new login().execute();
                 else {
                     Toast.makeText(getApplicationContext(), " Please check your internet connection", Toast.LENGTH_SHORT).show();
@@ -364,10 +364,5 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
         }
     }
 
-    public boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
+
 }

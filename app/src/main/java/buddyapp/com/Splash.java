@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,23 +38,26 @@ public class Splash extends AppCompatActivity {
                 if (PreferencesUtils.getData(Constants.token,getApplicationContext(),"").length()>1) {
 
                     if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)) {
+        try {
 
+            if (new JSONArray(PreferencesUtils.getData(Constants.approved, getApplicationContext(), "")).length() == 0) {
+                if (new JSONArray(PreferencesUtils.getData(Constants.pending, getApplicationContext(), "")).length() == 0) {
+                    startActivity(new Intent(getApplicationContext(), ChooseCategory.class));
+                    finish();
+                } else {
+                    startActivity(new Intent(getApplicationContext(), DoneActivity.class));
+                    finish();
 
-                        if(PreferencesUtils.getData(Constants.trainer_status,getApplicationContext(),"").equals(Constants.approved)) {
-                            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                            finish();
+                }
+            }else {
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                finish();
 
-                        }else{
-                            if(PreferencesUtils.getData(Constants.pending,getApplicationContext(),"").length()==0)
-                                {
-                                    startActivity(new Intent(getApplicationContext(), ChooseCategory.class));
-                                    finish();
-                                }else{
-                                    startActivity(new Intent(getApplicationContext(), DoneActivity.class));
-                                    finish();
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
 
-                                }
-                        }
                         }else{
                         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         finish();
