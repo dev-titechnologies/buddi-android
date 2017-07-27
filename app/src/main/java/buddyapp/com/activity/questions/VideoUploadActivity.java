@@ -486,6 +486,7 @@ try {
 
                     videoUpload.put("video_url",obj.getString("Url"));
                     videoUpload.put("subCat_name",currentSubCat.getString("subCat_name"));
+                    videoUpload.put("subCat_id",currentSubCat.getString("subCat_id"));
 
                 } else if (obj.getInt(Constants.status) == 2) {
                     Toast.makeText(VideoUploadActivity.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
