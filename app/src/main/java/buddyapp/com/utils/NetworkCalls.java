@@ -88,8 +88,8 @@ public class NetworkCalls {
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
 
         final OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(180, TimeUnit.SECONDS)
+                .readTimeout(180, TimeUnit.SECONDS)
                 .build();
         RequestBody requestBody = null;
         //case to handle multiple images

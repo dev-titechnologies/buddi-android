@@ -165,8 +165,12 @@ public class Question4 extends Activity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    if (CommonCall.isNetworkAvailable())
+                        new  saveQuestionS().execute();
+                    else {
+                        Toast.makeText(getApplicationContext(), " Please check your internet connection", Toast.LENGTH_SHORT).show();
+                    }
 
-                  new  saveQuestionS().execute();
 
                 }
 
