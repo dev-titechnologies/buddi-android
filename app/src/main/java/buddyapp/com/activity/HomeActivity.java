@@ -37,6 +37,7 @@ public class HomeActivity extends AppCompatActivity
     CircleImageView userImageView;
     TextView name, email,rating;
     JSONObject data;
+    Menu menu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +45,7 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("BuddyApp");
+
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +65,11 @@ public class HomeActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View hView =  navigationView.getHeaderView(0);
+
+        menu =navigationView.getMenu();
+
+        if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer"))
+        menu.findItem(R.id.nav_trainer).setVisible(false);
 
         userImageView = (CircleImageView) hView.findViewById(R.id.userImageView);
         name = (TextView) hView.findViewById(R.id.name);

@@ -5,29 +5,47 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context="buddyapp.com.activity.questions.DoneActivity">
 <LinearLayout
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_centerInParent="true"
+    android:weightSum="4"
     android:layout_height="wrap_content">
 <TextView
     android:layout_width="match_parent"
     android:text="You're Done!"
     android:textStyle="bold"
-    android:textSize="25sp"
+    android:textSize="35sp"
+    android:layout_weight="1"
     android:padding="@dimen/small"
     android:gravity="center"
     android:layout_height="wrap_content" />
     <TextView
         android:layout_width="match_parent"
         android:gravity="center"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        android:layout_weight="1"
+        android:lineSpacingExtra="7dp"
         android:padding="@dimen/small"
-        android:text="Thanks for your application! You will now be screened by the team, and we will get back to you as soon as possible!
+        android:text="Thanks for your application! \nYou will now be screened by the team, \nand we will get back to you as soon as possible!
 Talk soon.
--The Buddy team "
+ "
         android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:layout_weight="1"
+        android:textStyle="bold"
+        android:text="-The Buddy team"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/exit_bg"/>
 </LinearLayout>
 <Button
     android:layout_width="wrap_content"
