@@ -46,4 +46,6 @@ public class Constants {
 
     public static JSONObject questionData = new JSONObject();
 
+
+    public static boolean source_become_trainer = false;
 }

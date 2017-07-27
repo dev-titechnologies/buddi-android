@@ -47,12 +47,15 @@ Talk soon.
         android:layout_marginTop="10dp"
         android:src="@mipmap/exit_bg"/>
 </LinearLayout>
-<Button
-    android:layout_width="wrap_content"
-    android:layout_gravity="bottom"
+    <Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:text="Exit"
-    android:id="@+id/exit"
-    android:layout_centerHorizontal="true"
     android:layout_alignParentBottom="true"
-    android:layout_height="wrap_content" />
+    android:textColor="@color/white"
+    android:layout_marginTop="20dp"
+    android:id="@+id/exit"
+    android:background="@color/button_bgcolor"/>
+
+
 </RelativeLayout>
