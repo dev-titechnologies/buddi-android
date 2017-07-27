@@ -95,16 +95,24 @@ public class VideoUploadActivity extends AppCompatActivity {
 
 
                 } else {
+
+
+
                     try {
                         Constants.questionData.put("video data",videoUpload);
 
                         CommonCall.PrintLog("video data",Constants.questionData.toString());
 
+
+                        new completeQuestions().execute();
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Intent exit = new Intent(getApplicationContext(), DoneActivity.class);
-                    startActivity(exit);
+
+
+
                 }
 
 
@@ -489,6 +497,64 @@ try {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
     }
+    class completeQuestions extends AsyncTask<String, String, String> {
 
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            CommonCall.showLoader(VideoUploadActivity.this);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String response = NetworkCalls.POST(Urls.getADDTRAINECATEGORYURL(), Constants.questionData.toString());
+
+            return response;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+
+                CommonCall.hideLoader();
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt(Constants.status) == 1) {
+
+
+                    Toast.makeText(VideoUploadActivity.this, "  Success.", Toast.LENGTH_SHORT).show();
+
+
+
+                    Intent exit = new Intent(getApplicationContext(), DoneActivity.class);
+                    startActivity(exit);
+
+
+
+
+                } else if (obj.getInt(Constants.status) == 2) {
+
+
+                    Toast.makeText(VideoUploadActivity.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+
+
+
+                } else {
+
+
+                    //session out
+
+
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }
