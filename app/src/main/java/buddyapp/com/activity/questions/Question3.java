@@ -87,8 +87,11 @@ if (training_exp.getText().toString().trim().length()==0){
             public void onClick(View view) {
                 competed_category ="yes";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    yes_competed_category.setBackground(getResources().getDrawable(R.drawable.round_blue));
-                    no_competed_category.setBackground(getResources().getDrawable(R.drawable.pressed));
+                    yes_competed_category.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    no_competed_category.setBackgroundColor(getResources().getColor(R.color.white));
+
+                    no_competed_category.setTextColor(getResources().getColor(R.color.black));
+                    yes_competed_category.setTextColor(getResources().getColor(R.color.white));
                 }
             }
         });
@@ -97,8 +100,13 @@ if (training_exp.getText().toString().trim().length()==0){
             public void onClick(View view) {
                 competed_category ="no";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    no_competed_category.setBackground(getResources().getDrawable(R.drawable.round_blue));
-                    yes_competed_category.setBackground(getResources().getDrawable(R.drawable.pressed));
+                    yes_competed_category.setBackgroundColor(getResources().getColor(R.color.white));
+                    no_competed_category.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+                    yes_competed_category.setTextColor(getResources().getColor(R.color.black));
+
+                    no_competed_category.setTextColor(getResources().getColor(R.color.white));
+
                 }
             }
         });
@@ -109,8 +117,13 @@ if (training_exp.getText().toString().trim().length()==0){
             public void onClick(View view) {
                 coached_anybody ="yes";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    yes_coached_anybody.setBackground(getResources().getDrawable(R.drawable.round_blue));
-                    no_coached_anybody.setBackground(getResources().getDrawable(R.drawable.pressed));
+
+                    yes_coached_anybody.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    no_coached_anybody.setBackgroundColor(getResources().getColor(R.color.white));
+
+                    no_coached_anybody.setTextColor(getResources().getColor(R.color.black));
+                    yes_coached_anybody.setTextColor(getResources().getColor(R.color.white));
+
                 }
             }
         });
@@ -119,8 +132,14 @@ if (training_exp.getText().toString().trim().length()==0){
             public void onClick(View view) {
                 coached_anybody ="no";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    no_coached_anybody.setBackground(getResources().getDrawable(R.drawable.round_blue));
-                    yes_coached_anybody.setBackground(getResources().getDrawable(R.drawable.pressed));
+
+                    yes_coached_anybody.setBackgroundColor(getResources().getColor(R.color.white));
+                    no_coached_anybody.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+                    yes_coached_anybody.setTextColor(getResources().getColor(R.color.black));
+
+                    no_coached_anybody.setTextColor(getResources().getColor(R.color.white));
+
                 }
             }
         });
@@ -131,8 +150,13 @@ if (training_exp.getText().toString().trim().length()==0){
             public void onClick(View view) {
                 certified_trainer ="yes";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    yes_certified_trainer.setBackground(getResources().getDrawable(R.drawable.round_blue));
-                    no_certified_trainer.setBackground(getResources().getDrawable(R.drawable.pressed));
+
+                    yes_certified_trainer.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    no_certified_trainer.setBackgroundColor(getResources().getColor(R.color.white));
+
+                    no_certified_trainer.setTextColor(getResources().getColor(R.color.black));
+                    yes_certified_trainer.setTextColor(getResources().getColor(R.color.white));
+
                 }
             }
         });
@@ -141,8 +165,14 @@ if (training_exp.getText().toString().trim().length()==0){
             public void onClick(View view) {
                 certified_trainer ="no";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    no_certified_trainer.setBackground(getResources().getDrawable(R.drawable.round_blue));
-                    yes_certified_trainer.setBackground(getResources().getDrawable(R.drawable.pressed));
+
+                    yes_certified_trainer.setBackgroundColor(getResources().getColor(R.color.white));
+                    no_certified_trainer.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+                    yes_certified_trainer.setTextColor(getResources().getColor(R.color.black));
+
+                    no_certified_trainer.setTextColor(getResources().getColor(R.color.white));
+
                 }
             }
         });

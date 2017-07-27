@@ -348,9 +348,10 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 } else if (obj.getInt("status") == 2) {
                     Toast.makeText(LoginScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
                 } else if (obj.getInt("status") == 3) {
-                    Intent intent = new Intent(getApplicationContext(), RegisterScreen.class);
-                    startActivity(intent);
-                    finish();
+                    Toast.makeText(LoginScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(getApplicationContext(), RegisterScreen.class);
+//                    startActivity(intent);
+//                    finish();
                 } else {
 
                 }

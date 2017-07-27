@@ -107,9 +107,12 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         Google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                startActivityForResult(signInIntent, RC_SIGN_IN);
+                if(CommonCall.isNetworkAvailable()) {
+                    Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                    startActivityForResult(signInIntent, RC_SIGN_IN);
+                }else{
+                        Toast.makeText(getApplicationContext(),"Please check your internet connection",Toast.LENGTH_SHORT).show();
+                    }
             }
         });
 
@@ -120,8 +123,12 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
             @Override
             public void onClick(View view) {
                 facebook.setEnabled(false);
-                facebook_loginbutton.performClick();
-                fblogin();
+                if(CommonCall.isNetworkAvailable()) {
+                    facebook_loginbutton.performClick();
+                    fblogin();
+                }else{
+                        Toast.makeText(getApplicationContext(),"Please check your internet connection",Toast.LENGTH_SHORT).show();
+                    }
             }
         });
 
@@ -164,7 +171,11 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                     System.err.println("NumberParseException was thrown: " + e.toString());
                 }
                 if(validateFeelds()) {
+                    if(CommonCall.isNetworkAvailable())
                    new sendOtp().execute();
+                    else{
+                        Toast.makeText(getApplicationContext(),"Please check your internet connection",Toast.LENGTH_SHORT).show();
+                    }
 //                    Intent mobReg = new Intent(getApplicationContext(), MobileVerificationActivity.class);
 //                    mobReg.putExtra("MOBILE", smobilenumber);
 //                    startActivityForResult(mobReg, 156);//for otp verification handling

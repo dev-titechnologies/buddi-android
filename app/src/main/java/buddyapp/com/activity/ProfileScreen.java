@@ -171,7 +171,7 @@ public class ProfileScreen extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         image_uri = getOutputMediaFileUri(1);
 
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
         startActivityForResult(intent, CAMERA_REQUEST);
 
     }
@@ -665,7 +665,9 @@ public class ProfileScreen extends AppCompatActivity {
 
 
             try {
-                imageurl = image_uri.getPath();
+                Uri selectedImage = data.getData();
+                imageurl = getPathFromUri(selectedImage);
+
 //                userImageView.setImageURI(Uri.parse(imageurl));
                 new upLoad().execute();
             } catch (Exception e) {
