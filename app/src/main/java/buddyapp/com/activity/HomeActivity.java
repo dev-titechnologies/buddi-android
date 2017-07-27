@@ -31,6 +31,8 @@ import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
+import static buddyapp.com.Settings.Constants.source_become_trainer;
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -154,6 +156,7 @@ public class HomeActivity extends AppCompatActivity
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         } else if (id == R.id.nav_trainer) {
+            source_become_trainer=true;
             Intent intent = new Intent(getApplicationContext(),ChooseCategory.class);
             startActivity(intent);
         } else if (id == R.id.nav_invite) {

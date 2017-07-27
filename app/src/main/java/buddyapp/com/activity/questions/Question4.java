@@ -165,7 +165,7 @@ public class Question4 extends Activity {
                         question.put("weight", weight.getText().toString());
 
                         question.put("pounds", pounds);
-                        questionData.put("category", ChooseCategory.cat_selectedID);
+                        questionData.put("cat_ids", ChooseCategory.cat_selectedID);
                         questionData.put("sub_cat", sub_cat_selectedID.toString());
                         questionData.put("user_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
                         questionData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));

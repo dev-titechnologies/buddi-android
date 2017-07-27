@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -91,6 +92,9 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         ccp = (CountryCodePicker) findViewById(R.id.ccp);
         next = (TextView) findViewById(R.id.next);
         mobile = (EditText) findViewById(R.id.mobile);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Sign Up");
 
         Google = (ImageView) findViewById(R.id.googleplus);
         // Configure sign-in to request the user's ID, email address, and basic
