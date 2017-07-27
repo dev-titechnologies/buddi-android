@@ -171,7 +171,7 @@ public class ProfileScreen extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         image_uri = getOutputMediaFileUri(1);
 
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
         startActivityForResult(intent, CAMERA_REQUEST);
 
     }
@@ -187,6 +187,7 @@ public class ProfileScreen extends AppCompatActivity {
 
     /*Create a file Uri for saving an image or video */
     private Uri getOutputMediaFileUri(int type) {
+
         return Uri.fromFile(getOutputMediaFile(type));
     }
 
@@ -665,9 +666,7 @@ public class ProfileScreen extends AppCompatActivity {
 
 
             try {
-                Uri selectedImage = data.getData();
-                imageurl = getPathFromUri(selectedImage);
-
+                imageurl = image_uri.getPath();
 //                userImageView.setImageURI(Uri.parse(imageurl));
                 new upLoad().execute();
             } catch (Exception e) {
