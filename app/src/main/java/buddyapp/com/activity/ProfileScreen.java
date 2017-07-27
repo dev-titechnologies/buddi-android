@@ -6,13 +6,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,8 +33,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -63,8 +58,8 @@ public class ProfileScreen extends AppCompatActivity {
     RadioGroup rg;
     RadioButton rbmale, rbfemale;
     EditText firstName, lastName, eMail, password, mobile;
-    CircleImageView userImageView;
-    LinearLayout trainerCategory;
+    CircleImageView userImageView, trainerImageView;
+    LinearLayout trainerCategory,placeLayout, imageTrainer, imageUser;
     String semail, sfname, slname, sgender = "", scountrycode, spassword, sfacebookId = "", sgoogleplusId = "";
     String register_type = "normal";
     private PopupMenu popupMenu;
@@ -94,16 +89,36 @@ public class ProfileScreen extends AppCompatActivity {
         rbfemale = (RadioButton) findViewById(R.id.female);
         userImageView = (CircleImageView) findViewById(R.id.userimageView);
         trainerCategory = (LinearLayout) findViewById(R.id.trainer_category);
+        placeLayout = (LinearLayout) findViewById(R.id.place_layout);
+        trainerImageView = (CircleImageView) findViewById(R.id.trainerimageView);
+        imageTrainer = (LinearLayout) findViewById(R.id.image_trainer); // Trainer profile image View layout
+        imageUser = (LinearLayout) findViewById(R.id.image_user); // user profile image View layout
+        //****
+        // *****check for trainer or trainee
         if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
             trainerCategory.setVisibility(View.VISIBLE);
+            imageUser.setVisibility(View.GONE);
+            CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), trainerImageView, R.drawable.ic_no_image, R.drawable.ic_broken_image);
+            placeLayout.setVisibility(View.GONE);
+            imageTrainer.setVisibility(View.VISIBLE);
+        }else {
+            imageUser.setVisibility(View.VISIBLE);
+            trainerCategory.setVisibility(View.GONE);
+            CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView, R.drawable.ic_no_image, R.drawable.ic_broken_image);
+            trainerCategory.setVisibility(View.GONE);
+            placeLayout.setVisibility(View.VISIBLE);
         }
-
-        CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView, R.drawable.ic_no_image, R.drawable.ic_broken_image);
-
+        // load profile --->
         loadProfile();
 
         new getProfile().execute();
 
+        trainerImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userImageView.performClick();
+            }
+        });
         userImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -230,14 +245,14 @@ public class ProfileScreen extends AppCompatActivity {
                 break;
             case R.id.menu_item:
                 if (!editflag) {
-                    item.setIcon(R.mipmap.ic_launcher);
+                    item.setIcon(R.drawable.ic_check_white_24dp);
                     editflag = true;
                     userImageView.setClickable(true);
                     editProfile();
                     Toast.makeText(this, "Edit Profile", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    item.setIcon(R.mipmap.ic_launcher_round);
+                    item.setIcon(R.drawable.ic_edit_white);
                     editflag = false;
                     Toast.makeText(this, "Saving Please wait...", Toast.LENGTH_SHORT).show();
                     if (validateFeelds()) {
@@ -255,18 +270,14 @@ public class ProfileScreen extends AppCompatActivity {
 
     private void editProfile() {
 
-        firstName.setFocusableInTouchMode(true);
-        firstName.setFocusable(true);
+        firstName.setEnabled(true);
         ccp.setCcpClickable(true);
-        lastName.setFocusableInTouchMode(true);
-        lastName.setFocusable(true);
+        lastName.setEnabled(true);
         eMail.setEnabled(false);
-        eMail.setFocusableInTouchMode(true);
-        eMail.setFocusable(true);
+        eMail.setEnabled(true);
 //        password.setEnabled(false);
 
-        mobile.setFocusableInTouchMode(true);
-        mobile.setFocusable(true);
+        mobile.setEnabled(true);
     }
 
     @Override
@@ -277,13 +288,13 @@ public class ProfileScreen extends AppCompatActivity {
     // loading profile from db
     private void loadProfile() {
 
-        firstName.setFocusable(false);
+        firstName.setEnabled(false);
         ccp.setCcpClickable(false);
-        lastName.setFocusable(false);
+        lastName.setEnabled(false);
         eMail.setEnabled(true);
-        eMail.setFocusable(false);
+        eMail.setEnabled(false);
 //        password.setEnabled(false);
-        mobile.setFocusable(false);
+        mobile.setEnabled(false);
 
         try {
             firstName.setText(PreferencesUtils.getData(Constants.fname, getApplicationContext(), ""));
@@ -311,7 +322,7 @@ public class ProfileScreen extends AppCompatActivity {
                 sgender = "female";
             }
 
-            CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView, R.drawable.ic_no_image, R.drawable.ic_broken_image);
+//            CommonCall.LoadImage(getApplicationContext(), imageurl, userImageView, R.drawable.ic_no_image, R.drawable.ic_broken_image);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -421,13 +432,13 @@ public class ProfileScreen extends AppCompatActivity {
                     PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
                     PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
 
-                    new Timer().schedule(new TimerTask() {
+                /*    new Timer().schedule(new TimerTask() {
                         @Override
                         public void run() {
-
+*/
                     loadProfile();
-                        }
-                    }, 3000);
+//                        }
+//                    }, 1000);
 
                 } else if (obj.getInt("status") == 2) {
                     Toast.makeText(ProfileScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();

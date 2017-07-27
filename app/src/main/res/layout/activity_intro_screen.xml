@@ -32,11 +32,7 @@
             android:id="@+id/trainer"
             android:textColor="@drawable/font_select_color"/>
             </LinearLayout>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:src="@mipmap/ic_launcher_round"/>
+
     </LinearLayout>
     <View
         android:layout_width="match_parent"

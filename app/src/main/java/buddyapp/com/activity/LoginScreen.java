@@ -223,7 +223,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 sgoogleplusId = acct.getId();
                 login_type = "google";
                 if (acct.getEmail() != null)
-                    eMail.setText(acct.getEmail());
+                    semail=acct.getEmail();
                 if (isNetworkAvailable())
                     new login().execute();
                 else {

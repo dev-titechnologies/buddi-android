@@ -38,7 +38,7 @@ public class MobileVerificationActivity extends AppCompatActivity {
     TextView timmer;
     Button resend, changenumber;
     String mobile;
-    LinearLayout root;
+    LinearLayout root, secondLayer;
 
 Button retry;
     private static final String FORMAT = "%02d:%02d";
@@ -53,9 +53,10 @@ Button retry;
         otp = (EditText) findViewById(R.id.otp);
         retry = (Button) findViewById(R.id.retry);
         changenumber = (Button) findViewById(R.id.chanegnumber);
+        secondLayer = (LinearLayout) findViewById(R.id.second_layer);
         mobile = getIntent().getStringExtra("MOBILE");
-        new sendOtp().execute();
-
+//        new sendOtp().execute();
+        startCountDown();
         otp.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -118,7 +119,7 @@ if (otp.getText().toString().trim().length()>3){
 
             public void onFinish() {
                 retry.setVisibility(View.VISIBLE);
-
+                secondLayer.setVisibility(View.VISIBLE);
                 timmer.setText("0:0");
             }
         }.start();

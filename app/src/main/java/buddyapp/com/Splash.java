@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,6 +16,7 @@ import buddyapp.com.activity.ChooseCategory;
 import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.IntroScreen;
 import buddyapp.com.activity.WelcomeActivity;
+import buddyapp.com.activity.questions.DoneActivity;
 
 public class Splash extends AppCompatActivity {
 
@@ -39,12 +41,16 @@ public class Splash extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                             finish();
 
-
                         }else{
+                            if(PreferencesUtils.getData(Constants.pending,getApplicationContext(),"").length()==0)
+                                {
+                                    startActivity(new Intent(getApplicationContext(), ChooseCategory.class));
+                                    finish();
+                                }else{
+                                    startActivity(new Intent(getApplicationContext(), DoneActivity.class));
+                                    finish();
 
-                            startActivity(new Intent(getApplicationContext(), ChooseCategory.class));
-                            finish();
-
+                                }
                         }
                         }else{
                         startActivity(new Intent(getApplicationContext(), HomeActivity.class));

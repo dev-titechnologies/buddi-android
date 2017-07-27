@@ -56,8 +56,7 @@ TextView trainer, trainee;
                 }else{
                     intent = new Intent(getApplicationContext(), RegisterScreen.class);
                 }
-                if(checkPermissions())
-                    startActivity(intent);
+                startActivity(intent);
             }
         });
         trainee.setOnClickListener(new View.OnClickListener() {

@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -54,7 +55,7 @@ import buddyapp.com.utils.Urls;
 
 public class RegisterScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     TextView  next;
-    String semail, sfname,  slname, sgender="", scountrycode, smobilenumber, spassword, sfacebookId="",sgoogleplusId="";
+    String semail, sfname,  slname, sgender="", scountrycode, smobilenumber, validnumber, spassword, sfacebookId="",sgoogleplusId="";
     String register_type= "normal";
     ImageView Google, facebook;
     String user_image;
@@ -154,8 +155,8 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                     CommonCall.PrintLog("Phone number++", swissNumberProto + "");
                     isValid = phoneUtil.isValidNumber(swissNumberProto); // returns true
                     if (isValid) {
-                        CommonCall.PrintLog("Phone number", swissNumberProto + "");
-                        smobilenumber = "+"+scountrycode+"-"+smobilenumber;
+                        CommonCall.PrintLog("Phone number", swissNumberProto.getNationalNumber() + "");
+                        validnumber = "+"+scountrycode+"-"+swissNumberProto.getNationalNumber();
                     }
                         else
                         CommonCall.PrintLog("Invalid", "Invalid");
@@ -163,10 +164,10 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                     System.err.println("NumberParseException was thrown: " + e.toString());
                 }
                 if(validateFeelds()) {
-
-                    Intent mobReg = new Intent(getApplicationContext(), MobileVerificationActivity.class);
-                    mobReg.putExtra("MOBILE", smobilenumber);
-                    startActivityForResult(mobReg, 156);//for otp verification handling
+                   new sendOtp().execute();
+//                    Intent mobReg = new Intent(getApplicationContext(), MobileVerificationActivity.class);
+//                    mobReg.putExtra("MOBILE", smobilenumber);
+//                    startActivityForResult(mobReg, 156);//for otp verification handling
                 }
             }
         });
@@ -377,7 +378,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 reqData.put("password",spassword);
                 reqData.put("first_name",sfname);
                 reqData.put("last_name",slname);
-                reqData.put("mobile",smobilenumber);
+                reqData.put("mobile",validnumber);
                 reqData.put("gender",sgender);
                 reqData.put("user_image", user_image);
                 reqData.put("user_type", PreferencesUtils.getData(Constants.user_type,getApplicationContext(),""));
@@ -435,5 +436,58 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
 
         }
     }
+/*** OTP SENDING  ***/
+class sendOtp extends AsyncTask<String, String, String> {
+
+    JSONObject reqData = new JSONObject();
+
+
+    @Override
+    protected void onPreExecute() {
+        CommonCall.showLoader(RegisterScreen.this);
+
+        try {
+            reqData.put("mobile", validnumber);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected String doInBackground(String... strings) {
+
+
+        return NetworkCalls.POST(Urls.getSendOTPURL(), reqData.toString());
+    }
+
+
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+        CommonCall.hideLoader();
+
+        try {
+            final JSONObject response = new JSONObject(s);
+
+            if (response.getInt(Constants.status) == 1) {
+                Intent mobReg = new Intent(getApplicationContext(), MobileVerificationActivity.class);
+                mobReg.putExtra("MOBILE", validnumber);
+                startActivityForResult(mobReg, 156);
+            } else if (response.getInt(Constants.status) == 2) {
+                Toast.makeText(getApplicationContext(),response.getString("message"),Toast.LENGTH_SHORT).show();
+
+            } else if (response.getInt(Constants.status) == 3) {
+
+
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+}
 
 }

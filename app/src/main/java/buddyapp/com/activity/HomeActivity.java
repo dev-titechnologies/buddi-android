@@ -43,7 +43,7 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setTitle("BuddyApp");
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -127,25 +127,49 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
+
+            getSupportActionBar().setTitle("BuddyApp");
+            Fragment fragment = new BookingHistory();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+
+
         } else if (id == R.id.nav_settings) {
+            getSupportActionBar().setTitle("Settings");
+            Fragment fragment = new BookingHistory();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         } else if (id == R.id.nav_payment) {
+            getSupportActionBar().setTitle("Payment");
+            Fragment fragment = new BookingHistory();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         } else if (id == R.id.nav_trainer) {
             Intent intent = new Intent(getApplicationContext(),ChooseCategory.class);
             startActivity(intent);
         } else if (id == R.id.nav_invite) {
+            getSupportActionBar().setTitle("Invite Friends");
+            Fragment fragment = new BookingHistory();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         } else if (id == R.id.nav_history) {
+            getSupportActionBar().setTitle("Training History");
             Fragment fragment = new BookingHistory();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         }else if (id == R.id.nav_help) {
+            getSupportActionBar().setTitle("Help");
+            Fragment fragment = new BookingHistory();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         }else if (id == R.id.nav_legal) {
             Fragment fragment = new Legal();
+            getSupportActionBar().setTitle("Legal");
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
