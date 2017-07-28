@@ -241,28 +241,16 @@
                             android:layout_marginLeft="5dp"
                             android:text="Gender" />
 
-                        <RadioGroup
-                            android:id="@+id/radioGroup"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
 
-                            <RadioButton
+                            <EditText
                                 android:id="@+id/male"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingRight="5dp"
-                                android:text="Male"
                                 android:visibility="gone" />
 
-                            <RadioButton
-                                android:id="@+id/female"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:text="Female"
-                                android:visibility="gone" />
-                        </RadioGroup>
+
+
                     </LinearLayout>
 
                     <LinearLayout

@@ -37,6 +37,7 @@ import com.hbb20.CountryCodePicker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -62,8 +63,8 @@ public class ProfileScreen extends AppCompatActivity {
     private String userChoosenTask;
     boolean isValid = false;
     Uri image_uri;
-    RadioGroup rg;
-    RadioButton rbmale, rbfemale;
+
+    EditText rbmale;
     EditText firstName, lastName, eMail, password, mobile;
     CircleImageView userImageView, trainerImageView;
     LinearLayout trainerCategory,placeLayout, imageTrainer, imageUser;
@@ -92,9 +93,9 @@ public class ProfileScreen extends AppCompatActivity {
         eMail = (EditText) findViewById(R.id.email);
 //        password = (EditText) findViewById(R.id.password);
         mobile = (EditText) findViewById(R.id.mobile);
-        rg = (RadioGroup) findViewById(R.id.radioGroup);
-        rbmale = (RadioButton) findViewById(R.id.male);
-        rbfemale = (RadioButton) findViewById(R.id.female);
+
+        rbmale = (EditText) findViewById(R.id.male);
+
         userImageView = (CircleImageView) findViewById(R.id.userimageView);
         trainerCategory = (LinearLayout) findViewById(R.id.trainer_category);
         placeLayout = (LinearLayout) findViewById(R.id.place_layout);
@@ -326,11 +327,11 @@ public class ProfileScreen extends AppCompatActivity {
 
             if (gender.equalsIgnoreCase("male")) {
                 rbmale.setVisibility(View.VISIBLE);
-                rbmale.setChecked(true);
+                rbmale.setText("Male");
                 sgender = "male";
             } else {
-                rbfemale.setVisibility(View.VISIBLE);
-                rbfemale.setChecked(true);
+                rbmale.setVisibility(View.VISIBLE);
+                rbmale.setText("Female");
                 sgender = "female";
             }
 //            final Handler handler = new Handler();
@@ -528,12 +529,13 @@ public class ProfileScreen extends AppCompatActivity {
             focusView = mobile;
             focusView.requestFocus();
             return false;
-        } else if (sgender.length() == 0) {
-            Toast.makeText(getApplicationContext(), "Please select gender", Toast.LENGTH_SHORT).show();
-            focusView = rg;
-            focusView.requestFocus();
-            return false;
-        } else if (imageurl.length() == 0) {
+       }
+// else if (sgender.length() == 0) {
+////            Toast.makeText(getApplicationContext(), "Please select gender", Toast.LENGTH_SHORT).show();
+////            focusView.requestFocus();
+//            return false;
+//        }
+        else if (imageurl.length() == 0) {
             Toast.makeText(getApplicationContext(), "Please select profile image", Toast.LENGTH_SHORT).show();
             return false;
         }
