@@ -89,7 +89,6 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
         Google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
@@ -294,6 +293,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             try {
+                facebook.setEnabled(true);
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
                     JSONObject jsonObject = obj.getJSONObject("data");
