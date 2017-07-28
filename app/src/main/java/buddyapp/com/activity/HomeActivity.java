@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     CircleImageView userImageView;
+    LinearLayout root_profile;
     TextView name, email,rating;
     JSONObject data;
     Menu menu;
@@ -77,18 +79,18 @@ public class HomeActivity extends AppCompatActivity
         name = (TextView) hView.findViewById(R.id.name);
         email = (TextView) hView.findViewById(R.id.email);
         rating = (TextView) hView.findViewById(R.id.rating);
-
+        root_profile = (LinearLayout) hView.findViewById(R.id.root_profile);
 
         try {
 
             name.setText(PreferencesUtils.getData(Constants.fname,getApplicationContext(),"")+" "+PreferencesUtils.getData(Constants.lname,getApplicationContext(),""));
-            CommonCall.LoadImage(getApplicationContext(),PreferencesUtils.getData(Constants.user_image,getApplicationContext(),""), userImageView,R.drawable.ic_no_image,R.drawable.ic_broken_image);
+            CommonCall.LoadImage(getApplicationContext(),PreferencesUtils.getData(Constants.user_image,getApplicationContext(),""), userImageView,R.drawable.ic_no_image,R.drawable.ic_account);
             email.setText(PreferencesUtils.getData(Constants.email,getApplicationContext(),""));
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        userImageView.setOnClickListener(new View.OnClickListener() {
+        root_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),ProfileScreen.class);
@@ -208,10 +210,8 @@ public class HomeActivity extends AppCompatActivity
             try {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
-                    PreferencesUtils.saveData(Constants.token,"", getApplicationContext());
-                    LoginManager.getInstance().logOut();
-                    Intent intent = new Intent(getApplicationContext(),WelcomeActivity.class);
-                    startActivity(intent);
+//
+                    CommonCall.sessionout(HomeActivity.this);
                     finish();
                 }else if(obj.getInt("status") == 2){
                     Toast.makeText(getApplicationContext(),obj.getString("message"),Toast.LENGTH_SHORT);
@@ -226,7 +226,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        CommonCall.LoadImage(getApplicationContext(),PreferencesUtils.getData(Constants.user_image,getApplicationContext(),""), userImageView,R.drawable.ic_no_image,R.drawable.ic_broken_image);
+        CommonCall.LoadImage(getApplicationContext(),PreferencesUtils.getData(Constants.user_image,getApplicationContext(),""), userImageView,R.drawable.ic_no_image,R.drawable.ic_account);
 
     }
 }

@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:layout_gravity="center"
         android:id="@+id/sub_cat_card"
-        android:padding="@dimen/medium"
+        android:padding="@dimen/large"
         android:elevation="5dp"
         android:layout_height="match_parent">
         <LinearLayout

@@ -48,8 +48,8 @@
                     android:id="@+id/googleplus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_goolgeplus"
-                    android:padding="7dp"
+                    android:src="@drawable/ic_google_white"
+                    android:padding="10dp"
                     android:gravity="center"
                     android:textColor="#fff" />
             </LinearLayout>
@@ -76,8 +76,8 @@
                     android:id="@+id/facebook"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_facebook"
-                    android:padding="7dp"
+                    android:src="@drawable/ic_facebook_white"
+                    android:padding="10dp"
                     android:gravity="center"
                     android:textColor="#fff" />
             </LinearLayout>
@@ -113,6 +113,8 @@
                         android:layout_width="match_parent"
                         android:id="@+id/first_name"
                         android:singleLine="true"
+                        android:inputType="text"
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:maxLength="25"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -134,8 +136,9 @@
                         android:layout_width="match_parent"
                         android:id="@+id/last_name"
                         android:singleLine="true"
+                        android:inputType="text"
                         android:maxLength="25"
-
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>
@@ -178,6 +181,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Mobile"
+                        android:textAllCaps="true"
                         android:layout_marginLeft="5dp"/>
 
                     <com.hbb20.CountryCodePicker
@@ -221,6 +225,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
+                    android:textAllCaps="true"
                     android:text="Gender"/>
                 <RadioGroup
                     android:layout_width="match_parent"
@@ -232,12 +237,14 @@
                         android:layout_height="wrap_content"
                         android:paddingRight="5dp"
                         android:id="@+id/male"
+                        android:textAllCaps="true"
                         android:text="Male"/>
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:id="@+id/female"
+                        android:textAllCaps="true"
                         android:text="Female"/>
                 </RadioGroup>
             </LinearLayout>
@@ -252,6 +259,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Password"
+                    android:textAllCaps="true"
                     android:layout_marginLeft="5dp"/>
 
                 <EditText
@@ -279,6 +287,7 @@
                 android:gravity="center"
                 android:padding="15dp"
                 android:text="Next"
+                android:textAllCaps="true"
                 android:textColor="#fff" />
         </LinearLayout>
     </LinearLayout>

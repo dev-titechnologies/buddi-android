@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -73,6 +74,8 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Login");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -139,6 +142,18 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 startActivity(intent);
             }
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     /**
@@ -351,11 +366,15 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
 
                 } else if (obj.getInt("status") == 2) {
                     Toast.makeText(LoginScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                    if(obj.getString("status_type").equals("UserDoesntExist")) {
+                        Intent intent = new Intent(getApplicationContext(), RegisterScreen.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 } else if (obj.getInt("status") == 3) {
+
                     Toast.makeText(LoginScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(getApplicationContext(), RegisterScreen.class);
-//                    startActivity(intent);
-//                    finish();
+
                 } else {
 
                 }

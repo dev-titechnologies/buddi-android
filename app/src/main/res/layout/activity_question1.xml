@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="#f9f9f9"
     android:layout_height="match_parent"
 
     tools:context="buddyapp.com.activity.questions.Question1">
@@ -78,5 +79,6 @@
         android:textColor="@color/white"
         android:layout_marginTop="20dp"
         android:id="@+id/next"
+        android:textAllCaps="true"
         android:background="@color/button_bgcolor"/>
 </RelativeLayout>

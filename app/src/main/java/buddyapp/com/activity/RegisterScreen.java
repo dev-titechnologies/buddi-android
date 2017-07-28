@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -95,6 +96,8 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Sign Up");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
 
         Google = (ImageView) findViewById(R.id.googleplus);
         // Configure sign-in to request the user's ID, email address, and basic
@@ -187,7 +190,18 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
             }
         });
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
 
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
 /********************** Field validation *******************/
 
     private boolean validateFeelds() {
@@ -343,8 +357,12 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 // Get account information
 //                mFullName = acct.getDisplayName();
 //                mEmail = acct.getEmail();
-                firstName.setText(acct.getDisplayName());
-                lastName.setText(acct.getDisplayName());
+                String[] splitednaame = acct.getDisplayName().split("\\s+");
+                if (splitednaame[0]!=null)
+                firstName.setText(splitednaame[0]);
+
+                if (splitednaame[1]!=null)
+                lastName.setText(splitednaame[1]);
                 sgoogleplusId = acct.getId();
 
                user_image = acct.getPhotoUrl().toString();
@@ -352,9 +370,9 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 if (acct.getEmail()!=null)
                 eMail.setText(acct.getEmail());
 
-                Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Login Failed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Failed!", Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == 156) { // otp verification post process
             if (resultCode == RESULT_OK) {
@@ -439,7 +457,8 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 }else if(obj.getInt("status")==2){
                     Toast.makeText(RegisterScreen.this,obj.getString("message"), Toast.LENGTH_SHORT).show();
                 }else if(obj.getInt("status")==3){
-
+                    CommonCall.sessionout(RegisterScreen.this);
+                    finish();
                 }else{
 
                 }

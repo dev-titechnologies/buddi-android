@@ -48,7 +48,7 @@
                     android:layout_weight="1"
                     android:id="@+id/image_trainer"
                     android:visibility="gone"
-                    android:background="@drawable/gradient_color"
+                    android:background="@mipmap/profile_trainer"
                     android:gravity="left"
                     android:orientation="horizontal">
 
@@ -128,6 +128,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:maxLength="25"
+                                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                android:inputType="text"
                                 android:singleLine="true" />
                         </LinearLayout>
 
@@ -149,7 +151,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:maxLength="25"
-
+                                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                android:inputType="text"
                                 android:singleLine="true" />
                         </LinearLayout>
                     </LinearLayout>

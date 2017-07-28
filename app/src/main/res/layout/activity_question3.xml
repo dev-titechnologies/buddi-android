@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#f9f9f9"
     tools:context="buddyapp.com.activity.questions.Question3">
 <android.support.v7.widget.Toolbar
     android:layout_width="match_parent"
@@ -131,9 +132,7 @@
                     android:layout_weight="1"
                     android:background="@color/transparent"
                     android:layout_height="wrap_content"  />
-                <View
-                    android:layout_width="5dp"
-                    android:layout_height="10dp"/>
+
                 <Button
                     android:layout_width="wrap_content"
                     android:text="@string/no"
@@ -150,6 +149,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:elevation="10dp">
         <LinearLayout
             android:layout_width="match_parent"
@@ -199,6 +199,7 @@
         android:textColor="@color/white"
         android:layout_marginTop="20dp"
         android:id="@+id/next"
+        android:textAllCaps="true"
         android:layout_alignParentBottom="true"
         android:background="@color/button_bgcolor"/>
 </RelativeLayout>

@@ -278,7 +278,6 @@ try {
                 .start(CAMERA_RQ);                                 // Starts the camera activity, the result will be sent back to the current Activity
 
 
-
     }
 
     public String getPathFromUri(final Uri uri) {
