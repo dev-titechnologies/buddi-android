@@ -90,8 +90,8 @@ public class Question4 extends Activity {
 
                     no_pounds.setTextColor(getResources().getColor(R.color.black));
                     yes_pounds.setTextColor(getResources().getColor(R.color.white));
-
                 }
+
 
             }
         });
