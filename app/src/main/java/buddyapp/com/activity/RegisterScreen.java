@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -95,6 +96,8 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Sign Up");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
 
         Google = (ImageView) findViewById(R.id.googleplus);
         // Configure sign-in to request the user's ID, email address, and basic
@@ -187,7 +190,18 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
             }
         });
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
 
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
 /********************** Field validation *******************/
 
     private boolean validateFeelds() {

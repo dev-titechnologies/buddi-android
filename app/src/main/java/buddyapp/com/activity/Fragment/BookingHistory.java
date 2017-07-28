@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,6 +16,8 @@ import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.LoginScreen;
+import buddyapp.com.adapter.HistoryAdapter;
+import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
@@ -23,8 +26,8 @@ import buddyapp.com.utils.Urls;
  * A simple {@link Fragment} subclass.
  */
 public class BookingHistory extends Fragment {
-
-
+    DatabaseHandler db;
+HistoryAdapter historyAdapter;
     public BookingHistory() {
         // Required empty public constructor
     }
@@ -34,7 +37,8 @@ public class BookingHistory extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        new LoadBookingHistory().execute();
+        db = new DatabaseHandler(getActivity());
+//        new LoadBookingHistory().execute();
         return inflater.inflate(R.layout.fragment_booking_history, container, false);
 
     }
@@ -68,11 +72,37 @@ public class BookingHistory extends Fragment {
             try {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
-                    JSONObject jsonObject = obj.getJSONObject("data");
+                    JSONArray jsonArray = obj.getJSONArray("data");
+                    if(jsonArray.length()!=0){
+
+                        for(int i=0; i<jsonArray.length();i++)
+                        {
+                            JSONObject jsonObject= jsonArray.getJSONObject(i);
+                            jsonObject.put("booking_id",jsonObject.getString("booking_id"));
+                            jsonObject.put("trainee_id",jsonObject.getString("trainee_id"));
+                            jsonObject.put("trainee_name",jsonObject.getString("trainee_name"));
+                            jsonObject.put("trainer_name",jsonObject.getString("trainer_name"));
+                            jsonObject.put("trainer_id",jsonObject.getString("trainer_id"));
+                            jsonObject.put("category",jsonObject.getString("category"));
+                            jsonObject.put("training_status",jsonObject.getString("training_status"));
+                            jsonObject.put("payment_status",jsonObject.getString("payment_status"));
+                            jsonObject.put("location",jsonObject.getString("location"));
+                            jsonObject.put("trained_date",jsonObject.getString("trained_date"));
+
+                            db.insertHistroy(jsonObject);
+
+                        }
+//                        historyAdapter = new HistoryAdapter(getActivity(),jsonArray);
+                        loadHistory(db.getAllHistory());
+                    }
                 }
             } catch (JSONException e) {
 
             }
         }
+    }
+
+    private void loadHistory(JSONArray allHistory) {
+
     }
 }

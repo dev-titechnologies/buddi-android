@@ -106,13 +106,13 @@ public class ProfileScreen extends AppCompatActivity {
         if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
             trainerCategory.setVisibility(View.VISIBLE);
             imageUser.setVisibility(View.GONE);
-            CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), trainerImageView, R.drawable.ic_account, R.drawable.ic_broken_image);
+            CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), trainerImageView, R.drawable.ic_account, R.drawable.ic_account);
             placeLayout.setVisibility(View.GONE);
             imageTrainer.setVisibility(View.VISIBLE);
         }else {
             imageUser.setVisibility(View.VISIBLE);
             trainerCategory.setVisibility(View.GONE);
-            CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView,R.drawable.ic_account, R.drawable.ic_broken_image);
+            CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView,R.drawable.ic_account, R.drawable.ic_account);
             trainerCategory.setVisibility(View.GONE);
             placeLayout.setVisibility(View.VISIBLE);
         }
@@ -339,10 +339,10 @@ public class ProfileScreen extends AppCompatActivity {
 //                public void run() {
                     //Do something after 100ms
                     if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")){
-                        CommonCall.LoadImage(getApplicationContext(), imageurl, trainerImageView, R.drawable.ic_account, R.drawable.ic_broken_image);
+                        CommonCall.LoadImage(getApplicationContext(), imageurl, trainerImageView, R.drawable.ic_account, R.drawable.ic_account);
 
                     }else {
-                        CommonCall.LoadImage(getApplicationContext(), imageurl, userImageView, R.drawable.ic_account, R.drawable.ic_broken_image);
+                        CommonCall.LoadImage(getApplicationContext(), imageurl, userImageView, R.drawable.ic_account, R.drawable.ic_account);
                     }
 
             CommonCall.hideLoader();

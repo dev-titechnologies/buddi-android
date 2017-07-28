@@ -116,6 +116,7 @@
             android:layout_gravity="bottom"
             android:background="@color/button_bgcolor"
             android:text="@string/next"
+            android:textAllCaps="true"
             android:textColor="@color/white" />
 
     </LinearLayout>

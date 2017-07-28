@@ -13,6 +13,12 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <application
         android:name=".Controller"
         android:allowBackup="true"
@@ -89,13 +95,19 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".utils.CropActivity" />
-        <activity android:name=".activity.questions.Question1" />
-        <activity android:name=".activity.questions.Question2" />
-        <activity android:name=".activity.questions.Question3" />
-        <activity android:name=".activity.questions.Question4" />
-        <activity android:name=".activity.questions.VideoUploadActivity" />
-        <activity android:name=".activity.questions.BeforeVideoActivity" />
-        <activity android:name=".activity.questions.DoneActivity"></activity>
+        <activity android:name=".activity.questions.Question1"   android:screenOrientation="portrait" />
+        <activity android:name=".activity.questions.Question2"   android:screenOrientation="portrait"/>
+        <activity android:name=".activity.questions.Question3"   android:screenOrientation="portrait"/>
+        <activity android:name=".activity.questions.Question4"   android:screenOrientation="portrait"/>
+        <activity android:name=".activity.questions.VideoUploadActivity"   android:screenOrientation="portrait"/>
+        <activity android:name=".activity.questions.BeforeVideoActivity"   android:screenOrientation="portrait"/>
+        <activity android:name=".activity.questions.DoneActivity"   android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.afollestad.materialcamera.CaptureActivity"
+            android:theme="@style/MaterialCamera.CaptureActivity" />
+        <activity
+            android:name="com.afollestad.materialcamera.CaptureActivity2"
+            android:theme="@style/MaterialCamera.CaptureActivity" />
     </application>
 
 </manifest>

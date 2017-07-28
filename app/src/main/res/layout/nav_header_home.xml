@@ -15,6 +15,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="3"
+    android:id="@+id/root_profile"
     android:layout_marginTop="10dp"
     android:orientation="vertical">
     <buddyapp.com.utils.CircleImageView

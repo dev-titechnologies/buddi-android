@@ -199,6 +199,7 @@
         android:textColor="@color/white"
         android:layout_marginTop="20dp"
         android:id="@+id/next"
+        android:textAllCaps="true"
         android:layout_alignParentBottom="true"
         android:background="@color/button_bgcolor"/>
 </RelativeLayout>
