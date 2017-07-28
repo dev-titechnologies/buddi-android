@@ -48,7 +48,7 @@
                     android:layout_weight="1"
                     android:id="@+id/image_trainer"
                     android:visibility="gone"
-                    android:background="@drawable/gradient_color"
+                    android:background="@mipmap/profile_trainer"
                     android:gravity="left"
                     android:orientation="horizontal">
 

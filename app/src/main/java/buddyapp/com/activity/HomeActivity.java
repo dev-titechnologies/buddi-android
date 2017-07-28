@@ -208,10 +208,8 @@ public class HomeActivity extends AppCompatActivity
             try {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
-                    PreferencesUtils.saveData(Constants.token,"", getApplicationContext());
-                    LoginManager.getInstance().logOut();
-                    Intent intent = new Intent(getApplicationContext(),WelcomeActivity.class);
-                    startActivity(intent);
+//
+                    CommonCall.sessionout(HomeActivity.this);
                     finish();
                 }else if(obj.getInt("status") == 2){
                     Toast.makeText(getApplicationContext(),obj.getString("message"),Toast.LENGTH_SHORT);

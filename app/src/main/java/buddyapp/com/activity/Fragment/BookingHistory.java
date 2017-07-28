@@ -34,7 +34,7 @@ public class BookingHistory extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-//        new LoadBookingHistory().execute();
+        new LoadBookingHistory().execute();
         return inflater.inflate(R.layout.fragment_booking_history, container, false);
 
     }

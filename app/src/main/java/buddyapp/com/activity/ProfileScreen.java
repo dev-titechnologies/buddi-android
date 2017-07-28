@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.prefs.PreferencesFactory;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
@@ -73,6 +75,7 @@ public class ProfileScreen extends AppCompatActivity {
     private static int RESULT_LOAD_IMAGE = 1;
     int REQUEST_CROP_PICTURE = 222;
     String imageurl = "";
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +158,7 @@ public class ProfileScreen extends AppCompatActivity {
                 builder.show();
             }
         });
+
     }
 
     private void galleryIntent() {
@@ -253,17 +257,19 @@ public class ProfileScreen extends AppCompatActivity {
                 if (!editflag) {
                     item.setIcon(R.drawable.ic_check_white_24dp);
                     editflag = true;
-                    userImageView.setClickable(true);
+//                    userImageView.setClickable(true);
                     editProfile();
                     Toast.makeText(this, "Edit Profile", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    item.setIcon(R.drawable.ic_edit_white);
-                    editflag = false;
-                    Toast.makeText(this, "Saving Please wait...", Toast.LENGTH_SHORT).show();
                     if (validateFeelds()) {
-                        userImageView.setClickable(false);
-                        new updateProfile().execute();
+                        item.setIcon(R.drawable.ic_edit_white);
+                        editflag = false;
+                        if(CommonCall.isNetworkAvailable())
+                        {
+                            Toast.makeText(this, "Saving Please wait...", Toast.LENGTH_SHORT).show();
+    //                        userImageView.setClickable(false);
+                            new updateProfile().execute();}
                     }
                 }
                 break;
@@ -327,15 +333,21 @@ public class ProfileScreen extends AppCompatActivity {
                 rbfemale.setChecked(true);
                 sgender = "female";
             }
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+//            final Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
                     //Do something after 100ms
-                    CommonCall.LoadImage(getApplicationContext(), imageurl, userImageView, R.drawable.ic_account, R.drawable.ic_broken_image);
+                    if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")){
+                        CommonCall.LoadImage(getApplicationContext(), imageurl, trainerImageView, R.drawable.ic_account, R.drawable.ic_broken_image);
 
-                }
-            }, 3000);
+                    }else {
+                        CommonCall.LoadImage(getApplicationContext(), imageurl, userImageView, R.drawable.ic_account, R.drawable.ic_broken_image);
+                    }
+
+            CommonCall.hideLoader();
+//                }
+//            }, 3000);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -391,6 +403,8 @@ public class ProfileScreen extends AppCompatActivity {
                     Toast.makeText(ProfileScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
                 } else {
                     //session out
+                    CommonCall.sessionout(ProfileScreen.this);
+                    finish();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -444,24 +458,31 @@ public class ProfileScreen extends AppCompatActivity {
                     PreferencesUtils.saveData(Constants.user_image, jsonObject.getString(Constants.user_image), getApplicationContext());
                     PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
                     PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
 
-                    loadProfile();
+                            loadProfile();
 
+                        }
+                    }, 3000);
                 } else if (obj.getInt("status") == 2) {
                     Toast.makeText(ProfileScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
-                } else if (obj.getInt("status") == 3) {
-
                 } else {
-
+                    CommonCall.sessionout(ProfileScreen.this);
+                    finish();
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            CommonCall.hideLoader();
+
+
 
         }
     }
+
 
 
     /********************** Field validation *******************/
@@ -748,10 +769,9 @@ public class ProfileScreen extends AppCompatActivity {
 
                 }else if (obj.getInt("status") == 2) {
                     Toast.makeText(ProfileScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
-                } else if (obj.getInt("status") == 3) {
-
-                } else {
-
+                }  else {
+                    CommonCall.sessionout(ProfileScreen.this);
+                    finish();
                 }
 
             }catch (JSONException e){

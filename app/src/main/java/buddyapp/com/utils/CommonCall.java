@@ -3,18 +3,26 @@ package buddyapp.com.utils;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.facebook.login.LoginManager;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,8 +32,10 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import buddyapp.com.Controller;
+import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.activity.WelcomeActivity;
 
 /**
  * Created by Ajay on 15/6/16.
@@ -289,5 +299,16 @@ public static void hideLoader(){
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+
+    // log out **************
+    public static void sessionout( Context context){
+                    PreferencesUtils.saveData(Constants.token,"", context);
+                    LoginManager.getInstance().logOut();
+                    Intent intent = new Intent(context,WelcomeActivity.class);
+                    context.startActivity(intent);
+    }
+
+
 
 }
