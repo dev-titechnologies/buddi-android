@@ -23,7 +23,7 @@ public class Constants {
     public static String trainer = "trainer";
     public static String user_image = "user_image";
     public static String mobile = "mobile";
-
+    public static String trainer_type = "trainer_type";
     public static String trainer_status = "trainer_status";
 
     public static String approved = "category_approved";

@@ -27,7 +27,7 @@
     <string name="enter_zipcode">ENTER ZIPCODE</string>
 
     <string name="list_gym_sub">List any current gym subscriptions you currently have?</string>
-    <string name="what_zipcode">What is your zipcode?</string>
+    <string name="what_zipcode">Enter your exact zip code, which can list your profile perfectly.</string>
     <string name="access_military_instalations">Do you have access to military installations?</string>
     <string name="text_training_history">Nice! Now tell us about your training history.</string>
     <string name="text_how_long_training">How long have you been training seriously?</string>

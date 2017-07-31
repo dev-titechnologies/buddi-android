@@ -92,8 +92,8 @@ HistoryAdapter historyAdapter;
                             db.insertHistroy(jsonObject);
 
                         }
-//                        historyAdapter = new HistoryAdapter(getActivity(),jsonArray);
                         loadHistory(db.getAllHistory());
+                        historyAdapter = new HistoryAdapter(getActivity(),jsonArray);
                     }
                 }
             } catch (JSONException e) {

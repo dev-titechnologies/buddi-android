@@ -231,19 +231,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/radioGroup"
+                    android:paddingLeft="5dp"
                     android:orientation="horizontal">
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingRight="5dp"
+                        android:button="@null"
+                        android:drawablePadding="5dp"
+                        android:drawableRight="@drawable/radiobutton"
                         android:id="@+id/male"
                         android:textAllCaps="true"
                         android:text="Male"/>
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginLeft="10dp"
                         android:id="@+id/female"
+                        android:button="@null"
+                        android:drawablePadding="5dp"
+                        android:drawableRight="@drawable/radiobutton"
                         android:textAllCaps="true"
                         android:text="Female"/>
                 </RadioGroup>
