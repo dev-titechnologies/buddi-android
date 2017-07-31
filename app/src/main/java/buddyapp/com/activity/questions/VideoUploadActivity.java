@@ -185,7 +185,7 @@ public class VideoUploadActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 Uri vid = data.getData();
 
-                if (checkVideoDurationValidation(vid) >= 30) {
+                if (checkVideoDurationValidation(vid) >= 30 && checkVideoDurationValidation(vid) <= 90) {
 
 
                     videoUrl = getPathFromUri(vid);
@@ -194,7 +194,7 @@ public class VideoUploadActivity extends AppCompatActivity {
                     next.setVisibility(View.GONE);
                 } else {
 
-                    Toast.makeText(this, "Selected video should be more than 30 seconds.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Selected video should be more than 30 seconds and not more than 90 seconds", Toast.LENGTH_LONG).show();
                 }
 
 

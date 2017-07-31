@@ -25,6 +25,8 @@ Button exit;
             public void onClick(View view) {
 
                 if (source_become_trainer) {
+
+
                     Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

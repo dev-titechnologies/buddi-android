@@ -13,6 +13,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import buddyapp.com.Controller;
+import buddyapp.com.Settings.Constants;
+import buddyapp.com.Settings.PreferencesUtils;
+
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
@@ -27,7 +31,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String Category_Sub = "Category_Sub";
 
-    private static final String TABLE_HISTORY= "History";
+    private static final String TABLE_HISTORY = "History";
     // Contacts Table Columns names
     private static final String KEY_ID = "id";
 
@@ -51,7 +55,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String PAYMENT_STATUS = "payment_status";
     private static final String LOCATION = "location";
     private static final String TRAINED_DATE = "trained_date";
-
 
 
     public DatabaseHandler(Context context) {
@@ -105,17 +108,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
-
-    public void insertSubCategory(String cat_id,JSONArray category){
-
+    public void insertSubCategory(String cat_id, JSONArray category) {
 
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        for (int i=0;i<category.length();i++) {
+        for (int i = 0; i < category.length(); i++) {
             try {
                 JSONObject item = category.getJSONObject(i);
-
 
 
                 ContentValues values = new ContentValues();
@@ -138,35 +138,76 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
-
-    public void insertCategory(JSONArray category){
+    public void insertCategory(JSONArray category) {
 
         deleteCat();
         deleteSubContact();
 
-
-
+        ArrayList<String> arrayaproved = null,arraypending = null;
         SQLiteDatabase db = this.getWritableDatabase();
+        try {
 
-        for (int i=0;i<category.length();i++) {
+        JSONArray aproved = new JSONArray(PreferencesUtils.getData(Constants.approved, Controller.getAppContext(),""));
+        JSONArray pending = new JSONArray(PreferencesUtils.getData(Constants.pending, Controller.getAppContext(),""));
+
+
+        arrayaproved = new ArrayList(aproved.length());
+        for(int i=0;i < aproved.length();i++){
+
+                arrayaproved.add(aproved.get(i).toString());
+
+        }
+
+         arraypending = new ArrayList(pending.length());
+        for(int i=0;i < aproved.length();i++){
+
+                arraypending.add(pending.get(i).toString());
+
+        }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        for (int i = 0; i < category.length(); i++) {
             try {
                 JSONObject item = category.getJSONObject(i);
 
 
+                ContentValues values = new ContentValues();
 
-            ContentValues values = new ContentValues();
 
-
-            values.put(CAT_ID, item.getString("category_id"));
-            values.put(CAT_NAME, item.getString("category_name"));
+                values.put(CAT_ID, item.getString("category_id"));
+                values.put(CAT_NAME, item.getString("category_name"));
                 values.put(CAT_DESC, item.getString("category_desc"));
-            values.put(CAT_IMAGE, item.getString("category_image"));
-            values.put(CAT_STATUS,("1"));
-            // Inserting main cat
-            db.insert(TABLE_CATEGORY, null, values);
+                values.put(CAT_IMAGE, item.getString("category_image"));
+
+
+                if (arrayaproved.contains(item.getString("category_id"))
+                        
+                      || arraypending.contains(item.getString("category_id"))  
+                        
+                        )
+
+                values.put(CAT_STATUS, ("0"));
+else
+                    values.put(CAT_STATUS, ("1"));
+
+                
+                
+                
+                
+                // Inserting main cat
+
+
+
+
+
+                db.insert(TABLE_CATEGORY, null, values);
                 // Inserting sub cat
 
-                insertSubCategory(item.getString("category_id"),item.getJSONArray("sub_categories"));
+                insertSubCategory(item.getString("category_id"), item.getJSONArray("sub_categories"));
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -193,9 +234,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public JSONArray getAllCAT() {
-     JSONArray categoryList = new JSONArray();
+        JSONArray categoryList = new JSONArray();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_CATEGORY+" WHERE "+CAT_STATUS+" = 1";
+        String selectQuery = "SELECT  * FROM " + TABLE_CATEGORY + " WHERE " + CAT_STATUS + " = 1";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -206,10 +247,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 JSONObject contact = new JSONObject();
 
                 try {
-                    contact.put("category_id",cursor.getString(1));
 
-                contact.put("category_name",cursor.getString(2));
-                contact.put("category_image",cursor.getString(3));
+
+                    contact.put("category_id", cursor.getString(1));
+
+                    contact.put("category_name", cursor.getString(2));
+                    contact.put("category_image", cursor.getString(3));
 
 
                     categoryList.put(contact);
@@ -227,10 +270,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public HashSet getSubCat(ArrayList selectedID) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        HashSet<String> subCategoryList=new HashSet<String>();
+        HashSet<String> subCategoryList = new HashSet<String>();
 //        JSONArray subCategoryList = new JSONArray();
 
-        for (int i =0;i< selectedID.size();i++) {
+        for (int i = 0; i < selectedID.size(); i++) {
 
             Cursor cursor = db.query(Category_Sub, new String[]{CAT_ID,
                             SUB_CAT_ID, SUBCAT_NAME}, CAT_ID + "=?",
@@ -247,9 +290,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 //                        cat.put("subCat_name", cursor.getString(2));
 
 
-
-                            subCategoryList.add( cursor.getString(1));
-
+                        subCategoryList.add(cursor.getString(1));
 
 
                     } catch (Exception e) {
@@ -268,18 +309,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public JSONObject getSubCat(String id) {
 
-        JSONObject sub= new JSONObject();
+        JSONObject sub = new JSONObject();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(Category_Sub, new String[] { CAT_ID,
-                        SUB_CAT_ID, SUBCAT_NAME }, SUB_CAT_ID + "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
+        Cursor cursor = db.query(Category_Sub, new String[]{CAT_ID,
+                        SUB_CAT_ID, SUBCAT_NAME}, SUB_CAT_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
         try {
-            sub.put("subCat_id",cursor.getString(1));
+            sub.put("subCat_id", cursor.getString(1));
 
-            sub.put("subCat_name",cursor.getString(2));
+            sub.put("subCat_name", cursor.getString(2));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -289,7 +330,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return sub;
     }
 
-    public void insertHistroy(JSONObject jsonObject){
+    public void insertHistroy(JSONObject jsonObject) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues statement = new ContentValues();
@@ -314,7 +355,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public JSONArray getAllHistory() {
         JSONArray jsonArray = new JSONArray();
-        String selectQuery = "SELECT  * FROM " + TABLE_HISTORY+"";
+        String selectQuery = "SELECT  * FROM " + TABLE_HISTORY + "";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -322,7 +363,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 JSONObject obj = new JSONObject();
-                try{
+                try {
                     obj.put(BOOKING_ID, cursor.getString(0));
                     obj.put(TRAINEE_ID, cursor.getString(1));
                     obj.put(TRAINEE_NAME, cursor.getString(2));
@@ -333,12 +374,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     obj.put(PAYMENT_STATUS, cursor.getString(7));
                     obj.put(LOCATION, cursor.getString(8));
                     obj.put(TRAINED_DATE, cursor.getString(9));
-                }catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-        } while (cursor.moveToNext());
-    }
+            } while (cursor.moveToNext());
+        }
         return jsonArray;
     }
 }
