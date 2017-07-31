@@ -161,7 +161,7 @@
                     android:id="@+id/email"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"
-                    android:maxLength="30"
+                    android:maxLength="50"
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
@@ -226,12 +226,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:textAllCaps="true"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
                     android:text="Gender"/>
                 <RadioGroup
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/radioGroup"
                     android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
                     android:orientation="horizontal">
                     <RadioButton
                         android:layout_width="wrap_content"

@@ -39,6 +39,7 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import com.hbb20.CountryCodePicker;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,6 +51,7 @@ import buddyapp.com.R;
 
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.activity.questions.DoneActivity;
 import buddyapp.com.utils.CommonCall;
 
 import buddyapp.com.utils.NetworkCalls;
@@ -287,6 +289,8 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                                 @Override
                                 public void onCompleted(JSONObject object, GraphResponse response) {
                                     try {
+
+
                                         CommonCall.PrintLog("facebookresponsse",object.toString());
                                         register_type="facebook";
                                         if(object.getString("first_name").length()!=0)
@@ -314,6 +318,9 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
+
+                                   new login().execute();
+
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -369,7 +376,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
 
                 if (acct.getEmail()!=null)
                 eMail.setText(acct.getEmail());
-
+                new login().execute();
 //                Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Failed!", Toast.LENGTH_SHORT).show();
@@ -524,4 +531,133 @@ class sendOtp extends AsyncTask<String, String, String> {
     }
 }
 
+
+    class login extends AsyncTask<String, String, String> {
+        JSONObject reqData = new JSONObject();
+        String loginResponse = "";
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            CommonCall.showLoader(RegisterScreen.this);
+
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                reqData.put("login_type", register_type);
+                reqData.put("email", semail);
+                reqData.put("password", spassword);
+                reqData.put("facebook_id", sfacebookId);
+                reqData.put("google_id", sgoogleplusId);
+                reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
+                loginResponse = NetworkCalls.POST(Urls.getLoginURL(), reqData.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return loginResponse;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                facebook.setEnabled(true);
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt("status") == 1) {
+                    JSONObject jsonObject = obj.getJSONObject("data");
+                    PreferencesUtils.saveData(Constants.token, jsonObject.getString(Constants.token), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.user_id, jsonObject.getString(Constants.user_id), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.email, jsonObject.getString(Constants.email), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.fname, jsonObject.getString(Constants.fname), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.lname, jsonObject.getString(Constants.lname), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.user_image, jsonObject.getString(Constants.user_image), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.trainer_type, jsonObject.getString(Constants.trainer_type), getApplicationContext());
+
+
+                    if (!PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee")) {
+
+                        PreferencesUtils.saveData(Constants.approved, jsonObject.getString(Constants.approved), getApplicationContext());
+                        PreferencesUtils.saveData(Constants.pending, jsonObject.getString(Constants.pending), getApplicationContext());
+
+
+                        if (new JSONArray( PreferencesUtils.getData(Constants.approved, getApplicationContext(), "[]")).length() == 0) {
+
+
+                            if (new JSONArray(PreferencesUtils.getData(Constants.pending, getApplicationContext(), "[]")).length() == 0) {
+
+
+                                Intent intent = new Intent(getApplicationContext(), ChooseCategory.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+
+                            }else {
+
+
+                                Intent intent = new Intent(getApplicationContext(), DoneActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+                        } else {
+
+//                        if (PreferencesUtils.getData(Constants.pending, getApplicationContext(), "").length() == 0) {
+//
+//
+//                            Intent intent = new Intent(getApplicationContext(), ChooseCategory.class);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            startActivity(intent);
+//                            finish();
+//
+//                        }else
+
+                            {
+
+
+                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+
+
+                            }
+                        }
+
+
+                    }else{
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                } else if (obj.getInt("status") == 2) {
+
+//                    Toast.makeText(RegisterScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+//                    if(obj.getString("status_type").equals("UserDoesntExist")) {
+//                        Intent intent = new Intent(getApplicationContext(), RegisterScreen.class);
+//                        startActivity(intent);
+//                        finish();
+//                    }
+
+                } else if (obj.getInt("status") == 3) {
+
+//                    Toast.makeText(RegisterScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            CommonCall.hideLoader();
+        }
+    }
 }

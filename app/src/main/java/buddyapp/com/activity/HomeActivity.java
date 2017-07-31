@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -76,9 +77,14 @@ public class HomeActivity extends AppCompatActivity
         if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer"))
         menu.findItem(R.id.nav_trainer).setTitle("Add category");
 
-        if(PreferencesUtils.getData(Constants.trainer_type,getApplicationContext(),"").equals("true"))
-        menu.findItem(R.id.nav_trainer).setVisible(false);
-
+        if(PreferencesUtils.getData(Constants.trainer_type,getApplicationContext(),"").equals("true")) {
+         if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer"))
+         {
+             menu.findItem(R.id.nav_trainer).setVisible(true);
+         }
+         else
+             menu.findItem(R.id.nav_trainer).setVisible(false);
+        }
         userImageView = (CircleImageView) hView.findViewById(R.id.userImageView);
         name = (TextView) hView.findViewById(R.id.name);
         email = (TextView) hView.findViewById(R.id.email);

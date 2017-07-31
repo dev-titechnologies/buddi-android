@@ -32,6 +32,8 @@ import java.util.concurrent.TimeUnit;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
+import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.activity.ChooseCategory;
 import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
@@ -583,7 +585,7 @@ try {
                     Toast.makeText(VideoUploadActivity.this, "  Success.", Toast.LENGTH_SHORT).show();
 
 
-
+                    PreferencesUtils.saveData(Constants.pending, ChooseCategory.cat_selectedID.toString(),getApplicationContext());
                     Intent exit = new Intent(getApplicationContext(), DoneActivity.class);
                     startActivity(exit);
 
