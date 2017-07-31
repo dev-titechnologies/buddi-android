@@ -100,6 +100,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
             @Override
             public void onClick(View view) {
                 if (CommonCall.isNetworkAvailable()) {
+                    LoginManager.getInstance().logOut();
                     facebook.setEnabled(false);
                     facebook_loginbutton.performClick();
                     fblogin();
@@ -162,6 +163,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
         try {
             callbackManager = CallbackManager.Factory.create();
             facebook_loginbutton.setReadPermissions("email");
+            facebook.setEnabled(true);
             facebook_loginbutton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {

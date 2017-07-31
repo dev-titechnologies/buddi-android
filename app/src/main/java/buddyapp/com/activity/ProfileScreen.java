@@ -260,7 +260,6 @@ public class ProfileScreen extends AppCompatActivity {
                     editflag = true;
 //                    userImageView.setClickable(true);
                     editProfile();
-                    Toast.makeText(this, "Edit Profile", Toast.LENGTH_SHORT).show();
 
                 } else {
                     if (validateFeelds()) {
