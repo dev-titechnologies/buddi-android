@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -125,10 +126,21 @@ if (gym_sub!=null)
                     Toast.makeText(Question2.this, "Please Select Military Instalations", Toast.LENGTH_SHORT).show();
 
                 }  else{
-                    PreferencesUtils.saveData(Constants.gym_subscriptions,gym_sub.getSelectedStrings().toString(),getApplicationContext());
+
+                    List<String> temp = new ArrayList<String>();
+                    for (int i=0;i<gym_sub.getSelectedStrings().size();i++){
+
+                        temp.add(gymlistid.get(gymlist.indexOf(gym_sub.getSelectedStrings().get(i))));
+                    }
+
+
+                    PreferencesUtils.saveData(Constants.gym_subscriptions,temp.toString(),getApplicationContext());
 
                     PreferencesUtils.saveData(Constants.military_installations,military_installations_selected,getApplicationContext());
                     startActivity(new Intent(getApplicationContext(), Question3.class));
+
+
+
                 }
             }
         });
@@ -183,7 +195,6 @@ if (gym_sub!=null)
 
 
                     gym_sub.setItems(gymlist);
-
 
 
 
