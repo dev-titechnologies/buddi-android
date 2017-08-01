@@ -117,7 +117,11 @@ public class HomeActivity extends AppCompatActivity
         } else {
             if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
-                finish();
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+
                 return;
             }
 
@@ -235,6 +239,7 @@ public class HomeActivity extends AppCompatActivity
             try {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
+                    PreferencesUtils.cleardata(HomeActivity.this);
 //
                     CommonCall.sessionout(HomeActivity.this);
                     finish();

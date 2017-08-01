@@ -451,13 +451,13 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                     if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
 
                        Intent intent = new Intent(getApplicationContext(),ChooseCategory.class);
-                       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);
                        startActivity(intent);
                        finish();
 
                    }else {
                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                       intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);
                        startActivity(intent);
                        finish();
                    }
@@ -591,7 +591,7 @@ class sendOtp extends AsyncTask<String, String, String> {
 
 
                                 Intent intent = new Intent(getApplicationContext(), ChooseCategory.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                                 finish();
 
@@ -599,7 +599,7 @@ class sendOtp extends AsyncTask<String, String, String> {
 
 
                                 Intent intent = new Intent(getApplicationContext(), DoneActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                                 finish();
                             }
@@ -630,7 +630,8 @@ class sendOtp extends AsyncTask<String, String, String> {
 
                     }else{
                         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
                         startActivity(intent);
                         finish();
                     }

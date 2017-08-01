@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import buddyapp.com.R;
+import buddyapp.com.Settings.Constants;
+import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.HomeActivity;
 
 import static buddyapp.com.Settings.Constants.source_become_trainer;
@@ -26,7 +28,7 @@ Button exit;
 
                 if (source_become_trainer) {
 
-
+                    PreferencesUtils.saveData(Constants.trainer_type,"true",getApplicationContext());
                     Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
