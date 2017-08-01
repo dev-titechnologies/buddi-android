@@ -147,8 +147,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
 
-        JSONArray aproved = new JSONArray(PreferencesUtils.getData(Constants.approved, Controller.getAppContext(),""));
-        JSONArray pending = new JSONArray(PreferencesUtils.getData(Constants.pending, Controller.getAppContext(),""));
+        JSONArray aproved = new JSONArray(PreferencesUtils.getData(Constants.approved, Controller.getAppContext(),"[]"));
+        JSONArray pending = new JSONArray(PreferencesUtils.getData(Constants.pending, Controller.getAppContext(),"[]"));
 
 
         arrayaproved = new ArrayList(aproved.length());

@@ -50,6 +50,10 @@ public class HistoryAdapter extends BaseAdapter {
                     .inflate(R.layout.history_list_item, viewGroup, false);
             view.setTag(holder);
             holder = new CustomViewHolder();
+//            category, training_status,payment_status,location,date;
+            holder.name = (TextView) view.findViewById(R.id.name);
+            holder.training_status = (TextView) view.findViewById(R.id.training_status);
+            holder.payment_status = (TextView) view.findViewById(R.id.training_status);
         } else {
 
             holder = (CustomViewHolder) view.getTag();
@@ -68,6 +72,8 @@ public class HistoryAdapter extends BaseAdapter {
             location= jsonObject.getString("location");
             trained_date= jsonObject.getString("trained_date");
 
+            holder.name.setText(trainerName);
+            holder.training_status.setText(trainingStatus);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -76,7 +82,7 @@ public class HistoryAdapter extends BaseAdapter {
 
     public class CustomViewHolder {
 
-        TextView catName;
+        TextView name,category, training_status,payment_status,location,date;
         CardView cat_card;
 
     }

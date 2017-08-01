@@ -40,8 +40,8 @@ public class Splash extends AppCompatActivity {
                     if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)) {
         try {
 
-            if (new JSONArray(PreferencesUtils.getData(Constants.approved, getApplicationContext(), "")).length() == 0) {
-                if (new JSONArray(PreferencesUtils.getData(Constants.pending, getApplicationContext(), "")).length() == 0) {
+            if (new JSONArray(PreferencesUtils.getData(Constants.approved, getApplicationContext(), "[]")).length() == 0) {
+                if (new JSONArray(PreferencesUtils.getData(Constants.pending, getApplicationContext(), "[]")).length() == 0) {
                     startActivity(new Intent(getApplicationContext(), ChooseCategory.class));
                     finish();
                 } else {

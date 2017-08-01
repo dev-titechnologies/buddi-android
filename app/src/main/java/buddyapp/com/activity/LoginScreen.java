@@ -316,14 +316,14 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                         PreferencesUtils.saveData(Constants.pending, jsonObject.getString(Constants.pending), getApplicationContext());
 
 
-                        if (new JSONArray( PreferencesUtils.getData(Constants.approved, getApplicationContext(), "")).length() == 0) {
+                        if (new JSONArray( PreferencesUtils.getData(Constants.approved, getApplicationContext(), "[]")).length() == 0) {
 
 
-                            if (new JSONArray(PreferencesUtils.getData(Constants.pending, getApplicationContext(), "")).length() == 0) {
+                            if (new JSONArray(PreferencesUtils.getData(Constants.pending, getApplicationContext(), "[]")).length() == 0) {
 
 
                                 Intent intent = new Intent(getApplicationContext(), ChooseCategory.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
                                 finish();
 
@@ -331,7 +331,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
 
 
                                 Intent intent = new Intent(getApplicationContext(), DoneActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
                                 finish();
                             }
@@ -351,7 +351,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
 
 
                                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                                 finish();
 
@@ -362,7 +362,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
 
                     }else{
                         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
                     }
