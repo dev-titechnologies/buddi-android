@@ -35,11 +35,11 @@ public class ChooseCategory extends AppCompatActivity {
 
     RelativeLayout root;
     DatabaseHandler db;
-GridView grid;
+    GridView grid;
     CategoryAdapter categoryAdapter;
  public static   ArrayList<String> cat_selectedID = new ArrayList<>();
 
-ImageView errorImage;
+    ImageView errorImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
