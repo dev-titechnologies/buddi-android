@@ -37,7 +37,7 @@
 
     <string name="certified_personal">Are you currently a certified personal trainer?</string>
 
-
+    <string name="please_select_gym"> Please Choose Gym Subscriptions</string>
     <string name="more_information">Just a little more information:</string>
     <string name="list_1rep_movement">List your 1 rep max for each movement that applies to the category you wish to coach:</string>
     <string name="current_weight_text">What is your current weight?</string>

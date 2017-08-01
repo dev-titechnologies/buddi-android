@@ -21,7 +21,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 
 import buddyapp.com.R;
@@ -150,7 +152,10 @@ public class Question4 extends Activity {
                         question.put("zipcode", PreferencesUtils.getData(Constants.zipcode, getApplicationContext(), ""));
 
                         question.put("military_installations", PreferencesUtils.getData(Constants.military_installations, getApplicationContext(), ""));
-                        question.put("gym_subscriptions", PreferencesUtils.getData(Constants.gym_subscriptions, getApplicationContext(), ""));
+
+//                        List<String> myList = new ArrayList<String>(Arrays.asList(PreferencesUtils.getData(Constants.gym_subscriptions, getApplicationContext(), "").split(",")));
+
+                        question.put("gym_subscriptions", (PreferencesUtils.getData(Constants.gym_subscriptions, getApplicationContext(), "")));
 
                         question.put("training_exp", PreferencesUtils.getData(Constants.training_exp, getApplicationContext(), ""));
 

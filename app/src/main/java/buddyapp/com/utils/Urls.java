@@ -38,6 +38,15 @@ public class Urls {
 
     public static String ADDTRAINERCAT= "/profile/addTrainerCategory";
 
+    public static String GYMLIST= "/gym/listGyms ";
+
+
+    public static String getGYMLISTURL(){
+
+        return BASEURL+GYMLIST;
+    }
+
+
 
     public static String getADDTRAINECATEGORYURL(){
 
