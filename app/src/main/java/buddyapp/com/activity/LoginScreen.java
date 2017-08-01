@@ -369,8 +369,14 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
 
                 } else if (obj.getInt("status") == 2) {
                     Toast.makeText(LoginScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
-                    if(obj.getString("status_type").equals("UserDoesntExist")) {
+                    if(obj.getString("status_type").equals("UserNotRegistered")) {
                         Intent intent = new Intent(getApplicationContext(), RegisterScreen.class);
+                        intent.putExtra("login_type", login_type);
+                        intent.putExtra("email", semail);
+                        intent.putExtra("sfname", sfname);
+                        intent.putExtra("slname", slname);
+                        intent.putExtra("facebook_id", sfacebookId);
+                        intent.putExtra("google_id", sgoogleplusId);
                         startActivity(intent);
                         finish();
                     }

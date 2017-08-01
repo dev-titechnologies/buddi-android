@@ -52,10 +52,10 @@ Talk soon.
     android:layout_height="wrap_content"
     android:text="Exit"
     android:layout_alignParentBottom="true"
-    android:textColor="@color/white"
+    android:textColor="@color/black"
     android:layout_marginTop="20dp"
     android:id="@+id/exit"
-    android:background="@color/button_bgcolor"/>
+    android:background="@color/white"/>
 
 
 </RelativeLayout>

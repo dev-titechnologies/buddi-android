@@ -43,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.Inet4Address;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -100,7 +101,23 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         actionBar.setTitle("Sign Up");
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
-
+        Intent intent = getIntent();
+        try{
+        if(intent.hasExtra("email"))
+        {
+            eMail.setText(intent.getStringExtra("email"));
+            firstName.setText(intent.getStringExtra("sfname"));
+            lastName.setText(intent.getStringExtra("slname"));
+            if(intent.getStringExtra("facebook_id").length()>1)
+            {    sfacebookId = intent.getStringExtra("facebook_id");
+                 register_type = intent.getStringExtra("login_type");}
+            else if(intent.getStringExtra("google_id").length()>1)
+            {    sgoogleplusId = intent.getStringExtra("google_id");
+                 register_type = intent.getStringExtra("login_type");}
+        }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         Google = (ImageView) findViewById(R.id.googleplus);
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.

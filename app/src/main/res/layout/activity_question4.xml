@@ -76,7 +76,7 @@
 
             <EditText
                 android:layout_width="match_parent"
-                android:hint="weight"
+                android:hint="In pounds"
                 android:id="@+id/weight"
                 android:textColorHint="@color/button_text"
                 android:inputType="number"
