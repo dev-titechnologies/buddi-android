@@ -49,14 +49,20 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_marginTop="50dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_height="wrap_content">
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginBottom="@dimen/medium"
             android:src="@drawable/ic_qustion"
             android:layout_gravity="center"/>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/large">
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -64,15 +70,17 @@
                 android:layout_width="match_parent"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/gymtext"
+                android:padding="@dimen/medium"
                 android:text="@string/please_select_gym"
                 android:layout_height="wrap_content" />
     <buddyapp.com.utils.MultiSelectionSpinner
         android:layout_width="match_parent"
         android:id="@+id/gym"
-
-
+android:layout_gravity="center_vertical"
+        android:padding="@dimen/medium"
         android:layout_height="wrap_content" />
         </FrameLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
      <android.support.v7.widget.CardView
               android:layout_width="match_parent"
