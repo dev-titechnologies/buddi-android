@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import buddyapp.com.R;
@@ -23,14 +25,17 @@ public class Question3 extends Activity {
        ,yes_certified_trainer,no_certified_trainer;
     ImageView back;
     String competed_category="",coached_anybody="",certified_trainer ="";
-    EditText training_exp;
+    Spinner year;
+    Spinner month;
+    String training_exp;
+    private String[] yearSpinner;
+    private String[] monthSpinner;
+    String syear= "0",smonth="0", totalexp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question3);
         next=(Button)findViewById(R.id.next);
-        training_exp=(EditText)findViewById(R.id.training_exp);
-
         yes_competed_category=(Button)findViewById(R.id.yes_competed_category);
         no_competed_category=(Button)findViewById(R.id.no_competed_category);
         yes_coached_anybody=(Button)findViewById(R.id.yes_coached_anybody);
@@ -38,6 +43,24 @@ public class Question3 extends Activity {
         yes_certified_trainer=(Button)findViewById(R.id.yes_certified_trainer);
         no_certified_trainer=(Button)findViewById(R.id.no_certified_trainer);
         back = (ImageView) findViewById(R.id.back);
+
+        this.yearSpinner = new String[] {
+                "0","1", "2", "3", "4", "5","6","7","8","9","10+"
+        };
+        year = (Spinner) findViewById(R.id.year);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,
+                R.layout.spinner_item, yearSpinner);
+        year.setAdapter(adapter1);
+
+
+
+        this.monthSpinner = new String[] {
+                "0","1", "2", "3", "4", "5","6","7","8","9","10","11","12"
+        };
+        month = (Spinner) findViewById(R.id.month);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
+                R.layout.spinner_item,monthSpinner);
+        month.setAdapter(adapter2);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,9 +72,12 @@ public class Question3 extends Activity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-if (training_exp.getText().toString().trim().length()==0){
+                syear = year.getSelectedItem().toString();
+                smonth = month.getSelectedItem().toString();
+                training_exp = syear + " year" +" and "+ smonth + " months";
+if (syear.equals("0")&&smonth.equals("0")){
 
-    training_exp.setError("Please enter your experience.");
+   Toast.makeText(getApplicationContext(),"Please select your experience.", Toast.LENGTH_SHORT).show();
 
 }else if (competed_category.length()==0){
 
@@ -71,7 +97,7 @@ if (training_exp.getText().toString().trim().length()==0){
 }else {
 
 
-    PreferencesUtils.saveData(Constants.training_exp,training_exp.getText().toString(),getApplicationContext());
+    PreferencesUtils.saveData(Constants.training_exp,training_exp,getApplicationContext());
 
     PreferencesUtils.saveData(Constants.competed_category,competed_category,getApplicationContext());
     PreferencesUtils.saveData(Constants.coached_anybody,coached_anybody,getApplicationContext());

@@ -27,10 +27,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.hbb20:ccp:2.0.1'
+    compile 'com.google.android.gms:play-services-maps:11.0.2'
     compile 'com.google.android.gms:play-services-auth:11.0.2'
+    compile 'com.google.android.gms:play-services-location:11.0.2'
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.naver.android.helloyako:imagecropview:1.2.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.afollestad:material-camera:0.4.4'
+    compile 'com.github.aarsy.googlemapsanimations:googlemapsanimations:1.0.5'
 }

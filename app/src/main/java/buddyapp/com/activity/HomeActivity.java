@@ -1,11 +1,15 @@
 package buddyapp.com.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,8 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.login.LoginManager;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,30 +30,37 @@ import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.Fragment.BookingHistory;
+import buddyapp.com.activity.Fragment.HomeCategory;
 import buddyapp.com.activity.Fragment.Legal;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
+
 import static buddyapp.com.Settings.Constants.source_become_trainer;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
 
     CircleImageView userImageView;
     LinearLayout root_profile;
     TextView name, email,rating;
     JSONObject data;
     Menu menu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("BuddyApp");
+        getSupportActionBar().setTitle("Buddi");
 
+        Fragment fragment = new HomeCategory();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +117,7 @@ public class HomeActivity extends AppCompatActivity
             }
         });
     }
+
     boolean doubleBackToExitPressedOnce = false;
     @Override
     public void onBackPressed() {
@@ -168,8 +178,8 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
 
-            getSupportActionBar().setTitle("BuddyApp");
-            Fragment fragment = new BookingHistory();
+            getSupportActionBar().setTitle("Buddi");
+            Fragment fragment = new HomeCategory();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
@@ -224,7 +234,9 @@ public class HomeActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
+//
+    //
+        // ****** LOg Out *******
     class LogOutTask extends AsyncTask<String,String,String>{
 
         @Override

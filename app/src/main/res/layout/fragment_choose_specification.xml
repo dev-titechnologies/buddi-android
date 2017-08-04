@@ -1,0 +1,132 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="buddyapp.com.activity.Fragment.ChooseSpecification">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/large"
+        android:id="@+id/session"
+        android:textColor="@color/black"
+        android:drawableRight="@drawable/ic_right_black_24dp"
+        android:text="Choose Session Duration"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/ash"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/duration"
+        android:background="@color/ash">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium"
+            android:id="@+id/fifteen"
+            android:gravity="center"
+            android:onClick="setFifteen"
+            android:textColor="@color/black"
+            android:background="@color/white"
+            android:layout_marginTop="@dimen/medium"
+            android:layout_marginBottom="@dimen/small"
+            android:text="15 Minutes"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:id="@+id/thirty"
+            android:onClick="setThirty()"
+            android:background="@color/white"
+            android:layout_marginTop="@dimen/small"
+            android:layout_marginBottom="@dimen/small"
+            android:text="30 Minutes"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium"
+            android:id="@+id/hour"
+            android:textColor="@color/black"
+            android:onClick="setHour()"
+            android:gravity="center"
+            android:background="@color/white"
+            android:layout_marginTop="@dimen/small"
+            android:layout_marginBottom="@dimen/medium"
+            android:text="1 Hour"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/large"
+        android:textColor="@color/black"
+        android:id="@+id/trainer_gender"
+        android:drawableRight="@drawable/ic_right_black_24dp"
+        android:text="Choose Trainer Gender"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/ash"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ash"
+        android:visibility="gone"
+        android:id="@+id/gender"
+
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium"
+            android:gravity="center"
+            android:id="@+id/male"
+            android:onClick="setMale()"
+            android:textColor="@color/black"
+            android:background="@color/white"
+            android:layout_marginBottom="@dimen/medium"
+            android:layout_marginTop="@dimen/medium"
+            android:layout_weight="1"
+            android:text="Male"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="setFemale()"
+            android:textColor="@color/black"
+            android:id="@+id/female"
+            android:background="@color/white"
+            android:layout_marginBottom="@dimen/medium"
+            android:layout_marginTop="@dimen/medium"
+            android:padding="@dimen/medium"
+            android:text="Female"/>
+    </LinearLayout>
+</LinearLayout>
+</ScrollView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/next"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/white"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="bottom"
+        android:id="@+id/next"
+        android:textAllCaps="true"
+        android:background="@color/button_bgcolor"/>
+
+</FrameLayout>

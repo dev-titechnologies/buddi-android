@@ -1,11 +1,16 @@
 <resources>
-    <string name="app_name">Buddy App</string>
+    <string name="app_name">Buddi</string>
     <string name="title_activity_home">HomeActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    /** Google map key **/
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+       AIzaSyC6JkTaeWe13LrzMbs331sNuPQmyMf-hH4
+    </string>
 
     /** facebook **/
     <string name="facebook_app_id">1934978090076246</string>
@@ -82,7 +87,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="dummy_text">Where you can find trainers and also become a trainer.</string>
+    <string name="dummy_text">A new generation of fitness</string>
 
 
 </resources>

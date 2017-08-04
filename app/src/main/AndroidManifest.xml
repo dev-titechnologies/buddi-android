@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="buddyapp.com">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
@@ -30,7 +29,9 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -95,19 +96,34 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".utils.CropActivity" />
-        <activity android:name=".activity.questions.Question1"   android:screenOrientation="portrait" />
-        <activity android:name=".activity.questions.Question2"   android:screenOrientation="portrait"/>
-        <activity android:name=".activity.questions.Question3"   android:screenOrientation="portrait"/>
-        <activity android:name=".activity.questions.Question4"   android:screenOrientation="portrait"/>
-        <activity android:name=".activity.questions.VideoUploadActivity"   android:screenOrientation="portrait"/>
-        <activity android:name=".activity.questions.BeforeVideoActivity"   android:screenOrientation="portrait"/>
-        <activity android:name=".activity.questions.DoneActivity"   android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.questions.Question1"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.questions.Question2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.questions.Question3"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.questions.Question4"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.questions.VideoUploadActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.questions.BeforeVideoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.questions.DoneActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.afollestad.materialcamera.CaptureActivity"
             android:theme="@style/MaterialCamera.CaptureActivity" />
         <activity
             android:name="com.afollestad.materialcamera.CaptureActivity2"
             android:theme="@style/MaterialCamera.CaptureActivity" />
+        <activity android:name=".activity.Payments.PaymentType"></activity>
     </application>
 
 </manifest>

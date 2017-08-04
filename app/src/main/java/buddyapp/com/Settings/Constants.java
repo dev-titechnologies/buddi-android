@@ -1,6 +1,7 @@
 package buddyapp.com.Settings;
 
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -48,4 +49,9 @@ public class Constants {
 
 
     public static boolean source_become_trainer = false;
+
+    public static JSONArray searchArray = new JSONArray();
+    public static String latitude = "latitude";
+    public static  String longitude = "longitude";
+
 }

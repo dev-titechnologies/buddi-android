@@ -25,14 +25,6 @@
                 android:layout_gravity="start"
                 android:src="@drawable/ic_arrow_back_black_24dp"
                 />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:padding="@dimen/small"
-                android:layout_toRightOf="@id/back"
-                android:textSize="21sp"
-                android:text="@string/more_information"/>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
     <ScrollView
@@ -45,9 +37,16 @@
             android:layout_height="match_parent"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="20dp"
             android:paddingBottom="50dp"
             android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/small"
+                android:layout_toRightOf="@id/back"
+                android:layout_marginBottom="10dp"
+                android:textSize="21sp"
+                android:text="@string/more_information"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -74,13 +73,28 @@
                 android:text="@string/current_weight_text"
                 android:layout_height="wrap_content" />
 
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:hint="In pounds"
-                android:id="@+id/weight"
-                android:textColorHint="@color/button_text"
-                android:inputType="number"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/small"
+                android:paddingBottom="@dimen/small"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="10dp"
+                    android:id="@+id/hundreds"/>
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ones"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/small"
+                    android:text="lbs"/>
+            </LinearLayout>
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

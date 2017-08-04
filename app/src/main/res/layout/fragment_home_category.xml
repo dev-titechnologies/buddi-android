@@ -1,0 +1,52 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="buddyapp.com.activity.Fragment.HomeCategory">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+         xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/root"
+        tools:context="buddyapp.com.activity.ChooseCategory">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/large"
+        android:id="@+id/text"
+        android:text="Choose a Category"/>
+
+    <ImageView
+        android:layout_width="75dp"
+        android:src="@drawable/ic_error"
+        android:id="@+id/errorImage"
+        android:visibility="gone"
+        android:layout_below="@+id/text"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_height="75dp" />
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_below="@+id/text"
+        android:numColumns="2"
+        android:id="@+id/grid"
+        android:fillViewport="true"
+        android:gravity="center"
+        android:layout_height="wrap_content"></GridView>
+    </RelativeLayout>
+    </ScrollView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/next"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/white"
+        android:layout_marginTop="20dp"
+        android:id="@+id/next"
+        android:textAllCaps="true"
+        android:background="@color/button_bgcolor"/>
+</RelativeLayout>

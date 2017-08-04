@@ -20,18 +20,18 @@
             android:background="@drawable/round_corner_next_border"
 
             android:gravity="center">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Login as a Trainer"
-            android:paddingTop="20dp"
-            android:background="@drawable/button_pressed"
-            android:paddingBottom="20dp"
-            android:paddingLeft="60dp"
-            android:paddingRight="60dp"
-            android:id="@+id/trainer"
-            android:textColor="@drawable/font_select_color"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@drawable/button_pressed"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp"
+                android:id="@+id/trainee"
+                android:text="Login As a Trainee"
+                android:textColor="@drawable/font_select_color"/>
             </LinearLayout>
 
     </LinearLayout>
@@ -50,18 +50,19 @@
             android:background="@drawable/round_corner_next_border"
 
             android:gravity="center">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:background="@drawable/button_pressed"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:paddingLeft="60dp"
-            android:paddingRight="60dp"
-            android:id="@+id/trainee"
-            android:text="Login As a Trainee"
-            android:textColor="@drawable/font_select_color"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Login as a Trainer"
+                android:paddingTop="20dp"
+                android:background="@drawable/button_pressed"
+                android:paddingBottom="20dp"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp"
+                android:id="@+id/trainer"
+                android:textColor="@drawable/font_select_color"/>
+
             </LinearLayout>
     </LinearLayout>
 </LinearLayout>

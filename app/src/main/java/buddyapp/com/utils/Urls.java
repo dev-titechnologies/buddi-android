@@ -40,6 +40,7 @@ public class Urls {
 
     public static String GYMLIST= "/gym/listGyms ";
 
+    public static String TRAINERSEARCH= "/search/searchTrainer";
 
     public static String getGYMLISTURL(){
 
@@ -110,6 +111,10 @@ public class Urls {
 
     public static String getBookingHistoryURL(){
         return BASEURL+BOOKINGHISTORY;
+    }
+
+    public static String getTrainerSearchURL(){
+        return BASEURL+TRAINERSEARCH;
     }
 
 }
