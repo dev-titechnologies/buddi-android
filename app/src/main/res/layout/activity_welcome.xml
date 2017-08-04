@@ -42,7 +42,7 @@
         android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
-            android:text="Welcome to BuddyApp"
+            android:text="Welcome to Buddi"
             android:textSize="20dp"
             android:textColor="@color/colorPrimary"
             android:gravity="center"

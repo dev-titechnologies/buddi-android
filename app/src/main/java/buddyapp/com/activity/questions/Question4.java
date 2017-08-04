@@ -10,10 +10,12 @@ import android.os.Build;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 
@@ -47,11 +49,15 @@ public class Question4 extends Activity {
     SubCategoryAdapter subCategoryAdapter;
 
     public static ArrayList<String> sub_cat_selectedID;
-    EditText weight;
     HashSet subCats;
 
     ImageView back;
     String pounds = "";
+
+    private Integer[] hundredsSpinner;
+    private String[] onesSpinner;
+    int shundreds=0,sones=0, weight;
+    Spinner hundreds, ones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +72,33 @@ public class Question4 extends Activity {
         yes_pounds = (Button) findViewById(R.id.yes_pounds);
         no_pounds = (Button) findViewById(R.id.no_pounds);
         next = (Button) findViewById(R.id.next);
-        weight = (EditText) findViewById(R.id.weight);
+
         sub_list = (ListView) findViewById(R.id.sub_list);
         back = (ImageView) findViewById(R.id.back);
+
+        hundreds = (Spinner) findViewById(R.id.hundreds);
+        this.hundredsSpinner = new Integer[] {
+               100,200,300,400
+        };
+        ArrayAdapter<Integer> adapter1 = new ArrayAdapter<Integer>(this,
+                R.layout.spinner_item, hundredsSpinner);
+        hundreds.setAdapter(adapter1);
+
+
+        ArrayList<Integer> numbers = new ArrayList<Integer>(100);
+        for (int i = 1; i < 100; i++)
+        {
+            numbers.add(i);
+        }
+        ones = (Spinner) findViewById(R.id.ones);
+        ArrayAdapter<Integer> adapter2 = new ArrayAdapter<Integer>(this,
+                R.layout.spinner_item, numbers);
+        ones.setAdapter(adapter2);
+
+        shundreds = Integer.parseInt(hundreds.getSelectedItem().toString());
+        sones = Integer.parseInt(ones.getSelectedItem().toString());
+
+        weight = shundreds+sones;
 
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +163,7 @@ public class Question4 extends Activity {
                 if (sub_cat_selectedID.size() == 0) {
 
                     Toast.makeText(Question4.this, "Please choose your category.", Toast.LENGTH_SHORT).show();
-                } else if (weight.getText().toString().trim().length() == 0) {
+                } else if (weight == 0) {
 
                     Toast.makeText(Question4.this, "Please enter your weight.", Toast.LENGTH_SHORT).show();
 
@@ -167,7 +197,7 @@ public class Question4 extends Activity {
 
                         question.put("certified_trainer", PreferencesUtils.getData(Constants.certified_trainer, getApplicationContext(), ""));
 
-                        question.put("weight", weight.getText().toString());
+                        question.put("weight", weight+"");
 
                         question.put("pounds", pounds);
                         questionData.put("cat_ids", ChooseCategory.cat_selectedID);
