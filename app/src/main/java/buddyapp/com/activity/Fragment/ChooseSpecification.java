@@ -271,8 +271,16 @@ public class ChooseSpecification extends Fragment  {
                     JSONArray jsonArray = obj.getJSONArray("data");
                     if (jsonArray.length() != 0) {
                         PreferencesUtils.saveData("searchArray",obj.getJSONArray("data").toString(),getActivity());
+
                     Fragment fragment = new Map_Trainee();
-                    getActivity().getSupportFragmentManager().beginTransaction()
+                        Bundle args = new Bundle();
+                        args.putString(Constants.gender,sgender);
+                        args.putString("category", HomeCategory.cat_selectedID.get(0));
+                        args.putString(Constants.latitude, String.valueOf(latitude));
+                        args.putString(Constants.longitude, String.valueOf(longitude));
+                        args.putString(Constants.duration, String.valueOf(sessionDuration));
+                        fragment.setArguments(args);
+                        getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
                     }else

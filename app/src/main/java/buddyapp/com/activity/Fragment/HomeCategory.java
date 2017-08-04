@@ -6,12 +6,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import org.json.JSONArray;
@@ -39,7 +41,9 @@ public class HomeCategory extends Fragment {
     DatabaseHandler db;
     GridView grid;
     HomeCategoryAdapter categoryAdapter;
-    Button next;
+    public static Button next;
+    public static CardView instantCard;
+    LinearLayout instantBooking;
     public static ArrayList<String> cat_selectedID = new ArrayList<>();
 
     ImageView errorImage;
@@ -59,8 +63,10 @@ public class HomeCategory extends Fragment {
         root = (RelativeLayout) view.findViewById(R.id.root);
         grid = (GridView) view.findViewById(R.id.grid);
         next = (Button) view.findViewById(R.id.next);
-
+        instantCard = (CardView) view.findViewById(R.id.card_instant);
+        instantBooking = (LinearLayout) view.findViewById(R.id.instant_booking);
         errorImage = (ImageView) view.findViewById(R.id.errorImage);
+
         new getCategoryList().execute();
 
         next.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +77,12 @@ public class HomeCategory extends Fragment {
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
                 }
+            }
+        });
+        instantBooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
         return view;

@@ -42,6 +42,8 @@ public class Urls {
 
     public static String TRAINERSEARCH= "/search/searchTrainer";
 
+    public static String RANDOMSELECTOR= "/search/randomSelector";
+
     public static String getGYMLISTURL(){
 
         return BASEURL+GYMLIST;
@@ -115,6 +117,10 @@ public class Urls {
 
     public static String getTrainerSearchURL(){
         return BASEURL+TRAINERSEARCH;
+    }
+
+    public static String getRandomSelectURL(){
+        return BASEURL+RANDOMSELECTOR;
     }
 
 }

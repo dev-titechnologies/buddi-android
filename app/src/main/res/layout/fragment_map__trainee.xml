@@ -12,14 +12,21 @@
         />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:padding="20dp"
+        android:gravity="center"
         android:background="@color/white">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_bg"
-            android:text="Book Now"
-            android:textColor="@color/black"
-            android:padding="@dimen/medium"/>
+
+        <Button
+            android:layout_width="150dp"
+            android:background="@drawable/button_pressed"
+            android:id="@+id/select"
+            android:text="SELECT"
+            android:textStyle="bold"
+            android:textColor="@drawable/font_select_color"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 </FrameLayout>

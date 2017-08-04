@@ -53,5 +53,6 @@ public class Constants {
     public static JSONArray searchArray = new JSONArray();
     public static String latitude = "latitude";
     public static  String longitude = "longitude";
+    public static String duration = "duration";
 
 }

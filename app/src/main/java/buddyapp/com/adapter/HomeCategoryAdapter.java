@@ -86,14 +86,20 @@ public class HomeCategoryAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View view) {
 
+                    HomeCategory.next.setVisibility(View.VISIBLE);
+                    HomeCategory.instantCard.setVisibility(View.GONE);
                     if (HomeCategory.cat_selectedID.contains(view.getTag().toString())) {
-                        id=0;
-                        HomeCategory.cat_selectedID.remove(view.getTag().toString());
-                    } else
-                    {if(id==0) {
-                        id = 1;
+//                        id=0;
+                        HomeCategory.cat_selectedID.clear();
+                        HomeCategory.next.setVisibility(View.GONE);
+                        HomeCategory.instantCard.setVisibility(View.VISIBLE);
+                    } else{
+                        HomeCategory.cat_selectedID.clear();
+//                    {if(id==0) {
+//                        id = 1;
                         HomeCategory.cat_selectedID.add(view.getTag().toString());
-                    }}
+//                    }
+                }
                     CommonCall.PrintLog("data cat ", HomeCategory.cat_selectedID.toString());
                     notifyDataSetChanged();
                 }
