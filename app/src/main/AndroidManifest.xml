@@ -23,7 +23,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
@@ -128,13 +128,29 @@
         <activity
             android:name="com.afollestad.materialcamera.CaptureActivity2"
             android:theme="@style/MaterialCamera.CaptureActivity" />
-        <activity android:name=".activity.Payments.PaymentType" />
+
+        <activity android:name=".activity.Payments.PaymentType"
+            android:screenOrientation="portrait"
+        />
+
+        <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="${applicationId}.braintree" />
+            </intent-filter>
+        </activity>
+
+
         <activity android:name=".activity.ChooseSpecification" />
         <activity android:name=".activity.MapTrainee" />
         <activity android:name=".activity.TrainerProfileView" />
         <activity android:name=".activity.SessionReady" />
         <activity android:name=".activity.Session" />
         <activity android:name=".activity.ChatScreen"></activity>
+
     </application>
 
 </manifest>

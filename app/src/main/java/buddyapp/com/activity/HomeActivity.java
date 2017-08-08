@@ -27,6 +27,7 @@ import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.Fragment.BookingHistory;
 import buddyapp.com.activity.Fragment.HomeCategory;
 import buddyapp.com.activity.Fragment.Legal;
+import buddyapp.com.activity.Payments.PaymentType;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
@@ -187,10 +188,9 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_payment) {
             getSupportActionBar().setTitle("Payment");
-            Fragment fragment = new BookingHistory();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
+            Intent payment = new Intent(getApplicationContext(), PaymentType.class);
+startActivity(payment);
         } else if (id == R.id.nav_trainer) {
             source_become_trainer=true;
             Intent intent = new Intent(getApplicationContext(),ChooseCategory.class);
