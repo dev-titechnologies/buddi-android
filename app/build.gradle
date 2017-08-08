@@ -5,7 +5,7 @@ android {
     buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "buddyapp.com"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -22,7 +22,7 @@ android {
 dependencies {
     compile 'com.googlecode.libphonenumber:libphonenumber:8.6.0'
     compile 'com.jakewharton:butterknife:8.7.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.1'
+
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
@@ -36,4 +36,7 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.afollestad:material-camera:0.4.4'
     compile 'com.github.aarsy.googlemapsanimations:googlemapsanimations:1.0.5'
+    compile 'com.braintreepayments.api:drop-in:3.+'
+
+
 }

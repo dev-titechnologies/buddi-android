@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/root"
     android:background="#f9f9f9"
     tools:context="buddyapp.com.activity.Payments.PaymentType">
 <LinearLayout
@@ -27,11 +28,14 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+  android:id="@+id/promocode"
         android:inputType="number"/>
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="end"
+            android:id="@+id/applyPromo"
+            android:gravity="center_vertical"
             android:layout_marginRight="@dimen/small"
             android:text="DONE"/>
     </FrameLayout>
@@ -47,37 +51,57 @@
             android:text="SELECT PAYMENT MODE"
             android:layout_margin="@dimen/large"
             android:textAllCaps="true"/>
+
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="@dimen/medium"
+            android:id="@+id/credit_card"
             android:layout_marginLeft="@dimen/large"
             android:layout_marginRight="@dimen/large"
-            android:layout_marginBottom="@dimen/medium">
-            <RelativeLayout
+            android:layout_marginBottom="@dimen/large">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/medium"
-                android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawablePadding="@dimen/medium"
-                android:layout_alignParentLeft="true"
-                android:drawableLeft="@drawable/ic_paypal"
-                android:text="Paypal"/>
+
+                 android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_credit_card"
+
+                    android:visibility="visible"
+
+                    android:id="@+id/payment_image" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="@dimen/medium"
+                    android:id="@+id/credit_card_text"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/small"
+android:layout_weight="1"
+                    android:text="Loading..."
+                    android:layout_toLeftOf="@+id/imageView"
+                    android:layout_toRightOf="@+id/payment_image"
+                    android:layout_toEndOf="@+id/payment_image" />
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_tick"
                     android:visibility="visible"
-                    android:layout_alignParentRight="true"/>
-            </RelativeLayout>
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/imageView" />
+            </LinearLayout>
         </android.support.v7.widget.CardView>
+
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="@dimen/medium"
+            android:onClick="addPayment"
+            android:id="@+id/addPayment"
             android:layout_marginLeft="@dimen/large"
             android:layout_marginRight="@dimen/large"
             android:layout_marginBottom="@dimen/large">
@@ -85,20 +109,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/medium"
+
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/medium"
                     android:layout_alignParentLeft="true"
-                    android:drawableLeft="@drawable/ic_credit_card"
-                    android:text="Credit Card"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_tick"
-                    android:visibility="visible"
-                    android:layout_alignParentRight="true"/>
+              android:gravity="center"
+                    android:text="Add Payment Method"/>
+
             </RelativeLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
