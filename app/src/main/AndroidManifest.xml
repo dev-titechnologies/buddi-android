@@ -32,6 +32,11 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
+        <service
+            android:name=".services.Background"
+            android:exported="false" />
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -123,7 +128,13 @@
         <activity
             android:name="com.afollestad.materialcamera.CaptureActivity2"
             android:theme="@style/MaterialCamera.CaptureActivity" />
-        <activity android:name=".activity.Payments.PaymentType"></activity>
+        <activity android:name=".activity.Payments.PaymentType" />
+        <activity android:name=".activity.ChooseSpecification" />
+        <activity android:name=".activity.MapTrainee" />
+        <activity android:name=".activity.TrainerProfileView" />
+        <activity android:name=".activity.SessionReady" />
+        <activity android:name=".activity.Session" />
+        <activity android:name=".activity.ChatScreen"></activity>
     </application>
 
 </manifest>

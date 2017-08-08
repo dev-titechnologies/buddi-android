@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.activity.ChooseCategory;
+import buddyapp.com.activity.ChooseSpecification;
 import buddyapp.com.activity.questions.Question1;
 import buddyapp.com.adapter.CategoryAdapter;
 import buddyapp.com.adapter.HomeCategoryAdapter;
@@ -73,9 +74,8 @@ public class HomeCategory extends Fragment {
             @Override
             public void onClick(View view) {
                 if (cat_selectedID.size()>0) {
-                    Fragment fragment = new ChooseSpecification();
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+                    Intent intent = new Intent(getActivity(), ChooseSpecification.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -155,7 +155,7 @@ public class HomeCategory extends Fragment {
 
                     snackbar.show();
                 } else if (response.getInt(Constants.status) == 3) {
-
+                    CommonCall.sessionout(getActivity());
 
                 }
 

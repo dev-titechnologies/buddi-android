@@ -1,18 +1,16 @@
-package buddyapp.com.activity.Fragment;
-
+package buddyapp.com.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -28,22 +26,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
-
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.activity.Fragment.HomeCategory;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
-import static android.content.Context.LOCATION_SERVICE;
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class ChooseSpecification extends Fragment  {
+public class ChooseSpecification extends AppCompatActivity {
     int sessionDuration = 0;
     String sgender="";
     LinearLayout duration, gender;
@@ -56,45 +47,42 @@ public class ChooseSpecification extends Fragment  {
     private FusedLocationProviderClient mFusedLocationClient;
     LocationManager mLocationManager;
     double longitude, latitude;
-    public ChooseSpecification() {
-        // Required empty public constructor
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_choose_specification);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
 
-        View view = inflater.inflate(R.layout.fragment_choose_specification, container, false);
-        duration = (LinearLayout) view.findViewById(R.id.duration);
-        gender = (LinearLayout) view.findViewById(R.id.gender);
-        session = (TextView) view.findViewById(R.id.session);
-        trainerGender = (TextView) view.findViewById(R.id.trainer_gender);
-        fifteen = (TextView) view.findViewById(R.id.fifteen);
-        thirty = (TextView) view.findViewById(R.id.thirty);
-        hour = (TextView) view.findViewById(R.id.hour);
-        male = (TextView) view.findViewById(R.id.male);
-        female = (TextView) view.findViewById(R.id.female);
-        next= (Button) view.findViewById(R.id.next);
+        duration = (LinearLayout) findViewById(R.id.duration);
+        gender = (LinearLayout) findViewById(R.id.gender);
+        session = (TextView) findViewById(R.id.session);
+        trainerGender = (TextView) findViewById(R.id.trainer_gender);
+        fifteen = (TextView) findViewById(R.id.fifteen);
+        thirty = (TextView) findViewById(R.id.thirty);
+        hour = (TextView) findViewById(R.id.hour);
+        male = (TextView) findViewById(R.id.male);
+        female = (TextView) findViewById(R.id.female);
+        next= (Button) findViewById(R.id.next);
 
 // ************************Get Current location*********************
-        mLocationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+        mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
         }
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
         mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                .addOnSuccessListener(ChooseSpecification.this, new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
                         // Got last known location. In some rare situations this can be null.
                         if (location != null) {
                             longitude = location.getLongitude();
                             latitude = location.getLatitude();
-                            PreferencesUtils.saveData(Constants.latitude, String.valueOf(latitude), getActivity());
-                            PreferencesUtils.saveData(Constants.longitude, String.valueOf(longitude),getActivity());
+                            PreferencesUtils.saveData(Constants.latitude, String.valueOf(latitude), getApplicationContext());
+                            PreferencesUtils.saveData(Constants.longitude, String.valueOf(longitude),getApplicationContext());
                         }
                     }
                 });
@@ -103,7 +91,7 @@ public class ChooseSpecification extends Fragment  {
             public void onClick(View view) {
                 if (id == 0) {
                     id = 1;
-                    b = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
+                    b = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
                     b.reset();
                     duration.setVisibility(View.VISIBLE);
                     duration.startAnimation(b);
@@ -123,7 +111,7 @@ public class ChooseSpecification extends Fragment  {
             public void onClick(View view) {
                 if (ids == 0) {
                     ids = 1;
-                    a = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
+                    a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
                     a.reset();
                     gender.setVisibility(View.VISIBLE);
                     gender.startAnimation(a);
@@ -139,10 +127,10 @@ public class ChooseSpecification extends Fragment  {
         });
 
         fifteen.setOnClickListener(new View.OnClickListener() {                                           @Override
-                                               public void onClick(View view) {
-                                                   setFifteen();
-                                               }
-                                           });
+        public void onClick(View view) {
+            setFifteen();
+        }
+        });
         thirty.setOnClickListener(new View.OnClickListener() {                                           @Override
         public void onClick(View view) {
             setThirty();
@@ -168,18 +156,16 @@ public class ChooseSpecification extends Fragment  {
             @Override
             public void onClick(View view) {
                 if(sessionDuration>0 && sgender.length()>1) {
-                new SearchTrainer().execute();
+                    new ChooseSpecification.SearchTrainer().execute();
                 }else{
-                    Toast.makeText(getActivity(), "Please select you choice", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please select you choice", Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
-
-        return view;
     }
     private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -243,13 +229,13 @@ public class ChooseSpecification extends Fragment  {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            CommonCall.showLoader(getActivity());
+            CommonCall.showLoader(ChooseSpecification.this);
         }
 
         @Override
         protected String doInBackground(String... strings) {
             try {
-                reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.user_id, getActivity(), ""));
+                reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
                 reqData.put(Constants.gender, sgender);
                 reqData.put("category", HomeCategory.cat_selectedID.get(0));
                 reqData.put(Constants.latitude, latitude);
@@ -270,18 +256,15 @@ public class ChooseSpecification extends Fragment  {
                 if (obj.getInt("status") == 1) {
                     JSONArray jsonArray = obj.getJSONArray("data");
                     if (jsonArray.length() != 0) {
-                        PreferencesUtils.saveData("searchArray",obj.getJSONArray("data").toString(),getActivity());
+                        PreferencesUtils.saveData("searchArray",obj.getJSONArray("data").toString(),getApplicationContext());
 
-                    Fragment fragment = new Map_Trainee();
-                        Bundle args = new Bundle();
-                        args.putString(Constants.gender,sgender);
-                        args.putString("category", HomeCategory.cat_selectedID.get(0));
-                        args.putString(Constants.latitude, String.valueOf(latitude));
-                        args.putString(Constants.longitude, String.valueOf(longitude));
-                        args.putString(Constants.duration, String.valueOf(sessionDuration));
-                        fragment.setArguments(args);
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+                        Intent intent = new Intent(getApplicationContext(), MapTrainee.class);
+                        intent.putExtra(Constants.gender,sgender);
+                        intent.putExtra("category", HomeCategory.cat_selectedID.get(0));
+                        intent.putExtra(Constants.latitude, String.valueOf(latitude));
+                        intent.putExtra(Constants.longitude, String.valueOf(longitude));
+                        intent.putExtra(Constants.duration, String.valueOf(sessionDuration));
+                        startActivity(intent);
 
                     }else
                     {
@@ -292,5 +275,21 @@ public class ChooseSpecification extends Fragment  {
 
             }
         }
+    }
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+
+            default: return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 }

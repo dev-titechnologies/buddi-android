@@ -303,7 +303,7 @@ public static void hideLoader(){
 
     // log out **************
     public static void sessionout( Context context){
-                    PreferencesUtils.saveData(Constants.token,"", context);
+                    PreferencesUtils.cleardata(context);
                     LoginManager.getInstance().logOut();
                     Intent intent = new Intent(context,WelcomeActivity.class);
                     context.startActivity(intent);
