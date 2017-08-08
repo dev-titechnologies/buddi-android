@@ -20,6 +20,8 @@ android {
 }
 
 dependencies {
+
+
     compile 'com.googlecode.libphonenumber:libphonenumber:8.6.0'
     compile 'com.jakewharton:butterknife:8.7.0'
 
@@ -35,7 +37,8 @@ dependencies {
     compile 'com.naver.android.helloyako:imagecropview:1.2.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.afollestad:material-camera:0.4.4'
-    compile 'com.github.aarsy.googlemapsanimations:googlemapsanimations:1.0.5'
+
+
     compile 'com.braintreepayments.api:drop-in:3.+'
 
 

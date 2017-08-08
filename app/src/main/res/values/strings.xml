@@ -9,7 +9,7 @@
 
     /** Google map key **/
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
-       AIzaSyC6JkTaeWe13LrzMbs331sNuPQmyMf-hH4
+       AIzaSyB44SEXp2dClRqPnSp4EcPw0Yl5Fji4HkA
     </string>
 
     /** facebook **/
