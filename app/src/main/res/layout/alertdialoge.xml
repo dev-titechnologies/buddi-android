@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:background="@color/white"
+    android:layout_height="wrap_content">
  <LinearLayout
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
-     android:padding="@dimen/small"
+     android:padding="@dimen/medium"
+     android:background="@color/white"
      android:orientation="horizontal">
      <buddyapp.com.utils.CircleImageView
          android:id="@+id/trainerimageView"
@@ -80,10 +82,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/medium"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Waiting for your trainer..."/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium"
+            android:id="@+id/okay"
+            android:text="OK"/>
     </LinearLayout>
 </LinearLayout>

@@ -1,6 +1,7 @@
 package buddyapp.com.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -18,7 +19,7 @@ import org.json.JSONObject;
 ;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
-import buddyapp.com.activity.Payments.PaymentType;
+import buddyapp.com.utils.AlertDialoge.Alertdialoge;
 import buddyapp.com.utils.CircleImageView;
 
 public class TrainerProfileView extends Activity {
@@ -27,7 +28,7 @@ public class TrainerProfileView extends Activity {
     ImageView faceBook, instagram, linkedIn, snapChat, twitter, youTube,back;
     String data = "", distance="", latitude="", longitude="",status="",userId, name;
     Button booknow;
-
+    Alertdialoge pd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +52,7 @@ public class TrainerProfileView extends Activity {
         youTube = (ImageView) findViewById(R.id.nav_youtube);
         booknow = (Button) findViewById(R.id.next);
         back = (ImageView) findViewById(R.id.back);
+        pd = new Alertdialoge(TrainerProfileView.this);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +69,7 @@ public class TrainerProfileView extends Activity {
         booknow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                pd.show();
                 Intent intent= new Intent(getApplicationContext(), SessionReady.class);
                 intent.putExtra(Constants.latitude,latitude);
                 intent.putExtra(Constants.longitude,longitude);
@@ -74,6 +77,7 @@ public class TrainerProfileView extends Activity {
                 intent.putExtra("distance",distance);
                 startActivity(intent);
                 finish();
+
             }
         });
 

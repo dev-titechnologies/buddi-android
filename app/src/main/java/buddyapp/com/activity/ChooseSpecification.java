@@ -165,7 +165,7 @@ public class ChooseSpecification extends AppCompatActivity {
         });
     }
     private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(ChooseSpecification.this);
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -270,6 +270,10 @@ public class ChooseSpecification extends AppCompatActivity {
                     {
                         // No match found..........
                     }
+                }else if (obj.getInt("status") == 2) {
+                    Toast.makeText(getApplicationContext(),obj.getString("message"),Toast.LENGTH_SHORT).show();
+                }else if (obj.getInt("status") == 3) {
+                    CommonCall.sessionout(ChooseSpecification.this);
                 }
             } catch (JSONException e) {
 

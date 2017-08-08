@@ -139,7 +139,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 try{
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12));
-                Marker pos_Marker =  googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher)).title(name.toUpperCase()).draggable(false));
+                Marker pos_Marker =  googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title(name.toUpperCase()).draggable(false));
                 pos_Marker.showInfoWindow();
 
                 googleMap.setInfoWindowAdapter(SessionReady.this);
@@ -245,6 +245,7 @@ try{
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+   /******* DISTANCE TIME DETAILS *************************************************************/
 
             ParserTask parserTask = new ParserTask();
 

@@ -121,7 +121,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                 // mMap is GoogleMap object, latLng is the location on map from which ripple should start
 
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(place.getString("latitude")), Double.parseDouble(place.getString("longitude"))), 13));
-                Marker pos_Marker =  googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(place.getString("latitude")), Double.parseDouble(place.getString("longitude")))).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher)).title("Trainer").draggable(false));
+                Marker pos_Marker =  googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(place.getString("latitude")), Double.parseDouble(place.getString("longitude")))).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title("Trainer").draggable(false));
                 pos_Marker.showInfoWindow();
 
                 googleMap.setInfoWindowAdapter(MapTrainee.this);
