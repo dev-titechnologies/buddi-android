@@ -269,6 +269,7 @@ public class ChooseSpecification extends AppCompatActivity {
                     }else
                     {
                         // No match found..........
+                        Toast.makeText(getApplicationContext(), "No match found", Toast.LENGTH_SHORT).show();
                     }
                 }else if (obj.getInt("status") == 2) {
                     Toast.makeText(getApplicationContext(),obj.getString("message"),Toast.LENGTH_SHORT).show();
@@ -296,4 +297,6 @@ public class ChooseSpecification extends AppCompatActivity {
         }
         return true;
     }
+
+
 }

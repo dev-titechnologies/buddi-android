@@ -18,8 +18,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
@@ -28,6 +33,7 @@ import buddyapp.com.activity.Fragment.BookingHistory;
 import buddyapp.com.activity.Fragment.HomeCategory;
 import buddyapp.com.activity.Fragment.Legal;
 import buddyapp.com.activity.Payments.PaymentType;
+import buddyapp.com.services.LocationService;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
@@ -45,6 +51,13 @@ public class HomeActivity extends AppCompatActivity
     TextView name, email,rating;
     JSONObject data;
     Menu menu;
+
+    private Socket mSocket;
+    {
+        try {
+            mSocket = IO.socket("http://chat.socket.io");
+        } catch (URISyntaxException e) {}
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -265,5 +278,11 @@ startActivity(payment);
         super.onResume();
         CommonCall.LoadImage(getApplicationContext(),PreferencesUtils.getData(Constants.user_image,getApplicationContext(),""), userImageView,R.drawable.ic_no_image,R.drawable.ic_account);
 
+        if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
+
+            mSocket.connect();
+            startService(new Intent(this, LocationService.class));
+
+        }
     }
 }
