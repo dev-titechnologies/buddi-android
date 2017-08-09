@@ -1,5 +1,6 @@
 package buddyapp.com.activity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.braintreepayments.api.dropin.DropInResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
@@ -35,6 +37,7 @@ import java.util.HashMap;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.activity.Payments.PaymentType;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.RippleMap.MapRipple;
@@ -50,6 +53,9 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
     Button select;
     String sgender,lat, lng, category,duration;
     private HashMap<Marker, String> hashMarker = new HashMap<Marker, String>();
+
+
+    int resultPayment=403;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +77,19 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new RandomSelect().execute();
+
+
+
+if (PreferencesUtils.getData(Constants.clientToken,getApplicationContext(),"").length()>1) {
+    intPayment();
+
+}else{
+
+    Intent payment = new Intent(getApplicationContext(), PaymentType.class);
+    payment.putExtra("result", true);
+    startActivityForResult(payment,resultPayment);
+}
+
             }
         });
 
@@ -90,6 +108,32 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
     }
 
+
+    void intPayment(){
+
+        /*
+*
+*
+* getting payment
+*
+* */
+        CommonCall.showLoader(MapTrainee.this);
+
+        DropInResult.fetchDropInResult(MapTrainee.this, PreferencesUtils.getData(Constants.clientToken,getApplicationContext(),""), new DropInResult.DropInResultListener() {
+            @Override
+            public void onError(Exception exception) {
+                exception.printStackTrace();
+            }
+
+            @Override
+            public void onResult(DropInResult result) {
+                String  nounce=result.getPaymentMethodNonce().getNonce();
+
+
+                new checkout(MapTrainee.this,nounce).execute();
+            }
+        });
+    }
     private void getTrainerMarker() {
         String array = PreferencesUtils.getData("searchArray",getApplicationContext(),"");
         try {
@@ -203,7 +247,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
     }
 
-    class RandomSelect extends AsyncTask<String,String,String> {
+    public  class RandomSelect extends AsyncTask<String,String,String> {
         String response;
         JSONObject reqData = new JSONObject();
         @Override
@@ -259,5 +303,108 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
             default: return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+
+
+    public  class checkout extends  AsyncTask<String,String,String>{
+
+        Activity activity;
+        public checkout(Activity act,String nounce){
+            this.activity=act;
+            this.nounce=nounce;
+        }
+        String nounce ;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+
+
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            JSONObject req= new JSONObject();
+            try {
+                req.put("nonce",nounce);
+                req.put("amount","100");//for testing only
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String res = NetworkCalls.POST(Urls.getcheckoutURL(),req.toString());
+            return res;
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            CommonCall.hideLoader();
+            try {
+                final JSONObject response = new JSONObject(s);
+
+                if (response.getInt(Constants.status) == 1) {
+
+
+                    Toast.makeText(activity, "Payment  Successful!", Toast.LENGTH_SHORT).show();
+
+                    new RandomSelect().execute();
+                } else if (response.getInt(Constants.status) == 2) {
+
+//                Snackbar snackbar = Snackbar
+//                        .make(root, response.getString(Constants.message), Snackbar.LENGTH_INDEFINITE)
+//                        .setAction("RETRY", new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//
+//
+//                                Snackbar snackbar1 = null;
+//
+//                                snackbar1 = Snackbar.make(root, "Loading", Snackbar.LENGTH_SHORT);
+//
+//                                snackbar1.show();
+//                                new PaymentType.applyPromo().execute();
+//
+//                            }
+//                        });
+//
+//                snackbar.show();
+                } else if (response.getInt(Constants.status) == 3) {
+
+                    CommonCall.sessionout(activity);
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == resultPayment) {
+            if (resultCode == Activity.RESULT_OK) {
+
+                intPayment();
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                // the user canceled
+
+
+                Toast.makeText(this, "User Canceled", Toast.LENGTH_SHORT).show();
+
+            } else {
+
+                CommonCall.PrintLog("mylog", "Error :403 " );
+            }
+        }
+
+
     }
 }

@@ -227,8 +227,28 @@ CommonCall.sessionout(getApplicationContext());
         if (result != null) {
 
             displaycard(result);
-//        if (result.getPaymentMethodNonce().getDescription())
-//new CommonCall.checkout(PaymentType.this).execute();
+
+
+            if(getIntent().hasExtra("result")){
+
+//ForResult
+                /*
+*
+* going back to map screen
+*
+* */
+
+
+
+
+                setResult(403);
+                finish();
+            }else{
+
+//default
+            }
+
+
         }else{
             credit_card.setVisibility(View.GONE);
         }
@@ -262,6 +282,7 @@ CommonCall.sessionout(getApplicationContext());
         try {
             if (ClientToken.fromString(mAuthorization) instanceof ClientToken) {
                 DropInResult.fetchDropInResult(this, mAuthorization, this);
+
             } else {
                 CommonCall.PrintLog("no payment method ", "no payment method found");
             }

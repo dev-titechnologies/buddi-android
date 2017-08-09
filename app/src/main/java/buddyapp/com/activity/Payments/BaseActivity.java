@@ -209,11 +209,11 @@ public abstract class BaseActivity extends AppCompatActivity implements OnReques
                     if (res.getInt("status") == 1) {
 
 
-
                         mAuthorization = res.getString("data");
                                 onAuthorizationFetched();
 
 
+                        PreferencesUtils.saveData(Constants.clientToken,mAuthorization,getApplicationContext());
                     }else if(res.getInt("status")==2){
                         Toast.makeText(BaseActivity.this,res.getString("message"), Toast.LENGTH_SHORT).show();
                     }else if(res.getInt("status")==3){
