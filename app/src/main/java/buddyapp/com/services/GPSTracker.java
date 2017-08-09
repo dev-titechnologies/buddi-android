@@ -13,6 +13,8 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
+import buddyapp.com.utils.CommonCall;
+
 public class GPSTracker extends Service implements LocationListener {
 
     private final Context mContext;
@@ -124,6 +126,21 @@ public class GPSTracker extends Service implements LocationListener {
     @Override
     public IBinder onBind(Intent arg0) {
         return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        CommonCall.PrintLog("Service", "onStartCommand");
+        super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+
+        startService(new Intent(this, GPSTracker.class));
     }
 
     /**

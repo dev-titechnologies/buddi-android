@@ -269,7 +269,13 @@ public class ChooseSpecification extends AppCompatActivity {
                     }else
                     {
                         // No match found..........
+
+
+
+
                     }
+                }else{
+
                 }
             } catch (JSONException e) {
 
@@ -292,4 +298,6 @@ public class ChooseSpecification extends AppCompatActivity {
         }
         return true;
     }
+
+
 }

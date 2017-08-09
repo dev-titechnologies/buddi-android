@@ -28,6 +28,8 @@ import buddyapp.com.activity.Fragment.BookingHistory;
 import buddyapp.com.activity.Fragment.HomeCategory;
 import buddyapp.com.activity.Fragment.Legal;
 import buddyapp.com.activity.Payments.PaymentType;
+import buddyapp.com.services.GPSTracker;
+import buddyapp.com.services.LocationService;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
@@ -265,5 +267,10 @@ startActivity(payment);
         super.onResume();
         CommonCall.LoadImage(getApplicationContext(),PreferencesUtils.getData(Constants.user_image,getApplicationContext(),""), userImageView,R.drawable.ic_no_image,R.drawable.ic_account);
 
+
+        if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
+
+            startService(new Intent(this, LocationService.class));
+        }
     }
 }
