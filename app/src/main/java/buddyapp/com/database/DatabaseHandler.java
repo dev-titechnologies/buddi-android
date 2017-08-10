@@ -232,7 +232,18 @@ else
                 null);
         db.close();
     }
+    public long getcountSELECTEDCAT() {
 
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_CATEGORY + " WHERE " + CAT_STATUS + " = 0";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+
+        // return contact list
+        return cursor.getCount();
+    }
     public JSONArray getAllCAT() {
         JSONArray categoryList = new JSONArray();
         // Select All Query
