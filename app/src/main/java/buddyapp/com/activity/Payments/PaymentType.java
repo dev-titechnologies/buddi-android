@@ -224,11 +224,31 @@ CommonCall.sessionout(getApplicationContext());
         CommonCall.PrintLog("result", result.toString());
 
 
-        if (result != null) {
+        if (result.getPaymentMethodNonce() != null) {
 
             displaycard(result);
-//        if (result.getPaymentMethodNonce().getDescription())
-//new CommonCall.checkout(PaymentType.this).execute();
+
+
+            if(getIntent().hasExtra("result")){
+
+//ForResult
+                /*
+*
+* going back to map screen
+*
+* */
+
+
+
+
+                setResult(403);
+                finish();
+            }else{
+
+//default
+            }
+
+
         }else{
             credit_card.setVisibility(View.GONE);
         }
@@ -262,6 +282,7 @@ CommonCall.sessionout(getApplicationContext());
         try {
             if (ClientToken.fromString(mAuthorization) instanceof ClientToken) {
                 DropInResult.fetchDropInResult(this, mAuthorization, this);
+
             } else {
                 CommonCall.PrintLog("no payment method ", "no payment method found");
             }
@@ -283,10 +304,12 @@ CommonCall.sessionout(getApplicationContext());
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // the user canceled
                 Log.d("mylog", "user canceled");
+                CommonCall.hideLoader();
             } else {
                 // handle errors here, an exception may be available in
                 Exception error = (Exception) data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
                 Log.d("mylog", "Error : " + error.toString());
+                CommonCall.hideLoader();
             }
         }
 

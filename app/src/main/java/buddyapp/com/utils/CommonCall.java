@@ -16,7 +16,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.braintreepayments.api.dropin.DropInResult;
 import com.facebook.login.LoginManager;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -25,6 +27,7 @@ import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,6 +40,7 @@ import buddyapp.com.Controller;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.activity.MapTrainee;
 import buddyapp.com.activity.Payments.PaymentType;
 import buddyapp.com.activity.WelcomeActivity;
 
@@ -306,84 +310,22 @@ public static void hideLoader(){
 
     // log out **************
     public static void sessionout( Context context){
-                    PreferencesUtils.cleardata(context);
-                    LoginManager.getInstance().logOut();
+
+        String fcmId = PreferencesUtils.getData(Constants.device_id,Controller.getAppContext(),"");
+
+        PreferencesUtils.cleardata(context);
+
+
+        PreferencesUtils.saveData(Constants.device_id,fcmId,Controller.getAppContext());
+
+
+        LoginManager.getInstance().logOut();
                     Intent intent = new Intent(context,WelcomeActivity.class);
                     context.startActivity(intent);
     }
 
-public static class checkout extends  AsyncTask<String,String,String>{
-
-Activity activity;
-    public checkout(Activity act){
-        this.activity=act;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        CommonCall.showLoader(activity);
-    }
-
-    @Override
-    protected String doInBackground(String... strings) {
-
-JSONObject req= new JSONObject();
-        try {
-            req.put("user_id",PreferencesUtils.getData(Constants.user_id,activity,""));
-            req.put("amount","100");//for testing only
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String res = NetworkCalls.POST(Urls.getcheckoutURL(),req.toString());
-        return res;
-
-    }
-
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-CommonCall.hideLoader();
-        try {
-            final JSONObject response = new JSONObject(s);
-
-            if (response.getInt(Constants.status) == 1) {
 
 
-                Toast.makeText(activity, "Payment  Successful!", Toast.LENGTH_SHORT).show();
-
-
-            } else if (response.getInt(Constants.status) == 2) {
-
-//                Snackbar snackbar = Snackbar
-//                        .make(root, response.getString(Constants.message), Snackbar.LENGTH_INDEFINITE)
-//                        .setAction("RETRY", new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//
-//
-//                                Snackbar snackbar1 = null;
-//
-//                                snackbar1 = Snackbar.make(root, "Loading", Snackbar.LENGTH_SHORT);
-//
-//                                snackbar1.show();
-//                                new PaymentType.applyPromo().execute();
-//
-//                            }
-//                        });
-//
-//                snackbar.show();
-            } else if (response.getInt(Constants.status) == 3) {
-
-                CommonCall.sessionout(activity);
-            }
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-}
 
     public static void emitTrainerLocation(final double lat, final double lng) {
         AsyncTask.execute(new Runnable() {
@@ -435,4 +377,5 @@ CommonCall.hideLoader();
             }
         });
     }
+
 }

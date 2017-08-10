@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
+<uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -99,7 +99,6 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity android:name=".utils.CropActivity" />
         <activity
             android:name=".activity.questions.Question1"
             android:screenOrientation="portrait" />
@@ -149,6 +148,20 @@
         <activity android:name=".activity.SessionReady" />
         <activity android:name=".activity.Session" />
         <activity android:name=".activity.ChatScreen"></activity>
+        <!-- Firebase Notifications -->
+        <service android:name=".fcm.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".fcm.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- ./Firebase Notifications -->
+
 
     </application>
 

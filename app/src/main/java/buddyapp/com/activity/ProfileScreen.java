@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -15,7 +13,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,8 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -37,21 +32,16 @@ import com.hbb20.CountryCodePicker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.prefs.PreferencesFactory;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
-import buddyapp.com.utils.CropActivity;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 import buddyapp.com.utils.Utility;
@@ -181,14 +171,7 @@ public class ProfileScreen extends AppCompatActivity {
 
     }
 
-    private void onCaptureImageResult() {
 
-        String img_url = image_uri.getPath();
-        Intent crop = new Intent(getApplicationContext(), CropActivity.class);
-        crop.putExtra("url", img_url);
-
-        startActivityForResult(crop, REQUEST_CROP_PICTURE);
-    }
 
     /*Create a file Uri for saving an image or video */
     private Uri getOutputMediaFileUri(int type) {

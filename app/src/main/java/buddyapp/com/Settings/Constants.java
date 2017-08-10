@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 public class Constants {
 
+
+    public static String clientToken="clientToken";
     public static String fname="first_name";
     public static String lname= "last_name";
     public static String email = "email";
@@ -55,5 +57,7 @@ public class Constants {
     public static  String longitude = "longitude";
     public static String duration = "duration";
     public static String availStatus = "avail_status";
+
+    public static String transactionId = "transactionId";
 
 }

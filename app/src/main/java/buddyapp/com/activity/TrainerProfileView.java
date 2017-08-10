@@ -26,7 +26,7 @@ public class TrainerProfileView extends Activity {
     CircleImageView trainerImageView;
     TextView fullname, typeAge, height , weight, gymSubscription, trainingCategory, trainingHistory, coachingHistory, certifications, webUrl;
     ImageView faceBook, instagram, linkedIn, snapChat, twitter, youTube,back;
-    String data = "", distance="", latitude="", longitude="",status="",userId, name;
+    String data = "", distance="", latitude="", longitude="",status="",userId, name, trainerId;
     Button booknow;
     Alertdialoge pd;
     @Override
@@ -85,7 +85,9 @@ public class TrainerProfileView extends Activity {
 
     private void loadTrainerProfile() {
         try {
-            JSONObject obj = new JSONObject(data);
+            JSONObject trainer_details= new JSONObject(data);
+            JSONObject obj = trainer_details.getJSONObject("trainer_details");
+
             name = obj.getString("first_name") + " "+obj.getString("last_name");
             fullname.setText(obj.getString("first_name") + " "+obj.getString("last_name"));
             typeAge.setText("Trainer("+obj.getString("age")+")");

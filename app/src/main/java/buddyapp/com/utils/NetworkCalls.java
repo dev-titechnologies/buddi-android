@@ -313,7 +313,7 @@ public class NetworkCalls {
         CommonCall.PrintLog("REQ url", url);
         CommonCall.PrintLog("REQ PARAMS", params);
 
-
+        CommonCall.PrintLog("REQ Token", PreferencesUtils.getData(Constants.token, Controller.getAppContext(), "0"));
         try {
 
             Response response;

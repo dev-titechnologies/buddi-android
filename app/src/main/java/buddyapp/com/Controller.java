@@ -2,6 +2,8 @@ package buddyapp.com;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
@@ -87,6 +89,8 @@ public class Controller extends Application {
             CommonCall.PrintLog("received socket", jsonObject.toString());
             try {
                 JSONObject object = jsonObject.getJSONObject("message");
+
+                sendBroadcastTrainerLocation(object.getString("latitude"),object.getString("longitude"));
                 CommonCall.PrintLog("lat", object.getString("latitude"));
                 CommonCall.PrintLog("lng", object.getString("longitude"));
                 CommonCall.PrintLog("availabilityStatus", object.getString("availabilityStatus"));
@@ -128,5 +132,15 @@ public class Controller extends Application {
     }
 
     public static void updateSocket(){}
+
+    public static void sendBroadcastTrainerLocation(String lat,String lng) {
+        {
+            Intent intent = new Intent("SOCKET_BUDDI_TRAINER_LOCATION");
+            intent.putExtra("trainer_latitude", lat);
+            intent.putExtra("trainer_longitude",lng);
+            LocalBroadcastManager.getInstance(getAppContext()).sendBroadcast(intent);
+        }
+    }
+
 
 }

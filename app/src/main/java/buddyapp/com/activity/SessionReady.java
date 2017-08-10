@@ -1,11 +1,15 @@
 package buddyapp.com.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,6 +45,7 @@ import java.util.List;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
+import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.services.GPSTracker;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.RippleMap.MapRipple;
@@ -77,12 +82,23 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
         }
 
-        Intent intent = getIntent();
+      /*  Intent intent = getIntent();
         lat = intent.getStringExtra(Constants.latitude);
         lng = intent.getStringExtra(Constants.longitude);
         name = intent.getStringExtra("name");
         disatance = intent.getStringExtra("distance");
+*/
 
+        try {
+            JSONObject data = new JSONObject(PreferencesUtils.getData("trainerData",getApplicationContext(),""));
+            JSONObject trainerDetail = data.getJSONObject("trainer_details");
+            lat = trainerDetail.getString("trainer_latitude");
+            lng = trainerDetail.getString("trainer_longitude");
+            name = trainerDetail.getString("trainer_first_name") + " "+trainerDetail.getString("trainer_last_name");
+            CommonCall.socketGetTrainerLocation();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         SupportMapFragment mapFragment = (SupportMapFragment) this.getSupportFragmentManager()
                 .findFragmentById(map);
@@ -103,7 +119,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 /****
  * get Trainer location
   ****/
-        CommonCall.socketGetTrainerLocation();
+
         LoadmapTask();
     }
 
@@ -111,6 +127,24 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     protected void onStart() {
         super.onStart();
         CommonCall.showLoader(SessionReady.this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        lat = intent.getStringExtra("trainer_latitude");
+                        lng = intent.getStringExtra("trainer_longitude");
+                        LoadmapTask();
+                    }
+                }, new IntentFilter("SOCKET_BUDDI_TRAINER_LOCATION")
+
+
+        );
+
     }
 
     private void LoadmapTask() {
