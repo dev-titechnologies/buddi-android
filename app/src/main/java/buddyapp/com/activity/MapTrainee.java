@@ -277,7 +277,11 @@ if (PreferencesUtils.getData(Constants.clientToken,getApplicationContext(),"").l
                 reqData.put("category",category);
                 reqData.put(Constants.latitude,lat);
                 reqData.put(Constants.longitude,lng);
-                reqData.put(Constants.duration,duration);
+                reqData.put(Constants.amount,PreferencesUtils.getData(Constants.amount,getApplicationContext(),""));
+                reqData.put(Constants.transaction_status,PreferencesUtils.getData(Constants.transaction_status,getApplicationContext(),""));
+                reqData.put("transaction_id",PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),""));
+
+                reqData.put("training_time",duration);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -348,7 +352,7 @@ if (PreferencesUtils.getData(Constants.clientToken,getApplicationContext(),"").l
             JSONObject req= new JSONObject();
             try {
                 req.put("nonce",nounce);
-                req.put("amount","100");//for testing only
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -368,6 +372,9 @@ if (PreferencesUtils.getData(Constants.clientToken,getApplicationContext(),"").l
 
                     JSONObject data = response.getJSONObject("data");
                     PreferencesUtils.saveData(Constants.transactionId,data.getString("transactionId"),getApplicationContext());
+                    PreferencesUtils.saveData(Constants.amount, data.getString("amount"),getApplicationContext());
+                    PreferencesUtils.saveData(Constants.transaction_status,data.getString("status"),getApplicationContext());
+
                     Toast.makeText(activity, "Payment  Successful!", Toast.LENGTH_SHORT).show();
 
                     new RandomSelect().execute();

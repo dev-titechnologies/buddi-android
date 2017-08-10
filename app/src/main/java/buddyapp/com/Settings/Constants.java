@@ -59,5 +59,7 @@ public class Constants {
     public static String availStatus = "avail_status";
 
     public static String transactionId = "transactionId";
+    public static String amount ="amount";
+    public static String transaction_status = "transaction_status";
 
 }
