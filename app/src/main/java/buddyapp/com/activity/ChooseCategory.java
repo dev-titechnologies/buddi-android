@@ -25,6 +25,7 @@ import buddyapp.com.Settings.Constants;
 import buddyapp.com.activity.questions.BeforeVideoActivity;
 import buddyapp.com.activity.questions.Question1;
 import buddyapp.com.activity.questions.Question2;
+import buddyapp.com.activity.questions.Question4;
 import buddyapp.com.adapter.CategoryAdapter;
 import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.utils.CommonCall;
@@ -164,8 +165,8 @@ void loadData(JSONArray data){
                     * */
                     if (db.getcountSELECTEDCAT()>0){
 
-                        startActivity(new Intent(getApplicationContext(), BeforeVideoActivity.class));
-                    }
+                        startActivity(new Intent(getApplicationContext(), Question4.class));
+                    }else
                     startActivity(new Intent(getApplicationContext(), Question1.class));
 
 
