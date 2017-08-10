@@ -33,6 +33,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.hbb20.CountryCodePicker;
 
 import org.json.JSONArray;
@@ -397,5 +398,10 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+
+    }
 }

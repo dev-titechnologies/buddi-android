@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.braintreepayments.api.dropin.DropInResult;
 import com.facebook.login.LoginManager;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -26,6 +27,7 @@ import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -308,8 +310,16 @@ public static void hideLoader(){
 
     // log out **************
     public static void sessionout( Context context){
-                    PreferencesUtils.cleardata(context);
-                    LoginManager.getInstance().logOut();
+
+        String fcmId = PreferencesUtils.getData(Constants.device_id,Controller.getAppContext(),"");
+
+        PreferencesUtils.cleardata(context);
+
+
+        PreferencesUtils.saveData(Constants.device_id,fcmId,Controller.getAppContext());
+
+
+        LoginManager.getInstance().logOut();
                     Intent intent = new Intent(context,WelcomeActivity.class);
                     context.startActivity(intent);
     }

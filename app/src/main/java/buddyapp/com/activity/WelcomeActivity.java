@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import buddyapp.com.R;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -150,4 +152,5 @@ public class WelcomeActivity extends AppCompatActivity {
             container.removeView(view);
         }
     }
-}
+
+  }
