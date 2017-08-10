@@ -6,15 +6,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -22,6 +27,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -43,6 +49,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import buddyapp.com.Controller;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
@@ -53,7 +60,7 @@ import buddyapp.com.utils.RippleMap.MapRipple;
 import static buddyapp.com.R.id.map;
 
 public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWindowAdapter, OnMapReadyCallback, LocationSource.OnLocationChangedListener {
-
+    Marker pos_Marker;
     GoogleMap googleMap;
     GPSTracker gps ;
     LatLng origin;
@@ -95,6 +102,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             lat = trainerDetail.getString("trainer_latitude");
             lng = trainerDetail.getString("trainer_longitude");
             name = trainerDetail.getString("trainer_first_name") + " "+trainerDetail.getString("trainer_last_name");
+            Controller.mSocket.connect();
             CommonCall.socketGetTrainerLocation();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -136,9 +144,18 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
+                        CommonCall.PrintLog("brodcastmsg","brodcastmsg");
                         lat = intent.getStringExtra("trainer_latitude");
                         lng = intent.getStringExtra("trainer_longitude");
+                        // trainer location
+                        latitude = Double.valueOf(lat);
+                        longitude = Double.valueOf(lng);
+                        camera = new LatLng(latitude, longitude);
+                        origin = camera;
                         LoadmapTask();
+                        animateMarker(pos_Marker,camera,false,0.0f);
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 14));
+
                     }
                 }, new IntentFilter("SOCKET_BUDDI_TRAINER_LOCATION")
 
@@ -147,7 +164,46 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
     }
 
+    public void animateMarker(final Marker marker, final LatLng toPosition,
+                              final boolean hideMarker, final Float bearing) {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        Projection proj = googleMap.getProjection();
+        Point startPoint = proj.toScreenLocation(marker.getPosition());
+        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+        final long duration = 500;
+
+        final Interpolator interpolator = new LinearInterpolator();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed
+                        / duration);
+                double lng = t * toPosition.longitude + (1 - t)
+                        * startLatLng.longitude;
+                double lat = t * toPosition.latitude + (1 - t)
+                        * startLatLng.latitude;
+                marker.setPosition(new LatLng(lat, lng));
+                marker.setRotation(bearing);
+                if (t < 1.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16);
+                } else {
+                    if (hideMarker) {
+                        marker.setVisible(false);
+                    } else {
+                        marker.setVisible(true);
+                    }
+                }
+            }
+        });
+    }
+
     private void LoadmapTask() {
+            if(googleMap!= null)
+            googleMap.clear();
 
             String str_origin = "origin="+origin.latitude+","+origin.longitude;
             // Destination of route
@@ -177,7 +233,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 try{
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12));
-                Marker pos_Marker =  googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title(name.toUpperCase()).draggable(false));
+                pos_Marker =  googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title(name.toUpperCase()).draggable(false));
                 pos_Marker.showInfoWindow();
 
                 googleMap.setInfoWindowAdapter(SessionReady.this);
