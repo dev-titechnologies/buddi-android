@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
+import buddyapp.com.activity.questions.BeforeVideoActivity;
 import buddyapp.com.activity.questions.Question1;
 import buddyapp.com.activity.questions.Question2;
 import buddyapp.com.adapter.CategoryAdapter;
@@ -154,7 +155,20 @@ void loadData(JSONArray data){
 
 
                 if (cat_selectedID.size()>0){
+
+                    /*
+                    *
+                    *
+                    * check if this trainer has already completd the querstions by uploading the videos
+                    *
+                    * */
+                    if (db.getcountSELECTEDCAT()>0){
+
+                        startActivity(new Intent(getApplicationContext(), BeforeVideoActivity.class));
+                    }
                     startActivity(new Intent(getApplicationContext(), Question1.class));
+
+
 
                 }else{
 
