@@ -24,6 +24,8 @@ import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.Urls;
 
+import static buddyapp.com.utils.Urls.BASEURL;
+
 
 public class Controller extends Application {
     private static Context context;
@@ -62,7 +64,7 @@ public class Controller extends Application {
             options.reconnection = true;
             options.query = "__sails_io_sdk_version=0.12.13&token=" + PreferencesUtils.getData(Constants.token,getAppContext(),""); // Added this line
 
-            mSocket = IO.socket("http://192.168.1.66:9002",options);
+            mSocket = IO.socket(BASEURL,options);
         } catch (Exception e) {
             e.printStackTrace();
         }
