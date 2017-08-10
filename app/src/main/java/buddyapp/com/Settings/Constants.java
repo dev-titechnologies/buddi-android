@@ -26,7 +26,7 @@ public class Constants {
     public static String mobile = "mobile";
     public static String trainer_type = "trainer_type";
     public static String trainer_status = "trainer_status";
-
+    public static String trainer_id = "trainer_id";
     public static String approved = "category_approved";
     public static String pending = "category_pending";
 
@@ -54,5 +54,6 @@ public class Constants {
     public static String latitude = "latitude";
     public static  String longitude = "longitude";
     public static String duration = "duration";
+    public static String availStatus = "avail_status";
 
 }

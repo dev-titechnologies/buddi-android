@@ -1,10 +1,13 @@
 package buddyapp.com.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,14 +21,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.nkzawa.socketio.client.IO;
-import com.github.nkzawa.socketio.client.Socket;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 
+import buddyapp.com.Controller;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
@@ -52,12 +53,6 @@ public class HomeActivity extends AppCompatActivity
     JSONObject data;
     Menu menu;
 
-    private Socket mSocket;
-    {
-        try {
-            mSocket = IO.socket("http://chat.socket.io");
-        } catch (URISyntaxException e) {}
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,7 +198,7 @@ public class HomeActivity extends AppCompatActivity
             getSupportActionBar().setTitle("Payment");
 
             Intent payment = new Intent(getApplicationContext(), PaymentType.class);
-startActivity(payment);
+            startActivity(payment);
         } else if (id == R.id.nav_trainer) {
             source_become_trainer=true;
             Intent intent = new Intent(getApplicationContext(),ChooseCategory.class);
@@ -233,8 +228,27 @@ startActivity(payment);
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         } else if (id == R.id.nav_logout) {
+            final AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(HomeActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+            } else {
+                builder = new AlertDialog.Builder(HomeActivity.this);
+            }
+            builder.setTitle("Logout")
+                    .setMessage("Are you sure you want to log out?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            new LogOutTask().execute();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
 
-            new LogOutTask().execute();
 
         }
 
@@ -280,7 +294,12 @@ startActivity(payment);
 
         if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
 
-            mSocket.connect();
+//            if (!Controller.mSocket.connected()) {
+
+//                Controller.updateSocket();
+//                Controller.mSocket.connect();
+//
+//            }
             startService(new Intent(this, LocationService.class));
 
         }

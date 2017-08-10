@@ -36,11 +36,11 @@ TextView trainer, trainee;
         String login_type= getIntent().getStringExtra("login_type");
         if(login_type.equals("login")){
             flag = true;
-            trainee.setText("LOGIN AS A TRAINEE");
+            trainee.setText("LOGIN AS A USER");
             trainer.setText("LOGIN AS A TRAINER");
         }else{
             flag = false;
-            trainee.setText("REGISTER AS A TRAINEE");
+            trainee.setText("REGISTER AS A USER");
             trainer.setText("REGISTER AS A TRAINER");
         }
         /*if (Build.VERSION.SDK_INT >= 23) {

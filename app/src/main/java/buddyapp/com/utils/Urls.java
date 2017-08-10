@@ -8,8 +8,8 @@ import java.security.PublicKey;
 
 public class Urls {
 
-  public static String BASEURL = "http://git.titechnologies.in:4001";
-//    public static String BASEURL= "http://192.168.1.66:9002";
+//  public static String BASEURL = "http://git.titechnologies.in:4001";
+    public static String BASEURL= "http://192.168.1.66:9002";
 
 //    public static String BASEURL= "http://192.168.1.14:4001";
 

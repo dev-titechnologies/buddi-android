@@ -32,7 +32,7 @@ public class LocationService extends Service implements
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 100000;
+    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 20000;
 
     /**
      * The fastest rate for active location updates. Exact. Updates will never be more frequent
@@ -164,7 +164,7 @@ public class LocationService extends Service implements
                 .getLongitude(), Toast.LENGTH_SHORT).show();
         Log.d(TAG, "Latitude:==" + mCurrentLocation.getLatitude() + "\n Longitude:==" + mCurrentLocation.getLongitude
                 ());
-
+        CommonCall.emitTrainerLocation(mCurrentLocation.getLatitude(),mCurrentLocation.getLatitude());
 //        LocationDBHelper.getInstance(this).insertLocationDetails(mLocationData);
     }
 
@@ -203,7 +203,7 @@ public class LocationService extends Service implements
      * Requests location updates from the FusedLocationApi.
      */
     protected void startLocationUpdates() {
-        if (!mRequestingLocationUpdates) {
+        if (!mRequestingLocationUpdates&&mGoogleApiClient.isConnected() ) {
             mRequestingLocationUpdates = true;
 
             // The final argument to {@code requestLocationUpdates()} is a LocationListener

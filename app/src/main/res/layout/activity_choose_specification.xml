@@ -35,25 +35,6 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/medium"
-                    android:layout_marginBottom="@dimen/small"
-                    android:layout_marginRight="@dimen/medium"
-                    android:layout_marginLeft="@dimen/medium"
-                    android:elevation="10dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/medium"
-                    android:id="@+id/fifteen"
-                    android:gravity="center"
-                    android:onClick="setFifteen"
-                    android:textColor="@color/black"
-                    android:background="@color/white"
-                    android:text="15 Minutes"/>
-                </android.support.v7.widget.CardView>
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/small"
                     android:layout_marginBottom="@dimen/small"
                     android:layout_marginRight="@dimen/medium"
@@ -107,13 +88,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/ash"
-                android:visibility="gone"
+                android:visibility="visible"
+                android:gravity="center"
                 android:id="@+id/gender"
                 android:orientation="horizontal">
                 <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+
                     android:layout_marginTop="@dimen/medium"
                     android:layout_marginBottom="@dimen/medium"
                     android:layout_marginRight="@dimen/medium"
@@ -122,7 +104,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="@dimen/medium"
+                    android:paddingLeft="@dimen/large"
+                    android:paddingRight="@dimen/large"
+                    android:paddingTop="@dimen/medium"
+                    android:paddingBottom="@dimen/medium"
                     android:gravity="center"
                     android:id="@+id/male"
                     android:onClick="setMale()"
@@ -131,9 +116,8 @@
                     android:text="Male"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginTop="@dimen/medium"
                     android:layout_marginBottom="@dimen/medium"
                     android:layout_marginRight="@dimen/medium"
@@ -149,6 +133,25 @@
                     android:background="@color/white"
                     android:padding="@dimen/medium"
                     android:text="Female"/>
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/medium"
+                    android:layout_marginBottom="@dimen/medium"
+                    android:layout_marginRight="@dimen/medium"
+                    android:layout_marginLeft="@dimen/medium"
+                    android:elevation="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="@dimen/medium"
+                        android:gravity="center"
+                        android:id="@+id/no_preference"
+                        android:onClick="setMale()"
+                        android:textColor="@color/black"
+                        android:background="@color/white"
+                        android:text="No Preference"/>
                 </android.support.v7.widget.CardView>
             </LinearLayout>
         </LinearLayout>

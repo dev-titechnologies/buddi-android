@@ -24,13 +24,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textAllCaps="true"
                 android:background="@drawable/button_pressed"
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
                 android:paddingLeft="60dp"
                 android:paddingRight="60dp"
                 android:id="@+id/trainee"
-                android:text="Login As a Trainee"
+                android:text="Login As a User"
                 android:textColor="@drawable/font_select_color"/>
             </LinearLayout>
 
@@ -55,6 +56,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="Login as a Trainer"
+                android:textAllCaps="true"
                 android:paddingTop="20dp"
                 android:background="@drawable/button_pressed"
                 android:paddingBottom="20dp"

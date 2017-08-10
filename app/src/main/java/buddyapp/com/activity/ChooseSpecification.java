@@ -39,7 +39,7 @@ public class ChooseSpecification extends AppCompatActivity {
     String sgender="";
     LinearLayout duration, gender;
     TextView session, trainerGender;
-    TextView fifteen, thirty, hour, male, female;
+    TextView  thirty, hour, male, female, noPreference;
     int id =0, ids=0;
     Animation a,b;
     Button next;
@@ -59,12 +59,12 @@ public class ChooseSpecification extends AppCompatActivity {
         gender = (LinearLayout) findViewById(R.id.gender);
         session = (TextView) findViewById(R.id.session);
         trainerGender = (TextView) findViewById(R.id.trainer_gender);
-        fifteen = (TextView) findViewById(R.id.fifteen);
         thirty = (TextView) findViewById(R.id.thirty);
         hour = (TextView) findViewById(R.id.hour);
         male = (TextView) findViewById(R.id.male);
         female = (TextView) findViewById(R.id.female);
         next= (Button) findViewById(R.id.next);
+        noPreference = (TextView) findViewById(R.id.no_preference);
 
 // ************************Get Current location*********************
         mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
@@ -126,11 +126,7 @@ public class ChooseSpecification extends AppCompatActivity {
             }
         });
 
-        fifteen.setOnClickListener(new View.OnClickListener() {                                           @Override
-        public void onClick(View view) {
-            setFifteen();
-        }
-        });
+
         thirty.setOnClickListener(new View.OnClickListener() {                                           @Override
         public void onClick(View view) {
             setThirty();
@@ -151,7 +147,12 @@ public class ChooseSpecification extends AppCompatActivity {
             setFemale();
         }
         });
-
+        noPreference.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setNoPreference();
+            }
+        });
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,6 +165,17 @@ public class ChooseSpecification extends AppCompatActivity {
             }
         });
     }
+
+    private void setNoPreference() {
+        sgender = "nopreference";
+        noPreference.setTextColor(getResources().getColor(R.color.white));
+        noPreference.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        female.setTextColor(getResources().getColor(R.color.black));
+        male.setTextColor(getResources().getColor(R.color.black));
+        male.setBackgroundColor(getResources().getColor(R.color.white));
+        female.setBackgroundColor(getResources().getColor(R.color.white));
+    }
+
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(ChooseSpecification.this);
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
@@ -181,30 +193,20 @@ public class ChooseSpecification extends AppCompatActivity {
         final AlertDialog alert = builder.create();
         alert.show();
     }
-    public void setFifteen(){
-        sessionDuration = 15;
-        fifteen.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        thirty.setBackgroundColor(getResources().getColor(R.color.white));
-        hour.setBackgroundColor(getResources().getColor(R.color.white));
-        fifteen.setTextColor(getResources().getColor(R.color.white));
-        thirty.setTextColor(getResources().getColor(R.color.black));
-        hour.setTextColor(getResources().getColor(R.color.black));
-    }
+
     void setThirty(){
         sessionDuration = 30;
-        fifteen.setTextColor(getResources().getColor(R.color.black));
+
         thirty.setTextColor(getResources().getColor(R.color.white));
         hour.setTextColor(getResources().getColor(R.color.black));
-        fifteen.setBackgroundColor(getResources().getColor(R.color.white));
         thirty.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         hour.setBackgroundColor(getResources().getColor(R.color.white));
     }
     void setHour(){
         sessionDuration = 60;
-        fifteen.setTextColor(getResources().getColor(R.color.black));
+
         thirty.setTextColor(getResources().getColor(R.color.black));
         hour.setTextColor(getResources().getColor(R.color.white));
-        fifteen.setBackgroundColor(getResources().getColor(R.color.white));
         thirty.setBackgroundColor(getResources().getColor(R.color.white));
         hour.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
     }
@@ -214,6 +216,8 @@ public class ChooseSpecification extends AppCompatActivity {
         female.setTextColor(getResources().getColor(R.color.black));
         male.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         female.setBackgroundColor(getResources().getColor(R.color.white));
+        noPreference.setTextColor(getResources().getColor(R.color.black));
+        noPreference.setBackgroundColor(getResources().getColor(R.color.white));
     }
     void setFemale(){
         sgender = "female";
@@ -221,6 +225,8 @@ public class ChooseSpecification extends AppCompatActivity {
         male.setTextColor(getResources().getColor(R.color.black));
         male.setBackgroundColor(getResources().getColor(R.color.white));
         female.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        noPreference.setTextColor(getResources().getColor(R.color.black));
+        noPreference.setBackgroundColor(getResources().getColor(R.color.white));
     }
     class SearchTrainer extends AsyncTask<String,String,String> {
         String response = "";

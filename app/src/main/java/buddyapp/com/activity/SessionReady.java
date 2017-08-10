@@ -100,6 +100,10 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         origin = camera;
         dest = usercamera;
 
+/****
+ * get Trainer location
+  ****/
+        CommonCall.socketGetTrainerLocation();
         LoadmapTask();
     }
 

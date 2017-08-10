@@ -385,4 +385,54 @@ CommonCall.hideLoader();
     }
 }
 
+    public static void emitTrainerLocation(final double lat, final double lng) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+
+
+                JSONObject jsonObject = new JSONObject();
+                try {
+
+                    jsonObject.put("url", Urls.BASEURL + String.format("/location/addLocation/"));
+
+                    JSONObject object = new JSONObject();
+
+                    object.put("user_id", PreferencesUtils.getData(Constants.user_id, Controller.getAppContext(), ""));
+                    object.put("latitude", lat);
+                    object.put("longitude", lng);
+//                    object.put("avail_status",PreferencesUtils.getData(Constants.availStatus,Controller.getAppContext(),""));
+                    object.put("avail_status", "online");
+                    jsonObject.put("data", object);
+                    Controller.mSocket.emit("post", jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+    public static void socketGetTrainerLocation(){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+
+
+                JSONObject jsonObject = new JSONObject();
+                try {
+
+                    jsonObject.put("url", Urls.BASEURL+String.format("/location/receiveTrainerLocation"));
+
+                    JSONObject object = new JSONObject();
+
+                    object.put("user_id", PreferencesUtils.getData(Constants.user_id,Controller.getAppContext(),""));
+                    object.put("trainer_id",PreferencesUtils.getData(Constants.trainer_id,Controller.getAppContext(),""));
+
+                    jsonObject.put("data",object);
+                    Controller.mSocket.emit("post", jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }
