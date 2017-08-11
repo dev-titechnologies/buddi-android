@@ -21,6 +21,7 @@
         android:gravity="center"
         android:background="@color/white">
 
+
         <com.yarolegovich.discretescrollview.DiscreteScrollView
             android:id="@+id/picker"
             android:layout_width="match_parent"

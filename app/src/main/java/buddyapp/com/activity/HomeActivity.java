@@ -37,6 +37,7 @@ import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.Fragment.BookingHistory;
 import buddyapp.com.activity.Fragment.HomeCategory;
+import buddyapp.com.activity.Fragment.HomeTrainerMap;
 import buddyapp.com.activity.Fragment.Legal;
 import buddyapp.com.activity.Payments.PaymentType;
 import buddyapp.com.fcm.Config;
@@ -91,15 +92,20 @@ public class HomeActivity extends AppCompatActivity
         };
 
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Buddi");
 
-        Fragment fragment = new HomeCategory();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+        if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)) {
+            Fragment fragment = new HomeTrainerMap();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
+        }else {
+            Fragment fragment = new HomeCategory();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+        }
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,10 +223,17 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
 
             getSupportActionBar().setTitle("Buddi");
-            Fragment fragment = new HomeCategory();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
+            if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)) {
+                Fragment fragment = new HomeTrainerMap();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+
+            }else {
+                Fragment fragment = new HomeCategory();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+            }
 
         } else if (id == R.id.nav_settings) {
             getSupportActionBar().setTitle("Settings");

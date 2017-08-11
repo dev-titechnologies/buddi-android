@@ -46,6 +46,6 @@
     </color>
 
     <color name="transparent">#00ffffff</color>
-
-
+    <color name="online">#c392ff9e</color>
+    <color name="offline">#d396f5ff</color>
 </resources>
