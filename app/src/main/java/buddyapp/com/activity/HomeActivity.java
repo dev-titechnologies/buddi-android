@@ -31,6 +31,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import buddyapp.com.Controller;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
@@ -48,6 +49,8 @@ import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
 
+import static buddyapp.com.Controller.getAppContext;
+import static buddyapp.com.Controller.mSocket;
 import static buddyapp.com.Settings.Constants.source_become_trainer;
 
 public class HomeActivity extends AppCompatActivity
@@ -317,7 +320,7 @@ public class HomeActivity extends AppCompatActivity
             try {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
-                    PreferencesUtils.cleardata(HomeActivity.this);
+
 //
                     CommonCall.sessionout(HomeActivity.this);
                     finish();
@@ -338,12 +341,12 @@ public class HomeActivity extends AppCompatActivity
 
         if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
 
-//            if (!Controller.mSocket.connected()) {
+                            if (PreferencesUtils.getData(Constants.token,getApplicationContext(),"").length()>0 &&
+                        PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)&&
+                        PreferencesUtils.getData(Constants.availStatus,getApplicationContext(),"online").equals("online"))
+                    mSocket.connect();
 
-//                Controller.updateSocket();
-//                Controller.mSocket.connect();
-//
-//            }
+
             startService(new Intent(this, LocationService.class));
 
         }

@@ -45,10 +45,10 @@ public class Controller extends Application {
             {
                     socket();
                 listenEvent();
-                if (PreferencesUtils.getData(Constants.token,context,"").length()>0 &&
-                        PreferencesUtils.getData(Constants.user_type,context,"").equals(Constants.trainer)&&
-                        PreferencesUtils.getData(Constants.availStatus,context,"online").equals("online"))
-                    mSocket.connect();
+//                if (PreferencesUtils.getData(Constants.token,context,"").length()>0 &&
+//                        PreferencesUtils.getData(Constants.user_type,context,"").equals(Constants.trainer)&&
+//                        PreferencesUtils.getData(Constants.availStatus,context,"online").equals("online"))
+//                    mSocket.connect();
 
             }
         }
@@ -133,7 +133,11 @@ public class Controller extends Application {
         return mInstance;
     }
 
-    public static void updateSocket(){}
+    public static void updateSocket(){
+
+
+
+    }
 
     public static void sendBroadcastTrainerLocation(String lat,String lng) {
         {

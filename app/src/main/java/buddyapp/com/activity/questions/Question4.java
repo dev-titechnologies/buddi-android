@@ -59,6 +59,8 @@ public class Question4 extends Activity {
     int shundreds=0,sones=0, weight;
     Spinner hundreds, ones;
 
+
+    boolean outdoorFlag= false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,13 +156,22 @@ public class Question4 extends Activity {
 
 
         subCategoryAdapter = new SubCategoryAdapter(getApplicationContext(), subCats, db);
+
+
+
         sub_list.setAdapter(subCategoryAdapter);
+
+        if (subCats.size()==0){
+            outdoorFlag = true;// no sub categroy for outdoor
+
+        }
+
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (sub_cat_selectedID.size() == 0) {
+                if (sub_cat_selectedID.size() == 0 && !outdoorFlag ) {
 
                     Toast.makeText(Question4.this, "Please choose your category.", Toast.LENGTH_SHORT).show();
                 } else if (weight == 0) {
