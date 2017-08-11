@@ -71,6 +71,7 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
             userlat = Double.valueOf(PreferencesUtils.getData("Lat",getActivity(),""));
             userlng = Double.valueOf(PreferencesUtils.getData("Lng",getActivity(),""));
             usercamera = new LatLng(userlat, userlng);
+            setRippleView();
         }else {
             // check if GPS enabled
             gps = new GPSTracker(getActivity());
