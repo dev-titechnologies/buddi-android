@@ -10,26 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.yarolegovich.discretescrollview.DiscreteScrollView;
-
-import org.json.JSONArray;
-
-import java.util.ArrayList;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.PreferencesUtils;
-import buddyapp.com.activity.SessionReady;
-import buddyapp.com.adapter.StartStopAdapter;
 import buddyapp.com.services.GPSTracker;
 import buddyapp.com.utils.RippleMap.MapRipple;
 
@@ -56,7 +50,11 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
 
     }
 
+LinearLayout start,stop,profile,message;
 
+    ImageView startactionIcon,stopactionIcon,profileactionIcon,messageactionIcon;
+
+    TextView startactionTitle,stopactionTitle,profileactionTitle,messageactionTitle;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,7 +75,7 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
             userlat = Double.valueOf(PreferencesUtils.getData("Lat",getActivity(),""));
             userlng = Double.valueOf(PreferencesUtils.getData("Lng",getActivity(),""));
             usercamera = new LatLng(userlat, userlng);
-            setRippleView();
+//            setRippleView();
         }else {
             // check if GPS enabled
             gps = new GPSTracker(getActivity());
@@ -100,17 +98,43 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
     }
     void intstartStop(View view){
 
+        start =(LinearLayout)view.findViewById(R.id.start);
+        stop =(LinearLayout)view.findViewById(R.id.stop);
+        profile =(LinearLayout)view.findViewById(R.id.profile);
+        message =(LinearLayout)view.findViewById(R.id.message);
 
-        DiscreteScrollView scrollView =(DiscreteScrollView)view. findViewById(R.id.picker);
 
-        ArrayList<String> items = new ArrayList<>();
-        items.add("start");
-        items.add("stop");
-        items.add("start");
-        items.add("stop");
-        items.add("start");
-        items.add("stop");
-        scrollView.setAdapter(new StartStopAdapter(items));
+        startactionIcon =(ImageView)view.findViewById(R.id.startactionIcon);
+        stopactionIcon =(ImageView)view.findViewById(R.id.stopactionIcon);
+        profileactionIcon =(ImageView)view.findViewById(R.id.profileactionIcon);
+        messageactionIcon =(ImageView)view.findViewById(R.id.messageactionIcon);
+
+        startactionTitle =(TextView)view.findViewById(R.id.startactionTitle);
+        stopactionTitle =(TextView)view.findViewById(R.id.stopactionTitle);
+        profileactionTitle =(TextView)view.findViewById(R.id.profileactionTitle);
+        messageactionTitle =(TextView)view.findViewById(R.id.messagectionTitle);
+
+
+
+
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (startactionTitle.getText().equals("Start"))
+
+                startactionTitle.setText("Stop");
+                else
+                    startactionTitle.setText("Start");
+
+
+
+
+
+
+            }
+        });
+
     }
 
 

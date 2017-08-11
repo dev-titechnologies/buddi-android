@@ -176,7 +176,7 @@ public class NotificationUtils {
                 if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                     for (String activeProcess : processInfo.pkgList) {
                         if (activeProcess.equals(context.getPackageName())) {
-                            isInBackground = false;
+                            isInBackground = true;
                         }
                     }
                 }
@@ -185,7 +185,7 @@ public class NotificationUtils {
             List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
             ComponentName componentInfo = taskInfo.get(0).topActivity;
             if (componentInfo.getPackageName().equals(context.getPackageName())) {
-                isInBackground = false;
+                isInBackground = true;
             }
         }
  

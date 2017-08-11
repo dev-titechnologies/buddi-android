@@ -34,7 +34,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.yarolegovich.discretescrollview.DiscreteScrollView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -137,8 +136,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     void intstartStop(){
 
 
-        DiscreteScrollView scrollView =(DiscreteScrollView) findViewById(R.id.picker);
-//        scrollView.setAdapter(new StartStopAdapter());
+
     }
 
     @Override
