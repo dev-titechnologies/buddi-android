@@ -198,16 +198,17 @@ public class GPSTracker extends Service implements LocationListener {
                 mContext.startActivity(intent);
             }
         });
-
         // on pressing cancel button
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
-
+        AlertDialog dialog = alertDialog.create();
+        dialog.show();
         // Showing Alert Message
         alertDialog.show();
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false); //BUTTON1 is positive button
     }
 
     /**
