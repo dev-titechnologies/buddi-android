@@ -22,7 +22,7 @@
         <Button
             android:layout_width="150dp"
             android:background="@drawable/button_pressed"
-            android:id="@+id/select"
+            android:id="@+id/selected"
             android:text="SELECT"
             android:textStyle="bold"
             android:textColor="@drawable/font_select_color"
