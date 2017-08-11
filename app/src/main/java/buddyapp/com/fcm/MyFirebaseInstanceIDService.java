@@ -7,6 +7,7 @@ import android.util.Log;
  
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
@@ -25,7 +26,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
  
         // sending reg id to your server
         sendRegistrationToServer(refreshedToken);
- 
+        FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
         // Notify UI that registration has completed, so the progress indicator can be hidden.
         Intent registrationComplete = new Intent(Config.REGISTRATION_COMPLETE);
         registrationComplete.putExtra("token", refreshedToken);

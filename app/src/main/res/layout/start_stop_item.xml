@@ -26,16 +26,18 @@
             android:textColor="@android:color/black"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:visibility="invisible"
+            android:text="Start"
+
             tools:text="Washington" />
 
         <ImageView
             android:id="@+id/city_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
-            android:tint="@color/grey"
+
             tools:src="@mipmap/ic_launcher" />
 
     </FrameLayout>

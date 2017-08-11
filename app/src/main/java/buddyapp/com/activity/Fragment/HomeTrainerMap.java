@@ -20,9 +20,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.yarolegovich.discretescrollview.DiscreteScrollView;
+
+import org.json.JSONArray;
+
+import java.util.ArrayList;
 
 import buddyapp.com.R;
 import buddyapp.com.activity.SessionReady;
+import buddyapp.com.adapter.StartStopAdapter;
 import buddyapp.com.services.GPSTracker;
 import buddyapp.com.utils.RippleMap.MapRipple;
 
@@ -81,9 +87,26 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
         mapFragment.getMapAsync(this);
 
         LoadmapTask();
-
+        intstartStop(view);
         return view;
     }
+    void intstartStop(View view){
+
+
+        DiscreteScrollView scrollView =(DiscreteScrollView)view. findViewById(R.id.picker);
+
+        ArrayList<String> items = new ArrayList<>();
+        items.add("start");
+        items.add("stop");
+        items.add("start");
+        items.add("stop");
+        items.add("start");
+        items.add("stop");
+        scrollView.setAdapter(new StartStopAdapter(items));
+    }
+
+
+
 
     private void LoadmapTask() {
         if(googleMap!= null)
@@ -122,8 +145,8 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public void onResume() {
         super.onResume();
-        if(usercamera!=null)
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usercamera, 13));
+//        if(usercamera!=null)
+//            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usercamera, 13));
 
     }
 }

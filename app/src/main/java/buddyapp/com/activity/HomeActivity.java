@@ -351,6 +351,9 @@ public class HomeActivity extends AppCompatActivity
 
         }
 
+
+
+
         // register GCM registration complete receiver
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Config.REGISTRATION_COMPLETE));

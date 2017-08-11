@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import buddyapp.com.R;
@@ -27,9 +28,9 @@ import buddyapp.com.R;
 public class StartStopAdapter extends RecyclerView.Adapter<StartStopAdapter.ViewHolder> {
 
     private RecyclerView parentRecycler;
-    private JSONArray data;
+    private ArrayList<String> data;
 
-    public StartStopAdapter(JSONArray data) {
+    public StartStopAdapter(ArrayList<String> data) {
         this.data = data;
     }
 
@@ -46,13 +47,13 @@ public class StartStopAdapter extends RecyclerView.Adapter<StartStopAdapter.View
         return new ViewHolder(v);
     }
 
-    @Override
+  @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         int iconTint = ContextCompat.getColor(holder.itemView.getContext(), R.color.grey);
-        JSONObject forecast = null;
+        String forecast = null;
         try {
-            forecast = data.getJSONObject(position);
-        } catch (JSONException e) {
+            forecast = data.get(position);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -61,7 +62,7 @@ public class StartStopAdapter extends RecyclerView.Adapter<StartStopAdapter.View
 
     @Override
     public int getItemCount() {
-        return data.length();
+        return data.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
