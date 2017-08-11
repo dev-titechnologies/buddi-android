@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import buddyapp.com.R;
+import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.SessionReady;
 import buddyapp.com.services.GPSTracker;
 import buddyapp.com.utils.RippleMap.MapRipple;
@@ -43,7 +44,7 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
     Button select;
     String sgender,lat, lng, category,duration;
     String  disatance,name;
-
+    boolean initalLocation = true;
     public HomeTrainerMap() {
         // Required empty public constructor
 
@@ -65,17 +66,23 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
                 }
             }
         });
-        // check if GPS enabled
-        gps = new GPSTracker(getActivity());
-        if(gps.canGetLocation()){
-            userlat = gps.getLatitude();
-            userlng = gps.getLongitude();
-            usercamera = new LatLng(userlat,userlng); // user current location
+
+        if(PreferencesUtils.getData("Lat",getActivity(),"").length()>0){
+            userlat = Double.valueOf(PreferencesUtils.getData("Lat",getActivity(),""));
+            userlng = Double.valueOf(PreferencesUtils.getData("Lng",getActivity(),""));
+            usercamera = new LatLng(userlat, userlng);
         }else {
-            gps.showSettingsAlert();
+            // check if GPS enabled
+            gps = new GPSTracker(getActivity());
+            if (gps.canGetLocation()) {
+                userlat = gps.getLatitude();
+                userlng = gps.getLongitude();
+                usercamera = new LatLng(userlat, userlng); // user current location
+            } else {
+                gps.showSettingsAlert();
 
+            }
         }
-
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
@@ -105,7 +112,17 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public void onMapReady(GoogleMap googleMap) {
     this.googleMap = googleMap;
-        MapRipple mapRipple = new MapRipple(googleMap,usercamera, getActivity());
+        googleMap.setMyLocationEnabled(true);
+        if(usercamera!=null) {
+            PreferencesUtils.saveData("Lat", String.valueOf(usercamera.latitude),getActivity());
+            PreferencesUtils.saveData("Lng", String.valueOf(usercamera.longitude),getActivity());
+            setRippleView();
+
+        }
+    }
+
+    private void setRippleView() {
+        MapRipple mapRipple = new MapRipple(googleMap, usercamera, getActivity());
         mapRipple.withNumberOfRipples(3);
         mapRipple.withFillColor(getResources().getColor(R.color.login_bgcolor));
         mapRipple.withStrokeColor(Color.BLACK);
@@ -114,16 +131,24 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
         mapRipple.withRippleDuration(5000);    //12000ms
         mapRipple.withTransparency(0.5f);
         mapRipple.startRippleMapAnimation();
-
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usercamera, 12));
         googleMap.setMyLocationEnabled(true);
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(usercamera!=null)
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usercamera, 13));
+        gps = new GPSTracker(getActivity());
+        if(gps.canGetLocation()&& googleMap!=null){
+            userlat = gps.getLatitude();
+            userlng = gps.getLongitude();
+            usercamera = new LatLng(userlat,userlng); // user current location
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usercamera, 12));
+            setRippleView();
+        }else {
+//            gps.showSettingsAlert();
+
+        }
 
     }
 }
