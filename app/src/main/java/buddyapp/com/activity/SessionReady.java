@@ -34,6 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.yarolegovich.discretescrollview.DiscreteScrollView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +54,7 @@ import buddyapp.com.Controller;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.adapter.StartStopAdapter;
 import buddyapp.com.services.GPSTracker;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.RippleMap.MapRipple;
@@ -127,8 +129,16 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 /****
  * get Trainer location
   ****/
-
+        intstartStop();
         LoadmapTask();
+    }
+
+
+    void intstartStop(){
+
+
+        DiscreteScrollView scrollView =(DiscreteScrollView) findViewById(R.id.picker);
+//        scrollView.setAdapter(new StartStopAdapter());
     }
 
     @Override
