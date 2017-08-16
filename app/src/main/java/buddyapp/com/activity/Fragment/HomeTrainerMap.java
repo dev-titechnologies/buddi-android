@@ -131,7 +131,7 @@ LinearLayout start,stop,profile,message;
             @Override
             public void onClick(View view) {
 
-                if (startactionTitle.getText().equals("Start")) {
+                if (startactionTitle.getText().toString().equals("Start")) {
                     startactionTitle.setText("Cancel");
 
 

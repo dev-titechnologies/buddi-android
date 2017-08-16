@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -115,10 +116,12 @@ public class BroadcastService extends Service {
 
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             //First time
+
             builder = new NotificationCompat.Builder(getApplicationContext())
                     .setContentText(getApplicationContext().getString(R.string.app_name))
                     .setContentTitle("Session")
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(getNotificationIcon())
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                     .setAutoCancel(true)
                     .setOngoing(true)
                     .setOnlyAlertOnce(true)
@@ -173,7 +176,9 @@ public class BroadcastService extends Service {
         builder = new NotificationCompat.Builder(getApplicationContext())
                 .setContentText(getApplicationContext().getString(R.string.app_name))
                 .setContentTitle(text)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(getNotificationIcon())
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+
                 .setAutoCancel(true)
                 .setOngoing(false)
                 .setOnlyAlertOnce(true)
@@ -187,6 +192,12 @@ public class BroadcastService extends Service {
 
         mNotificationManager.notify(100, builder.build());
 //        startForeground(100, builder.build());
+    }
+
+
+    private int getNotificationIcon() {
+        boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
+        return useWhiteIcon ? R.mipmap.ic_launcher :  R.mipmap.ic_launcher ;
     }
     /**
      * Called by the Android runtime to remove the notification icon.
