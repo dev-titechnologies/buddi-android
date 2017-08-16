@@ -1,6 +1,7 @@
 package buddyapp.com.activity.Fragment;
 
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ServiceCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +52,8 @@ import buddyapp.com.utils.Urls;
 
 import static buddyapp.com.Controller.mSocket;
 import static buddyapp.com.R.id.map;
+import static buddyapp.com.timmer.BroadcastService.removeServiceNotification;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -184,10 +188,16 @@ LinearLayout start,stop,profile,message;
                     startactionTitle.setText("Cancel");
 
 
+            }
+        });
 
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                new StopForegroundWrapper().stopForegroundAndRemoveNotificationIcon(sMe);
 
-
-
+                NotificationManager nManager = ((NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE));
+                nManager.cancelAll();
             }
         });
     }

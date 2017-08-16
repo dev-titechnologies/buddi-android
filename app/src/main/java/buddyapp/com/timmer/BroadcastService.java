@@ -1,5 +1,6 @@
 package buddyapp.com.timmer;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -25,8 +26,12 @@ public class BroadcastService extends Service {
     CountDownTimer cdt = null;
 
 
+    // Instance of this service.
+     static BroadcastService sMe;
 
-    boolean started=false;
+
+
+
     @Override
         public void onCreate() {       
             super.onCreate();
@@ -34,6 +39,7 @@ public class BroadcastService extends Service {
 
 
         Log.i(TAG, "Starting timer...");
+        sMe=this;
         CreateNotification();
 
         cdt=null;
@@ -88,6 +94,11 @@ public class BroadcastService extends Service {
 
         @Override
         public int onStartCommand(Intent intent, int flags, int startId) {
+
+
+
+
+
             return START_NOT_STICKY;
 
         }
@@ -117,13 +128,7 @@ public class BroadcastService extends Service {
                                             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP),
                                     0)
                     );
-//                    .addAction(running ? R.drawable.ic_action_pause
-//                                    : R.drawable.ic_action_play,
-//                            running ? context.getString(R.string.pause)
-//                                    : context.getString(R.string.start),
-//                            startPendingIntent)
-//                    .addAction(R.drawable.ic_action_stop, context.getString(R.string.stop),
-//                            stopPendingIntent);
+
 
             mNotificationManager.notify(100, builder.build());
             startForeground(100, builder.build());
@@ -148,9 +153,11 @@ public class BroadcastService extends Service {
 
 
         stopForeground(true);
+        createStopSessionNoti("Session Completed");
+
 //        mNotificationManager.cancel(100);
 //        mNotificationManager = null;
-        createStopSessionNoti(text);
+//        createStopSessionNoti(text);
 
     }
 
@@ -159,7 +166,6 @@ public class BroadcastService extends Service {
 
 
 
-CommonCall.PrintLog("test","Stestfdsasa");
         mNotificationManager =
 
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -177,15 +183,37 @@ CommonCall.PrintLog("test","Stestfdsasa");
                                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP),
                                 0)
                 );
-//                    .addAction(running ? R.drawable.ic_action_pause
-//                                    : R.drawable.ic_action_play,
-//                            running ? context.getString(R.string.pause)
-//                                    : context.getString(R.string.start),
-//                            startPendingIntent)
-//                    .addAction(R.drawable.ic_action_stop, context.getString(R.string.stop),
-//                            stopPendingIntent);
+
 
         mNotificationManager.notify(100, builder.build());
 //        startForeground(100, builder.build());
     }
+    /**
+     * Called by the Android runtime to remove the notification icon.
+     */
+    public static void removeServiceNotification(
+            int notificationId,
+            Activity activity)
+    {
+        // We use a wrapper class to be backwards compatible.
+        // Loading the wrapper class will throw an error on
+        // platforms that does not support it.
+        try
+        {
+            if (null != sMe)
+            {
+                new StopForegroundWrapper().
+                        stopForegroundAndRemoveNotificationIcon(sMe);
+            }
+        }
+        catch (java.lang.VerifyError error)
+        {
+            // We are below API level 5, and need to remove the
+            // notification manually.
+            NotificationManager mNotificationManager = (NotificationManager)
+                    activity.getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.cancel(notificationId);
+        }
+    }
+
 }
