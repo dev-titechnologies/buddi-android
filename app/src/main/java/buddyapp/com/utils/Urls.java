@@ -154,4 +154,16 @@ public class Urls {
         return BASEURL+TRAINERSTATUS;
     }
 
+    public static String STARTSESSION = "/booking/startSession";
+
+    public static String getStartSessionURL(){
+        return BASEURL+STARTSESSION;
+    }
+
+    public static String EXTENDBOOKING = "/booking/extendBooking";
+
+    public static String getExtendSessionURL(){
+        return BASEURL+ EXTENDBOOKING;
+    }
+
 }

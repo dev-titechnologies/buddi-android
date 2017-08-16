@@ -19,7 +19,7 @@
     <string name="forgotpassword_desc">Do not worry just enter your email id below \n
         we will send you the password reset instructions.
     </string>
-
+    <string name="pref_key_transition_time" translatable="false">pref_key_transition_time</string>
     <string name="mobile_verification">We are unable to auto verify your mobile number.\n
     please enter the code</string>
     <string name="next">Next</string>
