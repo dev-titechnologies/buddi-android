@@ -1,6 +1,10 @@
 package buddyapp.com.activity.Fragment;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -25,6 +29,8 @@ import com.google.android.gms.maps.model.Marker;
 import buddyapp.com.R;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.services.GPSTracker;
+import buddyapp.com.timmer.BroadcastService;
+import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.RippleMap.MapRipple;
 
 import static buddyapp.com.R.id.map;
@@ -54,7 +60,7 @@ LinearLayout start,stop,profile,message;
 
     ImageView startactionIcon,stopactionIcon,profileactionIcon,messageactionIcon;
 
-    TextView startactionTitle,stopactionTitle,profileactionTitle,messageactionTitle;
+    TextView startactionTitle,stopactionTitle,profileactionTitle,messageactionTitle,sessionTimmer;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -114,18 +120,27 @@ LinearLayout start,stop,profile,message;
         profileactionTitle =(TextView)view.findViewById(R.id.profileactionTitle);
         messageactionTitle =(TextView)view.findViewById(R.id.messagectionTitle);
 
-
+        sessionTimmer =(TextView)view.findViewById(R.id.sessionTimmer);
 
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (startactionTitle.getText().equals("Start"))
+                if (startactionTitle.getText().equals("Start")) {
+                    startactionTitle.setText("Cancel");
 
-                startactionTitle.setText("Stop");
+
+                    getActivity().startService(new Intent(getActivity(), BroadcastService.class));
+                   CommonCall.PrintLog("Service ", "Started service");
+
+
+
+
+                }
+
                 else
-                    startactionTitle.setText("Start");
+                    startactionTitle.setText("Cancel");
 
 
 
@@ -137,7 +152,12 @@ LinearLayout start,stop,profile,message;
 
     }
 
-
+    private BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUI(intent); // or whatever method used to update your GUI fields
+        }
+    };
 
 
     private void LoadmapTask() {
@@ -198,7 +218,28 @@ LinearLayout start,stop,profile,message;
 //            gps.showSettingsAlert();
 
         }
+        getActivity().registerReceiver(br, new IntentFilter(BroadcastService.COUNTDOWN_BR));
+        CommonCall.PrintLog("service", "Registered broacast receiver");
 
 
+    }
+
+
+
+    private void updateGUI(Intent intent) {
+        if (intent.getExtras() != null) {
+            String millisUntilFinished = intent.getStringExtra("countdown");
+            CommonCall.PrintLog("service", "Countdown seconds remaining: " +  millisUntilFinished);
+
+            sessionTimmer.setText(millisUntilFinished);
+
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        getActivity().unregisterReceiver(br);
     }
 }
