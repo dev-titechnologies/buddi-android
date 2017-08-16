@@ -148,4 +148,10 @@ public class Urls {
         return BASEURL+RANDOMSELECTOR;
     }
 
+    public static String TRAINERSTATUS= "/location/updateLocationStatus/";
+
+    public static String getStatusURL(){
+        return BASEURL+TRAINERSTATUS;
+    }
+
 }

@@ -20,6 +20,7 @@ import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.IntroScreen;
 import buddyapp.com.activity.WelcomeActivity;
 import buddyapp.com.activity.questions.DoneActivity;
+import buddyapp.com.utils.CommonCall;
 
 public class Splash extends AppCompatActivity {
 
@@ -30,6 +31,7 @@ public class Splash extends AppCompatActivity {
         getSupportActionBar().hide();
         String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
+        CommonCall.PrintLog("device id", android_id);
         PreferencesUtils.saveData(Constants.device_id,android_id,getApplicationContext());
         new Timer().schedule(new TimerTask() {
             @Override

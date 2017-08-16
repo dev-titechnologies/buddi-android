@@ -88,67 +88,72 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/ash"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:gravity="center"
                 android:id="@+id/gender"
-                android:orientation="horizontal">
-                <android.support.v7.widget.CardView
-                    android:layout_width="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <android.support.v7.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="@dimen/medium"
+                        android:layout_marginBottom="@dimen/medium"
+                        android:layout_marginRight="@dimen/medium"
+                        android:layout_marginLeft="@dimen/medium"
+                        android:elevation="10dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="@dimen/large"
+                            android:paddingRight="@dimen/large"
+                            android:paddingTop="@dimen/medium"
+                            android:paddingBottom="@dimen/medium"
+                            android:gravity="center"
+                            android:id="@+id/male"
+                            android:textColor="@color/black"
+                            android:background="@color/white"
+                            android:text="Male"/>
+                    </android.support.v7.widget.CardView>
+                    <android.support.v7.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="@dimen/medium"
+                        android:layout_marginBottom="@dimen/medium"
+                        android:layout_marginRight="@dimen/medium"
+                        android:layout_marginLeft="@dimen/medium"
+                        android:elevation="10dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:id="@+id/female"
+                            android:background="@color/white"
+                            android:padding="@dimen/medium"
+                            android:text="Female"/>
+                    </android.support.v7.widget.CardView>
+                </LinearLayout>
 
-                    android:layout_marginTop="@dimen/medium"
-                    android:layout_marginBottom="@dimen/medium"
-                    android:layout_marginRight="@dimen/medium"
-                    android:layout_marginLeft="@dimen/medium"
-                    android:elevation="10dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="@dimen/large"
-                    android:paddingRight="@dimen/large"
-                    android:paddingTop="@dimen/medium"
-                    android:paddingBottom="@dimen/medium"
-                    android:gravity="center"
-                    android:id="@+id/male"
-                    android:onClick="setMale()"
-                    android:textColor="@color/black"
-                    android:background="@color/white"
-                    android:text="Male"/>
-                </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/medium"
                     android:layout_marginBottom="@dimen/medium"
-                    android:layout_marginRight="@dimen/medium"
-                    android:layout_marginLeft="@dimen/medium"
-                    android:elevation="10dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:onClick="setFemale()"
-                    android:textColor="@color/black"
-                    android:id="@+id/female"
-                    android:background="@color/white"
-                    android:padding="@dimen/medium"
-                    android:text="Female"/>
-                </android.support.v7.widget.CardView>
-                <android.support.v7.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/medium"
-                    android:layout_marginBottom="@dimen/medium"
-                    android:layout_marginRight="@dimen/medium"
-                    android:layout_marginLeft="@dimen/medium"
                     android:elevation="10dp">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="@dimen/medium"
+                        android:paddingTop="@dimen/medium"
+                        android:paddingBottom="@dimen/medium"
+                        android:paddingRight="35dp"
+                        android:paddingLeft="36dp"
                         android:gravity="center"
                         android:id="@+id/no_preference"
-                        android:onClick="setMale()"
                         android:textColor="@color/black"
                         android:background="@color/white"
                         android:text="No Preference"/>

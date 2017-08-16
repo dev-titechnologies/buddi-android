@@ -339,7 +339,7 @@ public class HomeActivity extends AppCompatActivity
         super.onResume();
         CommonCall.LoadImage(getApplicationContext(),PreferencesUtils.getData(Constants.user_image,getApplicationContext(),""), userImageView,R.drawable.ic_no_image,R.drawable.ic_account);
 
-        if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
+       /* if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
 
                             if (PreferencesUtils.getData(Constants.token,getApplicationContext(),"").length()>0 &&
                         PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)&&
@@ -349,7 +349,7 @@ public class HomeActivity extends AppCompatActivity
 
             startService(new Intent(this, LocationService.class));
 
-        }
+        }*/
 
 
 

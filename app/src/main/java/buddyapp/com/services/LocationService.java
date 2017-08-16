@@ -229,6 +229,7 @@ public class LocationService extends Service implements
             // The final argument to {@code requestLocationUpdates()} is a LocationListener
             // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+//            mGoogleApiClient.disconnect();
         }
     }
 
