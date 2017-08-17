@@ -44,6 +44,8 @@ import buddyapp.com.activity.MapTrainee;
 import buddyapp.com.activity.Payments.PaymentType;
 import buddyapp.com.activity.WelcomeActivity;
 
+import static buddyapp.com.Settings.Constants.start_session;
+
 /**
  * Created by Ajay on 15/6/16.
  */
@@ -376,6 +378,62 @@ public static void hideLoader(){
                 }
             }
         });
+    }
+
+    public static  class timerUpdate extends AsyncTask<String,String,String> {
+
+
+        String type,bookid;
+        Activity activity;
+        public timerUpdate(Activity act,String type,String bookid){
+            this.type= type;
+            this.bookid= bookid;
+
+            this.activity= act;
+        }
+
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+if (activity!=null)
+            showLoader(activity);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            String res="";
+            try {
+            JSONObject req= new JSONObject();
+
+                req.put("book_id",bookid);
+
+
+            req.put("action",type);
+
+             res = NetworkCalls.POST(Urls.getbookingActionURL(),req.toString());
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            return res;
+
+        }
+
+        @Override
+        protected void onPostExecute(String res) {
+            super.onPostExecute(res);
+            hideLoader();
+
+            PreferencesUtils.saveData(start_session,"false",Controller.getAppContext());
+
+
+        }
     }
 
 }

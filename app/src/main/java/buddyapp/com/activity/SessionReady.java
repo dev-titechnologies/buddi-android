@@ -68,6 +68,8 @@ import buddyapp.com.utils.RippleMap.MapRipple;
 import buddyapp.com.utils.Urls;
 
 import static buddyapp.com.R.id.map;
+import static buddyapp.com.Settings.Constants.trainee_Data;
+import static buddyapp.com.Settings.Constants.trainer_Data;
 
 public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWindowAdapter, OnMapReadyCallback, LocationSource.OnLocationChangedListener {
     Marker pos_Marker;
@@ -79,12 +81,13 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     Double latitude, longitude, userlat,userlng;
     LocationManager mLocationManager;
     Button select;
-    String sgender,lat, lng, category,duration;
+    String sgender,lat="0", lng="0", traine_id,trainer_id,duration,book_id;
+    int training_time;
     String  disatance,name;
     private HashMap<Marker, String> hashMarker = new HashMap<Marker, String>();
     private FusedLocationProviderClient mFusedLocationClient;
 
-    LinearLayout start,stop,profile,message;
+    LinearLayout start,cancel,profile,message;
     ImageView startactionIcon,stopactionIcon,profileactionIcon,messageactionIcon;
     TextView startactionTitle,stopactionTitle,profileactionTitle,messageactionTitle,sessionTimmer;
 
@@ -112,13 +115,35 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 */
 
         try {
-            JSONObject data = new JSONObject(PreferencesUtils.getData("trainerData",getApplicationContext(),""));
-            JSONObject trainerDetail = data.getJSONObject("trainer_details");
-            lat = trainerDetail.getString("trainer_latitude");
-            lng = trainerDetail.getString("trainer_longitude");
-            name = trainerDetail.getString("trainer_first_name") + " "+trainerDetail.getString("trainer_last_name");
+
+
+
+            if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")) {
+
+                JSONObject data = new JSONObject(PreferencesUtils.getData(trainee_Data, getApplicationContext(), ""));
+//                JSONObject trainerDetail = data.getJSONObject("trainer_details");
+                lat = data.getString("trainee_latitude");
+                lng = data.getString("trainee_longitude");
+                book_id= data.getString("book_id");
+                traine_id= data.getString("trainee_id");
+                training_time= data.getInt("training_time");
+                name = data.getString("trainee_first_name") + " " + data.getString("trainee_last_name");
+            }else{
+
+                JSONObject data = new JSONObject(PreferencesUtils.getData(trainer_Data, getApplicationContext(), ""));
+                JSONObject trainerDetail = data.getJSONObject("trainer_details");
+                lat = trainerDetail.getString("trainer_latitude");
+                lng = trainerDetail.getString("trainer_longitude");
+                training_time= data.getInt("training_time");
+                book_id= data.getString("book_id");
+                name = trainerDetail.getString("trainer_first_name") + " " + trainerDetail.getString("trainer_last_name");
+
+            }
+
             Controller.mSocket.connect();
             CommonCall.socketGetTrainerLocation();
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -148,33 +173,40 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
     void intstartStop() {
 
+        start = (LinearLayout) findViewById(R.id.start);
+        cancel = (LinearLayout) findViewById(R.id.cancel);
+        profile = (LinearLayout) findViewById(R.id.profile);
+        message = (LinearLayout) findViewById(R.id.message);
 
 
-        start =(LinearLayout)findViewById(R.id.start);
-        stop =(LinearLayout)findViewById(R.id.stop);
-        profile =(LinearLayout)findViewById(R.id.profile);
-        message =(LinearLayout)findViewById(R.id.message);
+        startactionIcon = (ImageView) findViewById(R.id.startactionIcon);
+        stopactionIcon = (ImageView) findViewById(R.id.stopactionIcon);
+        profileactionIcon = (ImageView) findViewById(R.id.profileactionIcon);
+        messageactionIcon = (ImageView) findViewById(R.id.messageactionIcon);
 
+        startactionTitle = (TextView) findViewById(R.id.startactionTitle);
+        stopactionTitle = (TextView) findViewById(R.id.stopactionTitle);
+        profileactionTitle = (TextView) findViewById(R.id.profileactionTitle);
+        messageactionTitle = (TextView) findViewById(R.id.messagectionTitle);
 
-        startactionIcon =(ImageView)findViewById(R.id.startactionIcon);
-        stopactionIcon =(ImageView)findViewById(R.id.stopactionIcon);
-        profileactionIcon =(ImageView)findViewById(R.id.profileactionIcon);
-        messageactionIcon =(ImageView)findViewById(R.id.messageactionIcon);
+        sessionTimmer = (TextView) findViewById(R.id.sessionTimmer);
+if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"false").equals("true")){
 
-        startactionTitle =(TextView)findViewById(R.id.startactionTitle);
-        stopactionTitle =(TextView)findViewById(R.id.stopactionTitle);
-        profileactionTitle =(TextView)findViewById(R.id.profileactionTitle);
-        messageactionTitle =(TextView)findViewById(R.id.messagectionTitle);
-
-        sessionTimmer =(TextView)findViewById(R.id.sessionTimmer);
-
+    startactionTitle.setText("Stop");
+}else{
+    startactionTitle.setText("Start");
+}
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (startactionTitle.getText().toString().equals("Start")) {
-                    startactionTitle.setText("Cancel");
+                    startactionTitle.setText("Stop");
+
+
+
+
 
 
                     Calendar calendar = Calendar.getInstance();
@@ -184,39 +216,52 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
                     PreferencesUtils.saveData("data", date_time, getApplicationContext());
-                    PreferencesUtils.saveData("hours", "1", getApplicationContext());
+                    PreferencesUtils.saveData("hours", training_time+"", getApplicationContext());
 
 
-                 startService(new Intent(getApplicationContext(), Timer_Service.class));
+                    startService(new Intent(getApplicationContext(), Timer_Service.class));
+
+
                     CommonCall.PrintLog("Service ", "Started service");
-
+PreferencesUtils.saveData(Constants.timerstarted,"true",getApplicationContext());
 //                     timerService = new BroadcastService();
 
-                    new StartSession().execute();
+                 new   StartSession().execute();
+                    profile.setEnabled(false);
+                    message.setEnabled(false);
+                } else{
 
-                } else
-                    startactionTitle.setText("Cancel");
+                    Timer_Service.stopFlag=true;
+                    PreferencesUtils.saveData(Constants.timerstarted,"false",getApplicationContext());
 
 
+                    startactionTitle.setText("Start");
 
 
+                    PreferencesUtils.saveData("data", "", getApplicationContext());
+                    PreferencesUtils.saveData("hours", "", getApplicationContext());
+
+                    stopService(new Intent(getApplicationContext(), Timer_Service.class));
+
+
+                    NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
+                    nManager.cancelAll();
+
+                    new CommonCall.timerUpdate(SessionReady.this,"cancel",book_id).execute();
+                }
 
 
             }
         });
 
-        stop.setOnClickListener(new View.OnClickListener() {
+        cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                PreferencesUtils.saveData("data", "", getApplicationContext());
-                PreferencesUtils.saveData("hours", "", getApplicationContext());
-
-                stopService(new Intent(getApplicationContext(), Timer_Service.class));
 
 
-                NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
-                nManager.cancelAll();
+
+
             }
         });
     }
@@ -677,8 +722,8 @@ CommonCall.hideLoader();
         @Override
         protected String doInBackground(String... strings) {
             try {
-//                reqData.put("Book_id", book_id);
-//                reqData.put("trainee_id)", trainee_id);
+                reqData.put("Book_id", book_id);
+                reqData.put("trainee_id",PreferencesUtils.getData(Constants.trainee_id, getApplicationContext(), ""));
                 reqData.put("trainer_id", PreferencesUtils.getData(Constants.trainer_id, getApplicationContext(), ""));
                 reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
                 response = NetworkCalls.POST(Urls.getStartSessionURL(), reqData.toString());

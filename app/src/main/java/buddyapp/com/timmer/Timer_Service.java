@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -23,8 +24,10 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import buddyapp.com.R;
+import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.HomeActivity;
+import buddyapp.com.utils.CommonCall;
 
 public class Timer_Service extends Service {
 
@@ -36,7 +39,7 @@ public class Timer_Service extends Service {
     String strDate;
     Date date_current, date_diff;
 
-
+public static boolean stopFlag =false;
 
     private Timer mTimer = null;
     public static final long NOTIFY_INTERVAL = 1000;
@@ -83,6 +86,15 @@ public class Timer_Service extends Service {
             });
         }
 
+    }
+    String bookid;
+    @Override
+    public int onStartCommand(Intent intent,  int flags, int startId) {
+
+
+         bookid = intent.getStringExtra("bookid");
+
+        return super.onStartCommand(intent, flags, startId);
     }
 
     public String twoDatesBetweenTime() {
@@ -199,7 +211,12 @@ public class Timer_Service extends Service {
 
 //        stopForeground(true);
         createStopSessionNoti("Session Completed");
+        PreferencesUtils.saveData(Constants.timerstarted,"false",getApplicationContext());
+        PreferencesUtils.saveData(Constants.trainee_Data,"",getApplicationContext());
+        PreferencesUtils.saveData(Constants.trainer_Data,"",getApplicationContext());
 
+if (!stopFlag)
+        new CommonCall.timerUpdate(null,"complete",bookid).execute();
 //        mNotificationManager.cancel(100);
 //        mNotificationManager = null;
 //        createStopSessionNoti(text);

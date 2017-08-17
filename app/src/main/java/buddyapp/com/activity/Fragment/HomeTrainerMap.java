@@ -198,8 +198,14 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
 //                     timerService = new BroadcastService();
 
 
-                } else
-                    startactionTitle.setText("Cancel");
+                    profile.setEnabled(false);
+                    message.setEnabled(false);
+                } else{
+
+
+                    stop.setEnabled(false);
+
+                    startactionTitle.setText("Cancel");}
 
 
             }
@@ -208,6 +214,10 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+                start.setEnabled(false);
+
 
                 PreferencesUtils.saveData("data", "", getActivity());
                 PreferencesUtils.saveData("hours", "", getActivity());

@@ -45,6 +45,8 @@ import buddyapp.com.utils.RippleMap.MapRipple;
 import buddyapp.com.utils.Urls;
 
 import static buddyapp.com.R.id.map;
+import static buddyapp.com.Settings.Constants.start_session;
+import static buddyapp.com.Settings.Constants.trainer_Data;
 
 public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindowAdapter, OnMapReadyCallback, LocationSource.OnLocationChangedListener {
     GoogleMap googleMap;
@@ -298,7 +300,10 @@ if (PreferencesUtils.getData(Constants.clientToken,getApplicationContext(),"").l
                 if (obj.getInt("status") == 1) {
                     JSONObject jsonObject = obj.getJSONObject("data");
                     PreferencesUtils.saveData(Constants.trainer_id,jsonObject.getString("trainer_id"),getApplicationContext());
-                    PreferencesUtils.saveData("trainerData",jsonObject.toString(),getApplicationContext());
+                    PreferencesUtils.saveData(trainer_Data,jsonObject.toString(),getApplicationContext());
+
+                    PreferencesUtils.saveData(start_session,"true",getApplicationContext());
+
                     Intent intent = new Intent(getApplicationContext(),SessionReady.class);
                     intent.putExtra("TrainerData",jsonObject.toString());
                     startActivity(intent);

@@ -29,7 +29,18 @@ public class Constants {
     public static String trainer_type = "trainer_type";
     public static String trainer_status = "trainer_status";
     public static String trainer_id = "trainer_id";
+
+    public static String trainee_id = "trainee_id";
+
+    public static String timerstarted = "timerstarted";
+
+
     public static String approved = "category_approved";
+    public static String trainer_Data = "trainer_Data";
+    public static String trainee_Data = "trainee_Data";
+
+    public static String start_session = "start_session";
+
     public static String pending = "category_pending";
 
     public static boolean stop=false;//for timmer

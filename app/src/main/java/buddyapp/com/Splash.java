@@ -18,6 +18,7 @@ import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.ChooseCategory;
 import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.IntroScreen;
+import buddyapp.com.activity.SessionReady;
 import buddyapp.com.activity.WelcomeActivity;
 import buddyapp.com.activity.questions.DoneActivity;
 import buddyapp.com.utils.CommonCall;
@@ -50,8 +51,18 @@ public class Splash extends AppCompatActivity {
 
                 }
             }else {
-                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+
+
+                if (PreferencesUtils.getData(Constants.start_session,getApplicationContext(),"false").equals("true")){
+
+                    startActivity(new Intent(getApplicationContext(), SessionReady.class));
+                    finish();
+                }
+                else{
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                 finish();
+
+                }
 
             }
         }catch (JSONException e){
@@ -59,8 +70,25 @@ public class Splash extends AppCompatActivity {
         }
 
                         }else{
-                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                        finish();
+
+/*
+*
+*
+* trainee =>
+*
+* */
+                        if (PreferencesUtils.getData(Constants.start_session,getApplicationContext(),"false").equals("true")){
+
+                            startActivity(new Intent(getApplicationContext(), SessionReady.class));
+                            finish();
+                        }
+                        else{
+                            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                            finish();
+
+                        }
+
+
 
                     }
 
