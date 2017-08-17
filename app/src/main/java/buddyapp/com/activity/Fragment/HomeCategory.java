@@ -68,7 +68,11 @@ public class HomeCategory extends Fragment {
         instantBooking = (LinearLayout) view.findViewById(R.id.instant_booking);
         errorImage = (ImageView) view.findViewById(R.id.errorImage);
 
-        new getCategoryList().execute();
+        if(db.getAllCAT().length()>0) {
+            loadData(db.getAllCAT());
+        }else {
+            new getCategoryList().execute();
+        }
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override

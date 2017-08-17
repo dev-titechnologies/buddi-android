@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,9 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,16 +30,30 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import buddyapp.com.R;
-import buddyapp.com.Settings.PreferencesUtils;
-import buddyapp.com.services.GPSTracker;
-import buddyapp.com.timmer.Timer_Service;
-import buddyapp.com.utils.CommonCall;
-import buddyapp.com.utils.RippleMap.MapRipple;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+
+import buddyapp.com.R;
+import buddyapp.com.Settings.Constants;
+import buddyapp.com.Settings.PreferencesUtils;
+
+import buddyapp.com.services.GPSTracker;
+
+import buddyapp.com.timmer.Timer_Service;
+
+import buddyapp.com.services.LocationService;
+import buddyapp.com.utils.CommonCall;
+import buddyapp.com.utils.NetworkCalls;
+
+import buddyapp.com.utils.RippleMap.MapRipple;
+import buddyapp.com.utils.Urls;
+
+import static buddyapp.com.Controller.mSocket;
 import static buddyapp.com.R.id.map;
 
 
@@ -47,15 +64,17 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
     Marker pos_Marker;
     GoogleMap googleMap;
     GPSTracker gps;
+
     LatLng origin;
     LatLng dest;
+
+
+
     private LatLng camera, usercamera;
     Double latitude, longitude, userlat, userlng;
-    LocationManager mLocationManager;
-    Button select;
-    String sgender, lat, lng, category, duration;
-    String disatance, name;
     boolean initalLocation = true;
+    ToggleButton toggle;
+    SupportMapFragment mapFragment;
 
     public HomeTrainerMap() {
         // Required empty public constructor
@@ -73,21 +92,43 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_trainer_map, container, false);
-        ToggleButton toggle = (ToggleButton) view.findViewById(R.id.togglebutton);
+        toggle = (ToggleButton) view.findViewById(R.id.togglebutton);
+        if (PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {
+            toggle.setChecked(true);
+        }
+
+//  checking online or offline
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    // The toggle is enabled
+                    mapFragment.getView().setClickable(false);
+                    if (PreferencesUtils.getData(Constants.token, getActivity(), "").length() > 0 &&
+                            PreferencesUtils.getData(Constants.user_type, getActivity(), "").equals(Constants.trainer) &&
+                            PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {
+                        mSocket.connect();
+                        getActivity().startService(new Intent(getActivity(), LocationService.class));
+                        new updateStatus().execute();
+
+                    }
                 } else {
+                    PreferencesUtils.saveData(Constants.availStatus, "offline", getActivity());
+                    mSocket.disconnect();
+                    getActivity().stopService(new Intent(getActivity(), LocationService.class));
+                    Toast.makeText(getActivity(), "You are now Offline", Toast.LENGTH_SHORT).show();
                     // The toggle is disabled
                 }
             }
         });
 
+/****
+ * Trainer location *************************************
+ */
+
         if (PreferencesUtils.getData("Lat", getActivity(), "").length() > 0) {
             userlat = Double.valueOf(PreferencesUtils.getData("Lat", getActivity(), ""));
             userlng = Double.valueOf(PreferencesUtils.getData("Lng", getActivity(), ""));
             usercamera = new LatLng(userlat, userlng);
+
 //            setRippleView();
         } else {
             // check if GPS enabled
@@ -101,7 +142,8 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
 
             }
         }
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
+
+        mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
 
@@ -109,6 +151,7 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
         intstartStop(view);
         return view;
     }
+
 
     void intstartStop(View view) {
 
@@ -138,9 +181,11 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
                 if (startactionTitle.getText().toString().equals("Start")) {
                     startactionTitle.setText("Cancel");
 
+
                     Calendar calendar = Calendar.getInstance();
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
                     String date_time = simpleDateFormat.format(calendar.getTime());
+
 
 
                     PreferencesUtils.saveData("data", date_time, getActivity());
@@ -174,8 +219,8 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
                 nManager.cancelAll();
             }
         });
-
     }
+
 
     private BroadcastReceiver br = new BroadcastReceiver() {
         @Override
@@ -271,5 +316,153 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
         getActivity().unregisterReceiver(br);
     }
 
+    /*********
+     * update trainer status -------
+     *********/
+    class updateStatus extends AsyncTask<String, String, String> {
+        JSONObject reqData = new JSONObject();
+        String response;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            CommonCall.showLoader(getActivity());
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.user_id, getActivity(), ""));
+                reqData.put(Constants.user_type, PreferencesUtils.getData(Constants.user_type, getActivity(), ""));
+                reqData.put(Constants.availStatus, PreferencesUtils.getData(Constants.availStatus, getActivity(), ""));
+                response = NetworkCalls.POST(Urls.getStatusURL(), reqData.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                CommonCall.hideLoader();
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt("status") == 1) {
+                    JSONObject data = obj.getJSONObject("data");
+
+                    Toast.makeText(getActivity(), "You are now Online", Toast.LENGTH_SHORT).show();
+                } else if (obj.getInt("status") == 2) {
+                    Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                }else if (obj.getInt("status") == 3) {
+                    Toast.makeText(getActivity(), "Session out", Toast.LENGTH_SHORT).show();
+                    CommonCall.sessionout(getActivity());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /*********
+     * Start Session
+     *********/
+    class StartSession extends AsyncTask<String, String, String> {
+        JSONObject reqData = new JSONObject();
+        String response;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            CommonCall.showLoader(getActivity());
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+//                reqData.put("Book_id", book_id);
+//                reqData.put("trainee_id)", trainee_id);
+                reqData.put("trainer_id", PreferencesUtils.getData(Constants.trainer_id, getActivity(), ""));
+                reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getActivity(), ""));
+                response = NetworkCalls.POST(Urls.getStartSessionURL(), reqData.toString());
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                CommonCall.hideLoader();
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt("status") == 1) {
+                    JSONObject data = obj.getJSONObject("data");
+                    Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                } else if (obj.getInt("status") == 2) {
+                    Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                }else if (obj.getInt("status") == 3) {
+                    Toast.makeText(getActivity(), "Session out", Toast.LENGTH_SHORT).show();
+                    CommonCall.sessionout(getActivity());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    /*********
+     * --> Extend booking
+     *********/
+    class ExtendSession extends AsyncTask<String, String, String> {
+        JSONObject reqData = new JSONObject();
+        String response;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            CommonCall.showLoader(getActivity());
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+//                reqData.put("book_id)", trainee_id);
+//                reqData.put("extended_start_time", extended_start_time);
+//                reqData.put("extended_end_time",extended_end_time);
+                response = NetworkCalls.POST(Urls.getExtendSessionURL(), reqData.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                CommonCall.hideLoader();
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt("status") == 1) {
+                    JSONObject data = obj.getJSONObject("data");
+                    Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                } else if (obj.getInt("status") == 2) {
+                    Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                } else if (obj.getInt("status") == 3) {
+                    Toast.makeText(getActivity(), "Session out", Toast.LENGTH_SHORT).show();
+                    CommonCall.sessionout(getActivity());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

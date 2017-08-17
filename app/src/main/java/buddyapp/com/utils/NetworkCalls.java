@@ -312,7 +312,7 @@ public class NetworkCalls {
     public static String POST(String url, String params) {
         CommonCall.PrintLog("REQ url", url);
         CommonCall.PrintLog("REQ PARAMS", params);
-
+        CommonCall.PrintLog("deviceID POST",PreferencesUtils.getData(Constants.device_id, Controller.getAppContext(), "0"));
         CommonCall.PrintLog("REQ Token", PreferencesUtils.getData(Constants.token, Controller.getAppContext(), "0"));
         try {
 

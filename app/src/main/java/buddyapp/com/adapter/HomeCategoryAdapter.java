@@ -31,6 +31,7 @@ public class HomeCategoryAdapter extends BaseAdapter {
     public HomeCategoryAdapter(Context context, JSONArray category) {
         this.context = context;
         this.cat = category;
+        HomeCategory.cat_selectedID.clear();
     }
 
 

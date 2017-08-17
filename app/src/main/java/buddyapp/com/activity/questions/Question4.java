@@ -163,7 +163,9 @@ public class Question4 extends Activity {
 
         if (subCats.size()==0){
             outdoorFlag = true;// no sub categroy for outdoor
-
+            sub_list.setVisibility(View.GONE);
+        }else{
+            sub_list.setVisibility(View.VISIBLE);
         }
 
 
@@ -212,6 +214,7 @@ public class Question4 extends Activity {
 
                         question.put("pounds", pounds);
                         questionData.put("cat_ids", ChooseCategory.cat_selectedID);
+
                         questionData.put("sub_cat", sub_cat_selectedID.toString());
                         questionData.put("user_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
                         questionData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
@@ -268,9 +271,14 @@ public class Question4 extends Activity {
                     Toast.makeText(Question4.this, "  Success.", Toast.LENGTH_SHORT).show();
 
 
-
+                    if(!outdoorFlag)
                     startActivity(new Intent(getApplicationContext(), BeforeVideoActivity.class));
+                else{
 
+                        PreferencesUtils.saveData(Constants.pending, ChooseCategory.cat_selectedID.toString(),getApplicationContext());
+
+                        startActivity(new Intent(getApplicationContext(), DoneActivity.class));
+                    }
 
 
 

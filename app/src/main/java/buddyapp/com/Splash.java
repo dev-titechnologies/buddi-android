@@ -20,6 +20,7 @@ import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.IntroScreen;
 import buddyapp.com.activity.WelcomeActivity;
 import buddyapp.com.activity.questions.DoneActivity;
+import buddyapp.com.utils.CommonCall;
 
 public class Splash extends AppCompatActivity {
 

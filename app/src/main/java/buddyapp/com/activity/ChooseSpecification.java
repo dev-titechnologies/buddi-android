@@ -157,7 +157,11 @@ public class ChooseSpecification extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(sessionDuration>0 && sgender.length()>1) {
-                    new ChooseSpecification.SearchTrainer().execute();
+                    if (latitude > 0.0){
+                        new SearchTrainer().execute();
+                        }else{
+                        Toast.makeText(getApplicationContext(), "Please check your GPS connection", Toast.LENGTH_SHORT).show();
+                    }
                 }else{
                     Toast.makeText(getApplicationContext(), "Please select you choice", Toast.LENGTH_SHORT).show();
                 }
