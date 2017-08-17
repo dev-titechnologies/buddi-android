@@ -159,11 +159,11 @@
         </service>
         <!-- ./Firebase Notifications -->
 
-        <service
-            android:name=".timmer.BroadcastService"
-            android:process="buddyapp.com.timmer.BroadcastService" />
 
         <activity android:name=".activity.TraineeProfileView"></activity>
+
+        <service android:name=".timmer.Timer_Service"></service>
+
     </application>
 
 </manifest>

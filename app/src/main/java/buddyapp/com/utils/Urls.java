@@ -52,6 +52,14 @@ public class Urls {
     public static String checkout= "/payment/checkout";
 
 
+    public static String bookingAction= "/booking/bookingAction";
+
+
+    public static String getbookingActionURL(){
+
+        return BASEURL+bookingAction;
+    }
+
     public static String getcheckoutURL(){
 
         return BASEURL+checkout;

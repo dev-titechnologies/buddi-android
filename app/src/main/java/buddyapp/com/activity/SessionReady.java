@@ -1,6 +1,9 @@
 package buddyapp.com.activity;
 
+
 import android.animation.ObjectAnimator;
+
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -51,7 +54,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -59,15 +64,16 @@ import buddyapp.com.Controller;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
-import buddyapp.com.adapter.StartStopAdapter;
 import buddyapp.com.services.GPSTracker;
-import buddyapp.com.timmer.BroadcastService;
+import buddyapp.com.timmer.Timer_Service;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.RippleMap.MapRipple;
 import buddyapp.com.utils.Urls;
 
 import static buddyapp.com.R.id.map;
+import static buddyapp.com.Settings.Constants.trainee_Data;
+import static buddyapp.com.Settings.Constants.trainer_Data;
 
 public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWindowAdapter, OnMapReadyCallback, LocationSource.OnLocationChangedListener {
     Marker pos_Marker;
@@ -79,12 +85,14 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     Double latitude, longitude, userlat,userlng;
     LocationManager mLocationManager;
     Button select;
-    String sgender,lat, lng, category,duration;
+    String sgender,lat="0", lng="0", traine_id,trainer_id,duration,book_id;
+    int training_time;
     String  disatance,name;
     private HashMap<Marker, String> hashMarker = new HashMap<Marker, String>();
     private FusedLocationProviderClient mFusedLocationClient;
-    HorizontalScrollView horizontalScrollView;
-    LinearLayout start,stop,profile,message;
+
+
+    LinearLayout start,cancel,profile,message;
     ImageView startactionIcon,stopactionIcon,profileactionIcon,messageactionIcon;
     TextView startactionTitle,stopactionTitle,profileactionTitle,messageactionTitle,sessionTimmer;
 
@@ -112,13 +120,35 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 */
 
         try {
-            JSONObject data = new JSONObject(PreferencesUtils.getData("trainerData",getApplicationContext(),""));
-            JSONObject trainerDetail = data.getJSONObject("trainer_details");
-            lat = trainerDetail.getString("trainer_latitude");
-            lng = trainerDetail.getString("trainer_longitude");
-            name = trainerDetail.getString("trainer_first_name") + " "+trainerDetail.getString("trainer_last_name");
+
+
+
+            if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")) {
+
+                JSONObject data = new JSONObject(PreferencesUtils.getData(trainee_Data, getApplicationContext(), ""));
+//                JSONObject trainerDetail = data.getJSONObject("trainer_details");
+                lat = data.getString("trainee_latitude");
+                lng = data.getString("trainee_longitude");
+                book_id= data.getString("book_id");
+                traine_id= data.getString("trainee_id");
+                training_time= data.getInt("training_time");
+                name = data.getString("trainee_first_name") + " " + data.getString("trainee_last_name");
+            }else{
+
+                JSONObject data = new JSONObject(PreferencesUtils.getData(trainer_Data, getApplicationContext(), ""));
+                JSONObject trainerDetail = data.getJSONObject("trainer_details");
+                lat = trainerDetail.getString("trainer_latitude");
+                lng = trainerDetail.getString("trainer_longitude");
+                training_time= data.getInt("training_time");
+                book_id= data.getString("book_id");
+                name = trainerDetail.getString("trainer_first_name") + " " + trainerDetail.getString("trainer_last_name");
+
+            }
+
             Controller.mSocket.connect();
             CommonCall.socketGetTrainerLocation();
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -145,15 +175,15 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         intstartStop();
         LoadmapTask();
     }
-
+    HorizontalScrollView     horizontalScrollView;
     void intstartStop() {
 
+        start = (LinearLayout) findViewById(R.id.start);
+        cancel = (LinearLayout) findViewById(R.id.cancel);
+        profile = (LinearLayout) findViewById(R.id.profile);
+        message = (LinearLayout) findViewById(R.id.message);
 
         horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollView);
-        start =(LinearLayout)findViewById(R.id.start);
-        stop =(LinearLayout)findViewById(R.id.stop);
-        profile =(LinearLayout)findViewById(R.id.profile);
-        message =(LinearLayout)findViewById(R.id.message);
 
 
         startactionIcon =(ImageView)findViewById(R.id.startactionIcon);
@@ -161,35 +191,86 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         profileactionIcon =(ImageView)findViewById(R.id.profileactionIcon);
         messageactionIcon =(ImageView)findViewById(R.id.messageactionIcon);
 
-        startactionTitle =(TextView)findViewById(R.id.startactionTitle);
-        stopactionTitle =(TextView)findViewById(R.id.stopactionTitle);
-        profileactionTitle =(TextView)findViewById(R.id.profileactionTitle);
-        messageactionTitle =(TextView)findViewById(R.id.messagectionTitle);
+
+        startactionTitle = (TextView) findViewById(R.id.startactionTitle);
+        stopactionTitle = (TextView) findViewById(R.id.stopactionTitle);
+        profileactionTitle = (TextView) findViewById(R.id.profileactionTitle);
+        messageactionTitle = (TextView) findViewById(R.id.messagectionTitle);
+
 
         sessionTimmer =(TextView)findViewById(R.id.sessionTimmer);
         ObjectAnimator animator= ObjectAnimator.ofInt(horizontalScrollView, "scrollX",150 );
         animator.setDuration(900);
         animator.start();
 
+        sessionTimmer = (TextView) findViewById(R.id.sessionTimmer);
+if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"false").equals("true")){
+
+    startactionTitle.setText("Stop");
+}else{
+    startactionTitle.setText("Start");
+}
+
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (startactionTitle.getText().equals("Start")) {
-                    startactionTitle.setText("Cancel");
+                if (startactionTitle.getText().toString().equals("Start")) {
+                    startactionTitle.setText("Stop");
 
-                    new StartSession().execute();
-                    startService(new Intent(getApplicationContext(), BroadcastService.class));
+
+
+
+
+
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+                    String date_time = simpleDateFormat.format(calendar.getTime());
+
+
+
+                    PreferencesUtils.saveData("data", date_time, getApplicationContext());
+                    PreferencesUtils.saveData("hours", training_time+"", getApplicationContext());
+
+
+                    startService(new Intent(getApplicationContext(), Timer_Service.class));
+
+
                     CommonCall.PrintLog("Service ", "Started service");
+PreferencesUtils.saveData(Constants.timerstarted,"true",getApplicationContext());
+//                     timerService = new BroadcastService();
+
+                 new   StartSession().execute();
+                    profile.setEnabled(false);
+                    message.setEnabled(false);
+                } else{
+
+                    Timer_Service.stopFlag=true;
+                    PreferencesUtils.saveData(Constants.timerstarted,"false",getApplicationContext());
 
 
+                    startactionTitle.setText("Start");
 
 
+                    PreferencesUtils.saveData("data", "", getApplicationContext());
+                    PreferencesUtils.saveData("hours", "", getApplicationContext());
+
+                    stopService(new Intent(getApplicationContext(), Timer_Service.class));
+
+
+                    NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
+                    nManager.cancelAll();
+
+                    new CommonCall.timerUpdate(SessionReady.this,"cancel",book_id).execute();
                 }
 
-                else
-                    startactionTitle.setText("Cancel");
 
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
 
 
@@ -207,7 +288,25 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         });
     }
 
+    private BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
 
+
+            updateGUI(intent); // or whatever method used to update your GUI fields
+        }
+    };
+
+    private void updateGUI(Intent intent) {
+        if (intent.getExtras() != null) {
+
+            String millisUntilFinished = intent.getStringExtra("time");
+            CommonCall.PrintLog("service", "Countdown seconds remaining: " + millisUntilFinished);
+
+            sessionTimmer.setText(millisUntilFinished);
+
+        }
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -238,7 +337,13 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
         );
+        registerReceiver(br, new IntentFilter(Timer_Service.str_receiver));
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+       unregisterReceiver(br);
     }
 
     public void animateMarker(final Marker marker, final LatLng toPosition,
@@ -639,8 +744,8 @@ CommonCall.hideLoader();
         @Override
         protected String doInBackground(String... strings) {
             try {
-//                reqData.put("Book_id", book_id);
-//                reqData.put("trainee_id)", trainee_id);
+                reqData.put("Book_id", book_id);
+                reqData.put("trainee_id",PreferencesUtils.getData(Constants.trainee_id, getApplicationContext(), ""));
                 reqData.put("trainer_id", PreferencesUtils.getData(Constants.trainer_id, getApplicationContext(), ""));
                 reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
                 response = NetworkCalls.POST(Urls.getStartSessionURL(), reqData.toString());

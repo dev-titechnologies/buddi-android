@@ -28,6 +28,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,12 +40,17 @@ import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 
+
 import buddyapp.com.activity.TraineeProfileView;
 import buddyapp.com.services.GPSTracker;
+
+import buddyapp.com.timmer.Timer_Service;
+
 import buddyapp.com.services.LocationService;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
-import buddyapp.com.timmer.BroadcastService;
+
+
 import buddyapp.com.utils.RippleMap.MapRipple;
 import buddyapp.com.utils.Urls;
 
@@ -56,21 +65,29 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
     Marker pos_Marker;
     GoogleMap googleMap;
     GPSTracker gps;
+
+    LatLng origin;
+    LatLng dest;
+
+
+
     private LatLng camera, usercamera;
     Double latitude, longitude, userlat, userlng;
     boolean initalLocation = true;
     ToggleButton toggle;
     SupportMapFragment mapFragment;
+
     public HomeTrainerMap() {
         // Required empty public constructor
 
     }
 
-LinearLayout start,stop,profile,message;
+    LinearLayout start, stop, profile, message;
 
-    ImageView startactionIcon,stopactionIcon,profileactionIcon,messageactionIcon;
+    ImageView startactionIcon, stopactionIcon, profileactionIcon, messageactionIcon;
 
-    TextView startactionTitle,stopactionTitle,profileactionTitle,messageactionTitle,sessionTimmer;
+    TextView startactionTitle, stopactionTitle, profileactionTitle, messageactionTitle, sessionTimmer;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -103,16 +120,18 @@ LinearLayout start,stop,profile,message;
                 }
             }
         });
+
 /****
  * Trainer location *************************************
  */
+
         if (PreferencesUtils.getData("Lat", getActivity(), "").length() > 0) {
             userlat = Double.valueOf(PreferencesUtils.getData("Lat", getActivity(), ""));
             userlng = Double.valueOf(PreferencesUtils.getData("Lng", getActivity(), ""));
             usercamera = new LatLng(userlat, userlng);
 
 //            setRippleView();
-        }else {
+        } else {
             // check if GPS enabled
             gps = new GPSTracker(getActivity());
             if (gps.canGetLocation()) {
@@ -134,27 +153,26 @@ LinearLayout start,stop,profile,message;
         return view;
     }
 
+
     void intstartStop(View view) {
 
+        start = (LinearLayout) view.findViewById(R.id.start);
+        stop = (LinearLayout) view.findViewById(R.id.stop);
+        profile = (LinearLayout) view.findViewById(R.id.profile);
+        message = (LinearLayout) view.findViewById(R.id.message);
 
 
-        start =(LinearLayout)view.findViewById(R.id.start);
-        stop =(LinearLayout)view.findViewById(R.id.stop);
-        profile =(LinearLayout)view.findViewById(R.id.profile);
-        message =(LinearLayout)view.findViewById(R.id.message);
+        startactionIcon = (ImageView) view.findViewById(R.id.startactionIcon);
+        stopactionIcon = (ImageView) view.findViewById(R.id.stopactionIcon);
+        profileactionIcon = (ImageView) view.findViewById(R.id.profileactionIcon);
+        messageactionIcon = (ImageView) view.findViewById(R.id.messageactionIcon);
 
+        startactionTitle = (TextView) view.findViewById(R.id.startactionTitle);
+        stopactionTitle = (TextView) view.findViewById(R.id.stopactionTitle);
+        profileactionTitle = (TextView) view.findViewById(R.id.profileactionTitle);
+        messageactionTitle = (TextView) view.findViewById(R.id.messagectionTitle);
 
-        startactionIcon =(ImageView)view.findViewById(R.id.startactionIcon);
-        stopactionIcon =(ImageView)view.findViewById(R.id.stopactionIcon);
-        profileactionIcon =(ImageView)view.findViewById(R.id.profileactionIcon);
-        messageactionIcon =(ImageView)view.findViewById(R.id.messageactionIcon);
-
-        startactionTitle =(TextView)view.findViewById(R.id.startactionTitle);
-        stopactionTitle =(TextView)view.findViewById(R.id.stopactionTitle);
-        profileactionTitle =(TextView)view.findViewById(R.id.profileactionTitle);
-        messageactionTitle =(TextView)view.findViewById(R.id.messagectionTitle);
-
-        sessionTimmer =(TextView)view.findViewById(R.id.sessionTimmer);
+        sessionTimmer = (TextView) view.findViewById(R.id.sessionTimmer);
 
 
         start.setOnClickListener(new View.OnClickListener() {
@@ -164,17 +182,31 @@ LinearLayout start,stop,profile,message;
                 if (startactionTitle.getText().toString().equals("Start")) {
                     startactionTitle.setText("Cancel");
 
-                    new StartSession().execute();
-                    getActivity().startService(new Intent(getActivity(), BroadcastService.class));
-                   CommonCall.PrintLog("Service ", "Started service");
+
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+                    String date_time = simpleDateFormat.format(calendar.getTime());
 
 
 
+                    PreferencesUtils.saveData("data", date_time, getActivity());
+                    PreferencesUtils.saveData("hours", "1", getActivity());
 
-                }
 
-                else
-                    startactionTitle.setText("Cancel");
+                    getActivity().startService(new Intent(getActivity(), Timer_Service.class));
+                    CommonCall.PrintLog("Service ", "Started service");
+
+//                     timerService = new BroadcastService();
+
+
+                    profile.setEnabled(false);
+                    message.setEnabled(false);
+                } else{
+
+
+                    stop.setEnabled(false);
+
+                    startactionTitle.setText("Cancel");}
 
 
             }
@@ -183,7 +215,16 @@ LinearLayout start,stop,profile,message;
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                new StopForegroundWrapper().stopForegroundAndRemoveNotificationIcon(sMe);
+
+
+                start.setEnabled(false);
+
+
+                PreferencesUtils.saveData("data", "", getActivity());
+                PreferencesUtils.saveData("hours", "", getActivity());
+
+                getActivity().stopService(new Intent(getActivity(), Timer_Service.class));
+
 
                 NotificationManager nManager = ((NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE));
                 nManager.cancelAll();
@@ -203,6 +244,8 @@ LinearLayout start,stop,profile,message;
     private BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+
+
             updateGUI(intent); // or whatever method used to update your GUI fields
         }
     };
@@ -266,18 +309,19 @@ LinearLayout start,stop,profile,message;
 //            gps.showSettingsAlert();
 
         }
-        getActivity().registerReceiver(br, new IntentFilter(BroadcastService.COUNTDOWN_BR));
+
         CommonCall.PrintLog("service", "Registered broacast receiver");
+        getActivity().registerReceiver(br, new IntentFilter(Timer_Service.str_receiver));
 
 
     }
 
 
-
     private void updateGUI(Intent intent) {
         if (intent.getExtras() != null) {
-            String millisUntilFinished = intent.getStringExtra("countdown");
-            CommonCall.PrintLog("service", "Countdown seconds remaining: " +  millisUntilFinished);
+
+            String millisUntilFinished = intent.getStringExtra("time");
+            CommonCall.PrintLog("service", "Countdown seconds remaining: " + millisUntilFinished);
 
             sessionTimmer.setText(millisUntilFinished);
 
@@ -314,6 +358,7 @@ LinearLayout start,stop,profile,message;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
 
             return response;
         }
@@ -438,4 +483,5 @@ LinearLayout start,stop,profile,message;
             }
         }
     }
+
 }

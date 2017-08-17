@@ -153,9 +153,31 @@ public class ChooseSpecification extends AppCompatActivity {
                 setNoPreference();
             }
         });
+
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+                if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    buildAlertMessageNoGps();
+                }
+
+                mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
+                mFusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(ChooseSpecification.this, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                // Got last known location. In some rare situations this can be null.
+                                if (location != null) {
+                                    longitude = location.getLongitude();
+                                    latitude = location.getLatitude();
+                                    PreferencesUtils.saveData(Constants.latitude, String.valueOf(latitude), getApplicationContext());
+                                    PreferencesUtils.saveData(Constants.longitude, String.valueOf(longitude),getApplicationContext());
+                                }
+                            }
+                        });
+
                 if(sessionDuration>0 && sgender.length()>1) {
                     if (latitude > 0.0){
                         new SearchTrainer().execute();
