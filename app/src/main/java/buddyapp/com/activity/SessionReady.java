@@ -132,7 +132,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 book_id= data.getString("book_id");
                 traine_id= data.getString("trainee_id");
                 training_time= data.getInt("training_time");
-                name = data.getString("trainee_first_name") + " " + data.getString("trainee_last_name");
+                name = data.getString("trainee_name") ;
             }else{
 
                 JSONObject data = new JSONObject(PreferencesUtils.getData(trainer_Data, getApplicationContext(), ""));
@@ -744,9 +744,9 @@ CommonCall.hideLoader();
         @Override
         protected String doInBackground(String... strings) {
             try {
-                reqData.put("Book_id", book_id);
+                reqData.put("book_id", book_id);
                 reqData.put("trainee_id",PreferencesUtils.getData(Constants.trainee_id, getApplicationContext(), ""));
-                reqData.put("trainer_id", PreferencesUtils.getData(Constants.trainer_id, getApplicationContext(), ""));
+                reqData.put("trainer_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
                 reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
                 response = NetworkCalls.POST(Urls.getStartSessionURL(), reqData.toString());
             }catch(JSONException e){
