@@ -27,6 +27,7 @@ import android.widget.ToggleButton;
 import com.github.nkzawa.socketio.client.Url;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -62,16 +63,11 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
     Marker pos_Marker;
     GoogleMap googleMap;
     GPSTracker gps;
-    LatLng origin;
-    LatLng dest;
     private LatLng camera, usercamera;
     Double latitude, longitude, userlat, userlng;
-    LocationManager mLocationManager;
-    Button select;
-    String sgender, lat, lng, category, duration;
-    String disatance, name;
     boolean initalLocation = true;
     ToggleButton toggle;
+    SupportMapFragment mapFragment;
     public HomeTrainerMap() {
         // Required empty public constructor
 
@@ -88,7 +84,6 @@ LinearLayout start,stop,profile,message;
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_trainer_map, container, false);
         toggle = (ToggleButton) view.findViewById(R.id.togglebutton);
-
         if (PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {
             toggle.setChecked(true);
         }
@@ -97,6 +92,7 @@ LinearLayout start,stop,profile,message;
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    mapFragment.getView().setClickable(false);
                     if (PreferencesUtils.getData(Constants.token, getActivity(), "").length() > 0 &&
                             PreferencesUtils.getData(Constants.user_type, getActivity(), "").equals(Constants.trainer) &&
                             PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {
@@ -136,7 +132,7 @@ LinearLayout start,stop,profile,message;
             }
         }
 
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
+        mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
 
@@ -172,7 +168,7 @@ LinearLayout start,stop,profile,message;
             @Override
             public void onClick(View view) {
 
-                if (startactionTitle.getText().equals("Start")) {
+                if (startactionTitle.getText().toString().equals("Start")) {
                     startactionTitle.setText("Cancel");
 
                     new StartSession().execute();

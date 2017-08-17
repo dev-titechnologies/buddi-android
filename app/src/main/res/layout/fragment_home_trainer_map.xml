@@ -38,7 +38,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="1"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="#b693e2ff"
         android:orientation="horizontal">
@@ -60,6 +59,7 @@
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:fillViewport="true"
+            android:layout_alignParentBottom="true"
             android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_width="match_parent"
