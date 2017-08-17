@@ -14,7 +14,8 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-<uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.GET_TASKS" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -23,7 +24,6 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
@@ -32,7 +32,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
 
         <service android:name=".services.LocationService" />
 
@@ -126,35 +125,33 @@
         <activity
             android:name="com.afollestad.materialcamera.CaptureActivity2"
             android:theme="@style/MaterialCamera.CaptureActivity" />
-
-        <activity android:name=".activity.Payments.PaymentType"
-            android:screenOrientation="portrait"
-        />
-
-        <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
+        <activity
+            android:name=".activity.Payments.PaymentType"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="${applicationId}.braintree" />
             </intent-filter>
         </activity>
-
-
         <activity android:name=".activity.ChooseSpecification" />
         <activity android:name=".activity.MapTrainee" />
         <activity android:name=".activity.TrainerProfileView" />
         <activity android:name=".activity.SessionReady" />
         <activity android:name=".activity.Session" />
-        <activity android:name=".activity.ChatScreen"></activity>
+        <activity android:name=".activity.ChatScreen" />
         <!-- Firebase Notifications -->
         <service android:name=".fcm.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name=".fcm.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -162,9 +159,11 @@
         </service>
         <!-- ./Firebase Notifications -->
 
-        <service android:name=".timmer.BroadcastService"
+        <service
+            android:name=".timmer.BroadcastService"
+            android:process="buddyapp.com.timmer.BroadcastService" />
 
-            android:process="buddyapp.com.timmer.BroadcastService"/>
+        <activity android:name=".activity.TraineeProfileView"></activity>
     </application>
 
 </manifest>

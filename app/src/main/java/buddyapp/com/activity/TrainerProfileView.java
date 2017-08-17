@@ -61,9 +61,9 @@ public class TrainerProfileView extends Activity {
             }
         });
 
-        Intent intent = getIntent();
+        /*Intent intent = getIntent();
         data = intent.getStringExtra("TrainerData");
-        if(data.length()>0)
+        if(data.length()>0)*/
         loadTrainerProfile();
 
         booknow.setOnClickListener(new View.OnClickListener() {

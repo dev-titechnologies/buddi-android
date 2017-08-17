@@ -7,15 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ServiceCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 
 import android.widget.ImageView;
@@ -24,10 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.github.nkzawa.socketio.client.Url;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -41,19 +36,17 @@ import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 
-import buddyapp.com.activity.SessionReady;
+import buddyapp.com.activity.TraineeProfileView;
 import buddyapp.com.services.GPSTracker;
 import buddyapp.com.services.LocationService;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.timmer.BroadcastService;
-import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.RippleMap.MapRipple;
 import buddyapp.com.utils.Urls;
 
 import static buddyapp.com.Controller.mSocket;
 import static buddyapp.com.R.id.map;
-import static buddyapp.com.timmer.BroadcastService.removeServiceNotification;
 
 
 /**
@@ -92,7 +85,7 @@ LinearLayout start,stop,profile,message;
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    mapFragment.getView().setClickable(false);
+
                     if (PreferencesUtils.getData(Constants.token, getActivity(), "").length() > 0 &&
                             PreferencesUtils.getData(Constants.user_type, getActivity(), "").equals(Constants.trainer) &&
                             PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {
@@ -135,7 +128,7 @@ LinearLayout start,stop,profile,message;
         mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
-
+        mapFragment.getView().setClickable(false);
         LoadmapTask();
         intstartStop(view);
         return view;
@@ -194,6 +187,14 @@ LinearLayout start,stop,profile,message;
 
                 NotificationManager nManager = ((NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE));
                 nManager.cancelAll();
+            }
+        });
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(),TraineeProfileView.class);
+                startActivity(i);
             }
         });
     }

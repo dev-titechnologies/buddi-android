@@ -1,5 +1,6 @@
 package buddyapp.com.activity;
 
+import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -81,7 +83,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     String  disatance,name;
     private HashMap<Marker, String> hashMarker = new HashMap<Marker, String>();
     private FusedLocationProviderClient mFusedLocationClient;
-
+    HorizontalScrollView horizontalScrollView;
     LinearLayout start,stop,profile,message;
     ImageView startactionIcon,stopactionIcon,profileactionIcon,messageactionIcon;
     TextView startactionTitle,stopactionTitle,profileactionTitle,messageactionTitle,sessionTimmer;
@@ -147,7 +149,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     void intstartStop() {
 
 
-
+        horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollView);
         start =(LinearLayout)findViewById(R.id.start);
         stop =(LinearLayout)findViewById(R.id.stop);
         profile =(LinearLayout)findViewById(R.id.profile);
@@ -165,7 +167,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         messageactionTitle =(TextView)findViewById(R.id.messagectionTitle);
 
         sessionTimmer =(TextView)findViewById(R.id.sessionTimmer);
-
+        ObjectAnimator animator= ObjectAnimator.ofInt(horizontalScrollView, "scrollX",150 );
+        animator.setDuration(900);
+        animator.start();
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,13 +197,21 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
             }
         });
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),TrainerProfileView.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        CommonCall.showLoader(SessionReady.this);
+//        CommonCall.showLoader(SessionReady.this);
     }
 
     @Override

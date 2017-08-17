@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
@@ -223,7 +224,7 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
 
             getSupportActionBar().setTitle("Buddi");
-
+            clearBackstack();
             if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)) {
                 Fragment fragment = new HomeTrainerMap();
                 getSupportFragmentManager().beginTransaction()
@@ -236,6 +237,7 @@ public class HomeActivity extends AppCompatActivity
             }
 
         } else if (id == R.id.nav_settings) {
+            clearBackstack();
             getSupportActionBar().setTitle("Settings");
             Fragment fragment = new BookingHistory();
             getSupportFragmentManager().beginTransaction()
@@ -243,38 +245,44 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_payment) {
             getSupportActionBar().setTitle("Payment");
-
+            clearBackstack();
             Intent payment = new Intent(getApplicationContext(), PaymentType.class);
             startActivity(payment);
         } else if (id == R.id.nav_trainer) {
+            clearBackstack();
             source_become_trainer=true;
             Intent intent = new Intent(getApplicationContext(),ChooseCategory.class);
             startActivity(intent);
         } else if (id == R.id.nav_invite) {
+            clearBackstack();
             getSupportActionBar().setTitle("Invite Friends");
             Fragment fragment = new BookingHistory();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         } else if (id == R.id.nav_history) {
+            clearBackstack();
             getSupportActionBar().setTitle("Training History");
             Fragment fragment = new BookingHistory();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         }else if (id == R.id.nav_help) {
+            clearBackstack();
             getSupportActionBar().setTitle("Help");
             Fragment fragment = new BookingHistory();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         }else if (id == R.id.nav_legal) {
+            clearBackstack();
             Fragment fragment = new Legal();
             getSupportActionBar().setTitle("Legal");
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         } else if (id == R.id.nav_logout) {
+            clearBackstack();
             final AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 builder = new AlertDialog.Builder(HomeActivity.this, android.R.style.Theme_Material_Dialog_Alert);
@@ -360,5 +368,29 @@ public class HomeActivity extends AppCompatActivity
 
         // clear the notification area when the app is opened
         NotificationUtils.clearNotifications(getApplicationContext());
+    }
+    public void clearBackstack() {
+
+        FragmentManager.BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(
+                0);
+        getSupportFragmentManager().popBackStack(entry.getId(),
+                FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getSupportFragmentManager().executePendingTransactions();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)) {
+            Fragment fragment = new HomeTrainerMap();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+
+        }else {
+            Fragment fragment = new HomeCategory();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+        }
     }
 }
