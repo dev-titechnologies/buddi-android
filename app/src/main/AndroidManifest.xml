@@ -162,9 +162,7 @@
         </service>
         <!-- ./Firebase Notifications -->
 
-        <service android:name=".timmer.BroadcastService"
-
-            android:process="buddyapp.com.timmer.BroadcastService"/>
+        <service android:name=".timmer.Timer_Service"></service>
     </application>
 
 </manifest>

@@ -32,6 +32,8 @@ public class Constants {
     public static String approved = "category_approved";
     public static String pending = "category_pending";
 
+    public static boolean stop=false;//for timmer
+
     public static String trainee = "trainee";
 
     public static String zipcode = "zipcode";

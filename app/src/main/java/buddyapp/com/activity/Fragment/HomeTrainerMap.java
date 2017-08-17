@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ServiceCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,15 +27,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import buddyapp.com.R;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.services.GPSTracker;
-import buddyapp.com.timmer.BroadcastService;
+import buddyapp.com.timmer.Timer_Service;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.RippleMap.MapRipple;
 
 import static buddyapp.com.R.id.map;
-import static buddyapp.com.timmer.BroadcastService.removeServiceNotification;
 
 
 /**
@@ -45,26 +46,28 @@ import static buddyapp.com.timmer.BroadcastService.removeServiceNotification;
 public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, GoogleMap.InfoWindowAdapter {
     Marker pos_Marker;
     GoogleMap googleMap;
-    GPSTracker gps ;
+    GPSTracker gps;
     LatLng origin;
     LatLng dest;
-    private LatLng camera,usercamera;
-    Double latitude, longitude, userlat,userlng;
+    private LatLng camera, usercamera;
+    Double latitude, longitude, userlat, userlng;
     LocationManager mLocationManager;
     Button select;
-    String sgender,lat, lng, category,duration;
-    String  disatance,name;
+    String sgender, lat, lng, category, duration;
+    String disatance, name;
     boolean initalLocation = true;
+
     public HomeTrainerMap() {
         // Required empty public constructor
 
     }
 
-LinearLayout start,stop,profile,message;
+    LinearLayout start, stop, profile, message;
 
-    ImageView startactionIcon,stopactionIcon,profileactionIcon,messageactionIcon;
+    ImageView startactionIcon, stopactionIcon, profileactionIcon, messageactionIcon;
 
-    TextView startactionTitle,stopactionTitle,profileactionTitle,messageactionTitle,sessionTimmer;
+    TextView startactionTitle, stopactionTitle, profileactionTitle, messageactionTitle, sessionTimmer;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,12 +84,12 @@ LinearLayout start,stop,profile,message;
             }
         });
 
-        if(PreferencesUtils.getData("Lat",getActivity(),"").length()>0){
-            userlat = Double.valueOf(PreferencesUtils.getData("Lat",getActivity(),""));
-            userlng = Double.valueOf(PreferencesUtils.getData("Lng",getActivity(),""));
+        if (PreferencesUtils.getData("Lat", getActivity(), "").length() > 0) {
+            userlat = Double.valueOf(PreferencesUtils.getData("Lat", getActivity(), ""));
+            userlng = Double.valueOf(PreferencesUtils.getData("Lng", getActivity(), ""));
             usercamera = new LatLng(userlat, userlng);
 //            setRippleView();
-        }else {
+        } else {
             // check if GPS enabled
             gps = new GPSTracker(getActivity());
             if (gps.canGetLocation()) {
@@ -106,25 +109,26 @@ LinearLayout start,stop,profile,message;
         intstartStop(view);
         return view;
     }
-    void intstartStop(View view){
 
-        start =(LinearLayout)view.findViewById(R.id.start);
-        stop =(LinearLayout)view.findViewById(R.id.stop);
-        profile =(LinearLayout)view.findViewById(R.id.profile);
-        message =(LinearLayout)view.findViewById(R.id.message);
+    void intstartStop(View view) {
+
+        start = (LinearLayout) view.findViewById(R.id.start);
+        stop = (LinearLayout) view.findViewById(R.id.stop);
+        profile = (LinearLayout) view.findViewById(R.id.profile);
+        message = (LinearLayout) view.findViewById(R.id.message);
 
 
-        startactionIcon =(ImageView)view.findViewById(R.id.startactionIcon);
-        stopactionIcon =(ImageView)view.findViewById(R.id.stopactionIcon);
-        profileactionIcon =(ImageView)view.findViewById(R.id.profileactionIcon);
-        messageactionIcon =(ImageView)view.findViewById(R.id.messageactionIcon);
+        startactionIcon = (ImageView) view.findViewById(R.id.startactionIcon);
+        stopactionIcon = (ImageView) view.findViewById(R.id.stopactionIcon);
+        profileactionIcon = (ImageView) view.findViewById(R.id.profileactionIcon);
+        messageactionIcon = (ImageView) view.findViewById(R.id.messageactionIcon);
 
-        startactionTitle =(TextView)view.findViewById(R.id.startactionTitle);
-        stopactionTitle =(TextView)view.findViewById(R.id.stopactionTitle);
-        profileactionTitle =(TextView)view.findViewById(R.id.profileactionTitle);
-        messageactionTitle =(TextView)view.findViewById(R.id.messagectionTitle);
+        startactionTitle = (TextView) view.findViewById(R.id.startactionTitle);
+        stopactionTitle = (TextView) view.findViewById(R.id.stopactionTitle);
+        profileactionTitle = (TextView) view.findViewById(R.id.profileactionTitle);
+        messageactionTitle = (TextView) view.findViewById(R.id.messagectionTitle);
 
-        sessionTimmer =(TextView)view.findViewById(R.id.sessionTimmer);
+        sessionTimmer = (TextView) view.findViewById(R.id.sessionTimmer);
 
 
         start.setOnClickListener(new View.OnClickListener() {
@@ -134,16 +138,22 @@ LinearLayout start,stop,profile,message;
                 if (startactionTitle.getText().toString().equals("Start")) {
                     startactionTitle.setText("Cancel");
 
-
-                    getActivity().startService(new Intent(getActivity(), BroadcastService.class));
-                   CommonCall.PrintLog("Service ", "Started service");
-
-
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+                    String date_time = simpleDateFormat.format(calendar.getTime());
 
 
-                }
+                    PreferencesUtils.saveData("data", date_time, getActivity());
+                    PreferencesUtils.saveData("hours", "1", getActivity());
 
-                else
+
+                    getActivity().startService(new Intent(getActivity(), Timer_Service.class));
+                    CommonCall.PrintLog("Service ", "Started service");
+
+//                     timerService = new BroadcastService();
+
+
+                } else
                     startactionTitle.setText("Cancel");
 
 
@@ -153,7 +163,12 @@ LinearLayout start,stop,profile,message;
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                new StopForegroundWrapper().stopForegroundAndRemoveNotificationIcon(sMe);
+
+                PreferencesUtils.saveData("data", "", getActivity());
+                PreferencesUtils.saveData("hours", "", getActivity());
+
+                getActivity().stopService(new Intent(getActivity(), Timer_Service.class));
+
 
                 NotificationManager nManager = ((NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE));
                 nManager.cancelAll();
@@ -165,13 +180,15 @@ LinearLayout start,stop,profile,message;
     private BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+
+
             updateGUI(intent); // or whatever method used to update your GUI fields
         }
     };
 
 
     private void LoadmapTask() {
-        if(googleMap!= null)
+        if (googleMap != null)
             googleMap.clear();
 
 
@@ -189,11 +206,11 @@ LinearLayout start,stop,profile,message;
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-    this.googleMap = googleMap;
+        this.googleMap = googleMap;
         googleMap.setMyLocationEnabled(true);
-        if(usercamera!=null) {
-            PreferencesUtils.saveData("Lat", String.valueOf(usercamera.latitude),getActivity());
-            PreferencesUtils.saveData("Lng", String.valueOf(usercamera.longitude),getActivity());
+        if (usercamera != null) {
+            PreferencesUtils.saveData("Lat", String.valueOf(usercamera.latitude), getActivity());
+            PreferencesUtils.saveData("Lng", String.valueOf(usercamera.longitude), getActivity());
             setRippleView();
 
         }
@@ -218,28 +235,29 @@ LinearLayout start,stop,profile,message;
         super.onResume();
 
         gps = new GPSTracker(getActivity());
-        if(gps.canGetLocation()&& googleMap!=null){
+        if (gps.canGetLocation() && googleMap != null) {
             userlat = gps.getLatitude();
             userlng = gps.getLongitude();
-            usercamera = new LatLng(userlat,userlng); // user current location
+            usercamera = new LatLng(userlat, userlng); // user current location
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usercamera, 12));
             setRippleView();
-        }else {
+        } else {
 //            gps.showSettingsAlert();
 
         }
-        getActivity().registerReceiver(br, new IntentFilter(BroadcastService.COUNTDOWN_BR));
+
         CommonCall.PrintLog("service", "Registered broacast receiver");
+        getActivity().registerReceiver(br, new IntentFilter(Timer_Service.str_receiver));
 
 
     }
 
 
-
     private void updateGUI(Intent intent) {
         if (intent.getExtras() != null) {
-            String millisUntilFinished = intent.getStringExtra("countdown");
-            CommonCall.PrintLog("service", "Countdown seconds remaining: " +  millisUntilFinished);
+
+            String millisUntilFinished = intent.getStringExtra("time");
+            CommonCall.PrintLog("service", "Countdown seconds remaining: " + millisUntilFinished);
 
             sessionTimmer.setText(millisUntilFinished);
 
@@ -252,7 +270,6 @@ LinearLayout start,stop,profile,message;
 
         getActivity().unregisterReceiver(br);
     }
-
 
 
 }

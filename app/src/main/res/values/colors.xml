@@ -48,4 +48,7 @@
     <color name="transparent">#00ffffff</color>
     <color name="online">#c392ff9e</color>
     <color name="offline">#d396f5ff</color>
+
+    <color name="colorInitial">#FFC107</color>
+    <color name="colorProgress">#00796B</color>
 </resources>
