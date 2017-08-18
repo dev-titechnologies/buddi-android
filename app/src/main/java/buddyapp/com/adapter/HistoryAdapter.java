@@ -54,10 +54,16 @@ public class HistoryAdapter extends BaseAdapter {
             holder = new CustomViewHolder();
             holder.trainer = (TextView) view.findViewById(R.id.trainer_txt);
             holder.trainee = (TextView) view.findViewById(R.id.trainee_txt);
-            if(PreferencesUtils.getData(Constants.user_type,context,"").equals("trainer"))
+            if(PreferencesUtils.getData(Constants.user_type,context,"").equals("trainer")) {
                 holder.trainee.setVisibility(View.VISIBLE);
-            else
+                holder.trainer.setVisibility(View.GONE);
+            } else{
                 holder.trainer.setVisibility(View.VISIBLE);
+                holder.trainee.setVisibility(View.GONE);
+
+            }
+
+
             holder.name = (TextView) view.findViewById(R.id.name);
             holder.training_status = (TextView) view.findViewById(R.id.training_status);
             holder.payment_status = (TextView) view.findViewById(R.id.training_status);
@@ -79,9 +85,15 @@ public class HistoryAdapter extends BaseAdapter {
             location= jsonObject.getString("location");
             trained_date= jsonObject.getString("trained_date");
 
-            holder.name.setText(trainerName);
+
+            if (PreferencesUtils.getData(Constants.user_type,context,"").equals("trainer"))
+
+            holder.name.setText(traineeName);
+                else
+                holder.name.setText(trainerName);
+
             holder.training_status.setText(trainingStatus);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return view;

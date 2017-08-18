@@ -128,6 +128,7 @@ public class TrainerProfileFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                         mSocket.connect();
+                    PreferencesUtils.saveData(Constants.availStatus, "online", getActivity());
                         getActivity().startService(new Intent(getActivity(), LocationService.class));
                         new updateStatus().execute();
 
@@ -354,7 +355,7 @@ public class TrainerProfileFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            CommonCall.showLoader(getActivity());
+
         }
 
         @Override
@@ -376,7 +377,7 @@ public class TrainerProfileFragment extends Fragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             try {
-                CommonCall.hideLoader();
+
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
                     JSONObject data = obj.getJSONObject("data");

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,15 +33,20 @@ HistoryAdapter historyAdapter;
         // Required empty public constructor
     }
 
-
+ListView list;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        View view=  inflater.inflate(R.layout.fragment_booking_history, container, false);
+        list = (ListView)view.findViewById(R.id.list);
         db = new DatabaseHandler(getActivity());
         new LoadBookingHistory().execute();
-        return inflater.inflate(R.layout.fragment_booking_history, container, false);
 
+
+
+        return  view;
     }
 
     class LoadBookingHistory extends AsyncTask<String,String,String> {
@@ -95,6 +101,7 @@ HistoryAdapter historyAdapter;
                         }
 //                        loadHistory(db.getAllHistory());
                         historyAdapter = new HistoryAdapter(getActivity(),jsonArray);
+                        list.setAdapter(historyAdapter);
                     }
                 }
             } catch (JSONException e) {

@@ -171,8 +171,9 @@ public class HomeActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+
             if (doubleBackToExitPressedOnce) {
-                super.onBackPressed();
+//                super.onBackPressed();
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -225,7 +226,7 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
 
             getSupportActionBar().setTitle("Buddi");
-            clearBackstack();
+
             if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)) {
                 Fragment fragment = new TrainerProfileFragment();
                 getSupportFragmentManager().beginTransaction()
@@ -238,52 +239,52 @@ public class HomeActivity extends AppCompatActivity
             }
 
         } else if (id == R.id.nav_settings) {
-            clearBackstack();
+
             getSupportActionBar().setTitle("Settings");
             Fragment fragment = new BookingHistory();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         } else if (id == R.id.nav_payment) {
-            getSupportActionBar().setTitle("Payment");
-            clearBackstack();
+//            getSupportActionBar().setTitle("Payment");
+
             Intent payment = new Intent(getApplicationContext(), PaymentType.class);
             startActivity(payment);
         } else if (id == R.id.nav_trainer) {
-            clearBackstack();
+
             source_become_trainer=true;
             Intent intent = new Intent(getApplicationContext(),ChooseCategory.class);
             startActivity(intent);
         } else if (id == R.id.nav_invite) {
-            clearBackstack();
+
             getSupportActionBar().setTitle("Invite Friends");
             Fragment fragment = new BookingHistory();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         } else if (id == R.id.nav_history) {
-            clearBackstack();
+
             getSupportActionBar().setTitle("Training History");
             Fragment fragment = new BookingHistory();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         }else if (id == R.id.nav_help) {
-            clearBackstack();
+
             getSupportActionBar().setTitle("Help");
             Fragment fragment = new BookingHistory();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         }else if (id == R.id.nav_legal) {
-            clearBackstack();
+
             Fragment fragment = new Legal();
             getSupportActionBar().setTitle("Legal");
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
         } else if (id == R.id.nav_logout) {
-            clearBackstack();
+
             final AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 builder = new AlertDialog.Builder(HomeActivity.this, android.R.style.Theme_Material_Dialog_Alert);

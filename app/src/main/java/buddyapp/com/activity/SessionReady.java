@@ -260,7 +260,7 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
 
 
 
-
+                new CommonCall.timerUpdate(SessionReady.this,"cancel",book_id).execute();
 
             }
         });
@@ -765,7 +765,7 @@ try{
 
 
                     startactionTitle.setText("Stop");
-
+                    cancel.setEnabled(false);
 
                     startactionIcon.setImageResource(R.mipmap.stop);
 
