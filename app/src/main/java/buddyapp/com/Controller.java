@@ -135,6 +135,17 @@ public class Controller extends Application {
 
     public static void updateSocket(){
 
+        try {
+            IO.Options options = new IO.Options();
+            options.forceNew = true;
+
+            options.reconnection = true;
+            options.query = "__sails_io_sdk_version=0.12.13&token=" + PreferencesUtils.getData(Constants.token,getAppContext(),""); // Added this line
+
+            mSocket = IO.socket(BASEURL,options);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
     }

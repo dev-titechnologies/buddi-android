@@ -44,6 +44,7 @@ import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.MapTrainee;
 import buddyapp.com.activity.Payments.PaymentType;
 import buddyapp.com.activity.WelcomeActivity;
+import buddyapp.com.services.LocationService;
 
 import static buddyapp.com.Settings.Constants.start_session;
 
@@ -318,7 +319,7 @@ public static void hideLoader(){
 
         PreferencesUtils.cleardata(context);
 
-
+        context.stopService(new Intent(context, LocationService.class));
         PreferencesUtils.saveData(Constants.device_id,fcmId,Controller.getAppContext());
 
 
