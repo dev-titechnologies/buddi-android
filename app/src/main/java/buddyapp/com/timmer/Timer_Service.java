@@ -27,6 +27,7 @@ import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.HomeActivity;
+import buddyapp.com.activity.SessionReady;
 import buddyapp.com.utils.CommonCall;
 
 public class Timer_Service extends Service {
@@ -174,7 +175,7 @@ public static boolean stopFlag =false;
                 .setOnlyAlertOnce(true)
                 .setContentIntent(
                         PendingIntent.getActivity(getApplicationContext(), 10,
-                                new Intent(getApplicationContext(), HomeActivity.class)
+                                new Intent(getApplicationContext(), SessionReady.class)
                                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP),
                                 0)
                 );
