@@ -87,15 +87,8 @@ public static boolean stopFlag =false;
         }
 
     }
-    String bookid;
-    @Override
-    public int onStartCommand(Intent intent,  int flags, int startId) {
 
 
-         bookid = intent.getStringExtra("bookid");
-
-        return super.onStartCommand(intent, flags, startId);
-    }
 
     public String twoDatesBetweenTime() {
 
@@ -214,6 +207,8 @@ public static boolean stopFlag =false;
         PreferencesUtils.saveData(Constants.timerstarted,"false",getApplicationContext());
         PreferencesUtils.saveData(Constants.trainee_Data,"",getApplicationContext());
         PreferencesUtils.saveData(Constants.trainer_Data,"",getApplicationContext());
+
+        String bookid = PreferencesUtils.getData(Constants.bookid,getApplicationContext(),"");
 
 if (!stopFlag)
         new CommonCall.timerUpdate(null,"complete",bookid).execute();

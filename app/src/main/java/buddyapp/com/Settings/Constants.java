@@ -33,7 +33,7 @@ public class Constants {
     public static String trainee_id = "trainee_id";
 
     public static String timerstarted = "timerstarted";
-
+    public static String bookid = "bookid";
 
     public static String approved = "category_approved";
     public static String trainer_Data = "trainer_Data";

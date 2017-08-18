@@ -36,40 +36,39 @@ public class Splash extends AppCompatActivity {
             @Override
             public void run() {
 
-                if (PreferencesUtils.getData(Constants.token,getApplicationContext(),"").length()>1) {
+                if (PreferencesUtils.getData(Constants.token, getApplicationContext(), "").length() > 1) {
 
-                    if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)) {
-        try {
+                    if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals(Constants.trainer)) {
+                        try {
 
-            if (new JSONArray(PreferencesUtils.getData(Constants.approved, getApplicationContext(), "[]")).length() == 0) {
-                if (new JSONArray(PreferencesUtils.getData(Constants.pending, getApplicationContext(), "[]")).length() == 0) {
-                    startActivity(new Intent(getApplicationContext(), ChooseCategory.class));
-                    finish();
-                } else {
-                    startActivity(new Intent(getApplicationContext(), DoneActivity.class));
-                    finish();
+                            if (new JSONArray(PreferencesUtils.getData(Constants.approved, getApplicationContext(), "[]")).length() == 0) {
+                                if (new JSONArray(PreferencesUtils.getData(Constants.pending, getApplicationContext(), "[]")).length() == 0) {
+                                    startActivity(new Intent(getApplicationContext(), ChooseCategory.class));
+                                    finish();
+                                } else {
+                                    startActivity(new Intent(getApplicationContext(), DoneActivity.class));
+                                    finish();
 
-                }
-            }else {
+                                }
+                            } else {
 
 
-                if (PreferencesUtils.getData(Constants.start_session,getApplicationContext(),"false").equals("true")){
+                                if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
 
-                    startActivity(new Intent(getApplicationContext(), SessionReady.class));
-                    finish();
-                }
-                else{
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                finish();
+                                    startActivity(new Intent(getApplicationContext(), SessionReady.class));
+                                    finish();
+                                } else {
+                                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                                    finish();
 
-                }
+                                }
 
-            }
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-                        }else{
+                    } else {
 
 /*
 *
@@ -77,23 +76,21 @@ public class Splash extends AppCompatActivity {
 * trainee =>
 *
 * */
-                        if (PreferencesUtils.getData(Constants.start_session,getApplicationContext(),"false").equals("true")){
+                        if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
 
                             startActivity(new Intent(getApplicationContext(), SessionReady.class));
                             finish();
-                        }
-                        else{
+                        } else {
                             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                             finish();
 
                         }
 
 
-
                     }
 
-                    }else
-                startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+                } else
+                    startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
                 finish();
 
             }

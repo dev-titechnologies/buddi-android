@@ -142,7 +142,10 @@ if (PreferencesUtils.getData(Constants.clientToken,getApplicationContext(),"").l
                 }else{
                 String  nounce=result.getPaymentMethodNonce().getNonce();
 
+if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"").length()>1){
 
+    new RandomSelect().execute();
+}else
                 new checkout(MapTrainee.this,nounce).execute();}
 
             }
@@ -383,6 +386,7 @@ if (PreferencesUtils.getData(Constants.clientToken,getApplicationContext(),"").l
                     Toast.makeText(activity, "Payment  Successful!", Toast.LENGTH_SHORT).show();
 
                     new RandomSelect().execute();
+
                 } else if (response.getInt(Constants.status) == 2) {
 
 //                Snackbar snackbar = Snackbar

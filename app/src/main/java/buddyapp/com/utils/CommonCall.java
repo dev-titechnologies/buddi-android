@@ -40,6 +40,7 @@ import buddyapp.com.Controller;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.MapTrainee;
 import buddyapp.com.activity.Payments.PaymentType;
 import buddyapp.com.activity.WelcomeActivity;
@@ -426,13 +427,40 @@ if (activity!=null)
         }
 
         @Override
-        protected void onPostExecute(String res) {
-            super.onPostExecute(res);
-            hideLoader();
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
 
             PreferencesUtils.saveData(start_session,"false",Controller.getAppContext());
 
+            try {
+                CommonCall.hideLoader();
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt("status") == 1) {
 
+                    Toast.makeText(activity, obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                    //clearing last payment id to avoid multiple payments
+                    PreferencesUtils.saveData(Constants.transactionId,"",activity);
+
+
+                    if (activity!=null) {
+                        Intent intent = new Intent(activity, HomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        activity.startActivity(intent);
+                        activity.finish();
+                    }
+
+                } else if (obj.getInt("status") == 2) {
+                    Toast.makeText(activity, obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                }else if (obj.getInt("status") == 3) {
+                    Toast.makeText(activity, "Session out", Toast.LENGTH_SHORT).show();
+                    CommonCall.sessionout(activity);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 

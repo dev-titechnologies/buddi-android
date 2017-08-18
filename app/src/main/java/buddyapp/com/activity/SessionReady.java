@@ -125,6 +125,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 lat = data.getString("trainee_latitude");
                 lng = data.getString("trainee_longitude");
                 book_id= data.getString("book_id");
+                PreferencesUtils.saveData(Constants.bookid,book_id,getApplicationContext());
                 traine_id= data.getString("trainee_id");
                 training_time= data.getInt("training_time");
                 name = data.getString("trainee_name") ;
@@ -136,6 +137,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 lng = trainerDetail.getString("trainer_longitude");
                 training_time= data.getInt("training_time");
                 book_id= data.getString("book_id");
+                PreferencesUtils.saveData(Constants.bookid,book_id,getApplicationContext());
                 name = trainerDetail.getString("trainer_first_name") + " " + trainerDetail.getString("trainer_last_name");
 
             }
@@ -202,29 +204,6 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
             public void onClick(View view) {
 
                 if (startactionTitle.getText().toString().equals("Start")) {
-                    startactionTitle.setText("Stop");
-
-
-
-
-
-
-                    Calendar calendar = Calendar.getInstance();
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-                    String date_time = simpleDateFormat.format(calendar.getTime());
-
-
-
-                    PreferencesUtils.saveData("data", date_time, getApplicationContext());
-                    PreferencesUtils.saveData("hours", training_time+"", getApplicationContext());
-
-
-                    startService(new Intent(getApplicationContext(), Timer_Service.class));
-
-
-                    CommonCall.PrintLog("Service ", "Started service");
-PreferencesUtils.saveData(Constants.timerstarted,"true",getApplicationContext());
-//                     timerService = new BroadcastService();
 
                  new   StartSession().execute();
                     profile.setEnabled(false);
@@ -740,10 +719,40 @@ CommonCall.hideLoader();
                 CommonCall.hideLoader();
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
-                    JSONObject data = obj.getJSONObject("data");
-                    CommonCall.PrintLog("Session Start", data.toString());
-                    PreferencesUtils.saveData("SessionStartData",data.toString(),getApplicationContext());
-                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+
+                   Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+
+
+
+                    startactionTitle.setText("Stop");
+
+
+
+
+
+
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+                    String date_time = simpleDateFormat.format(calendar.getTime());
+
+
+
+                    PreferencesUtils.saveData("data", date_time, getApplicationContext());
+                    PreferencesUtils.saveData("hours", training_time+"", getApplicationContext());
+
+
+                    startService(new Intent(getApplicationContext(), Timer_Service.class));
+
+
+                    CommonCall.PrintLog("Service ", "Started service");
+                    PreferencesUtils.saveData(Constants.timerstarted,"true",getApplicationContext());
+
+
+
+
+
 
                 } else if (obj.getInt("status") == 2) {
                     Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
@@ -804,5 +813,32 @@ CommonCall.hideLoader();
                 e.printStackTrace();
             }
         }
+    }
+    boolean doubleBackToExitPressedOnce = false;
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 }
