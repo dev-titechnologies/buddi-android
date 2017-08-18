@@ -55,13 +55,14 @@
                 android:layout_weight="1"
                 android:id="@+id/cancel"
                 android:gravity="center"
+                android:paddingTop="10dp"
                 android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/cancelactionIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@mipmap/cross" />
 
                 <TextView
                     android:id="@+id/cancelactionTitle"
@@ -80,13 +81,14 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:id="@+id/start"
+                android:paddingTop="10dp"
                 android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/startactionIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@mipmap/play" />
 
                 <TextView
                     android:id="@+id/startactionTitle"
@@ -104,6 +106,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:id="@+id/profile"
+                android:paddingTop="10dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -130,6 +133,7 @@
                 android:layout_weight="1"
                 android:id="@+id/message"
                 android:gravity="center"
+                android:paddingTop="10dp"
                 android:orientation="vertical">
 
                 <ImageView

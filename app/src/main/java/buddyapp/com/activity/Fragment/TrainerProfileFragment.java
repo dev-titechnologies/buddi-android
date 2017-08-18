@@ -22,9 +22,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -42,6 +44,7 @@ import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.ProfileScreen;
+import buddyapp.com.services.LocationService;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
@@ -49,6 +52,7 @@ import buddyapp.com.utils.Urls;
 import buddyapp.com.utils.Utility;
 
 import static android.app.Activity.RESULT_OK;
+import static buddyapp.com.Controller.mSocket;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,7 +78,7 @@ public class TrainerProfileFragment extends Fragment {
     int REQUEST_CROP_PICTURE = 222;
     String imageurl = "";
     Menu menu;
-
+    ToggleButton toggle;
     public TrainerProfileFragment() {
         // Required empty public constructor
     }
@@ -84,6 +88,10 @@ public class TrainerProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trainer_profile, container, false);
+        toggle = (ToggleButton) view.findViewById(R.id.togglebutton);
+        if (PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {
+            toggle.setChecked(true);
+        }
 
         ccp = (CountryCodePicker) view.findViewById(R.id.ccp);
         firstName = (EditText) view.findViewById(R.id.first_name);
@@ -99,22 +107,37 @@ public class TrainerProfileFragment extends Fragment {
         placeLayout = (LinearLayout) view.findViewById(R.id.place_layout);
         trainerImageView = (CircleImageView) view.findViewById(R.id.trainerimageView);
         imageTrainer = (LinearLayout) view.findViewById(R.id.image_trainer); // Trainer profile image View layout
-       //****
- /*       // *****check for trainer or trainee
-        if (PreferencesUtils.getData(Constants.user_type, getActivity(), "").equals("trainer")) {
-            trainerCategory.setVisibility(View.VISIBLE);
-            imageUser.setVisibility(View.GONE);
-            CommonCall.LoadImage(getActivity(), PreferencesUtils.getData(Constants.user_image, getActivity(), ""), trainerImageView, R.drawable.ic_account, R.drawable.ic_account);
-            placeLayout.setVisibility(View.GONE);
-            imageTrainer.setVisibility(View.VISIBLE);
-        }else {
-            imageUser.setVisibility(View.VISIBLE);
-            trainerCategory.setVisibility(View.GONE);
-            CommonCall.LoadImage(getActivity(), PreferencesUtils.getData(Constants.user_image, getActivity(), ""), userImageView,R.drawable.ic_account, R.drawable.ic_account);
-            trainerCategory.setVisibility(View.GONE);
-            placeLayout.setVisibility(View.VISIBLE);
-        }*/
-        // load profile --->
+
+
+  if (  PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {
+        mSocket.connect();
+        toggle.setChecked(true);
+        getActivity().startService(new Intent(getActivity(), LocationService.class));
+        new updateStatus().execute();
+  }
+
+
+
+        //  checking online or offline
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                        mSocket.connect();
+                        getActivity().startService(new Intent(getActivity(), LocationService.class));
+                        new updateStatus().execute();
+
+                    }
+                else {
+                    PreferencesUtils.saveData(Constants.availStatus, "offline", getActivity());
+                    mSocket.disconnect();
+                    getActivity().stopService(new Intent(getActivity(), LocationService.class));
+                    new updateStatus().execute();
+                    Toast.makeText(getActivity(), "You are now Offline", Toast.LENGTH_SHORT).show();
+                    // The toggle is disabled
+                }
+            }
+        });
+
         loadProfile();
 
         new getProfile().execute();
@@ -308,6 +331,56 @@ public class TrainerProfileFragment extends Fragment {
         }
     }
 
+    /*********
+     * update trainer status -------
+     *********/
+    class updateStatus extends AsyncTask<String, String, String> {
+        JSONObject reqData = new JSONObject();
+        String response;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            CommonCall.showLoader(getActivity());
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.user_id, getActivity(), ""));
+                reqData.put(Constants.user_type, PreferencesUtils.getData(Constants.user_type, getActivity(), ""));
+                reqData.put(Constants.availStatus, PreferencesUtils.getData(Constants.availStatus, getActivity(), ""));
+                response = NetworkCalls.POST(Urls.getStatusURL(), reqData.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                CommonCall.hideLoader();
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt("status") == 1) {
+                    JSONObject data = obj.getJSONObject("data");
+
+                    Toast.makeText(getActivity(), "You are now Online", Toast.LENGTH_SHORT).show();
+                } else if (obj.getInt("status") == 2) {
+                    Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                }else if (obj.getInt("status") == 3) {
+                    Toast.makeText(getActivity(), "Session out", Toast.LENGTH_SHORT).show();
+                    CommonCall.sessionout(getActivity());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     /********************** Field validation *******************/

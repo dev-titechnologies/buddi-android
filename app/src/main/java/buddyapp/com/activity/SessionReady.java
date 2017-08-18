@@ -224,6 +224,7 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
                  new   StartSession().execute();
                     profile.setEnabled(false);
                     message.setEnabled(false);
+                    startactionIcon.setImageResource(R.mipmap.stop);
                 } else{
 
                     Timer_Service.stopFlag=true;
@@ -231,7 +232,7 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
 
 
                     startactionTitle.setText("Start");
-
+                    startactionIcon.setImageResource(R.mipmap.play);
 
                     PreferencesUtils.saveData("data", "", getApplicationContext());
                     PreferencesUtils.saveData("hours", "", getApplicationContext());
