@@ -348,7 +348,14 @@ public static void hideLoader(){
                     object.put("latitude", lat);
                     object.put("longitude", lng);
 //                    object.put("avail_status",PreferencesUtils.getData(Constants.availStatus,Controller.getAppContext(),""));
+
+                    if (PreferencesUtils.getData(Constants.start_session,Controller.getAppContext(),"").equals("false"))
+
                     object.put("avail_status", "online");
+                    else
+                    object.put("avail_status", "booked");
+
+
                     jsonObject.put("data", object);
                     Controller.mSocket.emit("post", jsonObject);
                 } catch (JSONException e) {
@@ -439,13 +446,14 @@ if (activity!=null)
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
 
-                    Toast.makeText(activity, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
                     //clearing last payment id to avoid multiple payments
                     PreferencesUtils.saveData(Constants.transactionId,"",activity);
 
 
                     if (activity!=null) {
+                        Toast.makeText(activity, obj.getString("message"), Toast.LENGTH_SHORT).show();
+
                         Intent intent = new Intent(activity, HomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         activity.startActivity(intent);

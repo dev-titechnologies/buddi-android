@@ -68,6 +68,7 @@ import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.services.GPSTracker;
+import buddyapp.com.services.LocationService;
 import buddyapp.com.timmer.Timer_Service;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
@@ -75,31 +76,33 @@ import buddyapp.com.utils.RippleMap.MapRipple;
 import buddyapp.com.utils.Urls;
 
 
+import static buddyapp.com.Controller.mSocket;
 import static buddyapp.com.Controller.updateSocket;
 import static buddyapp.com.R.id.map;
+import static buddyapp.com.R.id.stop;
 import static buddyapp.com.Settings.Constants.trainee_Data;
 import static buddyapp.com.Settings.Constants.trainer_Data;
 
 public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWindowAdapter, OnMapReadyCallback, LocationSource.OnLocationChangedListener {
     Marker pos_Marker;
     GoogleMap googleMap;
-    GPSTracker gps ;
+    GPSTracker gps;
     LatLng origin;
     LatLng dest;
-    private LatLng camera,usercamera;
-    Double latitude, longitude, userlat,userlng;
+    private LatLng camera, usercamera;
+    Double latitude, longitude, userlat, userlng;
     LocationManager mLocationManager;
     Button select;
-    String sgender,lat="0", lng="0", traine_id,trainer_id,duration,book_id;
+    String sgender, lat = "0", lng = "0", traine_id, trainer_id, duration, book_id;
     int training_time;
-    String  disatance,name;
+    String disatance, name;
     private HashMap<Marker, String> hashMarker = new HashMap<Marker, String>();
     private FusedLocationProviderClient mFusedLocationClient;
 
 
-    LinearLayout start,cancel,profile,message;
-    ImageView startactionIcon,stopactionIcon,profileactionIcon,messageactionIcon;
-    TextView startactionTitle,stopactionTitle,profileactionTitle,messageactionTitle,sessionTimmer;
+    LinearLayout start, cancel, profile, message;
+    ImageView startactionIcon, stopactionIcon, profileactionIcon, messageactionIcon;
+    TextView startactionTitle, stopactionTitle, profileactionTitle, messageactionTitle, sessionTimmer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,11 +111,11 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 // check if GPS enabled
         gps = new GPSTracker(SessionReady.this);
-        if(gps.canGetLocation()){
+        if (gps.canGetLocation()) {
             userlat = gps.getLatitude();
             userlng = gps.getLongitude();
-            usercamera = new LatLng(userlat,userlng); // user current location
-        }else {
+            usercamera = new LatLng(userlat, userlng); // user current location
+        } else {
             gps.showSettingsAlert();
 
         }
@@ -127,39 +130,42 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         try {
 
 
-
-            if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")) {
+            if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
 
                 JSONObject data = new JSONObject(PreferencesUtils.getData(trainee_Data, getApplicationContext(), ""));
 //                JSONObject trainerDetail = data.getJSONObject("trainer_details");
                 lat = data.getString("trainee_latitude");
                 lng = data.getString("trainee_longitude");
-                book_id= data.getString("book_id");
-                PreferencesUtils.saveData(Constants.bookid,book_id,getApplicationContext());
-                traine_id= data.getString("trainee_id");
-                training_time= data.getInt("training_time");
-                name = data.getString("trainee_name") ;
+                book_id = data.getString("book_id");
+                PreferencesUtils.saveData(Constants.bookid, book_id, getApplicationContext());
+                traine_id = data.getString("trainee_id");
+                training_time = data.getInt("training_time");
+                name = data.getString("trainee_name");
 
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
+                updateSocket();
+                mSocket.connect();
+                startService(new Intent(getApplicationContext(), LocationService.class));
 
-            }else{
+            } else {
 
                 JSONObject data = new JSONObject(PreferencesUtils.getData(trainer_Data, getApplicationContext(), ""));
                 JSONObject trainerDetail = data.getJSONObject("trainer_details");
                 lat = trainerDetail.getString("trainer_latitude");
                 lng = trainerDetail.getString("trainer_longitude");
-                training_time= data.getInt("training_time");
-                trainer_id= data.getString("trainer_id");
-                traine_id= data.getString("trainee_id");
-                book_id= data.getString("book_id");
-                PreferencesUtils.saveData(Constants.bookid,book_id,getApplicationContext());
+                training_time = data.getInt("training_time");
+                trainer_id = data.getString("trainer_id");
+                traine_id = data.getString("trainee_id");
+                book_id = data.getString("book_id");
+                PreferencesUtils.saveData(Constants.bookid, book_id, getApplicationContext());
                 name = trainerDetail.getString("trainer_first_name") + " " + trainerDetail.getString("trainer_last_name");
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
 
+
+                updateSocket();
+                Controller.mSocket.connect();
+                CommonCall.socketGetTrainerLocation();
             }
-            updateSocket();
-            Controller.mSocket.connect();
-            CommonCall.socketGetTrainerLocation();
 
 
         } catch (JSONException e) {
@@ -184,11 +190,13 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 /****
  * get Trainer location
-  ****/
+ ****/
         intstartStop();
         LoadmapTask();
     }
-    HorizontalScrollView     horizontalScrollView;
+
+    HorizontalScrollView horizontalScrollView;
+
     void intstartStop() {
 
         start = (LinearLayout) findViewById(R.id.start);
@@ -199,10 +207,10 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollView);
 
 
-        startactionIcon =(ImageView)findViewById(R.id.startactionIcon);
-        stopactionIcon =(ImageView)findViewById(R.id.stopactionIcon);
-        profileactionIcon =(ImageView)findViewById(R.id.profileactionIcon);
-        messageactionIcon =(ImageView)findViewById(R.id.messageactionIcon);
+        startactionIcon = (ImageView) findViewById(R.id.startactionIcon);
+        stopactionIcon = (ImageView) findViewById(R.id.stopactionIcon);
+        profileactionIcon = (ImageView) findViewById(R.id.profileactionIcon);
+        messageactionIcon = (ImageView) findViewById(R.id.messageactionIcon);
 
 
         startactionTitle = (TextView) findViewById(R.id.startactionTitle);
@@ -211,18 +219,18 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         messageactionTitle = (TextView) findViewById(R.id.messagectionTitle);
 
 
-        sessionTimmer =(TextView)findViewById(R.id.sessionTimmer);
-        ObjectAnimator animator= ObjectAnimator.ofInt(horizontalScrollView, "scrollX",150 );
+        sessionTimmer = (TextView) findViewById(R.id.sessionTimmer);
+        ObjectAnimator animator = ObjectAnimator.ofInt(horizontalScrollView, "scrollX", 150);
         animator.setDuration(900);
         animator.start();
 
         sessionTimmer = (TextView) findViewById(R.id.sessionTimmer);
-if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"false").equals("true")){
+        if (PreferencesUtils.getData(Constants.timerstarted, getApplicationContext(), "false").equals("true")) {
 
-    startactionTitle.setText("Stop");
-}else{
-    startactionTitle.setText("Start");
-}
+            startactionTitle.setText("Stop");
+        } else {
+            startactionTitle.setText("Start");
+        }
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,21 +238,21 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
 
                 if (startactionTitle.getText().toString().equals("Start")) {
 
-                 new   StartSession().execute();
+                    new StartSession().execute();
                     profile.setEnabled(false);
                     message.setEnabled(false);
 
-                } else{
+                } else {
 
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            switch (which){
+                            switch (which) {
                                 case DialogInterface.BUTTON_POSITIVE:
                                     //Yes button clicked
 
-                                    Timer_Service.stopFlag=true;
-                                    PreferencesUtils.saveData(Constants.timerstarted,"false",getApplicationContext());
+                                    Timer_Service.stopFlag = true;
+                                    PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
 
 
                                     startactionTitle.setText("Start");
@@ -259,7 +267,7 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
                                     NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
                                     nManager.cancelAll();
 
-                                    new CommonCall.timerUpdate(SessionReady.this,"cancel",book_id).execute();
+                                    new CommonCall.timerUpdate(SessionReady.this, "cancel", book_id).execute();
 
                                     break;
 
@@ -275,9 +283,7 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
                             .setNegativeButton("No", dialogClickListener).show();
 
 
-
-
-                  }
+                }
 
 
             }
@@ -310,12 +316,12 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
                     @Override
                     public void onClick(View view) {
 
-                        if (reason.getText().toString().length()>1){
+                        if (reason.getText().toString().length() > 1) {
                             dialog.dismiss();
                             new CommonCall.timerUpdate(SessionReady.this, "cancel", book_id).execute();
 
 
-                        }else{
+                        } else {
 
 
                             reason.setError("Please enter your reason to cancel.");
@@ -332,9 +338,6 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
                         dialog.dismiss();
                     }
                 });
-
-
-
 
 
 //                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -374,18 +377,17 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
 //                        .setNegativeButton("No", dialogClickListener).show();
 
 
-
             }
         });
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")) {
+                if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
                     Intent intent = new Intent(getApplicationContext(), TraineeProfileView.class);
                     startActivity(intent);
-                }else{
-                    Intent intent = new Intent(getApplicationContext(),TrainerProfileView.class);
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), TrainerProfileView.class);
                     startActivity(intent);
                 }
             }
@@ -408,9 +410,51 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
             CommonCall.PrintLog("service", "Countdown seconds remaining: " + millisUntilFinished);
 
             sessionTimmer.setText(millisUntilFinished);
+            if (millisUntilFinished.equals("Session Completed")) {
 
+                /*
+                *
+                * this will execute when timmer has complted
+                *
+                *
+                *
+                * */
+
+
+                PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
+
+
+                startactionTitle.setText("Start");
+                startactionIcon.setImageResource(R.mipmap.play);
+
+                PreferencesUtils.saveData("data", "", getApplicationContext());
+                PreferencesUtils.saveData("hours", "", getApplicationContext());
+
+                stopService(new Intent(getApplicationContext(), Timer_Service.class));
+
+
+                NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
+                nManager.cancelAll();
+
+                //clearing last payment id to avoid multiple payments
+                PreferencesUtils.saveData(Constants.transactionId,"",getApplicationContext());
+
+
+
+
+
+                    Toast.makeText(getApplicationContext(), "Session Completed", Toast.LENGTH_SHORT).show();
+
+                    Intent intenthome = new Intent(getApplicationContext(), HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intenthome);
+                    finish();
+
+
+            }
         }
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -424,7 +468,7 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                        CommonCall.PrintLog("brodcastmsg","brodcastmsg");
+                        CommonCall.PrintLog("brodcastmsg", "brodcastmsg");
                         lat = intent.getStringExtra("trainer_latitude");
                         lng = intent.getStringExtra("trainer_longitude");
                         // trainer location
@@ -433,7 +477,7 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
                         camera = new LatLng(latitude, longitude);
                         origin = camera;
                         LoadmapTask();
-                        animateMarker(pos_Marker,camera,false,0.0f);
+                        animateMarker(pos_Marker, camera, false, 0.0f);
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 14));
 
                     }
@@ -447,7 +491,7 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       unregisterReceiver(br);
+        unregisterReceiver(br);
     }
 
     public void animateMarker(final Marker marker, final LatLng toPosition,
@@ -488,41 +532,41 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
     }
 
     private void LoadmapTask() {
-            if(googleMap!= null)
+        if (googleMap != null)
             googleMap.clear();
 
-            String str_origin = "origin="+origin.latitude+","+origin.longitude;
-            // Destination of route
-            String str_dest = "destination="+dest.latitude+","+dest.longitude;
-            // Sensor enabled
-            String sensor = "sensor=false";
-            String mode = "mode=driving";
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        // Sensor enabled
+        String sensor = "sensor=false";
+        String mode = "mode=driving";
 
-            String parameters = str_origin+"&"+str_dest+"&"+sensor;
+        String parameters = str_origin + "&" + str_dest + "&" + sensor;
 
-            // Building the parameters to the web service
+        // Building the parameters to the web service
 //            String parameters = origin + "&" + dest + "&" + sensor + "&" + mode;
 
-            // Output format
-            String output = "json";
+        // Output format
+        String output = "json";
 
-            // Building the url to the web service
-            String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
 
-            FetchUrl FetchUrl = new FetchUrl();
-            // Start downloading json data from Google Directions API
-            FetchUrl.execute(url);
+        FetchUrl FetchUrl = new FetchUrl();
+        // Start downloading json data from Google Directions API
+        FetchUrl.execute(url);
 
     }
 
     private void showMarker() {
 
-try{
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 13));
-                pos_Marker =  googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title(name.toUpperCase()).draggable(false));
-                pos_Marker.showInfoWindow();
+        try {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 13));
+            pos_Marker = googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title(name.toUpperCase()).draggable(false));
+            pos_Marker.showInfoWindow();
 
-                googleMap.setInfoWindowAdapter(SessionReady.this);
+            googleMap.setInfoWindowAdapter(SessionReady.this);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -530,6 +574,7 @@ try{
 
 
     }
+
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
@@ -547,6 +592,7 @@ try{
         final AlertDialog alert = builder.create();
         alert.show();
     }
+
     @Override
     public View getInfoWindow(Marker marker) {
         return null;
@@ -562,7 +608,7 @@ try{
 
         this.googleMap = googleMap;
 
-        MapRipple mapRipple = new MapRipple(googleMap,usercamera, getApplicationContext());
+        MapRipple mapRipple = new MapRipple(googleMap, usercamera, getApplicationContext());
         mapRipple.withNumberOfRipples(3);
         mapRipple.withFillColor(getResources().getColor(R.color.login_bgcolor));
         mapRipple.withStrokeColor(Color.BLACK);
@@ -585,6 +631,7 @@ try{
 //        googleMap.setMapStyle(style);
         googleMap.setInfoWindowAdapter(SessionReady.this);
     }
+
     @Override
     public void onLocationChanged(Location location) {
 
@@ -622,7 +669,7 @@ try{
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-   /******* DISTANCE TIME DETAILS *************************************************************/
+            /******* DISTANCE TIME DETAILS *************************************************************/
 
             ParserTask parserTask = new ParserTask();
 
@@ -631,6 +678,7 @@ try{
 
         }
     }
+
     private String downloadUrl(String strUrl) throws IOException {
         String data = "";
         InputStream iStream = null;
@@ -668,6 +716,7 @@ try{
         }
         return data;
     }
+
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
         // Parsing the data in non-ui thread
@@ -679,17 +728,17 @@ try{
 
             try {
                 jObject = new JSONObject(jsonData[0]);
-                Log.e("ParserTask",jsonData[0].toString());
+                Log.e("ParserTask", jsonData[0].toString());
                 DataParser parser = new DataParser();
                 Log.e("ParserTask", parser.toString());
 
                 // Starts parsing data
                 routes = parser.parse(jObject);
-                Log.e("ParserTask","Executing routes");
-                Log.e("ParserTask",routes.toString());
+                Log.e("ParserTask", "Executing routes");
+                Log.e("ParserTask", routes.toString());
 
             } catch (Exception e) {
-                Log.e("ParserTask",e.toString());
+                Log.e("ParserTask", e.toString());
                 e.printStackTrace();
             }
             return routes;
@@ -698,58 +747,57 @@ try{
         // Executes in UI thread, after the parsing process
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-    CommonCall.hideLoader();
-                ArrayList<LatLng> points;
-                PolylineOptions lineOptions = null;
-                // Traversing through all the routes
-                for (int i = 0; i < result.size(); i++) {
-                    points = new ArrayList<>();
-                    lineOptions = new PolylineOptions();
+            CommonCall.hideLoader();
+            ArrayList<LatLng> points;
+            PolylineOptions lineOptions = null;
+            // Traversing through all the routes
+            for (int i = 0; i < result.size(); i++) {
+                points = new ArrayList<>();
+                lineOptions = new PolylineOptions();
 
-                    // Fetching i-th route
-                    List<HashMap<String, String>> path = result.get(i);
+                // Fetching i-th route
+                List<HashMap<String, String>> path = result.get(i);
 
-                    // Fetching all the points in i-th route
-                    for (int j = 0; j < path.size(); j++) {
-                        HashMap<String, String> point = path.get(j);
+                // Fetching all the points in i-th route
+                for (int j = 0; j < path.size(); j++) {
+                    HashMap<String, String> point = path.get(j);
 
-                        double lat = Double.parseDouble(point.get("lat"));
-                        double lng = Double.parseDouble(point.get("lng"));
-                        LatLng position = new LatLng(lat, lng);
+                    double lat = Double.parseDouble(point.get("lat"));
+                    double lng = Double.parseDouble(point.get("lng"));
+                    LatLng position = new LatLng(lat, lng);
 
-                        points.add(position);
-                    }
-
-                    // Adding all the points in the route to LineOptions
-                    lineOptions.addAll(points);
-                    lineOptions.width(8);
-                    lineOptions.color(Color.MAGENTA);
-
-                    Log.d("onPostExecute","onPostExecute lineoptions decoded");
-
+                    points.add(position);
                 }
 
-                // Drawing polyline in the Google Map for the i-th route
-                if(lineOptions != null) {
-                    googleMap.addPolyline(lineOptions);
-                    showMarker();
-                }
-                else {
-                    Log.d("onPostExecute","without Polylines drawn");
-                }
+                // Adding all the points in the route to LineOptions
+                lineOptions.addAll(points);
+                lineOptions.width(8);
+                lineOptions.color(Color.MAGENTA);
+
+                Log.d("onPostExecute", "onPostExecute lineoptions decoded");
+
             }
 
+            // Drawing polyline in the Google Map for the i-th route
+            if (lineOptions != null) {
+                googleMap.addPolyline(lineOptions);
+                showMarker();
+            } else {
+                Log.d("onPostExecute", "without Polylines drawn");
+            }
         }
 
-
+    }
 
 
     public class DataParser {
 
-        /** Receives a JSONObject and returns a list of lists containing latitude and longitude */
-        public List<List<HashMap<String,String>>> parse(JSONObject jObject){
+        /**
+         * Receives a JSONObject and returns a list of lists containing latitude and longitude
+         */
+        public List<List<HashMap<String, String>>> parse(JSONObject jObject) {
 
-            List<List<HashMap<String, String>>> routes = new ArrayList<>() ;
+            List<List<HashMap<String, String>>> routes = new ArrayList<>();
             JSONArray jRoutes;
             JSONArray jLegs;
             JSONArray jSteps;
@@ -759,25 +807,25 @@ try{
                 jRoutes = jObject.getJSONArray("routes");
 
                 /** Traversing all routes */
-                for(int i=0;i<jRoutes.length();i++){
-                    jLegs = ( (JSONObject)jRoutes.get(i)).getJSONArray("legs");
+                for (int i = 0; i < jRoutes.length(); i++) {
+                    jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
                     List path = new ArrayList<>();
 
                     /** Traversing all legs */
-                    for(int j=0;j<jLegs.length();j++){
-                        jSteps = ( (JSONObject)jLegs.get(j)).getJSONArray("steps");
+                    for (int j = 0; j < jLegs.length(); j++) {
+                        jSteps = ((JSONObject) jLegs.get(j)).getJSONArray("steps");
 
                         /** Traversing all steps */
-                        for(int k=0;k<jSteps.length();k++){
+                        for (int k = 0; k < jSteps.length(); k++) {
                             String polyline = "";
-                            polyline = (String)((JSONObject)((JSONObject)jSteps.get(k)).get("polyline")).get("points");
+                            polyline = (String) ((JSONObject) ((JSONObject) jSteps.get(k)).get("polyline")).get("points");
                             List<LatLng> list = decodePoly(polyline);
 
                             /** Traversing all points */
-                            for(int l=0;l<list.size();l++){
+                            for (int l = 0; l < list.size(); l++) {
                                 HashMap<String, String> hm = new HashMap<>();
-                                hm.put("lat", Double.toString((list.get(l)).latitude) );
-                                hm.put("lng", Double.toString((list.get(l)).longitude) );
+                                hm.put("lat", Double.toString((list.get(l)).latitude));
+                                hm.put("lng", Double.toString((list.get(l)).longitude));
                                 path.add(hm);
                             }
                         }
@@ -787,13 +835,12 @@ try{
 
             } catch (JSONException e) {
                 e.printStackTrace();
-            }catch (Exception e){
+            } catch (Exception e) {
             }
 
 
             return routes;
         }
-
 
 
         private List<LatLng> decodePoly(String encoded) {
@@ -830,6 +877,7 @@ try{
             return poly;
         }
     }
+
     /*********
      * Start Session
      *********/
@@ -847,17 +895,17 @@ try{
         protected String doInBackground(String... strings) {
             try {
                 reqData.put("book_id", book_id);
-                reqData.put("trainee_id",PreferencesUtils.getData(Constants.trainee_id, getApplicationContext(), ""));
+                reqData.put("trainee_id", PreferencesUtils.getData(Constants.trainee_id, getApplicationContext(), ""));
 
                 if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer"))
-                reqData.put("trainer_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
-             else
+                    reqData.put("trainer_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
+                else
                     reqData.put("trainer_id", traine_id);
 
 
                 reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
                 response = NetworkCalls.POST(Urls.getStartSessionURL(), reqData.toString());
-            }catch(JSONException e){
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
             return response;
@@ -872,9 +920,7 @@ try{
                 if (obj.getInt("status") == 1) {
 
 
-                   Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-
-
+                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
 
 
                     startactionTitle.setText("Stop");
@@ -883,32 +929,27 @@ try{
                     startactionIcon.setImageResource(R.mipmap.stop);
 
 
-
                     Calendar calendar = Calendar.getInstance();
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
                     String date_time = simpleDateFormat.format(calendar.getTime());
 
 
-
                     PreferencesUtils.saveData("data", date_time, getApplicationContext());
-                    PreferencesUtils.saveData("hours", training_time+"", getApplicationContext());
+//                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
+                    PreferencesUtils.saveData("hours",  "1", getApplicationContext());
 
 
                     startService(new Intent(getApplicationContext(), Timer_Service.class));
 
 
                     CommonCall.PrintLog("Service ", "Started service");
-                    PreferencesUtils.saveData(Constants.timerstarted,"true",getApplicationContext());
-
-
-
-
+                    PreferencesUtils.saveData(Constants.timerstarted, "true", getApplicationContext());
 
 
                 } else if (obj.getInt("status") == 2) {
                     Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
 
-                }else if (obj.getInt("status") == 3) {
+                } else if (obj.getInt("status") == 3) {
                     Toast.makeText(getApplicationContext(), "Session out", Toast.LENGTH_SHORT).show();
                     CommonCall.sessionout(getApplicationContext());
                 }
@@ -917,6 +958,7 @@ try{
             }
         }
     }
+
     /*********
      * --> Extend booking
      *********/
@@ -965,7 +1007,9 @@ try{
             }
         }
     }
+
     boolean doubleBackToExitPressedOnce = false;
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -988,7 +1032,7 @@ try{
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }
