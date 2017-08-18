@@ -181,7 +181,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 
                 // mMap is GoogleMap object, latLng is the location on map from which ripple should start
 
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(place.getString("latitude")), Double.parseDouble(place.getString("longitude"))), 13));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(place.getString("latitude")), Double.parseDouble(place.getString("longitude"))), 14));
                 Marker pos_Marker =  googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(place.getString("latitude")), Double.parseDouble(place.getString("longitude")))).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title("Trainer").draggable(false));
                 pos_Marker.showInfoWindow();
 
@@ -226,13 +226,13 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
         this.googleMap = googleMap;
 
         MapRipple mapRipple = new MapRipple(googleMap,camera, getApplicationContext());
-        mapRipple.withNumberOfRipples(3);
+        mapRipple.withNumberOfRipples(1);
         mapRipple.withFillColor(getResources().getColor(R.color.login_bgcolor));
         mapRipple.withStrokeColor(Color.BLACK);
         mapRipple.withStrokewidth(1);      // 10dp
-        mapRipple.withDistance(1000);      // 2000 metres radius
+        mapRipple.withDistance(300);      // 2000 metres radius
         mapRipple.withRippleDuration(5000);    //12000ms
-        mapRipple.withTransparency(0.5f);
+        mapRipple.withTransparency(0.9f);
         mapRipple.startRippleMapAnimation();
 
         getTrainerMarker();

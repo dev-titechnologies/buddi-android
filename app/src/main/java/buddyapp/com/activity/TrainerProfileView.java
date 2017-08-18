@@ -33,7 +33,6 @@ public class TrainerProfileView extends Activity {
     TextView fullname, typeAge, height , weight, gymSubscription, trainingCategory, trainingHistory, coachingHistory, certifications, webUrl;
     ImageView faceBook, instagram, linkedIn, snapChat, twitter, youTube,back;
     String imageurl = "", distance="", latitude="", longitude="",status="",userId, name, trainerId;
-    Button booknow;
     Alertdialoge pd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +55,6 @@ public class TrainerProfileView extends Activity {
         snapChat = (ImageView) findViewById(R.id.nav_snapchat);
         twitter = (ImageView) findViewById(R.id.nav_twitter);
         youTube = (ImageView) findViewById(R.id.nav_youtube);
-        booknow = (Button) findViewById(R.id.next);
         back = (ImageView) findViewById(R.id.back);
         pd = new Alertdialoge(TrainerProfileView.this);
         trainerImageView = (CircleImageView) findViewById(R.id.trainerimageView);
@@ -71,21 +69,6 @@ public class TrainerProfileView extends Activity {
         data = intent.getStringExtra("TrainerData");
         if(data.length()>0)*/
         new getProfile().execute();
-
-        booknow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                pd.show();
-                Intent intent= new Intent(getApplicationContext(), SessionReady.class);
-                intent.putExtra(Constants.latitude,latitude);
-                intent.putExtra(Constants.longitude,longitude);
-                intent.putExtra("name",name);
-                intent.putExtra("distance",distance);
-                startActivity(intent);
-                finish();
-
-            }
-        });
 
     }
 

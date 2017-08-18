@@ -31,6 +31,7 @@ public class Question3 extends Activity {
     private String[] yearSpinner;
     private String[] monthSpinner;
     String syear= "0",smonth="0", totalexp;
+    boolean check1 = false, check2 = false, check3 = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +112,10 @@ if (syear.equals("0")&&smonth.equals("0")){
         yes_competed_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(check2 && check3){
+                    next.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                }
+                check1 = true;
                 competed_category ="yes";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     yes_competed_category.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -124,6 +129,10 @@ if (syear.equals("0")&&smonth.equals("0")){
         no_competed_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(check2 && check3){
+                    next.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                }
+                check1 = true;
                 competed_category ="no";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     yes_competed_category.setBackgroundColor(getResources().getColor(R.color.white));
@@ -141,6 +150,10 @@ if (syear.equals("0")&&smonth.equals("0")){
         yes_coached_anybody.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(check1 && check3){
+                    next.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                }
+                check2 = true;
                 coached_anybody ="yes";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 
@@ -156,6 +169,10 @@ if (syear.equals("0")&&smonth.equals("0")){
         no_coached_anybody.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(check1 && check3){
+                    next.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                }
+                check2 = true;
                 coached_anybody ="no";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 
@@ -174,6 +191,10 @@ if (syear.equals("0")&&smonth.equals("0")){
         yes_certified_trainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(check1 && check2){
+                    next.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                }
+                check3 = true;
                 certified_trainer ="yes";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 
@@ -189,6 +210,10 @@ if (syear.equals("0")&&smonth.equals("0")){
         no_certified_trainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(check1 && check2){
+                    next.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                }
+                check3 = true;
                 certified_trainer ="no";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 

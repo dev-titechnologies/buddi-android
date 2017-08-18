@@ -259,7 +259,7 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
                                     NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
                                     nManager.cancelAll();
 
-                                    new CommonCall.timerUpdate(SessionReady.this,"cancel",book_id).execute();
+                                    new CommonCall.timerUpdate(SessionReady.this,"complete",book_id).execute();
 
                                     break;
 
@@ -271,7 +271,7 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
                     };
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(SessionReady.this);
-                    builder.setMessage("Do you want to Stop this session?").setPositiveButton("Yes", dialogClickListener)
+                    builder.setMessage("Are you sure you want to stop this session?").setPositiveButton("Yes", dialogClickListener)
                             .setNegativeButton("No", dialogClickListener).show();
 
 
@@ -723,7 +723,7 @@ try{
                     // Adding all the points in the route to LineOptions
                     lineOptions.addAll(points);
                     lineOptions.width(8);
-                    lineOptions.color(Color.MAGENTA);
+                    lineOptions.color(Color.BLACK);
 
                     Log.d("onPostExecute","onPostExecute lineoptions decoded");
 
@@ -852,7 +852,7 @@ try{
                 if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer"))
                 reqData.put("trainer_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
              else
-                    reqData.put("trainer_id", traine_id);
+                    reqData.put("trainer_id", trainer_id);
 
 
                 reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));

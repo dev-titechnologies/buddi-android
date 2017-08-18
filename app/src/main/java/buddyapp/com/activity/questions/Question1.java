@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -49,6 +51,26 @@ public class Question1 extends Activity {
                 }else{
                     zipcode.setError("Invalid Zipcode");
                 }
+            }
+        });
+
+        zipcode.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                if(s.length() > 4)
+                   next.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                else
+                    next.setBackgroundColor(getResources().getColor(R.color.button_bgcolor));
             }
         });
     }

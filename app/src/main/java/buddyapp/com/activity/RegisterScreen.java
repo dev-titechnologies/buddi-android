@@ -63,7 +63,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
     String semail, sfname,  slname, sgender="", scountrycode, smobilenumber, validnumber, spassword, sfacebookId="",sgoogleplusId="";
     String register_type= "normal";
     ImageView Google, facebook;
-    String user_image;
+    String user_image="";
 
     CountryCodePicker ccp;
     boolean isValid = false;
@@ -389,7 +389,11 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 lastName.setText(splitednaame[1]);
                 sgoogleplusId = acct.getId();
 
+                if (acct.getPhotoUrl()!=null)
                user_image = acct.getPhotoUrl().toString();
+else
+
+
 
                 if (acct.getEmail()!=null)
                 eMail.setText(acct.getEmail());
