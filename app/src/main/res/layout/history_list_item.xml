@@ -29,7 +29,7 @@
             android:padding="5dp"
             android:visibility="gone"
             android:id="@+id/trainee_txt"
-            android:text="Trainee"/>
+            android:text="Trainee:"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

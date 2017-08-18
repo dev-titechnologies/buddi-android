@@ -81,7 +81,7 @@ ImageView payment_image;
 
             }
         });
-
+CommonCall.showLoader(PaymentType.this);
     }
 
 
@@ -223,7 +223,7 @@ CommonCall.sessionout(getApplicationContext());
     public void onResult(DropInResult result) {
         CommonCall.PrintLog("result", result.toString());
 
-
+CommonCall.hideLoader();
         if (result.getPaymentMethodNonce() != null) {
 
             displaycard(result);
