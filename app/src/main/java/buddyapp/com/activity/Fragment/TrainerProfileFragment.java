@@ -263,8 +263,11 @@ public class TrainerProfileFragment extends Fragment {
                     PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getActivity());
                     fullname.setText(jsonObject.getString(Constants.fname) + " "+jsonObject.getString(Constants.lname));
                     typeAge.setText("Trainer("+jsonObject.getString("age")+")");
+                    if (jsonObject.has("height"))
                     height.setText(jsonObject.getString("height"));
+                    if (jsonObject.has("weight"))
                     weight.setText(jsonObject.getString("weight"));
+
                     loadProfile();
 
                 } else if (obj.getInt(Constants.status) == 2) {
