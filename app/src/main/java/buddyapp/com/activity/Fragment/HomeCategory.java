@@ -68,8 +68,8 @@ public class HomeCategory extends Fragment {
         instantBooking = (LinearLayout) view.findViewById(R.id.instant_booking);
         errorImage = (ImageView) view.findViewById(R.id.errorImage);
 
-        if(db.getAllCAT().length()>0) {
-            loadData(db.getAllCAT());
+        if(db.getAllCATForTrainee().length()>0) {
+            loadData(db.getAllCATForTrainee());
         }else {
             new getCategoryList().execute();
         }
@@ -132,11 +132,11 @@ public class HomeCategory extends Fragment {
                 if (response.getInt(Constants.status) == 1) {
                     errorImage.setVisibility(View.GONE);
                     db.insertCategory(response.getJSONArray("data"));
-                    CommonCall.PrintLog("cat", db.getAllCAT().toString());
+                    CommonCall.PrintLog("cat", db.getAllCATForTrainee().toString());
 
 
 
-                    loadData(db.getAllCAT());
+                    loadData(db.getAllCATForTrainee());
 
                 } else if (response.getInt(Constants.status) == 2) {
                     errorImage.setVisibility(View.VISIBLE);

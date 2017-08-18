@@ -297,6 +297,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
             super.onPostExecute(s);
             try {
                 facebook.setEnabled(true);
+                CommonCall.hideLoader();
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
                     JSONObject jsonObject = obj.getJSONObject("data");

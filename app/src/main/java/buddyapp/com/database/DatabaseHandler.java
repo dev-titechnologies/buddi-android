@@ -277,6 +277,39 @@ else
         // return contact list
         return categoryList;
     }
+    public JSONArray getAllCATForTrainee() {
+        JSONArray categoryList = new JSONArray();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_CATEGORY;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                JSONObject contact = new JSONObject();
+
+                try {
+
+
+                    contact.put("category_id", cursor.getString(1));
+
+                    contact.put("category_name", cursor.getString(2));
+                    contact.put("category_image", cursor.getString(3));
+
+
+                    categoryList.put(contact);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return categoryList;
+    }
 
     public HashSet getSubCat(ArrayList selectedID) {
         SQLiteDatabase db = this.getReadableDatabase();

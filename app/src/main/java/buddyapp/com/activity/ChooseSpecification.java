@@ -131,7 +131,7 @@ public class ChooseSpecification extends AppCompatActivity {
         thirty.setOnClickListener(new View.OnClickListener() {                                           @Override
         public void onClick(View view) {
             check1 = true;
-            setThirty();
+            setFourty();
             if(check2)
                 next.setVisibility(View.VISIBLE);
         }
@@ -232,8 +232,8 @@ public class ChooseSpecification extends AppCompatActivity {
         alert.show();
     }
 
-    void setThirty(){
-        sessionDuration = 30;
+    void setFourty(){
+        sessionDuration = 40;
 
         thirty.setTextColor(getResources().getColor(R.color.white));
         hour.setTextColor(getResources().getColor(R.color.black));

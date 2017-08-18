@@ -134,6 +134,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 traine_id= data.getString("trainee_id");
                 training_time= data.getInt("training_time");
                 name = data.getString("trainee_name") ;
+
+                PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
+
             }else{
 
                 JSONObject data = new JSONObject(PreferencesUtils.getData(trainer_Data, getApplicationContext(), ""));
@@ -146,6 +149,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 book_id= data.getString("book_id");
                 PreferencesUtils.saveData(Constants.bookid,book_id,getApplicationContext());
                 name = trainerDetail.getString("trainer_first_name") + " " + trainerDetail.getString("trainer_last_name");
+                PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
 
             }
 
@@ -224,7 +228,7 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
                  new   StartSession().execute();
                     profile.setEnabled(false);
                     message.setEnabled(false);
-                    startactionIcon.setImageResource(R.mipmap.stop);
+
                 } else{
 
                     Timer_Service.stopFlag=true;
@@ -401,7 +405,7 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
     private void showMarker() {
 
 try{
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 13));
                 pos_Marker =  googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title(name.toUpperCase()).draggable(false));
                 pos_Marker.showInfoWindow();
 
@@ -474,10 +478,7 @@ try{
         googleMap.clear();
 
         MarkerOptions mp = new MarkerOptions();
-
         mp.position(new LatLng(location.getLatitude(), location.getLongitude()));
-
-        mp.title("my position");
 
         googleMap.addMarker(mp);
 
@@ -584,7 +585,7 @@ try{
         // Executes in UI thread, after the parsing process
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-CommonCall.hideLoader();
+    CommonCall.hideLoader();
                 ArrayList<LatLng> points;
                 PolylineOptions lineOptions = null;
                 // Traversing through all the routes
@@ -618,6 +619,7 @@ CommonCall.hideLoader();
                 // Drawing polyline in the Google Map for the i-th route
                 if(lineOptions != null) {
                     googleMap.addPolyline(lineOptions);
+                    showMarker();
                 }
                 else {
                     Log.d("onPostExecute","without Polylines drawn");
@@ -765,7 +767,7 @@ CommonCall.hideLoader();
                     startactionTitle.setText("Stop");
 
 
-
+                    startactionIcon.setImageResource(R.mipmap.stop);
 
 
 

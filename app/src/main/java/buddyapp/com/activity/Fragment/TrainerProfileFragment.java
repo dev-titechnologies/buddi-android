@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -64,12 +65,12 @@ public class TrainerProfileFragment extends Fragment {
     private String userChoosenTask;
     boolean isValid = false;
     Uri image_uri;
-
+    TextView fullname, typeAge, height , weight;
     EditText rbmale;
     EditText firstName, lastName, eMail, password, mobile;
     CircleImageView  trainerImageView;
     LinearLayout trainerCategory,placeLayout, imageTrainer, imageUser;
-    String semail, sfname, slname, sgender = "", scountrycode, spassword, sfacebookId = "", sgoogleplusId = "";
+    String email, sfname, slname, sgender = "", scountrycode, spassword, sfacebookId = "", sgoogleplusId = "";
     String register_type = "normal";
     private PopupMenu popupMenu;
     String user_image;
@@ -101,6 +102,10 @@ public class TrainerProfileFragment extends Fragment {
         mobile = (EditText) view.findViewById(R.id.mobile);
 
         rbmale = (EditText) view.findViewById(R.id.male);
+        fullname = (TextView) view.findViewById(R.id.fullname);
+        typeAge = (TextView) view.findViewById(R.id.type_age);
+        height = (TextView) view.findViewById(R.id.height);
+        weight = (TextView) view.findViewById(R.id.weight);
 
 
         trainerCategory = (LinearLayout) view.findViewById(R.id.trainer_category);
@@ -167,6 +172,11 @@ public class TrainerProfileFragment extends Fragment {
             eMail.setText(PreferencesUtils.getData(Constants.email, getActivity(), ""));
             imageurl = PreferencesUtils.getData(Constants.user_image, getActivity(), "");
 
+            /*fullname.setText(jsonObject.getString(Constants.fname) + " "+jsonObject.getString(Constants.lname));
+            typeAge.setText("Trainer("+jsonObject.getString("age")+")");
+            height.setText(jsonObject.getString("height"));
+            weight.setText(jsonObject.getString("weight"));
+*/
             String combined = PreferencesUtils.getData(Constants.mobile, getActivity(), "");
             if (combined.contains("-")) {
                 String[] parts = combined.split("-");
@@ -245,7 +255,10 @@ public class TrainerProfileFragment extends Fragment {
                     PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getActivity());
 //                    PreferencesUtils.saveData(Constants.user_type, jsonObject.getString(Constants.user_type), getApplicationContext());
                     PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getActivity());
-
+                    fullname.setText(jsonObject.getString(Constants.fname) + " "+jsonObject.getString(Constants.lname));
+                    typeAge.setText("Trainer("+jsonObject.getString("age")+")");
+                    height.setText(jsonObject.getString("height"));
+                    weight.setText(jsonObject.getString("weight"));
                     loadProfile();
 
                 } else if (obj.getInt(Constants.status) == 2) {
@@ -450,7 +463,7 @@ public class TrainerProfileFragment extends Fragment {
         else {
             sfname = firstName.getText().toString();
             slname = lastName.getText().toString();
-            semail = eMail.getText().toString();
+//            semail = eMail.getText().toString();
             user_image = imageurl;
 //            spassword = password.getText().toString();
             return true;
