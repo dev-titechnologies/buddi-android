@@ -1,0 +1,22 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="buddyapp.com.activity.Fragment.Settings">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/large"
+        android:textSize="@dimen/large"
+        android:text="Instant-Booking Preference" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/ash"/>
+</LinearLayout>
+</FrameLayout>

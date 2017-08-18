@@ -2,14 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="buddyapp.com.activity.Fragment.BookingHistory">
+    tools:context="buddyapp.com.activity.Fragment.InviteFriends">
 
     <!-- TODO: Update blank fragment layout -->
-    <ListView
+    <TextView
         android:layout_width="match_parent"
-        android:id="@+id/list"
-        android:smoothScrollbar="true"
-        android:layout_height="match_parent"></ListView>
-
+        android:layout_height="match_parent"
+        android:text="Friend list" />
 
 </FrameLayout>

@@ -1,0 +1,38 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context="buddyapp.com.activity.Fragment.Help">
+
+<android.support.v7.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="10dp">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="As A Question"
+    android:gravity="center"
+    android:padding="10dp"/>
+</android.support.v7.widget.CardView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp"
+        android:text="Still need help?\nSend us an email at:\nbuddyhelp@buddyapp.tv\nOR\nCall our Help center at:\n659-123-9000"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="FAQ"
+        android:textColor="@color/white"
+        android:layout_marginTop="20dp"
+        android:id="@+id/next"
+        android:layout_gravity="bottom"
+        android:textAllCaps="true"
+        android:layout_alignParentBottom="true"
+        android:background="@color/button_bgcolor"/>
+</FrameLayout>

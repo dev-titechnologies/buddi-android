@@ -395,7 +395,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            CommonCall.hideLoader();
+
         }
     }
 

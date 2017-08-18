@@ -37,9 +37,12 @@ import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.Fragment.BookingHistory;
+import buddyapp.com.activity.Fragment.Help;
 import buddyapp.com.activity.Fragment.HomeCategory;
 import buddyapp.com.activity.Fragment.HomeTrainerMap;
+import buddyapp.com.activity.Fragment.InviteFriends;
 import buddyapp.com.activity.Fragment.Legal;
+import buddyapp.com.activity.Fragment.Settings;
 import buddyapp.com.activity.Fragment.TrainerProfileFragment;
 import buddyapp.com.activity.Payments.PaymentType;
 import buddyapp.com.fcm.Config;
@@ -210,9 +213,9 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -241,7 +244,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
 
             getSupportActionBar().setTitle("Settings");
-            Fragment fragment = new BookingHistory();
+            Fragment fragment = new Settings();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
@@ -258,7 +261,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_invite) {
 
             getSupportActionBar().setTitle("Invite Friends");
-            Fragment fragment = new BookingHistory();
+            Fragment fragment = new InviteFriends();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
@@ -272,7 +275,7 @@ public class HomeActivity extends AppCompatActivity
         }else if (id == R.id.nav_help) {
 
             getSupportActionBar().setTitle("Help");
-            Fragment fragment = new BookingHistory();
+            Fragment fragment = new Help();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
@@ -348,23 +351,7 @@ public class HomeActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         CommonCall.LoadImage(getApplicationContext(),PreferencesUtils.getData(Constants.user_image,getApplicationContext(),""), userImageView,R.drawable.ic_no_image,R.drawable.ic_account);
-
-       /* if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
-
-                            if (PreferencesUtils.getData(Constants.token,getApplicationContext(),"").length()>0 &&
-                        PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)&&
-                        PreferencesUtils.getData(Constants.availStatus,getApplicationContext(),"online").equals("online"))
-                    mSocket.connect();
-
-
-            startService(new Intent(this, LocationService.class));
-
-        }*/
-
-
-
-
-        // register GCM registration complete receiver
+       // register GCM registration complete receiver
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Config.REGISTRATION_COMPLETE));
 
@@ -384,15 +371,6 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)) {
-            Fragment fragment = new TrainerProfileFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
-        }else {
-            Fragment fragment = new HomeCategory();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
-        }
     }
 }
