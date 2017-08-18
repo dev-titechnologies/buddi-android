@@ -171,7 +171,7 @@ public class ChooseSpecification extends AppCompatActivity {
             public void onClick(View view) {
 
                 mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
-                if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                if (!mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                     buildAlertMessageNoGps();
                 }
 
@@ -186,19 +186,23 @@ public class ChooseSpecification extends AppCompatActivity {
                                     latitude = location.getLatitude();
                                     PreferencesUtils.saveData(Constants.latitude, String.valueOf(latitude), getApplicationContext());
                                     PreferencesUtils.saveData(Constants.longitude, String.valueOf(longitude),getApplicationContext());
+
+
+                                    if(sessionDuration>0 && sgender.length()>1) {
+                                        if (latitude > 0.0){
+                                            new SearchTrainer().execute();
+                                        }else{
+                                            Toast.makeText(getApplicationContext(), "Please check your GPS connection", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }else{
+                                        Toast.makeText(getApplicationContext(), "Please select you choice", Toast.LENGTH_SHORT).show();
+                                    }
+
                                 }
                             }
                         });
 
-                if(sessionDuration>0 && sgender.length()>1) {
-                    if (latitude > 0.0){
-                        new SearchTrainer().execute();
-                        }else{
-                        Toast.makeText(getApplicationContext(), "Please check your GPS connection", Toast.LENGTH_SHORT).show();
-                    }
-                }else{
-                    Toast.makeText(getApplicationContext(), "Please select you choice", Toast.LENGTH_SHORT).show();
-                }
+
 
             }
         });
@@ -313,7 +317,7 @@ public class ChooseSpecification extends AppCompatActivity {
                     }else
                     {
                         // No match found..........
-                        Toast.makeText(getApplicationContext(), "No match found", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "No trainer found", Toast.LENGTH_SHORT).show();
                     }
                 }else if (obj.getInt("status") == 2) {
                     Toast.makeText(getApplicationContext(),obj.getString("message"),Toast.LENGTH_SHORT).show();
