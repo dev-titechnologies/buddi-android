@@ -1,5 +1,8 @@
 package buddyapp.com.activity;
 
+
+import android.animation.ObjectAnimator;
+
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,6 +25,7 @@ import android.view.View;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -87,6 +91,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     private HashMap<Marker, String> hashMarker = new HashMap<Marker, String>();
     private FusedLocationProviderClient mFusedLocationClient;
 
+
     LinearLayout start,cancel,profile,message;
     ImageView startactionIcon,stopactionIcon,profileactionIcon,messageactionIcon;
     TextView startactionTitle,stopactionTitle,profileactionTitle,messageactionTitle,sessionTimmer;
@@ -136,6 +141,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 lat = trainerDetail.getString("trainer_latitude");
                 lng = trainerDetail.getString("trainer_longitude");
                 training_time= data.getInt("training_time");
+                trainer_id= data.getString("trainer_id");
+                traine_id= data.getString("trainee_id");
                 book_id= data.getString("book_id");
                 PreferencesUtils.saveData(Constants.bookid,book_id,getApplicationContext());
                 name = trainerDetail.getString("trainer_first_name") + " " + trainerDetail.getString("trainer_last_name");
@@ -172,7 +179,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         intstartStop();
         LoadmapTask();
     }
-
+    HorizontalScrollView     horizontalScrollView;
     void intstartStop() {
 
         start = (LinearLayout) findViewById(R.id.start);
@@ -180,16 +187,25 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         profile = (LinearLayout) findViewById(R.id.profile);
         message = (LinearLayout) findViewById(R.id.message);
 
+        horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollView);
 
-        startactionIcon = (ImageView) findViewById(R.id.startactionIcon);
-        stopactionIcon = (ImageView) findViewById(R.id.stopactionIcon);
-        profileactionIcon = (ImageView) findViewById(R.id.profileactionIcon);
-        messageactionIcon = (ImageView) findViewById(R.id.messageactionIcon);
+
+        startactionIcon =(ImageView)findViewById(R.id.startactionIcon);
+        stopactionIcon =(ImageView)findViewById(R.id.stopactionIcon);
+        profileactionIcon =(ImageView)findViewById(R.id.profileactionIcon);
+        messageactionIcon =(ImageView)findViewById(R.id.messageactionIcon);
+
 
         startactionTitle = (TextView) findViewById(R.id.startactionTitle);
         stopactionTitle = (TextView) findViewById(R.id.stopactionTitle);
         profileactionTitle = (TextView) findViewById(R.id.profileactionTitle);
         messageactionTitle = (TextView) findViewById(R.id.messagectionTitle);
+
+
+        sessionTimmer =(TextView)findViewById(R.id.sessionTimmer);
+        ObjectAnimator animator= ObjectAnimator.ofInt(horizontalScrollView, "scrollX",150 );
+        animator.setDuration(900);
+        animator.start();
 
         sessionTimmer = (TextView) findViewById(R.id.sessionTimmer);
 if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"false").equals("true")){
@@ -243,6 +259,19 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
 
             }
         });
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")) {
+                    Intent intent = new Intent(getApplicationContext(), TraineeProfileView.class);
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(getApplicationContext(),TrainerProfileView.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private BroadcastReceiver br = new BroadcastReceiver() {
@@ -267,7 +296,7 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
     @Override
     protected void onStart() {
         super.onStart();
-        CommonCall.showLoader(SessionReady.this);
+//        CommonCall.showLoader(SessionReady.this);
     }
 
     @Override
@@ -703,7 +732,13 @@ CommonCall.hideLoader();
             try {
                 reqData.put("book_id", book_id);
                 reqData.put("trainee_id",PreferencesUtils.getData(Constants.trainee_id, getApplicationContext(), ""));
+
+                if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer"))
                 reqData.put("trainer_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
+             else
+                    reqData.put("trainer_id", traine_id);
+
+
                 reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
                 response = NetworkCalls.POST(Urls.getStartSessionURL(), reqData.toString());
             }catch(JSONException e){

@@ -20,12 +20,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
+            android:visibility="gone"
             android:id="@+id/trainer_txt"
             android:text="Trainer:"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
+            android:visibility="gone"
             android:id="@+id/trainee_txt"
             android:text="Trainee"/>
         <TextView

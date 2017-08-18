@@ -38,7 +38,7 @@ HistoryAdapter historyAdapter;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         db = new DatabaseHandler(getActivity());
-//        new LoadBookingHistory().execute();
+        new LoadBookingHistory().execute();
         return inflater.inflate(R.layout.fragment_booking_history, container, false);
 
     }
@@ -70,6 +70,7 @@ HistoryAdapter historyAdapter;
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             try {
+                CommonCall.hideLoader();
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
                     JSONArray jsonArray = obj.getJSONArray("data");
@@ -92,7 +93,7 @@ HistoryAdapter historyAdapter;
                             db.insertHistroy(jsonObject);
 
                         }
-                        loadHistory(db.getAllHistory());
+//                        loadHistory(db.getAllHistory());
                         historyAdapter = new HistoryAdapter(getActivity(),jsonArray);
                     }
                 }

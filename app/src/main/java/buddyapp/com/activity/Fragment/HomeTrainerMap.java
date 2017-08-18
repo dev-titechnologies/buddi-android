@@ -7,14 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 
 import android.widget.ImageView;
@@ -42,6 +40,8 @@ import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 
+
+import buddyapp.com.activity.TraineeProfileView;
 import buddyapp.com.services.GPSTracker;
 
 import buddyapp.com.timmer.Timer_Service;
@@ -49,6 +49,7 @@ import buddyapp.com.timmer.Timer_Service;
 import buddyapp.com.services.LocationService;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
+
 
 import buddyapp.com.utils.RippleMap.MapRipple;
 import buddyapp.com.utils.Urls;
@@ -101,7 +102,7 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    mapFragment.getView().setClickable(false);
+
                     if (PreferencesUtils.getData(Constants.token, getActivity(), "").length() > 0 &&
                             PreferencesUtils.getData(Constants.user_type, getActivity(), "").equals(Constants.trainer) &&
                             PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {
@@ -146,7 +147,7 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
         mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
-
+        mapFragment.getView().setClickable(false);
         LoadmapTask();
         intstartStop(view);
         return view;
@@ -227,6 +228,14 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
 
                 NotificationManager nManager = ((NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE));
                 nManager.cancelAll();
+            }
+        });
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(),TraineeProfileView.class);
+                startActivity(i);
             }
         });
     }

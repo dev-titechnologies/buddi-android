@@ -78,6 +78,6 @@
         android:layout_marginTop="20dp"
         android:id="@+id/next"
         android:textAllCaps="true"
-        android:background="@color/button_bgcolor"/>
+        android:background="@color/colorPrimary"/>
 
 </RelativeLayout>
