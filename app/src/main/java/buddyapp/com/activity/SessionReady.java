@@ -3,6 +3,7 @@ package buddyapp.com.activity;
 
 import android.animation.ObjectAnimator;
 
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,9 +23,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -71,6 +74,8 @@ import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.RippleMap.MapRipple;
 import buddyapp.com.utils.Urls;
 
+
+import static buddyapp.com.Controller.updateSocket;
 import static buddyapp.com.R.id.map;
 import static buddyapp.com.Settings.Constants.trainee_Data;
 import static buddyapp.com.Settings.Constants.trainer_Data;
@@ -152,7 +157,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
 
             }
-
+            updateSocket();
             Controller.mSocket.connect();
             CommonCall.socketGetTrainerLocation();
 
@@ -231,24 +236,48 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
 
                 } else{
 
-                    Timer_Service.stopFlag=true;
-                    PreferencesUtils.saveData(Constants.timerstarted,"false",getApplicationContext());
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:
+                                    //Yes button clicked
+
+                                    Timer_Service.stopFlag=true;
+                                    PreferencesUtils.saveData(Constants.timerstarted,"false",getApplicationContext());
 
 
-                    startactionTitle.setText("Start");
-                    startactionIcon.setImageResource(R.mipmap.play);
+                                    startactionTitle.setText("Start");
+                                    startactionIcon.setImageResource(R.mipmap.play);
 
-                    PreferencesUtils.saveData("data", "", getApplicationContext());
-                    PreferencesUtils.saveData("hours", "", getApplicationContext());
+                                    PreferencesUtils.saveData("data", "", getApplicationContext());
+                                    PreferencesUtils.saveData("hours", "", getApplicationContext());
 
-                    stopService(new Intent(getApplicationContext(), Timer_Service.class));
+                                    stopService(new Intent(getApplicationContext(), Timer_Service.class));
 
 
-                    NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
-                    nManager.cancelAll();
+                                    NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
+                                    nManager.cancelAll();
 
-                    new CommonCall.timerUpdate(SessionReady.this,"cancel",book_id).execute();
-                }
+                                    new CommonCall.timerUpdate(SessionReady.this,"cancel",book_id).execute();
+
+                                    break;
+
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    //No button clicked
+                                    break;
+                            }
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SessionReady.this);
+                    builder.setMessage("Do you want to Stop this session?").setPositiveButton("Yes", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+
+
+
+
+                  }
 
 
             }
@@ -258,9 +287,93 @@ if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"fal
             @Override
             public void onClick(View view) {
 
+// Create custom dialog object
+                final Dialog dialog = new Dialog(SessionReady.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                // Include dialog.xml file
+                dialog.setContentView(R.layout.custom_dialog_yesno);
+                // Set dialog title
+                dialog.setTitle("Custom Dialog");
+
+                // set values for custom dialog components - text, image and button
+                TextView text = (TextView) dialog.findViewById(R.id.textDialog);
+                final EditText reason = (EditText) dialog.findViewById(R.id.reason);
+                text.setText("Do you want to cancel this session");
 
 
-                new CommonCall.timerUpdate(SessionReady.this,"cancel",book_id).execute();
+                dialog.show();
+
+                Button declineButton = (Button) dialog.findViewById(R.id.no);
+                Button yes = (Button) dialog.findViewById(R.id.yes);
+                // if decline button is clicked, close the custom dialog
+                yes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (reason.getText().toString().length()>1){
+                            dialog.dismiss();
+                            new CommonCall.timerUpdate(SessionReady.this, "cancel", book_id).execute();
+
+
+                        }else{
+
+
+                            reason.setError("Please enter your reason to cancel.");
+
+                        }
+
+
+                    }
+                });
+                declineButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Close dialog
+                        dialog.dismiss();
+                    }
+                });
+
+
+
+
+
+//                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        switch (which){
+//                            case DialogInterface.BUTTON_POSITIVE:
+//                                //Yes button clicked
+//
+//                                if (input.getText().toString().length()>2) {
+//
+//                                    new CommonCall.timerUpdate(SessionReady.this, "cancel", book_id).execute();
+//                                    dialog.dismiss();
+////                                    break;
+//                                }else {
+//
+//                                    input.setError("Please enter your reason to cancel.");
+//
+//
+//                                }
+//
+//                            case DialogInterface.BUTTON_NEGATIVE:
+//                                //No button clicked
+////                                break;
+//                        }
+//                    }
+//                };
+//
+//                AlertDialog.Builder builder = new AlertDialog.Builder(SessionReady.this);
+//
+//                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+//                        LinearLayout.LayoutParams.MATCH_PARENT,
+//                        LinearLayout.LayoutParams.MATCH_PARENT);
+//                input.setLayoutParams(lp);
+//                builder.setView(input);
+//                builder.setMessage("Do you want to cancel this session?").setPositiveButton("Yes", dialogClickListener)
+//                        .setNegativeButton("No", dialogClickListener).show();
+
+
 
             }
         });

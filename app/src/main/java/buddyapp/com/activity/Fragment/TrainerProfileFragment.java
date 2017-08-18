@@ -54,6 +54,7 @@ import buddyapp.com.utils.Utility;
 
 import static android.app.Activity.RESULT_OK;
 import static buddyapp.com.Controller.mSocket;
+import static buddyapp.com.Controller.updateSocket;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -115,10 +116,13 @@ public class TrainerProfileFragment extends Fragment {
 
 
   if (  PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {
+      updateSocket();
         mSocket.connect();
         toggle.setChecked(true);
         getActivity().startService(new Intent(getActivity(), LocationService.class));
         new updateStatus().execute();
+  }else{
+      getActivity().stopService(new Intent(getActivity(), LocationService.class));
   }
 
 
@@ -127,6 +131,7 @@ public class TrainerProfileFragment extends Fragment {
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    updateSocket();
                         mSocket.connect();
                     PreferencesUtils.saveData(Constants.availStatus, "online", getActivity());
                         getActivity().startService(new Intent(getActivity(), LocationService.class));
