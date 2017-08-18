@@ -140,6 +140,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 lat = trainerDetail.getString("trainer_latitude");
                 lng = trainerDetail.getString("trainer_longitude");
                 training_time= data.getInt("training_time");
+                trainer_id= data.getString("trainer_id");
+                traine_id= data.getString("trainee_id");
                 book_id= data.getString("book_id");
                 name = trainerDetail.getString("trainer_first_name") + " " + trainerDetail.getString("trainer_last_name");
 
@@ -282,8 +284,13 @@ PreferencesUtils.saveData(Constants.timerstarted,"true",getApplicationContext())
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),TrainerProfileView.class);
-                startActivity(intent);
+                if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")) {
+                    Intent intent = new Intent(getApplicationContext(), TraineeProfileView.class);
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(getApplicationContext(),TrainerProfileView.class);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -746,7 +753,13 @@ CommonCall.hideLoader();
             try {
                 reqData.put("book_id", book_id);
                 reqData.put("trainee_id",PreferencesUtils.getData(Constants.trainee_id, getApplicationContext(), ""));
+
+                if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer"))
                 reqData.put("trainer_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
+             else
+                    reqData.put("trainer_id", traine_id);
+
+
                 reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
                 response = NetworkCalls.POST(Urls.getStartSessionURL(), reqData.toString());
             }catch(JSONException e){

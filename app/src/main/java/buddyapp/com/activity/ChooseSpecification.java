@@ -43,6 +43,7 @@ public class ChooseSpecification extends AppCompatActivity {
     int id =0, ids=0;
     Animation a,b;
     Button next;
+    Boolean check1=false, check2=false;
 
     private FusedLocationProviderClient mFusedLocationClient;
     LocationManager mLocationManager;
@@ -129,28 +130,39 @@ public class ChooseSpecification extends AppCompatActivity {
 
         thirty.setOnClickListener(new View.OnClickListener() {                                           @Override
         public void onClick(View view) {
+            check1 = true;
             setThirty();
+            if(check2)
+                next.setVisibility(View.VISIBLE);
         }
         });
         hour.setOnClickListener(new View.OnClickListener() {                                           @Override
         public void onClick(View view) {
-            setHour();
+            check1 = true;setHour();
+            if(check2)
+                next.setVisibility(View.VISIBLE);
         }
         });
         male.setOnClickListener(new View.OnClickListener() {                                           @Override
         public void onClick(View view) {
-            setMale();
+            check2 = true;setMale();
+            if(check1)
+                next.setVisibility(View.VISIBLE);
         }
         });
         female.setOnClickListener(new View.OnClickListener() {                                           @Override
         public void onClick(View view) {
-            setFemale();
+            check2 = true;setFemale();
+            if(check1)
+                next.setVisibility(View.VISIBLE);
         }
         });
         noPreference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setNoPreference();
+                check2 = true;setNoPreference();
+                if(check1)
+                    next.setVisibility(View.VISIBLE);
             }
         });
 

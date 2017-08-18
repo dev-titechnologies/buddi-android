@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,20 +14,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 ;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
+import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.utils.AlertDialoge.Alertdialoge;
 import buddyapp.com.utils.CircleImageView;
+import buddyapp.com.utils.CommonCall;
+import buddyapp.com.utils.NetworkCalls;
+import buddyapp.com.utils.Urls;
 
 public class TrainerProfileView extends Activity {
     CircleImageView trainerImageView;
     TextView fullname, typeAge, height , weight, gymSubscription, trainingCategory, trainingHistory, coachingHistory, certifications, webUrl;
     ImageView faceBook, instagram, linkedIn, snapChat, twitter, youTube,back;
-    String data = "", distance="", latitude="", longitude="",status="",userId, name, trainerId;
+    String imageurl = "", distance="", latitude="", longitude="",status="",userId, name, trainerId;
     Button booknow;
     Alertdialoge pd;
     @Override
@@ -53,7 +59,7 @@ public class TrainerProfileView extends Activity {
         booknow = (Button) findViewById(R.id.next);
         back = (ImageView) findViewById(R.id.back);
         pd = new Alertdialoge(TrainerProfileView.this);
-
+        trainerImageView = (CircleImageView) findViewById(R.id.trainerimageView);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +70,7 @@ public class TrainerProfileView extends Activity {
         /*Intent intent = getIntent();
         data = intent.getStringExtra("TrainerData");
         if(data.length()>0)*/
-        loadTrainerProfile();
+        new getProfile().execute();
 
         booknow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,17 +91,20 @@ public class TrainerProfileView extends Activity {
 
     private void loadTrainerProfile() {
         try {
-            JSONObject trainer_details= new JSONObject(data);
-            JSONObject obj = trainer_details.getJSONObject("trainer_details");
 
-            name = obj.getString("first_name") + " "+obj.getString("last_name");
-            fullname.setText(obj.getString("first_name") + " "+obj.getString("last_name"));
-            typeAge.setText("Trainer("+obj.getString("age")+")");
-            height.setText(obj.getString("height"));
-            weight.setText(obj.getString("weight"));
-            latitude = obj.getString(Constants.latitude);
-            longitude = obj.getString(Constants.longitude);
-            distance = obj.getString("distance");
+            JSONObject trainer_Data= new JSONObject(PreferencesUtils.getData(Constants.trainer_Data,getApplicationContext(),""));
+            JSONObject obj = trainer_Data.getJSONObject("trainer_details");
+
+            name = obj.getString("trainer_first_name") + " "+obj.getString("trainer_last_name");
+            fullname.setText(obj.getString("trainer_first_name") + " "+obj.getString("trainer_last_name"));
+            typeAge.setText("Trainer("+obj.getString("trainer_age")+")");
+            height.setText(obj.getString("trainer_height"));
+            weight.setText(obj.getString("trainer_weight"));
+            latitude = obj.getString("trainer_latitude");
+            longitude = obj.getString("trainer_longitude");
+            distance = obj.getString("trainer_distance");
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -115,5 +124,63 @@ public class TrainerProfileView extends Activity {
             default: return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    class getProfile extends AsyncTask<String, String, String> {
+        JSONObject reqData = new JSONObject();
+        String response;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            CommonCall.showLoader(TrainerProfileView.this);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                reqData.put(Constants.token, PreferencesUtils.getData(Constants.token, getApplicationContext(), ""));
+                reqData.put(Constants.user_type, "trainer");
+                reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.trainer_id, getApplicationContext(), ""));
+                response = NetworkCalls.POST(Urls.getTraineeProfileURL(), reqData.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            CommonCall.hideLoader();
+            try {
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt(Constants.status) == 1) {
+                    JSONObject jsonObject = obj.getJSONObject("data");
+                    PreferencesUtils.saveData(Constants.trainer_Data,obj.getJSONObject("data").toString(),getApplicationContext());
+
+                    fullname.setText(jsonObject.getString(Constants.fname) + " "+jsonObject.getString(Constants.lname));
+                    typeAge.setText("Trainer("+jsonObject.getString("age")+")");
+                    height.setText(jsonObject.getString("height"));
+                    weight.setText(jsonObject.getString("weight"));
+                    imageurl = PreferencesUtils.getData(Constants.user_image, getApplicationContext(), "");
+
+                    String gender = PreferencesUtils.getData(Constants.gender, getApplicationContext(), "");
+
+                    CommonCall.LoadImage(getApplicationContext(), imageurl, trainerImageView, R.drawable.ic_account, R.drawable.ic_account);
+
+                } else if (obj.getInt(Constants.status) == 2) {
+                    Toast.makeText(TrainerProfileView.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                } else {
+                    //session out
+                    CommonCall.sessionout(TrainerProfileView.this);
+                    finish();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

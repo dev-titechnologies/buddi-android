@@ -165,12 +165,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/next"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:textColor="@color/white"
         android:layout_marginTop="20dp"
         android:layout_gravity="bottom"
         android:id="@+id/next"
         android:textAllCaps="true"
-        android:background="@color/button_bgcolor"/>
+        android:background="@color/colorPrimary"/>
 
 </FrameLayout>

@@ -40,6 +40,7 @@ import buddyapp.com.activity.Fragment.BookingHistory;
 import buddyapp.com.activity.Fragment.HomeCategory;
 import buddyapp.com.activity.Fragment.HomeTrainerMap;
 import buddyapp.com.activity.Fragment.Legal;
+import buddyapp.com.activity.Fragment.TrainerProfileFragment;
 import buddyapp.com.activity.Payments.PaymentType;
 import buddyapp.com.fcm.Config;
 import buddyapp.com.fcm.NotificationUtils;
@@ -98,7 +99,7 @@ public class HomeActivity extends AppCompatActivity
         getSupportActionBar().setTitle("Buddi");
 
         if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)) {
-            Fragment fragment = new HomeTrainerMap();
+            Fragment fragment = new TrainerProfileFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
@@ -226,7 +227,7 @@ public class HomeActivity extends AppCompatActivity
             getSupportActionBar().setTitle("Buddi");
             clearBackstack();
             if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)) {
-                Fragment fragment = new HomeTrainerMap();
+                Fragment fragment = new TrainerProfileFragment();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 
@@ -383,7 +384,7 @@ public class HomeActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)) {
-            Fragment fragment = new HomeTrainerMap();
+            Fragment fragment = new TrainerProfileFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
 

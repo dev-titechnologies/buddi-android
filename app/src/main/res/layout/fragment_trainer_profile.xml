@@ -1,16 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="buddyapp.com.activity.TrainerProfileView">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="buddyapp.com.activity.ProfileScreen">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="50dp"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:weightSum="3">
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="165dp"
+                    android:layout_height="150dp"
+                    android:layout_weight="1"
                     android:id="@+id/image_trainer"
-                    android:paddingTop="30dp"
+                    android:visibility="visible"
                     android:background="@mipmap/profile_trainer"
                     android:gravity="left"
                     android:orientation="horizontal">
@@ -21,7 +41,7 @@
                         android:layout_height="75dp"
                         android:layout_margin="30dp"
                         android:clickable="false"
-                        android:src="@mipmap/ic_launcher_round" />
+                        android:src="@drawable/ic_account" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -32,14 +52,13 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:textSize="20dp"
-                            android:textStyle="bold"
                             android:id="@+id/fullname"
-                            android:textAllCaps="true"/>
+                            android:text="Aneesh P V"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="16dp"
+                            android:textColor="@color/white"
+                            android:textSize="18dp"
                             android:id="@+id/type_age"
                             android:text="Trainer (28)"/>
                         <TextView
@@ -47,65 +66,181 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:id="@+id/height"
-                            android:drawableLeft="@drawable/ic_height_arrow"
                             android:text="1.73"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:id="@+id/weight"
-                            android:paddingLeft="7dp"
-                            android:drawablePadding="5dp"
-                            android:drawableLeft="@mipmap/kg"
                             android:text="65.0 kg"/>
                     </LinearLayout>
                 </LinearLayout>
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:id="@+id/toolbar"
-        android:layout_alignParentTop="true"
-        android:background="@color/transparent"
-        android:layout_height="wrap_content">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:layout_centerVertical="true"
-                android:id="@+id/back"
-                android:layout_gravity="start"
-                android:src="@drawable/ic_arrow_back_black_24dp"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="19dp"
-                android:padding="@dimen/medium"
-                android:textColor="@color/white"
-                android:text="Trainer Profile"/>
-
-        </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/image_trainer">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:orientation="vertical"
-                    android:paddingBottom="50dp"
-                    android:weightSum="1">
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="20dp"
+                    android:weightSum="8">
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="FIRST NAME"
+                                android:textSize="12dp" />
+
+                            <EditText
+                                android:id="@+id/first_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:maxLength="25"
+                                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                android:inputType="text"
+                                android:singleLine="true" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="LAST NAME"
+                                android:textSize="12dp" />
+
+                            <EditText
+                                android:id="@+id/last_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:maxLength="25"
+                                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                android:inputType="text"
+                                android:singleLine="true" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="EMAIL"
+                            android:textSize="12dp" />
+
+                        <EditText
+                            android:id="@+id/email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textEmailAddress"
+                            android:maxLength="50"
+                            android:singleLine="true" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="Mobile" />
+
+                            <com.hbb20.CountryCodePicker
+                                android:id="@+id/ccp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:ccp_countryPreference="US,IN"
+                                app:ccp_defaultPhoneCode="1"
+                                app:ccp_textSize="16sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mobile"
+                                android:visibility="invisible" />
+
+                            <EditText
+                                android:id="@+id/mobile"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="phone"
+                                android:singleLine="true" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:weightSum="3">
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="Gender" />
+
+
+                        <EditText
+                            android:id="@+id/male"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="5dp"
+                            android:enabled="false"
+                            android:visibility="gone" />
+
+
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/trainer_category"
                     android:layout_width="match_parent"
@@ -121,6 +256,10 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/ash" />
 
                         <TextView
                             android:id="@+id/gym_subscription"
@@ -128,8 +267,8 @@
                             android:layout_height="match_parent"
                             android:background="@color/white"
                             android:drawableRight="@drawable/ic_right_black_24dp"
-                            android:padding="15dp"
-                            android:text="Gym Subscriptions" />
+                            android:padding="10dp"
+                            android:text="Gym Scriptions" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -144,54 +283,15 @@
                             android:background="@color/ash" />
 
                         <TextView
-                            android:id="@+id/training_category"
+                            android:id="@+id/category"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@color/white"
                             android:drawableRight="@drawable/ic_right_black_24dp"
-                            android:padding="15dp"
+                            android:padding="10dp"
                             android:text="Training Category" />
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/ash" />
-
-                        <TextView
-                            android:id="@+id/training_history"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/white"
-                            android:drawableRight="@drawable/ic_right_black_24dp"
-                            android:padding="15dp"
-                            android:text="Training History" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/ash" />
-
-                        <TextView
-                            android:id="@+id/coaching_history"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/white"
-                            android:drawableRight="@drawable/ic_right_black_24dp"
-                            android:padding="15dp"
-                            android:text="Coaching History" />
-                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -209,7 +309,7 @@
                             android:layout_height="match_parent"
                             android:background="@color/white"
                             android:drawableRight="@drawable/ic_right_black_24dp"
-                            android:padding="15dp"
+                            android:padding="10dp"
                             android:text="Certifications" />
 
                         <View
@@ -289,12 +389,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <TextView
+                            <EditText
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:padding="10dp"
-                                android:id="@+id/web_url"
                                 android:background="@color/transparent"
+                                android:drawableRight="@drawable/ic_edit_black_24dp"
                                 android:hint="Blog or Web URL" />
                         </LinearLayout>
                     </LinearLayout>
@@ -304,4 +404,4 @@
 
         </LinearLayout>
     </ScrollView>
-</RelativeLayout>
+</LinearLayout>

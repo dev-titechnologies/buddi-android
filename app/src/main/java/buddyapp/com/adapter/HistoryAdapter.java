@@ -13,6 +13,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import buddyapp.com.R;
+import buddyapp.com.Settings.Constants;
+import buddyapp.com.Settings.PreferencesUtils;
 
 /**
  * Created by titech on 25/7/17.
@@ -50,7 +52,12 @@ public class HistoryAdapter extends BaseAdapter {
                     .inflate(R.layout.history_list_item, viewGroup, false);
             view.setTag(holder);
             holder = new CustomViewHolder();
-//            category, training_status,payment_status,location,date;
+            holder.trainer = (TextView) view.findViewById(R.id.trainer_txt);
+            holder.trainee = (TextView) view.findViewById(R.id.trainee_txt);
+            if(PreferencesUtils.getData(Constants.user_type,context,"").equals("trainer"))
+                holder.trainee.setVisibility(View.VISIBLE);
+            else
+                holder.trainer.setVisibility(View.VISIBLE);
             holder.name = (TextView) view.findViewById(R.id.name);
             holder.training_status = (TextView) view.findViewById(R.id.training_status);
             holder.payment_status = (TextView) view.findViewById(R.id.training_status);
@@ -82,7 +89,7 @@ public class HistoryAdapter extends BaseAdapter {
 
     public class CustomViewHolder {
 
-        TextView name,category, training_status,payment_status,location,date;
+        TextView name,category, training_status,payment_status,location,date, trainer, trainee;
         CardView cat_card;
 
     }
