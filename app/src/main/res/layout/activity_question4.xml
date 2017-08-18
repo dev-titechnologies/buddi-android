@@ -107,7 +107,7 @@
             android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"
-                android:text="@string/pounds_text"
+                android:text="@string/knowledge_text"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/large"
                 android:gravity="center"/>
@@ -115,22 +115,14 @@
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center"
+                android:paddingBottom="5dp"
                 android:layout_height="match_parent">
-                <Button
-                    android:layout_width="wrap_content"
-                    android:id="@+id/yes_pounds"
-                    android:text="@string/yes"
-                    android:layout_weight="1"
-                    android:background="@color/transparent"
-                    android:layout_height="wrap_content"/>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:text="@string/no"
-                    android:id="@+id/no_pounds"
-                    android:layout_weight="1"
-                    android:background="@color/transparent"
-                    android:layout_height="wrap_content"/>
-
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="10dp"
+                    android:gravity="center"
+                    android:id="@+id/spinner"/>
             </LinearLayout>
 </LinearLayout>
             </android.support.v7.widget.CardView>

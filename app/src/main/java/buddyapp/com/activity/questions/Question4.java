@@ -43,7 +43,7 @@ import static buddyapp.com.Settings.Constants.questionData;
 
 public class Question4 extends Activity {
     Button next, yes_pounds, no_pounds;
-
+    Spinner spinner;
     ListView sub_list;
     DatabaseHandler db;
     SubCategoryAdapter subCategoryAdapter;
@@ -58,7 +58,7 @@ public class Question4 extends Activity {
     private String[] onesSpinner;
     int shundreds=0,sones=0, weight;
     Spinner hundreds, ones;
-
+    private String[] spinnerArray;
 
     boolean outdoorFlag= false;
     @Override
@@ -69,10 +69,10 @@ public class Question4 extends Activity {
 
         sub_cat_selectedID = new ArrayList<>();
 
-
+        spinner = (Spinner) findViewById(R.id.spinner);
         db = new DatabaseHandler(getApplicationContext());
-        yes_pounds = (Button) findViewById(R.id.yes_pounds);
-        no_pounds = (Button) findViewById(R.id.no_pounds);
+//        yes_pounds = (Button) findViewById(R.id.yes_pounds);
+//        no_pounds = (Button) findViewById(R.id.no_pounds);
         next = (Button) findViewById(R.id.next);
 
         sub_list = (ListView) findViewById(R.id.sub_list);
@@ -101,7 +101,13 @@ public class Question4 extends Activity {
         sones = Integer.parseInt(ones.getSelectedItem().toString());
 
         weight = shundreds+sones;
-
+        this.spinnerArray = new String[] {
+                "Not at all","Somewhat knowledgeable", "Extremely knowledgeable"
+        };
+        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this,
+                R.layout.spinner_item, spinnerArray);
+        spinner.setAdapter(adapter3);
+        pounds = String.valueOf(spinner.getSelectedItem());
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +118,7 @@ public class Question4 extends Activity {
                 finish();
             }
         });
-        yes_pounds.setOnClickListener(new View.OnClickListener() {
+        /*yes_pounds.setOnClickListener(new View.OnClickListener() {
             @Override
 
             public void onClick(View view) {
@@ -146,7 +152,7 @@ public class Question4 extends Activity {
                 }
 
             }
-        });
+        });*/
 
         ArrayList<JSONObject> values = new ArrayList<JSONObject>();
         HashSet<JSONObject> hashSet = new HashSet<JSONObject>();
