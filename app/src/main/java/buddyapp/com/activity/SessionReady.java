@@ -269,7 +269,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                                     NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
                                     nManager.cancelAll();
 
-                                    new CommonCall.timerUpdate(SessionReady.this, "cancel", book_id).execute();
+
+                                    new CommonCall.timerUpdate(SessionReady.this,"complete",book_id).execute();
+
 
                                     break;
 
@@ -281,7 +283,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                     };
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(SessionReady.this);
-                    builder.setMessage("Do you want to Stop this session?").setPositiveButton("Yes", dialogClickListener)
+                    builder.setMessage("Are you sure you want to stop this session?").setPositiveButton("Yes", dialogClickListener)
                             .setNegativeButton("No", dialogClickListener).show();
 
 
@@ -749,6 +751,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         // Executes in UI thread, after the parsing process
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+
             CommonCall.hideLoader();
             ArrayList<LatLng> points;
             PolylineOptions lineOptions = null;
@@ -900,9 +903,10 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 reqData.put("trainee_id", PreferencesUtils.getData(Constants.trainee_id, getApplicationContext(), ""));
 
                 if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer"))
-                    reqData.put("trainer_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
-                else
-                    reqData.put("trainer_id", traine_id);
+
+                reqData.put("trainer_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
+             else
+                    reqData.put("trainer_id", trainer_id);
 
 
                 reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));

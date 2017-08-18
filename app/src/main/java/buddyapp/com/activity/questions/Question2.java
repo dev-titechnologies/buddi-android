@@ -39,6 +39,7 @@ public class Question2 extends Activity {
     String military_installations_selected = "";
     ImageView back;
     RelativeLayout root;
+    boolean check1= false, check2 = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +62,7 @@ public class Question2 extends Activity {
         gym_sub.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                check2 = true;
                 gymtext.setVisibility(View.GONE);
                 gym_sub.setVisibility(View.VISIBLE);
                 return false;
@@ -79,6 +81,8 @@ public class Question2 extends Activity {
         yes_military_installations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(check2)
+                    next.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 military_installations_selected ="yes";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     yes_military_installations.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -93,6 +97,8 @@ public class Question2 extends Activity {
         no_military_installations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(check2)
+                    next.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     yes_military_installations.setBackgroundColor(getResources().getColor(R.color.white));
                     no_military_installations.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
