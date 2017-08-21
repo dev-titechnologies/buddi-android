@@ -170,39 +170,47 @@ public class ChooseSpecification extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
-                if (!mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                    buildAlertMessageNoGps();
-                }
+                if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
+                    Toast.makeText(ChooseSpecification.this, "You are already in a session", Toast.LENGTH_SHORT).show();
 
-                mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
-                mFusedLocationClient.getLastLocation()
-                        .addOnSuccessListener(ChooseSpecification.this, new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                // Got last known location. In some rare situations this can be null.
-                                if (location != null) {
-                                    longitude = location.getLongitude();
-                                    latitude = location.getLatitude();
-                                    PreferencesUtils.saveData(Constants.latitude, String.valueOf(latitude), getApplicationContext());
-                                    PreferencesUtils.saveData(Constants.longitude, String.valueOf(longitude),getApplicationContext());
+                    startActivity(new Intent(getApplicationContext(), SessionReady.class));
+                    finish();
+                }     else {
+
+                    mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+                    if (!mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                        buildAlertMessageNoGps();
+                    }
+
+                    mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
+                    mFusedLocationClient.getLastLocation()
+                            .addOnSuccessListener(ChooseSpecification.this, new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    // Got last known location. In some rare situations this can be null.
+                                    if (location != null) {
+                                        longitude = location.getLongitude();
+                                        latitude = location.getLatitude();
+                                        PreferencesUtils.saveData(Constants.latitude, String.valueOf(latitude), getApplicationContext());
+                                        PreferencesUtils.saveData(Constants.longitude, String.valueOf(longitude), getApplicationContext());
 
 
-                                    if(sessionDuration>0 && sgender.length()>1) {
-                                        if (latitude > 0.0){
-                                            new SearchTrainer().execute();
-                                        }else{
-                                            Toast.makeText(getApplicationContext(), "Please check your GPS connection", Toast.LENGTH_SHORT).show();
+                                        if (sessionDuration > 0 && sgender.length() > 1) {
+                                            if (latitude > 0.0) {
+                                                new SearchTrainer().execute();
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), "Please check your GPS connection", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Please select you choice", Toast.LENGTH_SHORT).show();
                                         }
-                                    }else{
-                                        Toast.makeText(getApplicationContext(), "Please select you choice", Toast.LENGTH_SHORT).show();
+
                                     }
-
                                 }
-                            }
-                        });
+                            });
 
 
+                }
 
             }
         });

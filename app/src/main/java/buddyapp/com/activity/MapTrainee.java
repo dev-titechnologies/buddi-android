@@ -83,16 +83,19 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
 
 
-if (PreferencesUtils.getData(Constants.clientToken,getApplicationContext(),"").length()>1) {
-    intPayment();
 
-}else{
+                    {
 
-    Intent payment = new Intent(getApplicationContext(), PaymentType.class);
-    payment.putExtra("result", true);
-    startActivityForResult(payment,resultPayment);
-}
+                    if (PreferencesUtils.getData(Constants.clientToken, getApplicationContext(), "").length() > 1) {
+                        intPayment();
 
+                    } else {
+
+                        Intent payment = new Intent(getApplicationContext(), PaymentType.class);
+                        payment.putExtra("result", true);
+                        startActivityForResult(payment, resultPayment);
+                    }
+                }
             }
         });
 
@@ -145,6 +148,8 @@ if (PreferencesUtils.getData(Constants.clientToken,getApplicationContext(),"").l
 if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"").length()>1){
 
     new RandomSelect().execute();
+
+
 }else
                 new checkout(MapTrainee.this,nounce).execute();}
 
@@ -318,6 +323,8 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+                Toast.makeText(MapTrainee.this, Constants.server_error_message, Toast.LENGTH_SHORT).show();
+
             }
 
         }

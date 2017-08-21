@@ -255,9 +255,18 @@ public class HomeActivity extends AppCompatActivity
             startActivity(payment);
         } else if (id == R.id.nav_trainer) {
 
-            source_become_trainer=true;
-            Intent intent = new Intent(getApplicationContext(),ChooseCategory.class);
-            startActivity(intent);
+
+            if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
+                Toast.makeText(this, "You are already in a session", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), SessionReady.class));
+                finish();
+            }     else {
+                source_become_trainer = true;
+                Intent intent = new Intent(getApplicationContext(), ChooseCategory.class);
+                startActivity(intent);
+
+            }
+
         } else if (id == R.id.nav_invite) {
 
             getSupportActionBar().setTitle("Invite Friends");

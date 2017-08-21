@@ -18,10 +18,12 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Interpolator;
@@ -108,7 +110,11 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session_ready);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+
 
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 // check if GPS enabled
@@ -194,6 +200,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
  * get Trainer location
  ****/
         intstartStop();
+        if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"false").equals("true")){
+            cancel.setEnabled(false);
+        }
         LoadmapTask();
     }
 
@@ -1020,7 +1029,10 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     public void onBackPressed() {
 //        super.onBackPressed();
 
-return;
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
 
 //        if (doubleBackToExitPressedOnce) {
 //            super.onBackPressed();
@@ -1043,4 +1055,16 @@ return;
 //            }
 //        }, 2000);
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+
+            default: return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
 }
