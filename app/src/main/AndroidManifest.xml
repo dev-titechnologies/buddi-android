@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="buddyapp.com">
-
+    <!-- Adding the permission -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -176,6 +177,12 @@
             android:screenOrientation="portrait" ></activity>
 
         <service android:name=".timmer.Timer_Service"></service>
+        <!-- Declaring broadcast receiver for BOOT_COMPLETED event. -->
+        <receiver android:name=".timmer.BootReceiver" android:enabled="true" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

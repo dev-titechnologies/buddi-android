@@ -169,7 +169,7 @@ public class VideoUploadActivity extends AppCompatActivity {
                 Uri vid = data.getData();
                 CommonCall.PrintLog("url video", data + "");
 //                CommonCall.PrintLog("url video",checkVideoDurationValidation(vid)+"");
-                if (checkVideoDurationValidation(vid) >= 30) {
+                if (checkVideoDurationValidation(vid) <= 90) {
 
                     videoUrl = getPathFromUri(vid);
                     upload.setVisibility(View.VISIBLE);
@@ -177,7 +177,7 @@ public class VideoUploadActivity extends AppCompatActivity {
 
                 } else {
 
-                    Toast.makeText(this, "Recorded video should be more than 30 seconds.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Videos should be no longer than 90 seconds.", Toast.LENGTH_LONG).show();
                 }
             }
             if (resultCode == Activity.RESULT_CANCELED) {
@@ -187,7 +187,7 @@ public class VideoUploadActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 Uri vid = data.getData();
 
-                if (checkVideoDurationValidation(vid) >= 30 && checkVideoDurationValidation(vid) <= 90) {
+                if (checkVideoDurationValidation(vid) <= 90) {
 
 
                     videoUrl = getPathFromUri(vid);
@@ -196,7 +196,7 @@ public class VideoUploadActivity extends AppCompatActivity {
                     next.setVisibility(View.GONE);
                 } else {
 
-                    Toast.makeText(this, "Selected video should be more than 30 seconds and not more than 90 seconds", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Videos should be no longer than 90 seconds.", Toast.LENGTH_LONG).show();
                 }
 
 

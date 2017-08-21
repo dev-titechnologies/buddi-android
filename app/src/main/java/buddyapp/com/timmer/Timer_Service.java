@@ -64,6 +64,7 @@ public static boolean stopFlag =false;
         mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 5, NOTIFY_INTERVAL);
         intent = new Intent(str_receiver);
         CreateNotification();
+    PreferencesUtils.saveData(Constants.timmer_status,"true",getApplicationContext());
     }
 
 
@@ -147,6 +148,7 @@ public static boolean stopFlag =false;
         Log.e("Service finish","Finish");
         fn_update("Session Completed");
         sessionCompleted("Session Completed");
+        PreferencesUtils.saveData(Constants.timmer_status,"false",getApplicationContext());
     }
 
     private void fn_update(String str_time){

@@ -21,6 +21,7 @@ import buddyapp.com.activity.IntroScreen;
 import buddyapp.com.activity.SessionReady;
 import buddyapp.com.activity.WelcomeActivity;
 import buddyapp.com.activity.questions.DoneActivity;
+import buddyapp.com.timmer.Timer_Service;
 import buddyapp.com.utils.CommonCall;
 
 public class Splash extends AppCompatActivity {
@@ -55,6 +56,8 @@ public class Splash extends AppCompatActivity {
 
                                 if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
 
+                                    startService(new Intent(getApplicationContext(), Timer_Service.class));
+
                                     startActivity(new Intent(getApplicationContext(), SessionReady.class));
                                     finish();
                                 } else
@@ -79,6 +82,8 @@ public class Splash extends AppCompatActivity {
 *
 * */
                         if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
+
+                            startService(new Intent(getApplicationContext(), Timer_Service.class));
 
                             startActivity(new Intent(getApplicationContext(), SessionReady.class));
                             finish();
