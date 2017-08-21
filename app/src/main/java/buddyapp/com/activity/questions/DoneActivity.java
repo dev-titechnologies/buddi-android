@@ -87,7 +87,7 @@ Button exit;
                 CommonCall.PrintLog("result",obj.toString());
                 if(obj.getInt("status")==1){
 
-                    PreferencesUtils.saveData(Constants.approved, obj.getString(Constants.approved), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.approved, obj.getJSONObject("data").getJSONArray(Constants.approved).toString(), getApplicationContext());
 
                         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);
