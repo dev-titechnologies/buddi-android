@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/root"
+    android:paddingTop="2dp"
     tools:context="buddyapp.com.activity.ChooseCategory">
 
 <ImageView
@@ -16,6 +17,7 @@
     android:layout_height="100dp" />
     <GridView
         android:layout_width="match_parent"
+        android:padding="5dp"
         android:numColumns="2"
         android:id="@+id/grid"
         android:gravity="center"

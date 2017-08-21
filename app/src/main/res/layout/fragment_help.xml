@@ -2,28 +2,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="20dp"
     tools:context="buddyapp.com.activity.Fragment.Help">
 
 <android.support.v7.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:cardCornerRadius="5dp"
     android:elevation="10dp">
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="As A Question"
-    android:gravity="center"
-    android:padding="10dp"/>
-</android.support.v7.widget.CardView>
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="@color/black"
-        android:gravity="center"
-        android:lineSpacingExtra="4dp"
-        android:text="Still need help?\nSend us an email at:\nbuddyhelp@buddyapp.tv\nOR\nCall our Help center at:\n659-123-9000"/>
+        android:gravity="center">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="As A Question"
+    android:drawableLeft="@drawable/ic_search"
+    android:drawablePadding="5dp"
+    android:gravity="left"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"/>
+    </LinearLayout>
+</android.support.v7.widget.CardView>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,5 +37,57 @@
         android:layout_gravity="bottom"
         android:textAllCaps="true"
         android:layout_alignParentBottom="true"
-        android:background="@color/button_bgcolor"/>
+        android:background="@drawable/round_corner_button"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+
+            android:padding="2dp"
+            android:text="Still need help?"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:padding="2dp"
+            android:text="Send us an email at:\nbuddyhelp@buddyapp.tv"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="OR"
+            android:textColor="@color/text_color"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="4dp"
+            android:padding="2dp"
+            android:text="Call our Help center at:"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="659-123-9000"
+            android:textColor="@color/text_color" />
+    </LinearLayout>
 </FrameLayout>

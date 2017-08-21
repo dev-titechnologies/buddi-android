@@ -103,7 +103,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
     LinearLayout start, cancel, profile, message;
-    ImageView startactionIcon, stopactionIcon, profileactionIcon, messageactionIcon;
+    ImageView startactionIcon, stopactionIcon, profileactionIcon, messageactionIcon,cancelactionIcon;
     TextView startactionTitle, stopactionTitle, profileactionTitle, messageactionTitle, sessionTimmer;
 
     @Override
@@ -202,6 +202,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         intstartStop();
         if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"false").equals("true")){
             cancel.setEnabled(false);
+            startactionIcon.setImageResource(R.mipmap.stop_blue);
         }
         LoadmapTask();
     }
@@ -222,7 +223,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         stopactionIcon = (ImageView) findViewById(R.id.stopactionIcon);
         profileactionIcon = (ImageView) findViewById(R.id.profileactionIcon);
         messageactionIcon = (ImageView) findViewById(R.id.messageactionIcon);
-
+        cancelactionIcon = (ImageView) findViewById(R.id.cancelactionIcon);
 
         startactionTitle = (TextView) findViewById(R.id.startactionTitle);
         stopactionTitle = (TextView) findViewById(R.id.stopactionTitle);
@@ -307,6 +308,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             public void onClick(View view) {
 
 // Create custom dialog object
+                cancelactionIcon.setImageResource(R.mipmap.cancel_blue);
                 final Dialog dialog = new Dialog(SessionReady.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 // Include dialog.xml file
@@ -941,7 +943,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                     startactionTitle.setText("Stop");
                     cancel.setEnabled(false);
 
-                    startactionIcon.setImageResource(R.mipmap.stop);
+                    startactionIcon.setImageResource(R.mipmap.stop_blue);
 
 
                     Calendar calendar = Calendar.getInstance();

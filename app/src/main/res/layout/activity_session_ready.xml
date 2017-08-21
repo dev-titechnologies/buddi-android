@@ -55,7 +55,7 @@
                 android:layout_weight="1"
                 android:id="@+id/cancel"
                 android:gravity="center"
-                android:paddingTop="10dp"
+                android:paddingTop="15dp"
                 android:orientation="vertical">
 
                 <ImageView
@@ -81,7 +81,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:id="@+id/start"
-                android:paddingTop="10dp"
+                android:paddingTop="15dp"
                 android:orientation="vertical">
 
                 <ImageView
@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:id="@+id/profile"
-                android:paddingTop="10dp"
+                android:paddingTop="15dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -133,7 +133,7 @@
                 android:layout_weight="1"
                 android:id="@+id/message"
                 android:gravity="center"
-                android:paddingTop="10dp"
+                android:paddingTop="15dp"
                 android:orientation="vertical">
 
                 <ImageView

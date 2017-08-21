@@ -384,10 +384,25 @@ public class ProfileScreen extends AppCompatActivity {
                     PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
 //                    PreferencesUtils.saveData(Constants.user_type, jsonObject.getString(Constants.user_type), getApplicationContext());
                     PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
-                    fullname.setText(obj.getString("trainer_first_name") + " "+obj.getString("trainer_last_name"));
-                    typeAge.setText("Trainer("+obj.getString("trainer_age")+")");
-                    height.setText(obj.getString("trainer_height"));
-                    weight.setText(obj.getString("trainer_weight"));
+                   if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
+                    fullname.setText(jsonObject.getString("first_name") + " "+jsonObject.getString("last_name"));
+
+                       if(jsonObject.getString("age").equals("null")){
+                           typeAge.setText("Trainer");
+                       }else{
+                           typeAge.setText("Trainer("+jsonObject.getString("age")+")");}
+                       if(jsonObject.getString("height").equals("null")){
+                           height.setVisibility(View.GONE);
+                       }else
+                       { height.setText(jsonObject.getString("height"));}
+                       if(jsonObject.getString("weight").equals("null")){
+                           weight.setVisibility(View.GONE);
+                       }else
+                       { weight.setText(jsonObject.getString("weight"));}
+
+                    PreferencesUtils.saveData(Constants.category_submitted,obj.getJSONArray("category_submitted").toString(),getApplicationContext());
+                    PreferencesUtils.saveData(Constants.category_approved,obj.getJSONArray("category_approved").toString(),getApplicationContext());
+                   }
                     loadProfile();
 
                 } else if (obj.getInt(Constants.status) == 2) {

@@ -75,4 +75,6 @@ public class Constants {
     public static String amount ="amount";
     public static String transaction_status = "transaction_status";
 
+    public static String category_submitted = "category_submitted";
+    public static String category_approved = "category_approved";
 }

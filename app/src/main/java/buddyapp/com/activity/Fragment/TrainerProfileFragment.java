@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -80,7 +81,7 @@ public class TrainerProfileFragment extends Fragment {
     int REQUEST_CROP_PICTURE = 222;
     String imageurl = "";
     Menu menu;
-    ToggleButton toggle;
+    Switch toggle;
     public TrainerProfileFragment() {
         // Required empty public constructor
     }
@@ -90,7 +91,7 @@ public class TrainerProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trainer_profile, container, false);
-        toggle = (ToggleButton) view.findViewById(R.id.togglebutton);
+        toggle = (Switch) view.findViewById(R.id.togglebutton);
         if (PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {
             toggle.setChecked(true);
         }
@@ -133,6 +134,7 @@ public class TrainerProfileFragment extends Fragment {
                 if (isChecked) {
                     updateSocket();
                         mSocket.connect();
+
                     PreferencesUtils.saveData(Constants.availStatus, "online", getActivity());
                         getActivity().startService(new Intent(getActivity(), LocationService.class));
                         new updateStatus().execute();
@@ -262,13 +264,18 @@ public class TrainerProfileFragment extends Fragment {
 //                    PreferencesUtils.saveData(Constants.user_type, jsonObject.getString(Constants.user_type), getApplicationContext());
                     PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getActivity());
                     fullname.setText(jsonObject.getString(Constants.fname) + " "+jsonObject.getString(Constants.lname));
-                    if (!jsonObject.getString("age").equals("null"))
-                    typeAge.setText("Trainer("+jsonObject.getString("age")+")");
-                    if (!jsonObject.getString("height").equals("null"))
-                    height.setText(jsonObject.getString("height"));
-                    if (!jsonObject.getString("weight").equals("null"))
-                    weight.setText(jsonObject.getString("weight"));
-
+                    if(jsonObject.getString("age").equals("null")){
+                        typeAge.setText("Trainer");
+                    }else
+                        typeAge.setText("Trainer("+jsonObject.getString("age")+")");
+                    if(jsonObject.getString("height").equals("null")){
+                        height.setVisibility(View.GONE);
+                    }else
+                        height.setText(jsonObject.getString("height"));
+                    if(jsonObject.getString("weight").equals("null")){
+                        weight.setVisibility(View.GONE);
+                    }else
+                        weight.setText(jsonObject.getString("weight"));
                     loadProfile();
 
                 } else if (obj.getInt(Constants.status) == 2) {

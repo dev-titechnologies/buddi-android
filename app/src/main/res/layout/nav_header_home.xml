@@ -7,7 +7,7 @@
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="@dimen/medium"
-    android:paddingLeft="@dimen/medium"
+    android:paddingLeft="@dimen/large"
     android:paddingRight="@dimen/medium"
     android:paddingTop="@dimen/medium"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
@@ -20,7 +20,7 @@
     android:orientation="vertical">
     <buddyapp.com.utils.CircleImageView
         android:id="@+id/userImageView"
-        android:layout_gravity="center"
+        android:layout_gravity="left"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_weight="1.5"

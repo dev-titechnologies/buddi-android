@@ -27,14 +27,17 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="165dp"
                     android:layout_weight="1"
                     android:id="@+id/image_trainer"
                     android:visibility="visible"
                     android:background="@mipmap/profile_trainer"
                     android:gravity="left"
-                    android:orientation="horizontal">
-
+                    android:orientation="vertical">
+              <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
                     <buddyapp.com.utils.CircleImageView
                         android:id="@+id/trainerimageView"
                         android:layout_width="75dp"
@@ -76,12 +79,11 @@
                             android:drawableLeft="@mipmap/kg"
                             />
                     </LinearLayout>
-                </LinearLayout>
-                <LinearLayout
+                    </LinearLayout>
+                    <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:background="@color/colorAccent"
                     android:layout_marginTop="-5dp"
                     android:layout_centerHorizontal="true"
                     android:orientation="horizontal">
@@ -92,13 +94,16 @@
                         android:padding="5dp"
                         android:textStyle="bold"
                         android:text="Availability status"/>
-                    <ToggleButton
+                    <Switch
                         android:id="@+id/togglebutton"
                         android:layout_width="60dp"
                         android:layout_height="50dp"
-                        android:textColor="@color/black"
-                        android:background="@drawable/toggle_selector"/>
+                        android:shadowColor="@color/ash"
+                        android:theme="@style/SCBSwitch"
+                        android:textColor="@color/black"/>
                 </LinearLayout>
+                </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

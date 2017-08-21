@@ -50,4 +50,5 @@
 
     <color name="colorInitial">#FFC107</color>
     <color name="colorProgress">#00796B</color>
+    <color name="text_color">#32A7D8</color>
 </resources>

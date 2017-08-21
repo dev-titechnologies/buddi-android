@@ -145,9 +145,19 @@ public class TrainerProfileView extends Activity {
                     PreferencesUtils.saveData(Constants.trainer_Data,obj.getJSONObject("data").toString(),getApplicationContext());
 
                     fullname.setText(jsonObject.getString(Constants.fname) + " "+jsonObject.getString(Constants.lname));
+                    if(jsonObject.getString("age").equals("null")){
+                        typeAge.setText("Trainer");
+                    }else
                     typeAge.setText("Trainer("+jsonObject.getString("age")+")");
+                    if(jsonObject.getString("height").equals("null")){
+                        height.setVisibility(View.GONE);
+                    }else
                     height.setText(jsonObject.getString("height"));
+                    if(jsonObject.getString("weight").equals("null")){
+                        weight.setVisibility(View.GONE);
+                    }else
                     weight.setText(jsonObject.getString("weight"));
+
                     imageurl = PreferencesUtils.getData(Constants.user_image, getApplicationContext(), "");
 
                     String gender = PreferencesUtils.getData(Constants.gender, getApplicationContext(), "");
