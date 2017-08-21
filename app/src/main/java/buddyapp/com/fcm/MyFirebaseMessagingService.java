@@ -110,18 +110,51 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //                    // app is in background, show the notification in notification tray
                     Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
                     resultIntent.putExtra("message", data.toString());
-//
-//                    // check for image attachment
-//                    if (TextUtils.isEmpty(imageUrl)) {
+
                         showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
-//                    } else {
-//                        // image is present, show notification with image
-//                        showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, resultIntent, imageUrl);
-//                    }
-//                }
+
+
+
+            }else if(json.getInt("type")==2){
+
+
+                Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
+                resultIntent.putExtra("message","");
+
+                showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
+
+
+
+
+
+            }else if(json.getInt("type")==3){
+
+
+                Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
+                resultIntent.putExtra("message","");
+
+                showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
+
+
+
+
+
+            }else if(json.getInt("type")==4){
+
+
+                Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
+                resultIntent.putExtra("message","");
+
+                showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
+
+
+
 
 
             }
+
+
+
         } catch (JSONException e) {
             Log.e(TAG, "Json Exception: " + e.getMessage());
         } catch (Exception e) {
