@@ -41,6 +41,8 @@ public class Constants {
 
     public static String start_session = "start_session";
 
+    public static String timmer_status = "timmerstatus";
+
     public static String pending = "category_pending";
 
     public static boolean stop=false;//for timmer

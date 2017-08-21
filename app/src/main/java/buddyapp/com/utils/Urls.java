@@ -53,6 +53,13 @@ public class Urls {
 
 
     public static String bookingAction= "/booking/bookingAction";
+    public static String categoryStatus= "/login/categoryStatus";
+
+
+    public static String getcategoryStatusURL(){
+
+        return BASEURL+categoryStatus;
+    }
 
 
     public static String getbookingActionURL(){
