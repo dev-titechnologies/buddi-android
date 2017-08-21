@@ -56,8 +56,8 @@ public class TraineeProfileView extends AppCompatActivity {
 
     EditText rbmale;
     EditText firstName, lastName, eMail, password, mobile;
-    CircleImageView userImageView, trainerImageView;
-    LinearLayout trainerCategory,placeLayout, imageTrainer, imageUser;
+    CircleImageView userImageView;
+    LinearLayout placeLayout, imageTrainer, imageUser;
     String semail, sfname, slname, sgender = "", scountrycode, spassword, sfacebookId = "", sgoogleplusId = "";
     String register_type = "normal";
     private PopupMenu popupMenu;
@@ -70,7 +70,7 @@ public class TraineeProfileView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_view);
+        setContentView(R.layout.activity_trainee_profile_view);
 
             ActionBar actionBar = getSupportActionBar();
             actionBar.setTitle("Profile");
@@ -86,91 +86,23 @@ public class TraineeProfileView extends AppCompatActivity {
             rbmale = (EditText) findViewById(R.id.male);
 
             userImageView = (CircleImageView) findViewById(R.id.userimageView);
-            trainerCategory = (LinearLayout) findViewById(R.id.trainer_category);
             placeLayout = (LinearLayout) findViewById(R.id.place_layout);
-            trainerImageView = (CircleImageView) findViewById(R.id.trainerimageView);
             imageTrainer = (LinearLayout) findViewById(R.id.image_trainer); // Trainer profile image View layout
             imageUser = (LinearLayout) findViewById(R.id.image_user); // user profile image View layout
             //****
             // *****check for trainer or trainee
-            if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
-                trainerCategory.setVisibility(View.VISIBLE);
-                imageUser.setVisibility(View.GONE);
-                CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), trainerImageView, R.drawable.ic_account, R.drawable.ic_account);
-                placeLayout.setVisibility(View.GONE);
-                imageTrainer.setVisibility(View.VISIBLE);
-            }else {
+
                 imageUser.setVisibility(View.VISIBLE);
-                trainerCategory.setVisibility(View.GONE);
                 CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView,R.drawable.ic_account, R.drawable.ic_account);
-                trainerCategory.setVisibility(View.GONE);
+
                 placeLayout.setVisibility(View.VISIBLE);
-            }
+
             // load profile --->
-            loadProfile();
+//            loadProfile();
 
             new getProfile().execute();
 
-            trainerImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    userImageView.performClick();
-                }
-            });
-            userImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    final CharSequence[] items = {"Take Photo", "Choose from Library",
-                            "Cancel"};
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(TraineeProfileView.this);
-                    builder.setTitle("Add Photo!");
-                    builder.setItems(items, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int item) {
-                            boolean result = Utility.checkPermission(TraineeProfileView.this);
-
-                            if (items[item].equals("Take Photo")) {
-                                userChoosenTask = "Take Photo";
-
-                                cameraIntent();
-
-                            } else if (items[item].equals("Choose from Library")) {
-                                userChoosenTask = "Choose from Library";
-
-                                galleryIntent();
-
-                            } else if (items[item].equals("Cancel")) {
-                                dialog.dismiss();
-                            }
-                        }
-                    });
-                    builder.show();
-                }
-            });
-
         }
-
-    private void galleryIntent() {
-				/*Intent i = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);*/
-        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        getIntent.setType("image/*");
-
-        startActivityForResult(getIntent, RESULT_LOAD_IMAGE);
-    }
-
-    private void cameraIntent() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        image_uri = getOutputMediaFileUri(1);
-
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
-        startActivityForResult(intent, CAMERA_REQUEST);
-
-    }
-
-
 
     /*Create a file Uri for saving an image or video */
     private Uri getOutputMediaFileUri(int type) {
@@ -215,10 +147,6 @@ public class TraineeProfileView extends AppCompatActivity {
         return mediaFile;
     }
 
-
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -230,19 +158,6 @@ public class TraineeProfileView extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
         return true;
-    }
-
-
-    private void editProfile() {
-
-        firstName.setEnabled(true);
-        ccp.setCcpClickable(true);
-        lastName.setEnabled(true);
-        eMail.setEnabled(false);
-        eMail.setEnabled(true);
-//        password.setEnabled(false);
-
-        mobile.setEnabled(true);
     }
 
     @Override
@@ -291,12 +206,8 @@ public class TraineeProfileView extends AppCompatActivity {
 //                @Override
 //                public void run() {
             //Do something after 100ms
-            if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")){
-                CommonCall.LoadImage(getApplicationContext(), imageurl, trainerImageView, R.drawable.ic_account, R.drawable.ic_account);
 
-            }else {
                 CommonCall.LoadImage(getApplicationContext(), imageurl, userImageView, R.drawable.ic_account, R.drawable.ic_account);
-            }
 
             CommonCall.hideLoader();
 //                }
@@ -323,8 +234,8 @@ public class TraineeProfileView extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             try {
                 reqData.put(Constants.token, PreferencesUtils.getData(Constants.token, getApplicationContext(), ""));
-                reqData.put(Constants.user_type, PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
-                reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
+                reqData.put(Constants.user_type, Constants.trainee);
+                reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.trainee_id, getApplicationContext(), ""));
                 response = NetworkCalls.POST(Urls.getTraineeProfileURL(), reqData.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -365,152 +276,7 @@ public class TraineeProfileView extends AppCompatActivity {
         }
     }
 
-    // Updating profile
-    class updateProfile extends AsyncTask<String, String, String> {
-        JSONObject reqData = new JSONObject();
-        String registerResponse;
 
-        @Override
-        protected void onPreExecute() {
-            CommonCall.showLoader(TraineeProfileView.this);
-
-
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                reqData.put("first_name", sfname);
-                reqData.put("last_name", slname);
-                reqData.put("mobile", smobile);
-                reqData.put("gender", sgender);
-                reqData.put("user_image", user_image);
-                reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
-                reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
-                reqData.put("profile_desc", "Description");
-
-                registerResponse = NetworkCalls.POST(Urls.getEditTraineeProfileURL(), reqData.toString());
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return registerResponse;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            try {
-                JSONObject obj = new JSONObject(s);
-                if (obj.getInt("status") == 1) {
-                    JSONObject jsonObject = obj.getJSONObject("data");
-                    PreferencesUtils.saveData(Constants.email, jsonObject.getString(Constants.email), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.fname, jsonObject.getString(Constants.fname), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.lname, jsonObject.getString(Constants.lname), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.user_image, jsonObject.getString(Constants.user_image), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            loadProfile();
-
-                        }
-                    }, 3000);
-                } else if (obj.getInt("status") == 2) {
-                    Toast.makeText(TraineeProfileView.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
-                } else {
-                    CommonCall.sessionout(TraineeProfileView.this);
-                    finish();
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-
-        }
-    }
-
-
-
-    /********************** Field validation *******************/
-
-    private boolean validateFeelds() {
-
-        try {
-
-            scountrycode = ccp.getSelectedCountryCode();
-            smobile = String.valueOf(mobile.getText());
-            PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
-
-            Phonenumber.PhoneNumber swissNumberProto = phoneUtil.parse(smobile, ccp.getSelectedCountryNameCode());
-            CommonCall.PrintLog("Phone number++", swissNumberProto + "");
-            isValid = phoneUtil.isValidNumber(swissNumberProto); // returns true
-            if (isValid) {
-                CommonCall.PrintLog("Phone number", swissNumberProto + "");
-                smobile = "+" + scountrycode + "-" + smobile;
-            } else
-                CommonCall.PrintLog("Invalid", "Invalid");
-        } catch (NumberParseException e) {
-            System.err.println("NumberParseException was thrown: " + e.toString());
-        }
-
-        View focusView = null;
-        if (firstName.getText().length() == 0) {
-            firstName.setError("Invalid Firstname");
-            focusView = firstName;
-            focusView.requestFocus();
-            return false;
-        } else if (lastName.getText().length() == 0) {
-            lastName.setError("Invalid Lastname");
-            focusView = lastName;
-            focusView.requestFocus();
-            return false;
-        } else if (mobile.getText().length() == 0) {
-            mobile.setError("Please enter your mobile number");
-            focusView = mobile;
-            focusView.requestFocus();
-            return false;
-        } else if (!isValid) {
-            mobile.setError("Please check your mobile number and country code");
-            focusView = mobile;
-            focusView.requestFocus();
-            return false;
-        }
-// else if (sgender.length() == 0) {
-////            Toast.makeText(getApplicationContext(), "Please select gender", Toast.LENGTH_SHORT).show();
-////            focusView.requestFocus();
-//            return false;
-//        }
-        else if (imageurl.length() == 0) {
-            Toast.makeText(getApplicationContext(), "Please select profile image", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        /* else if (password.getText().length() == 0) {
-            password.setError("Please enter password");
-            focusView = password;
-            focusView.requestFocus();
-            return false;
-        } else if (password.getText().length() < 8) {
-            password.setError("Password must be 8 characters or more");
-            focusView = password;
-            focusView.requestFocus();
-            return false;
-        } */
-        else {
-            sfname = firstName.getText().toString();
-            slname = lastName.getText().toString();
-            semail = eMail.getText().toString();
-            user_image = imageurl;
-//            spassword = password.getText().toString();
-            return true;
-        }
-    }
     public static String getDataColumn(Context context, Uri uri, String selection,
                                        String[] selectionArgs) {
 
@@ -637,71 +403,6 @@ public class TraineeProfileView extends AppCompatActivity {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
 
-
-            try {
-                imageurl = image_uri.getPath();
-                new upLoad().execute();
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                System.out.println("imageeeeeeeeee exception");
-                e.printStackTrace();
-            }
-
-
-        }
-
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-
-            Uri selectedImage = data.getData();
-            imageurl = getPathFromUri(selectedImage);
-
-            Log.e("CUrent source", "gallery");
-
-            new upLoad().execute();
-        }
-    }
-
-
-    class upLoad extends AsyncTask<String, String, String> {
-        JSONObject reqData = new JSONObject();
-        String response;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            CommonCall.showLoader(TraineeProfileView.this);
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            response = NetworkCalls.UPLOAD(imageurl,Urls.getUPLOADURL());
-            return response;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            CommonCall.hideLoader();
-            try {
-                JSONObject obj = new JSONObject(s);
-                if (obj.getInt("status") == 1) {
-                    imageurl = obj.getString("Url");
-                    if(validateFeelds())
-                        new updateProfile().execute();
-
-
-                }else if (obj.getInt("status") == 2) {
-                    Toast.makeText(TraineeProfileView.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
-                }  else {
-                    CommonCall.sessionout(TraineeProfileView.this);
-                    finish();
-                }
-
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
-        }
     }
 }

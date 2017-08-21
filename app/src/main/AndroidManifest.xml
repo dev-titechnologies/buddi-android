@@ -67,6 +67,7 @@
         <activity
             android:name=".activity.HomeActivity"
             android:label="@string/title_activity_home"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -151,13 +152,15 @@
         <activity android:name=".activity.MapTrainee"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.TrainerProfileView"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".activity.SessionReady"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.Session"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.ChatScreen"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
         <!-- Firebase Notifications -->
         <service android:name=".fcm.MyFirebaseMessagingService">
             <intent-filter>
@@ -173,7 +176,8 @@
 
 
         <activity android:name=".activity.TraineeProfileView"
-            android:screenOrientation="portrait" ></activity>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"></activity>
 
         <service android:name=".timmer.Timer_Service"></service>
 

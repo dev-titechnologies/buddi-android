@@ -47,7 +47,7 @@
                     android:layout_height="150dp"
                     android:layout_weight="1"
                     android:id="@+id/image_trainer"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:background="@mipmap/profile_trainer"
                     android:gravity="left"
                     android:orientation="horizontal">

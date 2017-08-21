@@ -42,8 +42,7 @@
     <color name="login_bgcolor">#47CBFB</color>
     <color name="black">#000000</color>
     <color name="ash">#E0DEDF</color>
-    <color name="grey">#2F2F2F
-    </color>
+    <color name="grey">#2F2F2F</color>
 
     <color name="transparent">#00ffffff</color>
     <color name="online">#c392ff9e</color>

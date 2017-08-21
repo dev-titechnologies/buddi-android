@@ -73,7 +73,7 @@
             </LinearLayout>
             <FrameLayout
                 android:layout_width="100dp"
-                android:background="@color/grey"
+                android:background="@color/button_text"
                 android:layout_height="5dp"></FrameLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -99,7 +99,7 @@
             </LinearLayout>
             <FrameLayout
                 android:layout_width="100dp"
-                android:background="@color/grey"
+                android:background="@color/button_text"
                 android:layout_height="5dp"></FrameLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -125,7 +125,7 @@
             </LinearLayout>
             <FrameLayout
                 android:layout_width="100dp"
-                android:background="@color/grey"
+                android:background="@color/button_text"
                 android:layout_height="5dp"></FrameLayout>
             <LinearLayout
                 android:layout_width="wrap_content"

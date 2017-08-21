@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -67,7 +68,7 @@ public class ProfileScreen extends AppCompatActivity {
     int REQUEST_CROP_PICTURE = 222;
     String imageurl = "";
     Menu menu;
-
+    TextView fullname, typeAge, height , weight;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +78,10 @@ public class ProfileScreen extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
+        fullname = (TextView) findViewById(R.id.fullname);
+        typeAge = (TextView) findViewById(R.id.type_age);
+        height = (TextView) findViewById(R.id.height);
+        weight = (TextView) findViewById(R.id.weight);
         ccp = (CountryCodePicker) findViewById(R.id.ccp);
         firstName = (EditText) findViewById(R.id.first_name);
         lastName = (EditText) findViewById(R.id.last_name);
@@ -379,7 +384,10 @@ public class ProfileScreen extends AppCompatActivity {
                     PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
 //                    PreferencesUtils.saveData(Constants.user_type, jsonObject.getString(Constants.user_type), getApplicationContext());
                     PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
-
+                    fullname.setText(obj.getString("trainer_first_name") + " "+obj.getString("trainer_last_name"));
+                    typeAge.setText("Trainer("+obj.getString("trainer_age")+")");
+                    height.setText(obj.getString("trainer_height"));
+                    weight.setText(obj.getString("trainer_weight"));
                     loadProfile();
 
                 } else if (obj.getInt(Constants.status) == 2) {

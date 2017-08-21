@@ -255,9 +255,9 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 else {
                     Toast.makeText(getApplicationContext(), " Please check your internet connection", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Login Failed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Google Login Failed!", Toast.LENGTH_SHORT).show();
             }
         } else
 

@@ -114,7 +114,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //                    // check for image attachment
 //                    if (TextUtils.isEmpty(imageUrl)) {
                         showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
-//                    } else {
+                        startActivity(resultIntent);
+// } else {
 //                        // image is present, show notification with image
 //                        showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, resultIntent, imageUrl);
 //                    }
