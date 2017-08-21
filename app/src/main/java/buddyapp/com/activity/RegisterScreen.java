@@ -143,12 +143,13 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         });
 
         facebook_loginbutton = (LoginButton) findViewById(R.id.login_button);
-        LoginManager.getInstance().logOut();
+
         facebook = (ImageView) findViewById(R.id.facebook);
         facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 facebook.setEnabled(false);
+                LoginManager.getInstance().logOut();
                 if(CommonCall.isNetworkAvailable()) {
                     facebook_loginbutton.performClick();
                     fblogin();
@@ -353,6 +354,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 public void onCancel() {
                     facebook.setEnabled(true);
                     Toast.makeText(getApplicationContext(), "Login Failed", Toast.LENGTH_SHORT);
+
                 }
 
                 @Override

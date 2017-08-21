@@ -238,9 +238,14 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 // Get account information
 //                mFullName = acct.getDisplayName();
 //                mEmail = acct.getEmail();
-                String split[] = acct.getDisplayName().split("\\s+");
+                try{
+                    String split[] = acct.getDisplayName().split("\\s+");
                 sfname = split[0];
                 slname = split[1];
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
                 sgoogleplusId = acct.getId();
                 login_type = "google";
                 if (acct.getEmail() != null)

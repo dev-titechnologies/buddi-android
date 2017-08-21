@@ -88,6 +88,7 @@ public class HomeCategoryAdapter extends BaseAdapter {
                 public void onClick(View view) {
 
                     HomeCategory.next.setVisibility(View.VISIBLE);
+
                     HomeCategory.instantCard.setVisibility(View.GONE);
                     if (HomeCategory.cat_selectedID.contains(view.getTag().toString())) {
 //                        id=0;

@@ -52,27 +52,29 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:textSize="20dp"
-                            android:id="@+id/fullname"
-                            android:text="Aneesh P V"/>
+                            android:id="@+id/fullname"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:textSize="18dp"
-                            android:id="@+id/type_age"
-                            android:text="Trainer (28)"/>
+                            android:id="@+id/type_age"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:id="@+id/height"
-                            android:text="1.73"/>
+                            android:drawableLeft="@drawable/ic_height_arrow"
+                            />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:id="@+id/weight"
-                            android:text="65.0 kg"/>
+                            android:paddingLeft="6dp"
+                            android:drawablePadding="5dp"
+                            android:drawableLeft="@mipmap/kg"
+                            />
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
