@@ -349,7 +349,7 @@ public static void hideLoader(){
                     object.put("longitude", lng);
 //                    object.put("avail_status",PreferencesUtils.getData(Constants.availStatus,Controller.getAppContext(),""));
 
-                    if (PreferencesUtils.getData(Constants.start_session,Controller.getAppContext(),"").equals("false"))
+                    if (PreferencesUtils.getData(Constants.start_session,Controller.getAppContext(),"false").equals("false"))
 
                     object.put("avail_status", "online");
                     else

@@ -108,7 +108,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session_ready);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 // check if GPS enabled
         gps = new GPSTracker(SessionReady.this);
         if (gps.canGetLocation()) {
