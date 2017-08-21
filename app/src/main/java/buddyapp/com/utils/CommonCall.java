@@ -1,13 +1,16 @@
 package buddyapp.com.utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.text.format.DateUtils;
@@ -443,7 +446,7 @@ if (activity!=null)
 
             try {
                 CommonCall.hideLoader();
-                JSONObject obj = new JSONObject(s);
+                final JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
 
 
@@ -451,14 +454,44 @@ if (activity!=null)
                     PreferencesUtils.saveData(Constants.transactionId,"",activity);
 
 
-                    if (activity!=null) {
-                        Toast.makeText(activity, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(activity, HomeActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        activity.startActivity(intent);
-                        activity.finish();
+
+
+                    if (activity!=null) {
+
+                        AlertDialog.Builder builder;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            builder = new AlertDialog.Builder(activity, android.R.style.Theme_Material_Dialog_Alert);
+                        } else {
+                            builder = new AlertDialog.Builder(activity);
+                        }
+
+                        builder.setMessage(obj.getString("message"))
+                                .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue with delete
+
+//                                        try {
+//                                            Toast.makeText(activity, obj.getString("message"), Toast.LENGTH_SHORT).show();
+//                                        } catch (JSONException e) {
+//                                            e.printStackTrace();
+//                                        }
+
+                                        Intent intent = new Intent(activity, HomeActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        activity.startActivity(intent);
+                                        activity.finish();
+
+                                    }
+                                })
+
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+
+
                     }
+
+
 
                 } else if (obj.getInt("status") == 2) {
                     Toast.makeText(activity, obj.getString("message"), Toast.LENGTH_SHORT).show();
