@@ -193,6 +193,11 @@ public class Question4 extends Activity {
 
                 } else {
 
+                    pounds = String.valueOf(spinner.getSelectedItem());
+                    shundreds = Integer.parseInt(hundreds.getSelectedItem().toString());
+                    sones = Integer.parseInt(ones.getSelectedItem().toString());
+
+                    weight = shundreds+sones;
 
                     JSONObject question = new JSONObject();
 
