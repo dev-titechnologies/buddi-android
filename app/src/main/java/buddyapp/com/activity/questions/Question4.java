@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -219,9 +220,9 @@ public class Question4 extends Activity {
                         question.put("weight", weight+"");
 
                         question.put("pounds", pounds);
-                        questionData.put("cat_ids", ChooseCategory.cat_selectedID);
+                        questionData.put("cat_ids",new JSONArray( ChooseCategory.cat_selectedID));
 
-                        questionData.put("sub_cat", sub_cat_selectedID.toString());
+                        questionData.put("sub_cat",new JSONArray( sub_cat_selectedID));
                         questionData.put("user_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
                         questionData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
 

@@ -89,11 +89,19 @@ Button exit;
 
                     PreferencesUtils.saveData(Constants.approved, obj.getJSONObject("data").getJSONArray(Constants.approved).toString(), getApplicationContext());
 
+                    if (source_become_trainer) {
+
+                        PreferencesUtils.saveData(Constants.trainer_type,"true",getApplicationContext());
                         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
-
+                    }else{
+                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                        intent.addCategory(Intent.CATEGORY_HOME);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
                 }else if(obj.getInt("status")==2){
                     Toast.makeText(DoneActivity.this,obj.getString("message"), Toast.LENGTH_SHORT).show();
                 }else if(obj.getInt("status")==3){

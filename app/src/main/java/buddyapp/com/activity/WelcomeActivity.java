@@ -1,5 +1,6 @@
 package buddyapp.com.activity;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
@@ -154,4 +155,11 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-  }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
+        nManager.cancelAll();
+
+    }
+}

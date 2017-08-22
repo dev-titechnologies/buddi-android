@@ -39,7 +39,7 @@ Talk soon.
         android:textSize="25sp"
         android:layout_weight="1"
         android:textStyle="bold"
-        android:text="-The Buddy team"/>
+        android:text="-The Buddi team"/>
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

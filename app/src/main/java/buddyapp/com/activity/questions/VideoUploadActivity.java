@@ -1,6 +1,7 @@
 package buddyapp.com.activity.questions;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -474,7 +475,14 @@ try {
         }
 
     }
+    ProgressDialog pd;
+    public  void showLoader(Activity yourActivity){
 
+        pd = new ProgressDialog(yourActivity);
+        pd.setMessage("Uploading");
+        pd.setCancelable(false);
+        pd.show();
+    }
 
     class uploadVideo extends AsyncTask<String, String, String> {
         JSONObject reqData = new JSONObject();
@@ -483,7 +491,7 @@ try {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            CommonCall.showLoader(VideoUploadActivity.this);
+            showLoader(VideoUploadActivity.this);
             try {
                 reqData.put("file_name", videoUrl.substring(videoUrl.lastIndexOf('/') + 1));
                 reqData.put("file_type", "vid");

@@ -116,7 +116,7 @@ public class LocationService extends Service implements
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         updateUI();
-        Toast.makeText(this,("location changes"),
+        Toast.makeText(this,("Updating User Location..."),
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -160,8 +160,8 @@ public class LocationService extends Service implements
 
     private void updateUI() {
         setLocationData();
-        Toast.makeText(this, "Latitude: =" + mCurrentLocation.getLatitude() + " Longitude:=" + mCurrentLocation
-                .getLongitude(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Latitude: =" + mCurrentLocation.getLatitude() + " Longitude:=" + mCurrentLocation
+//                .getLongitude(), Toast.LENGTH_SHORT).show();
         Log.d(TAG, "Latitude:==" + mCurrentLocation.getLatitude() + "\n Longitude:==" + mCurrentLocation.getLongitude
                 ());
         CommonCall.emitTrainerLocation(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
