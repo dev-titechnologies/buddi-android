@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.activity.Fragment.HomeCategory;
 import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.SessionReady;
 
@@ -132,7 +133,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }else if(json.getInt("type")==3){
 
 
-                Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
+                Intent resultIntent = new Intent(getApplicationContext(), HomeCategory.class);
                 resultIntent.putExtra("message","");
 
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
@@ -144,7 +145,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }else if(json.getInt("type")==4){
 
 
-                Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
+                Intent resultIntent = new Intent(getApplicationContext(), HomeCategory.class);
                 resultIntent.putExtra("message","");
 
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);

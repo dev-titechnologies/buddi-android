@@ -114,9 +114,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Training Session");
 
-
-        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 // check if GPS enabled
         gps = new GPSTracker(SessionReady.this);
         if (gps.canGetLocation()) {
@@ -651,13 +650,13 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         this.googleMap = googleMap;
 
         MapRipple mapRipple = new MapRipple(googleMap, usercamera, getApplicationContext());
-        mapRipple.withNumberOfRipples(3);
+        mapRipple.withNumberOfRipples(1);
         mapRipple.withFillColor(getResources().getColor(R.color.login_bgcolor));
         mapRipple.withStrokeColor(Color.BLACK);
         mapRipple.withStrokewidth(1);      // 10dp
-        mapRipple.withDistance(1000);      // 2000 metres radius
+        mapRipple.withDistance(100);      // 2000 metres radius
         mapRipple.withRippleDuration(5000);    //12000ms
-        mapRipple.withTransparency(0.5f);
+        mapRipple.withTransparency(0.9f);
         mapRipple.startRippleMapAnimation();
 
         showMarker();
@@ -814,8 +813,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(8);
-                lineOptions.color(Color.MAGENTA);
+                lineOptions.width(7);
+                lineOptions.color(getResources().getColor(R.color.marker_color));
 
                 Log.d("onPostExecute", "onPostExecute lineoptions decoded");
 
