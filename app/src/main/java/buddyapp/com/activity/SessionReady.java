@@ -279,7 +279,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                                     nManager.cancelAll();
 
 
-                                    new CommonCall.timerUpdate(SessionReady.this,"complete",book_id).execute();
+                                    new CommonCall.timerUpdate(SessionReady.this,"complete",book_id,"").execute();
 
 
                                     break;
@@ -332,7 +332,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                         if (reason.getText().toString().length() > 1) {
                             dialog.dismiss();
-                            new CommonCall.timerUpdate(SessionReady.this, "cancel", book_id).execute();
+
+                            new CommonCall.timerUpdate(SessionReady.this, "cancel", book_id,reason.getText().toString()).execute();
 
 
                         } else {

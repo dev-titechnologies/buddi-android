@@ -397,11 +397,12 @@ try {
     public static  class timerUpdate extends AsyncTask<String,String,String> {
 
 
-        String type,bookid;
+        String type,bookid,reason;
         Activity activity;
-        public timerUpdate(Activity act,String type,String bookid){
+        public timerUpdate(Activity act,String type,String bookid,String reason){
             this.type= type;
             this.bookid= bookid;
+            this.reason= reason;
 
             this.activity= act;
         }
@@ -424,7 +425,7 @@ if (activity!=null)
 
                 req.put("book_id",bookid);
 
-
+                req.put("reason",reason);
             req.put("action",type);
 
              res = NetworkCalls.POST(Urls.getbookingActionURL(),req.toString());

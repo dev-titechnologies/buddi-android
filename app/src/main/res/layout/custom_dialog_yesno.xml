@@ -9,6 +9,7 @@
     <TextView
         android:id="@+id/textDialog"
         android:layout_width="match_parent"
+        android:layout_margin="@dimen/medium"
         android:text="Do you want to cancel"
         android:gravity="center"
         android:padding="@dimen/medium"
@@ -20,6 +21,7 @@
         android:layout_width="match_parent"
         android:id="@+id/reason"
         android:hint="Enter Reason"
+        android:layout_margin="@dimen/medium"
         android:maxLines="2"
         android:layout_height="wrap_content" />
 <LinearLayout

@@ -214,7 +214,7 @@ public static boolean stopFlag =false;
         String bookid = PreferencesUtils.getData(Constants.bookid,getApplicationContext(),"");
 
 if (!stopFlag)
-        new CommonCall.timerUpdate(null,"complete",bookid).execute();
+        new CommonCall.timerUpdate(null,"complete",bookid,"").execute();
 //        mNotificationManager.cancel(100);
 //        mNotificationManager = null;
 //        createStopSessionNoti(text);
