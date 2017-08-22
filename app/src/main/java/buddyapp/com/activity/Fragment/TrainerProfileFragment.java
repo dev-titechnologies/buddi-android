@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -44,6 +45,7 @@ import java.util.Date;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.activity.ChooseSpecification;
 import buddyapp.com.activity.ProfileScreen;
 import buddyapp.com.services.LocationService;
 import buddyapp.com.utils.CircleImageView;
@@ -53,6 +55,7 @@ import buddyapp.com.utils.Urls;
 import buddyapp.com.utils.Utility;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.LOCATION_SERVICE;
 import static buddyapp.com.Controller.mSocket;
 import static buddyapp.com.Controller.updateSocket;
 
@@ -84,7 +87,7 @@ public class TrainerProfileFragment extends Fragment {
     public TrainerProfileFragment() {
         // Required empty public constructor
     }
-
+    LocationManager mLocationManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -126,11 +129,17 @@ public class TrainerProfileFragment extends Fragment {
   }
 
 
+        mLocationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
         //  checking online or offline
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+
+                    if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        buildAlertMessageNoGps();
+                    }
+
                     updateSocket();
                         mSocket.connect();
                     PreferencesUtils.saveData(Constants.availStatus, "online", getActivity());
@@ -159,7 +168,24 @@ public class TrainerProfileFragment extends Fragment {
         return view;
     }
 
-
+    private void buildAlertMessageNoGps() {
+        final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                        toggle.setChecked(false);
+                    }
+                });
+        final android.support.v7.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
 
 
     private void loadProfile() {
@@ -393,8 +419,8 @@ public class TrainerProfileFragment extends Fragment {
 
                     Toast.makeText(getActivity(), "You are now Online", Toast.LENGTH_SHORT).show();
                 } else if (obj.getInt("status") == 2) {
-                    Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-
+//                    Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                    new updateStatus().execute();
                 }else if (obj.getInt("status") == 3) {
                     Toast.makeText(getActivity(), "Session out", Toast.LENGTH_SHORT).show();
                     CommonCall.sessionout(getActivity());
