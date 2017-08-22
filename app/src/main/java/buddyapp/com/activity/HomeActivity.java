@@ -152,9 +152,9 @@ public class HomeActivity extends AppCompatActivity
         try {
 
             name.setText(PreferencesUtils.getData(Constants.fname,getApplicationContext(),"")+" "+PreferencesUtils.getData(Constants.lname,getApplicationContext(),""));
-            CommonCall.LoadImage(getApplicationContext(),PreferencesUtils.getData(Constants.user_image,getApplicationContext(),""), userImageView,R.drawable.ic_no_image,R.drawable.ic_account);
             email.setText(PreferencesUtils.getData(Constants.email,getApplicationContext(),""));
-        } catch (Exception e) {
+            CommonCall.LoadImage(getApplicationContext(),PreferencesUtils.getData(Constants.user_image,getApplicationContext(),""), userImageView,R.drawable.ic_no_image,R.drawable.ic_account);
+       } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -303,7 +303,7 @@ public class HomeActivity extends AppCompatActivity
 
             final AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(HomeActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+                builder = new AlertDialog.Builder(HomeActivity.this);
             } else {
                 builder = new AlertDialog.Builder(HomeActivity.this);
             }

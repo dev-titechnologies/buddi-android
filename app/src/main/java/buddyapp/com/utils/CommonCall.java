@@ -483,7 +483,7 @@ if (activity!=null)
 //                                        }
 
                                         Intent intent = new Intent(activity, HomeActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         activity.startActivity(intent);
                                         activity.finish();
 

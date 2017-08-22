@@ -41,14 +41,14 @@
                             android:textColor="@color/black"
                             android:textSize="16dp"
                             android:id="@+id/type_age"
-                            android:text="Trainer (28)"/>
+                  />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:id="@+id/height"
                             android:drawableLeft="@drawable/ic_height_arrow"
-                            android:text="1.73"/>
+                          />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                             android:paddingLeft="7dp"
                             android:drawablePadding="5dp"
                             android:drawableLeft="@mipmap/kg"
-                            android:text="65.0 kg"/>
+                        />
                     </LinearLayout>
                 </LinearLayout>
     <android.support.v7.widget.Toolbar

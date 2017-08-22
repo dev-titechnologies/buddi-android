@@ -467,8 +467,14 @@ else
                 JSONObject obj= new JSONObject(s);
                 if(obj.getInt("status")==1){
 
-                PreferencesUtils.saveData(Constants.token,obj.getString(Constants.token),getApplicationContext());
-                PreferencesUtils.saveData(Constants.user_id,obj.getString(Constants.user_id),getApplicationContext());
+                    PreferencesUtils.saveData(Constants.token, obj.getString(Constants.token), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.user_id, obj.getString(Constants.user_id), getApplicationContext());
+
+                    PreferencesUtils.saveData(Constants.email, semail, getApplicationContext());
+                    PreferencesUtils.saveData(Constants.fname, sfname, getApplicationContext());
+                    PreferencesUtils.saveData(Constants.lname,slname, getApplicationContext());
+                    PreferencesUtils.saveData(Constants.user_image, user_image, getApplicationContext());
+
 
 
                     if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
