@@ -161,8 +161,12 @@ public class HomeActivity extends AppCompatActivity
         root_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(CommonCall.isNetworkAvailable()){
                 Intent intent = new Intent(getApplicationContext(),ProfileScreen.class);
                 startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(), " Please check your internet connection", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

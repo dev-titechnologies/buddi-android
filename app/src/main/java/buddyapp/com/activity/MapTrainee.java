@@ -167,11 +167,17 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 
     }
 
-    void showMarker(JSONArray places) {
+    void showMarker(final JSONArray places) {
 
-        try {
-            for (int k = 0; k < places.length(); k++) {
-                JSONObject place = places.getJSONObject(k);
+
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 14), new GoogleMap.CancelableCallback() {
+                @Override
+                public void onFinish() {
+                    for (int k = 0; k < places.length(); k++) {
+                        JSONObject place = null;
+                        try {
+                            place = places.getJSONObject(k);
+
 
 //                Marker marker = googleMap.addMarker(new MarkerOptions()
 //                        .position(new LatLng(Double.parseDouble(place.getString("latitude")), Double.parseDouble(place.getString("longitude"))))
@@ -184,17 +190,31 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 //                hashMarker.put(marker, place.getString("image"));
 
 
-                // mMap is GoogleMap object, latLng is the location on map from which ripple should start
+                        // mMap is GoogleMap object, latLng is the location on map from which ripple should start
 
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(place.getString("latitude")), Double.parseDouble(place.getString("longitude"))), 14));
-                Marker pos_Marker =  googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(place.getString("latitude")), Double.parseDouble(place.getString("longitude")))).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title("Trainer").draggable(false));
-                pos_Marker.showInfoWindow();
+                        Marker pos_Marker = null;
 
-                googleMap.setInfoWindowAdapter(MapTrainee.this);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                            pos_Marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(place.getString("latitude")), Double.parseDouble(place.getString("longitude")))).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title("Trainer").draggable(false));
+                            pos_Marker.showInfoWindow();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        googleMap.setInfoWindowAdapter(MapTrainee.this);
+                    }
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+
+
+
+
+
 
 
     }
@@ -250,6 +270,8 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 //        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(getActivity(), R.raw.my_map_style);
 //        googleMap.setMapStyle(style);
         googleMap.setInfoWindowAdapter(MapTrainee.this);
+
+
     }
     @Override
     public void onLocationChanged(Location location) {
@@ -275,7 +297,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            CommonCall.showLoader(MapTrainee.this);
+
 
         }
 
@@ -302,10 +324,10 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            CommonCall.hideLoader();
+
             try {
                 JSONObject obj = new JSONObject(s);
-                if (obj.getInt("status") == 1) {
+                if (obj.getInt("status") == 1) { CommonCall.hideLoader();
                     JSONObject jsonObject = obj.getJSONObject("data");
                     PreferencesUtils.saveData(Constants.trainer_id,jsonObject.getString("trainer_id"),getApplicationContext());
                     PreferencesUtils.saveData(trainer_Data,jsonObject.toString(),getApplicationContext());
@@ -316,13 +338,14 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                     intent.putExtra("TrainerData",jsonObject.toString());
                     startActivity(intent);
 
-                }else if(obj.getInt("status") == 2){
+                }else if(obj.getInt("status") == 2){ CommonCall.hideLoader();
                     Toast.makeText(MapTrainee.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
                 }else{
-
+                    CommonCall.hideLoader();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+                CommonCall.hideLoader();
                 Toast.makeText(MapTrainee.this, Constants.server_error_message, Toast.LENGTH_SHORT).show();
 
             }
@@ -379,7 +402,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            CommonCall.hideLoader();
+
             try {
                 final JSONObject response = new JSONObject(s);
 
@@ -395,7 +418,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                     new RandomSelect().execute();
 
                 } else if (response.getInt(Constants.status) == 2) {
-
+                    CommonCall.hideLoader();
 //                Snackbar snackbar = Snackbar
 //                        .make(root, response.getString(Constants.message), Snackbar.LENGTH_INDEFINITE)
 //                        .setAction("RETRY", new View.OnClickListener() {
@@ -415,13 +438,13 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 //
 //                snackbar.show();
                 } else if (response.getInt(Constants.status) == 3) {
-
+                    CommonCall.hideLoader();
                     CommonCall.sessionout(activity);
                 }
 
 
             } catch (JSONException e) {
-                e.printStackTrace();
+                e.printStackTrace(); CommonCall.hideLoader();
             }
         }
     }
@@ -438,7 +461,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 // the user canceled
 
                 CommonCall.hideLoader();
-                Toast.makeText(this, "User Canceled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Payment cancelled", Toast.LENGTH_SHORT).show();
 
             } else {
                 CommonCall.hideLoader();

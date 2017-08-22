@@ -274,10 +274,9 @@ public class ProfileScreen extends AppCompatActivity {
         ccp.setCcpClickable(true);
         lastName.setEnabled(true);
         eMail.setEnabled(false);
-        eMail.setEnabled(true);
 //        password.setEnabled(false);
 
-        mobile.setEnabled(true);
+//        mobile.setEnabled(true);
     }
 
     @Override

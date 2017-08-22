@@ -195,7 +195,7 @@ public class ChooseSpecification extends AppCompatActivity {
                                         PreferencesUtils.saveData(Constants.longitude, String.valueOf(longitude), getApplicationContext());
 
 
-                                        if (sessionDuration > 0 && sgender.length() > 1) {
+                                        if (sessionDuration > 0) {
                                             if (latitude > 0.0) {
                                                 new SearchTrainer().execute();
                                             } else {

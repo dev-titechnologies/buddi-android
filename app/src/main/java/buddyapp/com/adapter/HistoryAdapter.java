@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -20,6 +22,7 @@ import java.util.Locale;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.utils.CommonCall;
 
 /**
  * Created by titech on 25/7/17.
@@ -65,6 +68,7 @@ public class HistoryAdapter extends BaseAdapter {
             holder.training_status = (TextView) view.findViewById(R.id.training_status);
             holder.payment_status = (TextView) view.findViewById(R.id.training_status);
             holder.date = (TextView) view.findViewById(R.id.date);
+            holder.background = (ImageView) view.findViewById(R.id.background);
             if(PreferencesUtils.getData(Constants.user_type,context,"").equals("trainer")) {
                 holder.trainee.setVisibility(View.VISIBLE);
                 holder.trainer.setVisibility(View.GONE);
@@ -86,7 +90,12 @@ public class HistoryAdapter extends BaseAdapter {
             traineeName= jsonObject.getString("trainee_name");
             trainerName= jsonObject.getString("trainer_name");
             trainerId= jsonObject.getString("trainer_id");
-            category= jsonObject.getString("category");
+
+            JSONArray array = jsonObject.getJSONArray("category");
+            category = array.getJSONObject(1).getString("categoryName");
+
+            CommonCall.LoadImage(context,array.getJSONObject(1).getString("categoryBookImage"),holder.background,R.drawable.ic_no_image,R.drawable.ic_no_image);
+
             trainingStatus= jsonObject.getString("training_status");
             paymentStatus= jsonObject.getString("payment_status");
             location= jsonObject.getString("location");
@@ -135,6 +144,7 @@ public class HistoryAdapter extends BaseAdapter {
 
         TextView name,category, training_status,payment_status,location,date, trainer, trainee;
         CardView cat_card;
+        ImageView background;
 
     }
 }

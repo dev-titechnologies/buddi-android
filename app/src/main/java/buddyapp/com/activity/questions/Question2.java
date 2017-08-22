@@ -129,7 +129,7 @@ if (gym_sub!=null)
                 }else if (military_installations_selected.length()==0) {
 
 
-                    Toast.makeText(Question2.this, "Please Select Military Instalations", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Question2.this, "Please Select Military Installations", Toast.LENGTH_SHORT).show();
 
                 }  else{
 

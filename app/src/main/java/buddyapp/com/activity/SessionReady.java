@@ -491,9 +491,19 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                         longitude = Double.valueOf(lng);
                         camera = new LatLng(latitude, longitude);
                         origin = camera;
-                        LoadmapTask();
-                        animateMarker(pos_Marker, camera, false, 0.0f);
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 14));
+
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 14), new GoogleMap.CancelableCallback() {
+                            @Override
+                            public void onFinish() {
+                                LoadmapTask();
+                                animateMarker(pos_Marker, camera, false, 0.0f);
+                            }
+
+                            @Override
+                            public void onCancel() {
+
+                            }
+                        });
 
                     }
                 }, new IntentFilter("SOCKET_BUDDI_TRAINER_LOCATION")
@@ -633,7 +643,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         mapRipple.withTransparency(0.5f);
         mapRipple.startRippleMapAnimation();
 
-        showMarker();
+//        showMarker();
         googleMap.setMyLocationEnabled(true);
 
 

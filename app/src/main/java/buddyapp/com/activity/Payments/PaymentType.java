@@ -10,6 +10,7 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -50,7 +51,7 @@ LinearLayout root;
     TextView credit_card_text,applyPromo;
 EditText promocode;
 ImageView payment_image;
-
+Button done;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +64,7 @@ ImageView payment_image;
         addPayment = (CardView) findViewById(R.id.addPayment);
         credit_card = (CardView) findViewById(R.id.credit_card);
         payment_image = (ImageView) findViewById(R.id.payment_image);
-
+        done = (Button) findViewById(R.id.done);
         credit_card_text = (TextView) findViewById(R.id.credit_card_text);
 
         ActionBar actionBar = getSupportActionBar();
@@ -82,6 +83,23 @@ ImageView payment_image;
             }
         });
 CommonCall.showLoader(PaymentType.this);
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(getIntent().hasExtra("result")){
+
+    /**ForResult
+                    /*
+    *
+    * going back to map screen
+    *
+    * */
+                    setResult(RESULT_OK,new Intent());
+                    finish();
+                }
+            }
+        });
     }
 
 
@@ -227,7 +245,7 @@ CommonCall.hideLoader();
         if (result.getPaymentMethodNonce() != null) {
 
             displaycard(result);
-
+done.setVisibility(View.VISIBLE);
 
             if(getIntent().hasExtra("result")){
 
@@ -241,8 +259,10 @@ CommonCall.hideLoader();
 
 
 
-                setResult(403);
+
+                setResult(RESULT_OK,new Intent());
                 finish();
+
             }else{
 
 //default
@@ -303,7 +323,7 @@ CommonCall.hideLoader();
 
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // the user canceled
-                Log.d("mylog", "user canceled");
+                Log.d("mylog", "user cancelled");
                 CommonCall.hideLoader();
             } else {
                 // handle errors here, an exception may be available in
