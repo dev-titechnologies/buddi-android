@@ -87,17 +87,18 @@ CommonCall.showLoader(PaymentType.this);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getIntent().hasExtra("result")){
+       /*         if(getIntent().hasExtra("result")){
 
-    /**ForResult
-                    /*
+    *//**ForResult
+                    *//*
     *
     * going back to map screen
     *
-    * */
+    * *//*
                     setResult(RESULT_OK,new Intent());
                     finish();
-                }
+                }*/
+    onBackPressed();
             }
         });
     }

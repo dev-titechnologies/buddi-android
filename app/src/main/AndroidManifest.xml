@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="buddyapp.com">
+
     <!-- Adding the permission -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -25,7 +26,6 @@
         android:name=".Controller"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -55,22 +55,24 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".Splash"
-            android:screenOrientation="portrait" >
+        <activity
+            android:name=".Splash"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity"
-            android:screenOrientation="portrait"  />
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.HomeActivity"
             android:label="@string/title_activity_home"
-            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.ChooseCategory"
             android:screenOrientation="portrait" />
@@ -107,8 +109,8 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activity.questions.Question1"
-            android:windowSoftInputMode="stateHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.questions.Question2"
             android:screenOrientation="portrait" />
@@ -148,20 +150,26 @@
                 <data android:scheme="${applicationId}.braintree" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ChooseSpecification"
+        <activity
+            android:name=".activity.ChooseSpecification"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.MapTrainee"
+        <activity
+            android:name=".activity.MapTrainee"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.TrainerProfileView"
+        <activity
+            android:name=".activity.TrainerProfileView"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".activity.SessionReady"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".activity.SessionReady"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.Session"
+        <activity
+            android:name=".activity.Session"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.ChatScreen"
+        <activity
+            android:name=".activity.ChatScreen"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <!-- Firebase Notifications -->
         <service android:name=".fcm.MyFirebaseMessagingService">
             <intent-filter>
@@ -175,19 +183,23 @@
         </service>
         <!-- ./Firebase Notifications -->
 
-
-        <activity android:name=".activity.TraineeProfileView"
+        <activity
+            android:name=".activity.TraineeProfileView"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
 
-        <service android:name=".timmer.Timer_Service"></service>
+        <service android:name=".timmer.Timer_Service" />
         <!-- Declaring broadcast receiver for BOOT_COMPLETED event. -->
-        <receiver android:name=".timmer.BootReceiver" android:enabled="true" android:exported="false">
+        <receiver
+            android:name=".timmer.BootReceiver"
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
+        <activity android:name=".activity.Detail_history"></activity>
     </application>
 
 </manifest>

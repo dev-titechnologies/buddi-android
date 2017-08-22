@@ -1,6 +1,7 @@
 package buddyapp.com.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v7.widget.CardView;
@@ -22,6 +23,7 @@ import java.util.Locale;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.activity.Detail_history;
 import buddyapp.com.utils.CommonCall;
 
 /**
@@ -32,7 +34,7 @@ public class HistoryAdapter extends BaseAdapter {
     Context context;
     JSONArray jsonArray;
     String bookingId, traineeId,traineeName,trainerName,trainerId,
-    category,trainingStatus,paymentStatus,location,trained_date;
+    category,trainingStatus,paymentStatus,location,trained_date, desc, image, name,profileImage;
     public HistoryAdapter(Context context, JSONArray jsonArray){
         this.context = context;
         this.jsonArray = jsonArray;
@@ -55,34 +57,23 @@ public class HistoryAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         CustomViewHolder holder = null;
-        if (view == null) {
+//        if (view == null) {
             view = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.history_list_item, viewGroup, false);
             view.setTag(holder);
             holder = new CustomViewHolder();
-            holder.trainer = (TextView) view.findViewById(R.id.trainer_txt);
-            holder.trainee = (TextView) view.findViewById(R.id.trainee_txt);
-            holder.category = (TextView) view.findViewById(R.id.category);
-            holder.location = (TextView) view.findViewById(R.id.location);
-            holder.name = (TextView) view.findViewById(R.id.name);
-            holder.training_status = (TextView) view.findViewById(R.id.training_status);
-            holder.payment_status = (TextView) view.findViewById(R.id.training_status);
-            holder.date = (TextView) view.findViewById(R.id.date);
+
             holder.background = (ImageView) view.findViewById(R.id.background);
-            if(PreferencesUtils.getData(Constants.user_type,context,"").equals("trainer")) {
-                holder.trainee.setVisibility(View.VISIBLE);
-                holder.trainer.setVisibility(View.GONE);
-            } else{
-                holder.trainer.setVisibility(View.VISIBLE);
-                holder.trainee.setVisibility(View.GONE);
+            holder.trainedDate = (TextView) view.findViewById(R.id.trained_date);
+            holder.description = (TextView) view.findViewById(R.id.description);
 
-            }
 
-        } else {
 
-            holder = (CustomViewHolder) view.getTag();
-
-        }
+//        } else {
+//
+//            holder = (CustomViewHolder) view.getTag();
+//
+//        }
         try{
             JSONObject jsonObject= jsonArray.getJSONObject(i);
             bookingId = jsonObject.getString("booking_id");
@@ -90,17 +81,26 @@ public class HistoryAdapter extends BaseAdapter {
             traineeName= jsonObject.getString("trainee_name");
             trainerName= jsonObject.getString("trainer_name");
             trainerId= jsonObject.getString("trainer_id");
+            profileImage =jsonObject.getString("profile_img");
+            if (PreferencesUtils.getData(Constants.user_type,context,"").equals("trainer"))
+                name=traineeName;
+            else
+                name=trainerName;
 
-            JSONArray array = jsonObject.getJSONArray("category");
-            category = array.getJSONObject(1).getString("categoryName");
+            final JSONArray array = new JSONArray(jsonObject.getString("category"));
+            category = array.getJSONObject(0).getString("categoryName");
 
-            CommonCall.LoadImage(context,array.getJSONObject(1).getString("categoryBookImage"),holder.background,R.drawable.ic_no_image,R.drawable.ic_no_image);
+            image = array.getJSONObject(0).getString("categoryBookImage");
+            CommonCall.LoadImage(context,image,holder.background,R.drawable.ic_no_image,R.drawable.ic_no_image);
 
             trainingStatus= jsonObject.getString("training_status");
             paymentStatus= jsonObject.getString("payment_status");
             location= jsonObject.getString("location");
             trained_date= jsonObject.getString("trained_date");
 
+            desc = category+" session with "+name;
+
+            view.setTag(jsonObject);
 
 /*          String CurrentString = location;
             String[] separated = CurrentString.split("/");
@@ -121,20 +121,43 @@ public class HistoryAdapter extends BaseAdapter {
 //            String postalCode = addresses.get(0).getPostalCode();
 //            String knownName = addresses.get(0).getFeatureName();
 
+            holder.trainedDate.setText(CommonCall.convertTime1(trained_date));
+            holder.description.setText(category+" session with "+name);
+            view.setTag(jsonObject);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        JSONObject jsonObject =  new JSONObject(view.getTag().toString());
+                        final JSONArray array = new JSONArray(jsonObject.getString("category"));
+                        category = array.getJSONObject(0).getString("categoryName");
 
+                        if (PreferencesUtils.getData(Constants.user_type,context,"").equals("trainer"))
+                            name=jsonObject.getString("trainee_name");
+                        else
+                            name=jsonObject.getString("trainer_name");
 
-            if (PreferencesUtils.getData(Constants.user_type,context,"").equals("trainer"))
+                        desc = category+" session with "+name;
 
-            holder.name.setText(traineeName);
-                else
-                holder.name.setText(trainerName);
-
-            holder.date.setText(trained_date);
-            holder.location.setText(location);
-            holder.category.setText(category);
-            holder.payment_status.setText(paymentStatus);
-            holder.training_status.setText(trainingStatus);
-        } catch (Exception e) {
+                    Intent intent = new Intent(context, Detail_history.class);
+                    intent.putExtra("traineeName",jsonObject.getString("trainee_name"));
+                    intent.putExtra("trainerName",jsonObject.getString("trainer_name"));
+                    intent.putExtra("category",category);
+                    intent.putExtra("trainingStatus",jsonObject.getString("training_status"));
+                    intent.putExtra("paymentStatus",jsonObject.getString("payment_status"));
+                    intent.putExtra("location",jsonObject.getString("location"));
+                    intent.putExtra("trained_date",jsonObject.getString("trained_date"));
+                    intent.putExtra("profileImage",jsonObject.getString("profile_img"));
+                    intent.putExtra("desc",desc);
+                    intent.putExtra("image",array.getJSONObject(0).getString("categoryBookImage"));
+                    context.startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         return view;
@@ -142,7 +165,7 @@ public class HistoryAdapter extends BaseAdapter {
 
     public class CustomViewHolder {
 
-        TextView name,category, training_status,payment_status,location,date, trainer, trainee;
+        TextView category, trainedDate,description;
         CardView cat_card;
         ImageView background;
 

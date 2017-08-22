@@ -96,7 +96,7 @@
                         android:text="Availability status"/>
                     <Switch
                         android:id="@+id/togglebutton"
-                        android:layout_width="60dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:shadowColor="@color/ash"
                         android:theme="@style/SCBSwitch"

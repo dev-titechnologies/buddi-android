@@ -176,15 +176,15 @@ public class CommonCall {
         return time;
     }
 
-    public static long convertTime1(String date) {
+    public static String convertTime1(String date) {
 
-        long formattedDate = 0;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy HH:mm");
+        String formattedDate = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy, HH:mm");
         try {
-//            formattedDate = sdf.format((Iso8601.toCalendar(date).getTime()));
+            formattedDate = sdf.format((Iso8601.toCalendar(date).getTime()));
 
 //            formattedDate = Long.parseLong(getTimeAgo(Iso8601.toCalendar(date).getTimeInMillis()));
-            formattedDate = Iso8601.toCalendar(date).getTimeInMillis();
+//            formattedDate = Iso8601.toCalendar(date).getTimeInMillis();
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -228,7 +228,7 @@ public class CommonCall {
         }
     }
 
-    public static String convertTime(String date) {
+    /*public static String convertTime(String date) {
         long now = System.currentTimeMillis();
         String res="";
         if (convertTime1(date) > now || convertTime1(date) <= 0) {
@@ -246,7 +246,7 @@ public class CommonCall {
                 res = "just now";
         }
                 return res;
-    }
+    }*/
 
 
 
@@ -301,9 +301,11 @@ public static void showLoader(Activity yourActivity){
 
 public static void hideLoader(){
     if (pd!=null){
-
-        pd.dismiss();
-    }
+try {
+    pd.dismiss();
+}catch (Exception e){
+    e.printStackTrace();
+}}
 }
 
 
@@ -443,9 +445,11 @@ if (activity!=null)
 
 
             PreferencesUtils.saveData(start_session,"false",Controller.getAppContext());
+            if (activity!=null)
+                CommonCall.hideLoader();
 
             try {
-                CommonCall.hideLoader();
+
                 final JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
 

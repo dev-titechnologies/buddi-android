@@ -587,11 +587,28 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     private void showMarker() {
 
         try {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 13));
-            pos_Marker = googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title(name.toUpperCase()).draggable(false));
-            pos_Marker.showInfoWindow();
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 13), new GoogleMap.CancelableCallback() {
+                @Override
+                public void onFinish() {
+                  try {
 
-            googleMap.setInfoWindowAdapter(SessionReady.this);
+
+                    pos_Marker = googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title(name.toUpperCase()).draggable(false));
+                    pos_Marker.showInfoWindow();
+
+                    googleMap.setInfoWindowAdapter(SessionReady.this);
+                }catch (Exception e){
+                      e.printStackTrace();
+                  }
+
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -643,7 +660,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         mapRipple.withTransparency(0.5f);
         mapRipple.startRippleMapAnimation();
 
-//        showMarker();
+        showMarker();
         googleMap.setMyLocationEnabled(true);
 
 
