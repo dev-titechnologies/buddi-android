@@ -2,12 +2,12 @@ package buddyapp.com.activity;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import buddyapp.com.R;
+import buddyapp.com.activity.chat.ChatScreen;
 
 public class Session extends AppCompatActivity {
 

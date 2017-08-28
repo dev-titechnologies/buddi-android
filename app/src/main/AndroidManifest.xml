@@ -167,7 +167,7 @@
             android:name=".activity.Session"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.ChatScreen"
+            android:name=".activity.chat.ChatScreen"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <!-- Firebase Notifications -->
@@ -199,7 +199,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.Detail_history"></activity>
+        <activity android:name=".activity.Detail_history" />
+        <activity android:name=".activity.SettingsCategory"></activity>
     </application>
 
 </manifest>

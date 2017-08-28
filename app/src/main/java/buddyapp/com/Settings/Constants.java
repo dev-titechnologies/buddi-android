@@ -79,4 +79,13 @@ public class Constants {
 
     public static String category_submitted = "category_submitted";
     public static String category_approved = "category_approved";
+
+    public static String trainer_gender = "trainer_gender";
+    public static String training_duration = "training_duration";
+
+    public static String settings_address ="settings_address";
+    public static String settings_latitude = "settings_latitude";
+    public static String setting_longitude = "setting_longitude";
+
+    public static String settings_cat_id = "settings_cat_id";
 }
