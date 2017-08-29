@@ -296,7 +296,12 @@ public static void showLoader(Activity yourActivity){
      pd = new ProgressDialog(yourActivity);
     pd.setMessage("loading");
     pd.setCancelable(false);
-    pd.show();
+    if(!((Activity) yourActivity).isFinishing())
+    {
+        pd.show();
+    }
+
+
 }
 
 public static void hideLoader(){
@@ -470,6 +475,8 @@ if (activity!=null)
                         } else {
                             builder = new AlertDialog.Builder(activity);
                         }
+                        if(!((Activity) activity).isFinishing())
+                        {
 
                         builder.setMessage(obj.getString("message"))
                                 .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -492,7 +499,14 @@ if (activity!=null)
 
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
+                            //show dialog
+                        }else{
+                            Intent intent = new Intent(activity, HomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            activity.startActivity(intent);
+                            activity.finish();
 
+                        }
 
                     }
 

@@ -128,9 +128,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
 
+                Intent intent = new Intent("BUDDI_TRAINER_START");
 
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
             }else if(json.getInt("type")==3){
+
+
+
+
 
 
                 Intent resultIntent = new Intent(getApplicationContext(), HomeCategory.class);
@@ -139,7 +145,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
 
 
+                Intent intent = new Intent("BUDDI_TRAINER_STOP");
 
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
 
             }else if(json.getInt("type")==4){
@@ -151,6 +159,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
 
 
+                Intent intent = new Intent("BUDDI_TRAINER_STOP");
+
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
 
 

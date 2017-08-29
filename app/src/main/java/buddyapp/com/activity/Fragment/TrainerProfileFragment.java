@@ -407,7 +407,7 @@ public class TrainerProfileFragment extends Fragment {
                 reqData.put(Constants.user_type, PreferencesUtils.getData(Constants.user_type, getActivity(), ""));
                 reqData.put(Constants.availStatus, PreferencesUtils.getData(Constants.availStatus, getActivity(), ""));
                 response = NetworkCalls.POST(Urls.getStatusURL(), reqData.toString());
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 

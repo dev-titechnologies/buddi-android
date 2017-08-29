@@ -83,6 +83,7 @@ import static buddyapp.com.Controller.mSocket;
 import static buddyapp.com.Controller.updateSocket;
 import static buddyapp.com.R.id.map;
 import static buddyapp.com.R.id.stop;
+import static buddyapp.com.Settings.Constants.start_session;
 import static buddyapp.com.Settings.Constants.trainee_Data;
 import static buddyapp.com.Settings.Constants.trainer_Data;
 
@@ -263,26 +264,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                             switch (which) {
                                 case DialogInterface.BUTTON_POSITIVE:
                                     //Yes button clicked
-
-                                    Timer_Service.stopFlag = true;
-                                    PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
-
-
-                                    startactionTitle.setText("Start");
-                                    startactionIcon.setImageResource(R.mipmap.play);
-
-                                    PreferencesUtils.saveData("data", "", getApplicationContext());
-                                    PreferencesUtils.saveData("hours", "", getApplicationContext());
-
-                                    stopService(new Intent(getApplicationContext(), Timer_Service.class));
-
-
-                                    NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
-                                    nManager.cancelAll();
-
-
-                                    new CommonCall.timerUpdate(SessionReady.this,"complete",book_id,"").execute();
-
+                                    stopAction();
 
                                     break;
 
@@ -519,8 +501,95 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
         );
+
+
+        startauto();
+        stopauto();
         registerReceiver(br, new IntentFilter(Timer_Service.str_receiver));
     }
+void startauto(){
+
+    LocalBroadcastManager.getInstance(this).registerReceiver(
+            new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+start.performClick();
+
+
+                }
+            }, new IntentFilter("BUDDI_TRAINER_START")
+
+
+    );
+}
+
+
+void stopAction(){
+    Timer_Service.stopFlag = true;
+    PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
+
+
+    startactionTitle.setText("Start");
+    startactionIcon.setImageResource(R.mipmap.play);
+
+    PreferencesUtils.saveData("data", "", getApplicationContext());
+    PreferencesUtils.saveData("hours", "", getApplicationContext());
+
+    stopService(new Intent(getApplicationContext(), Timer_Service.class));
+
+
+    NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
+    nManager.cancelAll();
+
+
+    new CommonCall.timerUpdate(SessionReady.this,"complete",book_id,"").execute();
+
+}
+void stopSession(){
+    Timer_Service.stopFlag = true;
+    PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
+
+    PreferencesUtils.saveData(start_session,"false",Controller.getAppContext());
+
+    startactionTitle.setText("Start");
+    startactionIcon.setImageResource(R.mipmap.play);
+
+    PreferencesUtils.saveData("data", "", getApplicationContext());
+    PreferencesUtils.saveData("hours", "", getApplicationContext());
+
+    stopService(new Intent(getApplicationContext(), Timer_Service.class));
+
+
+    NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
+    nManager.cancelAll();
+
+    //clearing last payment id to avoid multiple payments
+    PreferencesUtils.saveData(Constants.transactionId,"",getApplicationContext());
+    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    startActivity(intent);
+    finish();
+
+
+}
+    void stopauto(){
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+
+                        stopSession();
+
+                    }
+                }, new IntentFilter("BUDDI_TRAINER_STOP")
+
+
+        );
+    }
+
+
 
     @Override
     protected void onDestroy() {

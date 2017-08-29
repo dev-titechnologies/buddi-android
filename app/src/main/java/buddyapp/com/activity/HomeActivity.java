@@ -133,7 +133,7 @@ public class HomeActivity extends AppCompatActivity
         menu =navigationView.getMenu();
 
         if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer"))
-        menu.findItem(R.id.nav_trainer).setTitle("Add category");
+        menu.findItem(R.id.nav_trainer).setTitle("Add Category");
 
         if(PreferencesUtils.getData(Constants.trainer_type,getApplicationContext(),"").equals("true")) {
          if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer"))
