@@ -3,6 +3,7 @@ package buddyapp.com.activity;
 
 import android.animation.ObjectAnimator;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -69,6 +70,7 @@ import buddyapp.com.Controller;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.activity.chat.ChatActivity;
 import buddyapp.com.services.GPSTracker;
 import buddyapp.com.services.LocationService;
 import buddyapp.com.timmer.Timer_Service;
@@ -117,6 +119,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle("Training Session");
 
+        intstartStop();
 // check if GPS enabled
         gps = new GPSTracker(SessionReady.this);
         if (gps.canGetLocation()) {
@@ -190,16 +193,19 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
         mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+
             buildAlertMessageNoGps();
+
         }
 
         origin = camera;
         dest = usercamera;
 
+
 /****
  * get Trainer location
  ****/
-        intstartStop();
+
         if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"false").equals("true")){
             cancel.setEnabled(false);
             startactionIcon.setImageResource(R.mipmap.stop_blue);
@@ -387,6 +393,13 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                     Intent intent = new Intent(getApplicationContext(), TrainerProfileView.class);
                     startActivity(intent);
                 }
+            }
+        });
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent =  new Intent(getApplicationContext(),ChatActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -687,7 +700,7 @@ void stopSession(){
     }
 
     private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(SessionReady.this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(SessionReady.this, android.R.style.Theme_Material_Dialog_Alert);
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -701,7 +714,10 @@ void stopSession(){
                     }
                 });
         final AlertDialog alert = builder.create();
-         alert.show();
+        if(!((Activity) this).isFinishing())
+        {
+        alert.show();
+        }
     }
 
     @Override

@@ -201,6 +201,10 @@
 
         <activity android:name=".activity.Detail_history" />
         <activity android:name=".activity.SettingsCategory"></activity>
+        <activity
+            android:name=".activity.chat.ChatActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>
