@@ -69,6 +69,7 @@ import buddyapp.com.Controller;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.activity.chat.ChatActivity;
 import buddyapp.com.services.GPSTracker;
 import buddyapp.com.services.LocationService;
 import buddyapp.com.timmer.Timer_Service;
@@ -194,6 +195,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
         origin = camera;
         dest = usercamera;
+
 
 /****
  * get Trainer location
@@ -407,6 +409,13 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 }
             }
         });
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent =  new Intent(getApplicationContext(),ChatActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private BroadcastReceiver br = new BroadcastReceiver() {
@@ -618,7 +627,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     }
 
     private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(SessionReady.this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -632,7 +641,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                     }
                 });
         final AlertDialog alert = builder.create();
-         alert.show();
+        alert.show();
     }
 
     @Override
