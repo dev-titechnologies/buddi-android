@@ -6,14 +6,16 @@
     android:layout_marginTop="10dp"
     android:layout_marginBottom="5dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <buddyapp.com.utils.CircleImageView
         android:id="@+id/imageView3"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_marginStart="5dp"
-        android:src="@drawable/default_avata"/>
+        android:src="@drawable/default_avata"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="5dp" />
 
     <TextView
         android:id="@+id/textContentFriend"
@@ -28,6 +30,9 @@
         android:layout_marginEnd="20dp"
         android:text="A"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#000" />
+        android:textColor="#000"
+        android:layout_toRightOf="@id/imageView3"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="20dp" />
 
 </RelativeLayout>

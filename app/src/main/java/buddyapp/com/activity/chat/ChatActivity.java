@@ -26,7 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import buddyapp.com.R;
@@ -43,7 +42,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     public static final int VIEW_TYPE_FRIEND_MESSAGE = 1;
     private ListMessageAdapter adapter;
     private String roomId;
-    private ArrayList<CharSequence> idFriend;
+    private String idFriend;
     private Consersation consersation;
     private ImageButton btnSend;
     private EditText editWriteMessage;
@@ -57,7 +56,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         Intent intentData = getIntent();
-        idFriend.add(PreferencesUtils.getData(Constants.trainer_id,getApplicationContext(),""));
+        idFriend=PreferencesUtils.getData(Constants.trainer_id,getApplicationContext(),"");
         roomId = PreferencesUtils.getData(Constants.bookid,getApplicationContext(),"");
 
         Log.e("idFrnd + roomid ", idFriend+"  "+roomId);
@@ -82,7 +81,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             recyclerChat = (RecyclerView) findViewById(R.id.recyclerChat);
             recyclerChat.setLayoutManager(linearLayoutManager);
             adapter = new ListMessageAdapter(this, consersation, bitmapAvataFriend, bitmapAvataUser);
-            FirebaseDatabase.getInstance().getReference().child("message/" + roomId).addChildEventListener(new ChildEventListener() {
+            FirebaseDatabase.getInstance().getReference().child("bookingID_" + roomId).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     if (dataSnapshot.getValue() != null) {
@@ -125,9 +124,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            Intent result = new Intent();
-            result.putExtra("idFriend", idFriend.get(0));
-            setResult(RESULT_OK, result);
+
             this.finish();
         }
         return true;
@@ -152,7 +149,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 newMessage.idSender = StaticConfig.UID;
                 newMessage.idReceiver = roomId;
                 newMessage.timestamp = System.currentTimeMillis();
-                FirebaseDatabase.getInstance().getReference().child("message/" + roomId).push().setValue(newMessage);
+                FirebaseDatabase.getInstance().getReference().child("bookingID_" + roomId).push().setValue(newMessage);
             }
         }
     }

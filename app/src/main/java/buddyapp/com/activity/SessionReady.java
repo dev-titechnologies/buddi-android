@@ -3,6 +3,7 @@ package buddyapp.com.activity;
 
 import android.animation.ObjectAnimator;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -118,6 +119,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle("Training Session");
 
+        intstartStop();
 // check if GPS enabled
         gps = new GPSTracker(SessionReady.this);
         if (gps.canGetLocation()) {
@@ -191,7 +193,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
         mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+
             buildAlertMessageNoGps();
+
         }
 
         origin = camera;
@@ -201,7 +205,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 /****
  * get Trainer location
  ****/
-        intstartStop();
+
         if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"false").equals("true")){
             cancel.setEnabled(false);
             startactionIcon.setImageResource(R.mipmap.stop_blue);
@@ -696,7 +700,7 @@ void stopSession(){
     }
 
     private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(SessionReady.this, android.R.style.Theme_Material_Dialog_Alert);
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -710,7 +714,10 @@ void stopSession(){
                     }
                 });
         final AlertDialog alert = builder.create();
+        if(!((Activity) this).isFinishing())
+        {
         alert.show();
+        }
     }
 
     @Override
