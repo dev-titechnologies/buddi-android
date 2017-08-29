@@ -518,8 +518,8 @@ try {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             try {
+                pd.dismiss();
 
-                CommonCall.hideLoader();
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt(Constants.status) == 1) {
 

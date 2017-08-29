@@ -41,7 +41,7 @@ dependencies {
     compile 'com.naver.android.helloyako:imagecropview:1.2.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.afollestad:material-camera:0.4.4'
-    compile 'com.braintreepayments.api:drop-in:3.+'
+    compile 'com.braintreepayments.api:drop-in:3.0.8'
     compile 'com.google.firebase:firebase-messaging:11.0.4'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
