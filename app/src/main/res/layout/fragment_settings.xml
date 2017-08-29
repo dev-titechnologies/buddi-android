@@ -3,20 +3,222 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="buddyapp.com.activity.Fragment.Settings">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="50dp"
     android:orientation="vertical">
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/large"
+        android:layout_margin="15dp"
+        android:textColor="@color/black"
         android:textSize="@dimen/large"
         android:text="Instant-Booking Preference" />
 <View
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:background="@color/ash"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:id="@+id/locaton_preference"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:text="Location Preference"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/ash"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/location"
+        android:layout_marginBottom="10dp"
+        android:background="@color/ash">
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium"
+            android:layout_marginBottom="@dimen/medium"
+            android:layout_marginRight="@dimen/medium"
+            android:layout_marginLeft="@dimen/medium"
+            android:elevation="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/medium"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:id="@+id/address"
+                android:background="@color/colorPrimary"
+                android:text=""/>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:id="@+id/category_preference"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:text="Training Category Preference"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/ash"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:id="@+id/gender_preference"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:text="Gender Preference"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ash"
+        android:visibility="gone"
+        android:gravity="center"
+        android:id="@+id/gender"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <android.support.v7.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="@dimen/medium"
+                android:layout_marginBottom="@dimen/medium"
+                android:layout_marginRight="@dimen/medium"
+                android:layout_marginLeft="@dimen/medium"
+                android:elevation="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/large"
+                    android:paddingRight="@dimen/large"
+                    android:paddingTop="@dimen/medium"
+                    android:paddingBottom="@dimen/medium"
+                    android:gravity="center"
+                    android:id="@+id/male"
+                    android:textColor="@color/black"
+                    android:background="@color/white"
+                    android:text="Male"/>
+            </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="@dimen/medium"
+                android:layout_marginBottom="@dimen/medium"
+                android:layout_marginRight="@dimen/medium"
+                android:layout_marginLeft="@dimen/medium"
+                android:elevation="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:id="@+id/female"
+                    android:background="@color/white"
+                    android:padding="@dimen/medium"
+                    android:text="Female"/>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/medium"
+            android:elevation="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/medium"
+                android:paddingBottom="@dimen/medium"
+                android:paddingRight="35dp"
+                android:paddingLeft="36dp"
+                android:gravity="center"
+                android:id="@+id/no_preference"
+                android:textColor="@color/black"
+                android:background="@color/white"
+                android:text="No Preference"/>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/ash"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:id="@+id/session_preference"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:text="Session Length Preference"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/duration"
+        android:background="@color/ash">
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium"
+            android:layout_marginBottom="@dimen/small"
+            android:layout_marginRight="@dimen/medium"
+            android:layout_marginLeft="@dimen/medium"
+            android:elevation="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/medium"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:id="@+id/thirty"
+                android:onClick="setThirty()"
+                android:background="@color/white"
+                android:text="40 Minutes"/>
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small"
+            android:layout_marginBottom="@dimen/medium"
+            android:layout_marginRight="@dimen/medium"
+            android:layout_marginLeft="@dimen/medium"
+            android:elevation="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/medium"
+                android:id="@+id/hour"
+                android:textColor="@color/black"
+                android:onClick="setHour()"
+                android:gravity="center"
+                android:background="@color/white"
+                android:text="1 Hour"/>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/ash"/>
+
 </LinearLayout>
+    </ScrollView>
 </FrameLayout>

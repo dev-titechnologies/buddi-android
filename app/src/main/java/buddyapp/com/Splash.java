@@ -18,8 +18,10 @@ import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.ChooseCategory;
 import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.IntroScreen;
+import buddyapp.com.activity.Session;
 import buddyapp.com.activity.SessionReady;
 import buddyapp.com.activity.WelcomeActivity;
+import buddyapp.com.activity.chat.ChatScreen;
 import buddyapp.com.activity.questions.DoneActivity;
 import buddyapp.com.timmer.Timer_Service;
 import buddyapp.com.utils.CommonCall;
@@ -36,8 +38,7 @@ public class Splash extends AppCompatActivity {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-
-                if (PreferencesUtils.getData(Constants.token, getApplicationContext(), "").length() > 1) {
+             if (PreferencesUtils.getData(Constants.token, getApplicationContext(), "").length() > 1) {
 
                     if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals(Constants.trainer)) {
                         try {

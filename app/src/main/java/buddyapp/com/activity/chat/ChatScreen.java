@@ -1,4 +1,4 @@
-package buddyapp.com.activity;
+package buddyapp.com.activity.chat;
 
 import android.app.Activity;
 import android.graphics.Color;

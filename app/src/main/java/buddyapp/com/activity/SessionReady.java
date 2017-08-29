@@ -687,7 +687,7 @@ void stopSession(){
     }
 
     private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(SessionReady.this);
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -701,7 +701,7 @@ void stopSession(){
                     }
                 });
         final AlertDialog alert = builder.create();
-        alert.show();
+         alert.show();
     }
 
     @Override

@@ -296,7 +296,7 @@
                             android:background="@color/white"
                             android:drawableRight="@drawable/ic_right_black_24dp"
                             android:padding="10dp"
-                            android:text="Gym Scriptions" />
+                            android:text="Gym Subscriptions" />
                     </LinearLayout>
 
                     <LinearLayout
