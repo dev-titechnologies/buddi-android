@@ -25,9 +25,6 @@ dependencies {
     }
 
 
-
-
-
     compile 'com.googlecode.libphonenumber:libphonenumber:8.6.0'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.android.support:appcompat-v7:25.3.1'
