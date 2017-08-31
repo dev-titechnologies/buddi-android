@@ -12,6 +12,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import buddyapp.com.Controller;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.Fragment.HomeCategory;
@@ -135,6 +136,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }else if(json.getInt("type")==3){
 
 
+                PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
+
+                PreferencesUtils.saveData(start_session,"false", Controller.getAppContext());
 
 
 
@@ -151,7 +155,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
             }else if(json.getInt("type")==4){
+                PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
 
+                PreferencesUtils.saveData(start_session,"false", Controller.getAppContext());
 
                 Intent resultIntent = new Intent(getApplicationContext(), HomeCategory.class);
                 resultIntent.putExtra("message","");

@@ -103,7 +103,7 @@ public class SettingsCategoryAdapter extends BaseAdapter {
                         settings_cat_selectedID.clear();
 //                    {if(id==0) {
 //                        id = 1;
-                        PreferencesUtils.saveData(Constants.settings_cat_id, String.valueOf(settings_cat_selectedID.add(view.getTag().toString())),context);
+                        PreferencesUtils.saveData(Constants.settings_cat_id, String.valueOf(view.getTag().toString()),context);
                         settings_cat_selectedID.add(view.getTag().toString());
 //                    }
                     }
