@@ -66,6 +66,7 @@ import java.util.Calendar;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import buddyapp.com.Controller;
 import buddyapp.com.R;
@@ -156,9 +157,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
                 updateSocket();
-                mSocket.connect();
+                Controller.mSocket.connect();
                 startService(new Intent(getApplicationContext(), LocationService.class));
-
             } else {
 
                 JSONObject data = new JSONObject(PreferencesUtils.getData(trainer_Data, getApplicationContext(), ""));

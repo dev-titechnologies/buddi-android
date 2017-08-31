@@ -423,8 +423,7 @@ try {
         });
     }
 
-    public static void
-    getSenderMessage() {
+    public static void getSenderMessage() {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {

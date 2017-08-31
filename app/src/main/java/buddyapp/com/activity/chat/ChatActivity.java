@@ -153,6 +153,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                        receiveMsg = intent.getStringExtra("CHAT_MESSAGE");
                        chatName = intent.getStringExtra("CHAT_NAME");
                        chatImage = intent.getStringExtra("CHAT_IMAGE");
+                        loadMessageFromSocket(receiveMsg);
                     }
                 }, new IntentFilter("SOCKET_BUDDI_CHAT")
 
@@ -171,6 +172,23 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             newMessage.idReceiver = PreferencesUtils.getData(Constants.trainee_id,getApplicationContext(),"");
 
         newMessage.text = content;
+//        newMessage.timestamp = (long) mapMessage.get("timestamp");
+        consersation.getListMessageData().add(newMessage);
+        adapter.notifyDataSetChanged();
+        linearLayoutManager.scrollToPosition(consersation.getListMessageData().size() - 1);
+        recyclerChat.setAdapter(adapter);
+    }
+    private void loadMessageFromSocket(String receiveMsg){
+        adapter = new ListMessageAdapter(this, consersation, bitmapAvataFriend, bitmapAvataUser);
+        Message newMessage = new Message();
+        newMessage.idSender = PreferencesUtils.getData(Constants.user_id,getApplicationContext(),"");
+
+        if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainee"))
+            newMessage.idReceiver = PreferencesUtils.getData(Constants.trainer_id,getApplicationContext(),"");
+        else
+            newMessage.idReceiver = PreferencesUtils.getData(Constants.trainee_id,getApplicationContext(),"");
+
+        newMessage.text = receiveMsg;
 //        newMessage.timestamp = (long) mapMessage.get("timestamp");
         consersation.getListMessageData().add(newMessage);
         adapter.notifyDataSetChanged();
@@ -361,7 +379,7 @@ class ListMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        return consersation.getListMessageData().get(position).idSender.equals(StaticConfig.UID) ? ChatActivity.VIEW_TYPE_USER_MESSAGE : ChatActivity.VIEW_TYPE_FRIEND_MESSAGE;
+        return consersation.getListMessageData().get(position).idSender.equals(PreferencesUtils.getData(Constants.user_id,context,"")) ? ChatActivity.VIEW_TYPE_USER_MESSAGE : ChatActivity.VIEW_TYPE_FRIEND_MESSAGE;
     }
 
     @Override

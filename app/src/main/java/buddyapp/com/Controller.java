@@ -45,7 +45,7 @@ public class Controller extends Application {
             {
                     socket();
 //                listenEvent();
-                CommonCall.chatConnect();
+
 //                if (PreferencesUtils.getData(Constants.token,context,"").length()>0 &&
 //                        PreferencesUtils.getData(Constants.user_type,context,"").equals(Constants.trainer)&&
 //                        PreferencesUtils.getData(Constants.availStatus,context,"online").equals("online"))
@@ -73,6 +73,7 @@ public class Controller extends Application {
         mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
+
                 CommonCall.PrintLog("Socket","Connected");
             }
         });
