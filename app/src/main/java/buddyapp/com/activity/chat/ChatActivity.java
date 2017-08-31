@@ -44,7 +44,7 @@ import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
-import static buddyapp.com.Controller.chatConnect;
+
 
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
     private RecyclerView recyclerChat;
@@ -139,7 +139,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         String content = "";
         String id = "";
 
-        chatConnect();
+
         new getMessages().execute();
 //        loadMessage(content, id);
     }

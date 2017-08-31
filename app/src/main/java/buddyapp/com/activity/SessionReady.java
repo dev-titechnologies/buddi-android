@@ -81,6 +81,7 @@ import buddyapp.com.utils.RippleMap.MapRipple;
 import buddyapp.com.utils.Urls;
 
 
+import static buddyapp.com.Controller.chatConnect;
 import static buddyapp.com.Controller.mSocket;
 import static buddyapp.com.Controller.updateSocket;
 import static buddyapp.com.R.id.map;
@@ -157,6 +158,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
                 updateSocket();
                 mSocket.connect();
+                chatConnect();
                 startService(new Intent(getApplicationContext(), LocationService.class));
 
             } else {
@@ -176,6 +178,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                 updateSocket();
                 Controller.mSocket.connect();
+                chatConnect();
 
                 CommonCall.socketGetTrainerLocation();
             }
@@ -601,7 +604,7 @@ void stopSession(){
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(br);
-        mSocket.disconnect();
+//        mSocket.disconnect();
     }
 
     public void animateMarker(final Marker marker, final LatLng toPosition,
