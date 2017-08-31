@@ -72,7 +72,7 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
         female = (TextView) view.findViewById(R.id.female);
         next= (Button) view.findViewById(R.id.next);
         noPreference = (TextView) view.findViewById(R.id.no_preference);
-        location = (LinearLayout) view.findViewById(R.id.location);
+        location = (LinearLayout) view.findViewById(R.id.locationSettings);
         loadScreen();
 
         locationPref.setOnClickListener(new View.OnClickListener() {
@@ -273,7 +273,7 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
             maddress.setText(address );
             PreferencesUtils.saveData(Constants.settings_address, prefAddress,getActivity());
             PreferencesUtils.saveData(Constants.settings_latitude, String.valueOf(place.getLatLng().latitude),getActivity());
-            PreferencesUtils.saveData(Constants.setting_longitude, String.valueOf(place.getLatLng().longitude),getActivity());
+            PreferencesUtils.saveData(Constants.settings_longitude, String.valueOf(place.getLatLng().longitude),getActivity());
 
         } else {
             super.onActivityResult(requestCode, resultCode, data);

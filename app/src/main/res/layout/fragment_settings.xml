@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone"
-        android:id="@+id/location"
+        android:id="@+id/locationSettings"
         android:layout_marginBottom="10dp"
         android:background="@color/ash">
         <android.support.v7.widget.CardView

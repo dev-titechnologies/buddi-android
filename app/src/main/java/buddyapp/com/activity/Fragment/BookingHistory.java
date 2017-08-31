@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +29,6 @@ import buddyapp.com.utils.Urls;
 public class BookingHistory extends Fragment {
     DatabaseHandler db;
 HistoryAdapter historyAdapter;
-    TextView noHistory;
     public BookingHistory() {
         // Required empty public constructor
     }
@@ -43,7 +41,6 @@ ListView list;
 
         View view=  inflater.inflate(R.layout.fragment_booking_history, container, false);
         list = (ListView)view.findViewById(R.id.list);
-        noHistory = (TextView) view.findViewById(R.id.no_history);
         db = new DatabaseHandler(getActivity());
         new LoadBookingHistory().execute();
 
@@ -84,7 +81,7 @@ ListView list;
                 if (obj.getInt("status") == 1) {
                     JSONArray jsonArray = obj.getJSONArray("data");
                     if(jsonArray.length()!=0){
-                        noHistory.setVisibility(View.GONE);
+
                         for(int i=0; i<jsonArray.length();i++)
                         {
                             JSONObject jsonObject= jsonArray.getJSONObject(i);
@@ -105,13 +102,10 @@ ListView list;
 //                        loadHistory(db.getAllHistory());
                         historyAdapter = new HistoryAdapter(getActivity(),jsonArray);
                         list.setAdapter(historyAdapter);
-                    }else{
-                        noHistory.setVisibility(View.VISIBLE);
                     }
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
-                noHistory.setVisibility(View.VISIBLE);
+
             }
         }
     }

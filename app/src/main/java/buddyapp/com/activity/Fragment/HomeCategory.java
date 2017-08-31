@@ -15,6 +15,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,8 +25,10 @@ import java.util.ArrayList;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
+import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.ChooseCategory;
 import buddyapp.com.activity.ChooseSpecification;
+import buddyapp.com.activity.MapTrainee;
 import buddyapp.com.activity.questions.Question1;
 import buddyapp.com.adapter.CategoryAdapter;
 import buddyapp.com.adapter.HomeCategoryAdapter;
@@ -86,6 +89,28 @@ public class HomeCategory extends Fragment {
         instantBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+if (PreferencesUtils.getData(Constants.settings_cat_id,getActivity(),"").length()==0){
+
+    Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
+}else if (PreferencesUtils.getData(Constants.settings_address,getActivity(),"").length()==0){
+
+    Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
+
+}else if (PreferencesUtils.getData(Constants.trainer_gender,getActivity(),"").length()==0){
+    Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
+
+
+}else if (PreferencesUtils.getData(Constants.training_duration,getActivity(),"").length()==0){
+
+    Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
+
+}else{
+new SearchTrainer().execute();
+}
+
+
 
             }
         });
@@ -169,6 +194,66 @@ public class HomeCategory extends Fragment {
             }
 
 
+        }
+    }
+
+    class SearchTrainer extends AsyncTask<String,String,String> {
+        String response = "";
+        JSONObject reqData = new JSONObject();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            CommonCall.showLoader(getActivity());
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.user_id, getActivity(), ""));
+                reqData.put(Constants.gender, PreferencesUtils.getData(Constants.trainer_gender, getActivity(), ""));
+                reqData.put("category", PreferencesUtils.getData(Constants.settings_cat_id, getActivity(), ""));
+                reqData.put(Constants.latitude, PreferencesUtils.getData(Constants.settings_latitude, getActivity(), ""));
+                reqData.put(Constants.longitude, PreferencesUtils.getData(Constants.settings_longitude, getActivity(), ""));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            response = NetworkCalls.POST(Urls.getTrainerSearchURL(), reqData.toString());
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            CommonCall.hideLoader();
+            try {
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt("status") == 1) {
+                    JSONArray jsonArray = obj.getJSONArray("data");
+                    if (jsonArray.length() != 0) {
+                        PreferencesUtils.saveData("searchArray",obj.getJSONArray("data").toString(),getActivity());
+
+                        Intent intent = new Intent(getActivity(), MapTrainee.class);
+                        intent.putExtra(Constants.gender,PreferencesUtils.getData(Constants.trainer_gender, getActivity(), ""));
+                        intent.putExtra("category", PreferencesUtils.getData(Constants.settings_cat_id, getActivity(), ""));
+                        intent.putExtra(Constants.latitude, (PreferencesUtils.getData(Constants.settings_latitude, getActivity(), "")));
+                        intent.putExtra(Constants.longitude, PreferencesUtils.getData(Constants.longitude, getActivity(), ""));
+                        intent.putExtra(Constants.duration, (PreferencesUtils.getData(Constants.training_duration, getActivity(), "")));
+                        startActivity(intent);
+
+                    }else
+                    {
+                        // No match found..........
+                        Toast.makeText(getActivity(), "No trainer found", Toast.LENGTH_SHORT).show();
+                    }
+                }else if (obj.getInt("status") == 2) {
+                    Toast.makeText(getActivity(),obj.getString("message"),Toast.LENGTH_SHORT).show();
+                }else if (obj.getInt("status") == 3) {
+                    CommonCall.sessionout(getActivity());
+                }
+            } catch (JSONException e) {
+
+            }
         }
     }
 }

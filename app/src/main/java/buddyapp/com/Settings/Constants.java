@@ -85,7 +85,7 @@ public class Constants {
 
     public static String settings_address ="settings_address";
     public static String settings_latitude = "settings_latitude";
-    public static String setting_longitude = "setting_longitude";
+    public static String settings_longitude = "setting_longitude";
 
     public static String settings_cat_id = "settings_cat_id";
 }
