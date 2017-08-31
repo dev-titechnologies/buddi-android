@@ -47,15 +47,12 @@ import buddyapp.com.activity.Fragment.TrainerProfileFragment;
 import buddyapp.com.activity.Payments.PaymentType;
 import buddyapp.com.fcm.Config;
 import buddyapp.com.fcm.NotificationUtils;
-import buddyapp.com.services.LocationService;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
 
-import static buddyapp.com.Controller.getAppContext;
-import static buddyapp.com.Controller.mSocket;
 import static buddyapp.com.Settings.Constants.source_become_trainer;
 
 public class HomeActivity extends AppCompatActivity

@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@drawable/rounded_corner1"
+        android:background="@drawable/rounded_corner2"
         android:padding="10dp"
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@id/imageView2"
@@ -30,6 +30,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_marginStart="20dp"
         android:text="a"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:layout_toLeftOf="@id/imageView2"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="5dp" />
 
 </RelativeLayout>

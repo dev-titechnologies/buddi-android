@@ -110,7 +110,7 @@ public class VideoUploadActivity extends AppCompatActivity {
 
 
                     try {
-                        Constants.questionData.put("video_data",videoUpload);
+                        Constants.questionData.put("video_data",videoUpload.toString());
 
                         CommonCall.PrintLog("video data",Constants.questionData.toString());
 

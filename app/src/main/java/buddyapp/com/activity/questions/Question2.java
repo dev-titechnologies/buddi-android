@@ -119,14 +119,15 @@ public class Question2 extends Activity {
             @Override
             public void onClick(View view) {
 
-if (gym_sub!=null)
+/*if (gym_sub!=null)
                 if ( ( gym_sub.getSelectedItemsAsString().trim().length()<2 || gym_sub.getSelectedItemsAsString().toString().equals(getString(R.string.please_select_gym)))) {
 
 
                     Toast.makeText(Question2.this, getString(R.string.please_select_gym), Toast.LENGTH_SHORT).show();
 
 
-                }else if (military_installations_selected.length()==0) {
+                }else*/
+                    if (military_installations_selected.length()==0) {
 
 
                     Toast.makeText(Question2.this, "Please Select Military Installations", Toast.LENGTH_SHORT).show();

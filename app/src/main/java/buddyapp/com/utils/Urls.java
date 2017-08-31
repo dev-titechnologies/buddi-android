@@ -181,4 +181,10 @@ public class Urls {
         return BASEURL+ EXTENDBOOKING;
     }
 
+    public static String getAllMessage = "/chat/receiveMessage";
+
+    public static String getAllMessageURL(){
+        return BASEURL+getAllMessage;
+    }
+
 }

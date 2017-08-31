@@ -63,6 +63,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -175,6 +176,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                 updateSocket();
                 Controller.mSocket.connect();
+
                 CommonCall.socketGetTrainerLocation();
             }
 
@@ -506,7 +508,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
         );
 
-
+        Controller.listenEvent();
         startauto();
         stopauto();
         registerReceiver(br, new IntentFilter(Timer_Service.str_receiver));

@@ -44,7 +44,8 @@ public class Controller extends Application {
         if(mSocket==null || !mSocket.connected()){
             {
                     socket();
-                listenEvent();
+//                listenEvent();
+                CommonCall.chatConnect();
 //                if (PreferencesUtils.getData(Constants.token,context,"").length()>0 &&
 //                        PreferencesUtils.getData(Constants.user_type,context,"").equals(Constants.trainer)&&
 //                        PreferencesUtils.getData(Constants.availStatus,context,"online").equals("online"))
@@ -84,18 +85,25 @@ public class Controller extends Application {
         });
     }
     public static void listenEvent() {
-    mSocket.on("message", new Emitter.Listener() {
+    mSocket.on("message",  new Emitter.Listener() {
         @Override
         public void call(Object... args) {
             final JSONObject jsonObject = (JSONObject)args[0];
             CommonCall.PrintLog("received socket", jsonObject.toString());
             try {
-                JSONObject object = jsonObject.getJSONObject("message");
+                if(jsonObject.getString("type").equals("location")) {
+                    JSONObject object = jsonObject.getJSONObject("message");
 
-                sendBroadcastTrainerLocation(object.getString("latitude"),object.getString("longitude"));
-                CommonCall.PrintLog("lat", object.getString("latitude"));
-                CommonCall.PrintLog("lng", object.getString("longitude"));
-                CommonCall.PrintLog("availabilityStatus", object.getString("availabilityStatus"));
+                    sendBroadcastTrainerLocation(object.getString("latitude"), object.getString("longitude"));
+                    CommonCall.PrintLog("lat", object.getString("latitude"));
+                    CommonCall.PrintLog("lng", object.getString("longitude"));
+                    CommonCall.PrintLog("availabilityStatus", object.getString("availabilityStatus"));
+                }else if(jsonObject.getString("type").equals("message")){
+                    JSONObject object = jsonObject.getJSONObject("chat");
+                    sendBroadcastChatMessage(object.getString("text"),object.getString("fromId"),
+                            object.getString("from_name"),object.getString("from_img"));
+
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -159,5 +167,13 @@ public class Controller extends Application {
         }
     }
 
+    public static void sendBroadcastChatMessage(String image, String fromName, String msg, String fromId) {
+        Intent intent = new Intent("SOCKET_BUDDI_CHAT");
+        intent.putExtra("CHAT_FROMID", fromId);
+        intent.putExtra("CHAT_MESSAGE",msg);
+        intent.putExtra("CHAT_NAME",fromName);
+        intent.putExtra("CHAT_IMAGE",image);
+        LocalBroadcastManager.getInstance(getAppContext()).sendBroadcast(intent);
+    }
 
 }

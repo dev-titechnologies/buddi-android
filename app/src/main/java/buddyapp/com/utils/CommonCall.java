@@ -398,7 +398,61 @@ try {
             }
         });
     }
+    public static void chatConnect(){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
 
+
+                JSONObject jsonObject = new JSONObject();
+                try {
+
+                    jsonObject.put("url", Urls.BASEURL+String.format("/connectSocket/connectSocket/"));
+//
+//                    JSONObject object = new JSONObject();
+//
+//                    object.put("user_id", PreferencesUtils.getData(Constants.user_id,Controller.getAppContext(),""));
+//                    object.put("trainer_id",PreferencesUtils.getData(Constants.trainer_id,Controller.getAppContext(),""));
+//
+//                    jsonObject.put("data",object);
+                    Controller.mSocket.emit("post", jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public static void
+    getSenderMessage() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+
+
+                JSONObject jsonObject = new JSONObject();
+                try {
+
+                    jsonObject.put("url", "http://git.titechnologies.in:4001"+String.format("/connectSocket/getMessages"));
+
+                    JSONObject object = new JSONObject();
+
+                    object.put("from_id",PreferencesUtils.getData(Constants.user_id,Controller.getAppContext(),""));
+
+                    if(PreferencesUtils.getData(Constants.user_type,Controller.getAppContext(),"").equals("trainee"))
+                        object.put("to_id",PreferencesUtils.getData(Constants.trainer_id,Controller.getAppContext(),""));
+                    else
+                        object.put("to_id",PreferencesUtils.getData(Constants.trainee_id,Controller.getAppContext(),""));
+
+                    jsonObject.put("data",object);
+                    Controller.mSocket.emit("post", jsonObject);
+                    CommonCall.PrintLog("getmsg", jsonObject.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
     public static  class timerUpdate extends AsyncTask<String,String,String> {
 
 
