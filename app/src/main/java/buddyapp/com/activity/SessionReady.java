@@ -493,7 +493,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                             @Override
                             public void onFinish() {
                                 LoadmapTask();
-                                animateMarker(pos_Marker, camera, false, 0.0f);
+//                                animateMarker(pos_Marker, camera, false, 0.0f);
                             }
 
                             @Override
@@ -601,6 +601,7 @@ void stopSession(){
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(br);
+        mSocket.disconnect();
     }
 
     public void animateMarker(final Marker marker, final LatLng toPosition,

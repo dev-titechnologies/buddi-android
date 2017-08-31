@@ -44,12 +44,14 @@ import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
+import static buddyapp.com.Controller.chatConnect;
+
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
     private RecyclerView recyclerChat;
     public static final int VIEW_TYPE_USER_MESSAGE = 0;
     public static final int VIEW_TYPE_FRIEND_MESSAGE = 1;
     private ListMessageAdapter adapter;
-    private String roomId, fromId,toId,receiveMsg, chatName, chatImage;
+    private String roomId, fromId, toId, receiveMsg, chatName, chatImage;
     private String idFriend;
     private Consersation consersation;
     private ImageButton btnSend;
@@ -70,11 +72,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 //            StaticConfig.UID=PreferencesUtils.getData(Constants.trainer_id,getApplicationContext(),"");
 //        }
 
-        roomId = PreferencesUtils.getData(Constants.bookid,getApplicationContext(),"");
+        roomId = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
 
 
-        CommonCall.PrintLog("socket : ",Controller.mSocket.connected()+"");
-        Log.e("idFrnd + roomid ", idFriend+"  "+roomId);
+        CommonCall.PrintLog("socket : ", Controller.mSocket.connected() + "");
+        Log.e("idFrnd + roomid ", idFriend + "  " + roomId);
 //        String nameFriend = intentData.getStringExtra(StaticConfig.INTENT_KEY_CHAT_FRIEND);
 
         consersation = new Consersation();
@@ -86,15 +88,15 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 //            byte[] decodedString = Base64.decode(base64AvataUser, Base64.DEFAULT);
 //            bitmapAvataUser = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 //        } else {
-            bitmapAvataUser = null;
+        bitmapAvataUser = null;
 //        }
 
         editWriteMessage = (EditText) findViewById(R.id.editWriteMessage);
 //        if (idFriend != null && nameFriend != null) {
 //            getSupportActionBar().setTitle(nameFriend);
-            linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            recyclerChat = (RecyclerView) findViewById(R.id.recyclerChat);
-            recyclerChat.setLayoutManager(linearLayoutManager);
+        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerChat = (RecyclerView) findViewById(R.id.recyclerChat);
+        recyclerChat.setLayoutManager(linearLayoutManager);
 //            adapter = new ListMessageAdapter(this, consersation, bitmapAvataFriend, bitmapAvataUser);
     /*      FirebaseDatabase.getInstance().getReference().child("bookingID_" + roomId).addChildEventListener(new ChildEventListener() {
                 @Override
@@ -135,9 +137,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 //            recyclerChat.setAdapter(adapter);
 //        }
         String content = "";
-        String id="";
-        CommonCall.getSenderMessage();
-        Controller.listenEvent();
+        String id = "";
+
+        chatConnect();
         new getMessages().execute();
 //        loadMessage(content, id);
     }
@@ -149,10 +151,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                       fromId = intent.getStringExtra("CHAT_FROMID");
-                       receiveMsg = intent.getStringExtra("CHAT_MESSAGE");
-                       chatName = intent.getStringExtra("CHAT_NAME");
-                       chatImage = intent.getStringExtra("CHAT_IMAGE");
+                        fromId = intent.getStringExtra("CHAT_FROMID");
+                        receiveMsg = intent.getStringExtra("CHAT_MESSAGE");
+                        chatName = intent.getStringExtra("CHAT_NAME");
+                        chatImage = intent.getStringExtra("CHAT_IMAGE");
                     }
                 }, new IntentFilter("SOCKET_BUDDI_CHAT")
 
@@ -160,15 +162,15 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         );
     }
 
-    private void loadMessage(String content){
+    private void loadMessage(String content) {
         adapter = new ListMessageAdapter(this, consersation, bitmapAvataFriend, bitmapAvataUser);
         Message newMessage = new Message();
-        newMessage.idSender = PreferencesUtils.getData(Constants.user_id,getApplicationContext(),"");
+        newMessage.idSender = PreferencesUtils.getData(Constants.user_id, getApplicationContext(), "");
 
-        if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainee"))
-            newMessage.idReceiver = PreferencesUtils.getData(Constants.trainer_id,getApplicationContext(),"");
+        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee"))
+            newMessage.idReceiver = PreferencesUtils.getData(Constants.trainer_id, getApplicationContext(), "");
         else
-            newMessage.idReceiver = PreferencesUtils.getData(Constants.trainee_id,getApplicationContext(),"");
+            newMessage.idReceiver = PreferencesUtils.getData(Constants.trainee_id, getApplicationContext(), "");
 
         newMessage.text = content;
 //        newMessage.timestamp = (long) mapMessage.get("timestamp");
@@ -177,9 +179,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         linearLayoutManager.scrollToPosition(consersation.getListMessageData().size() - 1);
         recyclerChat.setAdapter(adapter);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
 
             this.finish();
         }
@@ -202,12 +205,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 editWriteMessage.setText("");
                 Message newMessage = new Message();
                 newMessage.text = content;
-                newMessage.idSender = PreferencesUtils.getData(Constants.user_id,getApplicationContext(),"");
+                newMessage.idSender = PreferencesUtils.getData(Constants.user_id, getApplicationContext(), "");
 
-                if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainee"))
-                    newMessage.idReceiver = PreferencesUtils.getData(Constants.trainer_id,getApplicationContext(),"");
+                if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee"))
+                    newMessage.idReceiver = PreferencesUtils.getData(Constants.trainer_id, getApplicationContext(), "");
                 else
-                    newMessage.idReceiver = PreferencesUtils.getData(Constants.trainee_id,getApplicationContext(),"");
+                    newMessage.idReceiver = PreferencesUtils.getData(Constants.trainee_id, getApplicationContext(), "");
 
 
                 newMessage.timestamp = System.currentTimeMillis();
@@ -232,20 +235,20 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
                     JSONObject object = new JSONObject();
 
-                    object.put("book_id", PreferencesUtils.getData(Constants.bookid,getApplicationContext(),""));
-                    object.put("from_id",PreferencesUtils.getData(Constants.user_id,getApplicationContext(),""));
+                    object.put("book_id", PreferencesUtils.getData(Constants.bookid, getApplicationContext(), ""));
+                    object.put("from_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
 
-                    if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainee"))
-                        object.put("to_id",PreferencesUtils.getData(Constants.trainer_id,getApplicationContext(),""));
+                    if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee"))
+                        object.put("to_id", PreferencesUtils.getData(Constants.trainer_id, getApplicationContext(), ""));
                     else
-                        object.put("to_id",PreferencesUtils.getData(Constants.trainee_id,getApplicationContext(),""));
+                        object.put("to_id", PreferencesUtils.getData(Constants.trainee_id, getApplicationContext(), ""));
 
                     object.put("message", content);
 
                     jsonObject.put("data", object);
                     Controller.mSocket.emit("post", jsonObject);
-                    CommonCall.PrintLog("emitMsg",jsonObject+"");
-                    CommonCall.PrintLog("token",PreferencesUtils.getData(Constants.token,getApplicationContext(),""));
+                    CommonCall.PrintLog("emitMsg", jsonObject + "");
+                    CommonCall.PrintLog("token", PreferencesUtils.getData(Constants.token, getApplicationContext(), ""));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -253,7 +256,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    class getMessages extends AsyncTask<String,String,String> {
+    class getMessages extends AsyncTask<String, String, String> {
         JSONObject reqData = new JSONObject();
 
         @Override
@@ -263,13 +266,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected String doInBackground(String... strings) {
             try {
-                reqData.put("from_id",PreferencesUtils.getData(Constants.user_id,getApplicationContext(),""));
+                reqData.put("from_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
 
 
-            if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainee"))
-                reqData.put("to_id",PreferencesUtils.getData(Constants.trainer_id,getApplicationContext(),""));
-            else
-                reqData.put("to_id",PreferencesUtils.getData(Constants.trainee_id,getApplicationContext(),""));
+                if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee"))
+                    reqData.put("to_id", PreferencesUtils.getData(Constants.trainer_id, getApplicationContext(), ""));
+                else
+                    reqData.put("to_id", PreferencesUtils.getData(Constants.trainee_id, getApplicationContext(), ""));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -280,9 +283,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-        String ss= s;
+            String ss = s;
 //                final JSONObject response = new JSONObject(s);
-                CommonCall.PrintLog("AllMessages", ss);
+            CommonCall.PrintLog("AllMessages", ss);
 
         }
     }
@@ -324,38 +327,38 @@ class ListMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //            if (currentAvata != null) {
 //                ((ItemMessageFriendHolder) holder).avata.setImageBitmap(currentAvata);
 //            } else {
-                final String id = consersation.getListMessageData().get(position).idSender;
-                if(bitmapAvataDB.get(id) == null){
-                    bitmapAvataDB.put(id, FirebaseDatabase.getInstance().getReference().child("user/" + id + "/avata"));
-                    bitmapAvataDB.get(id).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.getValue() != null) {
-                                String avataStr = (String) dataSnapshot.getValue();
-                                if(!avataStr.equals(StaticConfig.STR_DEFAULT_BASE64)) {
-                                    byte[] decodedString = Base64.decode(avataStr, Base64.DEFAULT);
-                                    ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
-                                }else{
-                                    ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avata));
-                                }
-                                notifyDataSetChanged();
+            final String id = consersation.getListMessageData().get(position).idSender;
+            if (bitmapAvataDB.get(id) == null) {
+                bitmapAvataDB.put(id, FirebaseDatabase.getInstance().getReference().child("user/" + id + "/avata"));
+                bitmapAvataDB.get(id).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() != null) {
+                            String avataStr = (String) dataSnapshot.getValue();
+                            if (!avataStr.equals(StaticConfig.STR_DEFAULT_BASE64)) {
+                                byte[] decodedString = Base64.decode(avataStr, Base64.DEFAULT);
+                                ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
+                            } else {
+                                ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avata));
                             }
+                            notifyDataSetChanged();
                         }
+                    }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-                        }
-                    });
-                }
-        }else if (holder instanceof ItemMessageUserHolder)
+                    }
+                });
+            }
+        } else if (holder instanceof ItemMessageUserHolder)
 
-    {
-        ((ItemMessageUserHolder) holder).txtContent.setText(consersation.getListMessageData().get(position).text);
-    }
+        {
+            ((ItemMessageUserHolder) holder).txtContent.setText(consersation.getListMessageData().get(position).text);
+        }
         //            if (bitmapAvataUser != null) {
 //                ((ItemMessageUserHolder) holder).avata.setImageBitmap(bitmapAvataUser);
-            }
+    }
 //        }
 //    }
 

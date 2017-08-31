@@ -106,14 +106,14 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
                     if (PreferencesUtils.getData(Constants.token, getActivity(), "").length() > 0 &&
                             PreferencesUtils.getData(Constants.user_type, getActivity(), "").equals(Constants.trainer) &&
                             PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {
-                        mSocket.connect();
+
                         getActivity().startService(new Intent(getActivity(), LocationService.class));
                         new updateStatus().execute();
 
                     }
                 } else {
                     PreferencesUtils.saveData(Constants.availStatus, "offline", getActivity());
-                    mSocket.disconnect();
+
                     getActivity().stopService(new Intent(getActivity(), LocationService.class));
                     Toast.makeText(getActivity(), "You are now Offline", Toast.LENGTH_SHORT).show();
                     // The toggle is disabled

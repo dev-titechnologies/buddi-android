@@ -3,6 +3,7 @@ package buddyapp.com;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.github.nkzawa.emitter.Emitter;
@@ -43,18 +44,44 @@ public class Controller extends Application {
 
         if(mSocket==null || !mSocket.connected()){
             {
+//                mSocket= null;
                     socket();
-//                listenEvent();
-                CommonCall.chatConnect();
+                listenEvent();
+
 //                if (PreferencesUtils.getData(Constants.token,context,"").length()>0 &&
 //                        PreferencesUtils.getData(Constants.user_type,context,"").equals(Constants.trainer)&&
 //                        PreferencesUtils.getData(Constants.availStatus,context,"online").equals("online"))
 //                    mSocket.connect();
+//                mSocket.connect();
 
             }
         }
 
 
+    }
+    public  static void chatConnect(){
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+
+
+                JSONObject jsonObject = new JSONObject();
+                try {
+
+                    jsonObject.put("url", Urls.BASEURL+String.format("/connectSocket/connectSocket/"));
+//
+//                    JSONObject object = new JSONObject();
+//
+//                    object.put("user_id", PreferencesUtils.getData(Constants.user_id,Controller.getAppContext(),""));
+//                    object.put("trainer_id",PreferencesUtils.getData(Constants.trainer_id,Controller.getAppContext(),""));
+//
+//                    jsonObject.put("data",object);
+                    Controller.mSocket.emit("post", jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
     void socket(){
 
