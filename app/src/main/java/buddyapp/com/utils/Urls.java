@@ -8,10 +8,10 @@ import java.security.PublicKey;
 
 public class Urls {
 
-  public static String BASEURL = "http://git.titechnologies.in:4001";
-//    public static String BASEURL= "http://192.168.1.66:9002";
+    public static String BASEURL = "http://git.titechnologies.in:4001";
+//  public static String BASEURL= "http://192.168.1.66:9002";
 
-//    public static String BASEURL= "http://192.168.1.14:4001";
+//  public static String BASEURL= "http://192.168.1.20:9002";
 
     public static String LOGIN= "/login/login";
 
@@ -54,6 +54,23 @@ public class Urls {
 
     public static String bookingAction= "/booking/bookingAction";
     public static String categoryStatus= "/login/categoryStatus";
+
+    public static String acceptSelection= "/search/acceptSelection";
+
+    public static String declineSelection= "/search/declineSelection";
+
+    public static String getDeclineSelectionURL(){
+
+        return BASEURL+declineSelection;
+    }
+
+
+
+
+    public static String getAcceptSelectionURL(){
+
+        return BASEURL+acceptSelection;
+    }
 
 
     public static String getcategoryStatusURL(){

@@ -230,6 +230,8 @@ public class TrainerProfileFragment extends Fragment {
                 rbmale.setText("Female");
                 sgender = "female";
             }
+
+
 //            final Handler handler = new Handler();
 //            handler.postDelayed(new Runnable() {
 //                @Override

@@ -41,9 +41,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import buddyapp.com.R;
 
-/**
- * Created by abhay yadav on 12-Jan-17.
- */
+
 public class MapRadar {
 
     private GoogleMap googleMap;

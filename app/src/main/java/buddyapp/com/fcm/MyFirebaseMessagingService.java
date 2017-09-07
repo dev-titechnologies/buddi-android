@@ -17,10 +17,13 @@ import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.Fragment.HomeCategory;
 import buddyapp.com.activity.HomeActivity;
+import buddyapp.com.activity.RequestActivity;
 import buddyapp.com.activity.SessionReady;
+import buddyapp.com.utils.CommonCall;
 
 import static buddyapp.com.Settings.Constants.start_session;
 import static buddyapp.com.Settings.Constants.trainee_Data;
+import static buddyapp.com.Settings.Constants.trainer_Data;
 
 /**
  * Created by Ravi Tamada on 08/08/16.
@@ -87,10 +90,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             if (json.getInt("type")==1) {
 
-
+                CommonCall.hideLoader();
                 JSONObject data = json.getJSONObject("data");
-                PreferencesUtils.saveData(Constants.trainee_id,data.getString("trainee_id"),getApplicationContext());
-                PreferencesUtils.saveData(trainee_Data,data.toString(),getApplicationContext());
+                PreferencesUtils.saveData(Constants.trainer_id,data.getJSONObject("trainer_details").getString("trainer_id"),getApplicationContext());
+                PreferencesUtils.saveData(trainer_Data,data.toString(),getApplicationContext());
 
                 PreferencesUtils.saveData(start_session,"true",getApplicationContext());
 
@@ -115,8 +118,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                         showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
 
-
-
+                resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+startActivity(resultIntent);
 
 
             }else if(json.getInt("type")==2){
@@ -169,6 +172,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
+
+
+            }else if(json.getInt("type")==5){
+
+                JSONObject data = json.getJSONObject("data");
+                Intent resultIntent = new Intent(getApplicationContext(), RequestActivity.class);
+                resultIntent.putExtra("message",data.toString());
+                resultIntent.putExtra("title",title);
+                showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
+
+
+
+
+            }
+            else if(json.getInt("type")==6){
 
 
             }

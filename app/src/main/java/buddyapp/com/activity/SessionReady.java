@@ -63,7 +63,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.ConcurrentModificationException;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -108,7 +108,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
     LinearLayout start, cancel, profile, message;
-    ImageView startactionIcon, stopactionIcon, profileactionIcon, messageactionIcon,cancelactionIcon;
+    ImageView startactionIcon, stopactionIcon, profileactionIcon, messageactionIcon, cancelactionIcon;
     TextView startactionTitle, stopactionTitle, profileactionTitle, messageactionTitle, sessionTimmer;
 
     @Override
@@ -147,13 +147,14 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                 JSONObject data = new JSONObject(PreferencesUtils.getData(trainee_Data, getApplicationContext(), ""));
 //                JSONObject trainerDetail = data.getJSONObject("trainer_details");
-                lat = data.getString("trainee_latitude");
-                lng = data.getString("trainee_longitude");
                 book_id = data.getString("book_id");
+
                 PreferencesUtils.saveData(Constants.bookid, book_id, getApplicationContext());
                 traine_id = data.getString("trainee_id");
                 training_time = data.getInt("training_time");
-                name = data.getString("trainee_name");
+                name = data.getJSONObject("trainee_details").getString("trainee_first_name") + " " + data.getJSONObject("trainee_details").getString("trainee_last_name");
+                lat = data.getJSONObject("trainee_details").getString("trainee_latitude");
+                lng = data.getJSONObject("trainee_details").getString("trainee_longitude");
 
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
                 updateSocket();
@@ -168,8 +169,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 lat = trainerDetail.getString("trainer_latitude");
                 lng = trainerDetail.getString("trainer_longitude");
                 training_time = data.getInt("training_time");
-                trainer_id = data.getString("trainer_id");
-                traine_id = data.getString("trainee_id");
+                trainer_id = trainerDetail.getString("trainer_id");
+                traine_id = PreferencesUtils.getData(Constants.user_id, getApplicationContext(), "");
                 book_id = data.getString("book_id");
                 PreferencesUtils.saveData(Constants.bookid, book_id, getApplicationContext());
                 name = trainerDetail.getString("trainer_first_name") + " " + trainerDetail.getString("trainer_last_name");
@@ -211,7 +212,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
  * get Trainer location
  ****/
 
-        if (PreferencesUtils.getData(Constants.timerstarted,getApplicationContext(),"false").equals("true")){
+        if (PreferencesUtils.getData(Constants.timerstarted, getApplicationContext(), "false").equals("true")) {
             cancel.setEnabled(false);
             startactionIcon.setImageResource(R.mipmap.stop_blue);
         }
@@ -326,7 +327,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                         if (reason.getText().toString().length() > 1) {
                             dialog.dismiss();
 
-                            new CommonCall.timerUpdate(SessionReady.this, "cancel", book_id,reason.getText().toString()).execute();
+                            new CommonCall.timerUpdate(SessionReady.this, "cancel", book_id, reason.getText().toString()).execute();
 
 
                         } else {
@@ -403,7 +404,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent =  new Intent(getApplicationContext(),ChatActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                 startActivity(intent);
             }
         });
@@ -452,18 +453,15 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 nManager.cancelAll();
 
                 //clearing last payment id to avoid multiple payments
-                PreferencesUtils.saveData(Constants.transactionId,"",getApplicationContext());
+                PreferencesUtils.saveData(Constants.transactionId, "", getApplicationContext());
 
 
+                Toast.makeText(getApplicationContext(), "Session Completed", Toast.LENGTH_SHORT).show();
 
-
-
-                    Toast.makeText(getApplicationContext(), "Session Completed", Toast.LENGTH_SHORT).show();
-
-                    Intent intenthome = new Intent(getApplicationContext(), HomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intenthome);
-                    finish();
+                Intent intenthome = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intenthome);
+                finish();
 
 
             }
@@ -516,73 +514,76 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         stopauto();
         registerReceiver(br, new IntentFilter(Timer_Service.str_receiver));
     }
-void startauto(){
 
-    LocalBroadcastManager.getInstance(this).registerReceiver(
-            new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
+    void startauto() {
 
-start.performClick();
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
 
-
-                }
-            }, new IntentFilter("BUDDI_TRAINER_START")
+                        start.performClick();
 
 
-    );
-}
+                    }
+                }, new IntentFilter("BUDDI_TRAINER_START")
 
 
-void stopAction(){
-    Timer_Service.stopFlag = true;
-    PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
+        );
+    }
 
 
-    startactionTitle.setText("Start");
-    startactionIcon.setImageResource(R.mipmap.play);
-
-    PreferencesUtils.saveData("data", "", getApplicationContext());
-    PreferencesUtils.saveData("hours", "", getApplicationContext());
-
-    stopService(new Intent(getApplicationContext(), Timer_Service.class));
+    void stopAction() {
+        Timer_Service.stopFlag = true;
+        PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
 
 
-    NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
-    nManager.cancelAll();
+        startactionTitle.setText("Start");
+        startactionIcon.setImageResource(R.mipmap.play);
+
+        PreferencesUtils.saveData("data", "", getApplicationContext());
+        PreferencesUtils.saveData("hours", "", getApplicationContext());
+
+        stopService(new Intent(getApplicationContext(), Timer_Service.class));
 
 
-    new CommonCall.timerUpdate(SessionReady.this,"complete",book_id,"").execute();
-
-}
-void stopSession(){
-    Timer_Service.stopFlag = true;
-    PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
-
-    PreferencesUtils.saveData(start_session,"false",Controller.getAppContext());
-
-    startactionTitle.setText("Start");
-    startactionIcon.setImageResource(R.mipmap.play);
-
-    PreferencesUtils.saveData("data", "", getApplicationContext());
-    PreferencesUtils.saveData("hours", "", getApplicationContext());
-
-    stopService(new Intent(getApplicationContext(), Timer_Service.class));
+        NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
+        nManager.cancelAll();
 
 
-    NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
-    nManager.cancelAll();
+        new CommonCall.timerUpdate(SessionReady.this, "complete", book_id, "").execute();
 
-    //clearing last payment id to avoid multiple payments
-    PreferencesUtils.saveData(Constants.transactionId,"",getApplicationContext());
-    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    startActivity(intent);
-    finish();
+    }
+
+    void stopSession() {
+        Timer_Service.stopFlag = true;
+        PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
+
+        PreferencesUtils.saveData(start_session, "false", Controller.getAppContext());
+
+        startactionTitle.setText("Start");
+        startactionIcon.setImageResource(R.mipmap.play);
+
+        PreferencesUtils.saveData("data", "", getApplicationContext());
+        PreferencesUtils.saveData("hours", "", getApplicationContext());
+
+        stopService(new Intent(getApplicationContext(), Timer_Service.class));
 
 
-}
-    void stopauto(){
+        NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
+        nManager.cancelAll();
+
+        //clearing last payment id to avoid multiple payments
+        PreferencesUtils.saveData(Constants.transactionId, "", getApplicationContext());
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+
+
+    }
+
+    void stopauto() {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 new BroadcastReceiver() {
@@ -597,7 +598,6 @@ void stopSession(){
 
         );
     }
-
 
 
     @Override
@@ -678,16 +678,16 @@ void stopSession(){
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 13), new GoogleMap.CancelableCallback() {
                 @Override
                 public void onFinish() {
-                  try {
+                    try {
 
 
-                    pos_Marker = googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title(name.toUpperCase()).draggable(false));
-                    pos_Marker.showInfoWindow();
+                        pos_Marker = googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title(name.toUpperCase()).draggable(false));
+                        pos_Marker.showInfoWindow();
 
-                    googleMap.setInfoWindowAdapter(SessionReady.this);
-                }catch (Exception e){
-                      e.printStackTrace();
-                  }
+                        googleMap.setInfoWindowAdapter(SessionReady.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 }
 
@@ -720,9 +720,8 @@ void stopSession(){
                     }
                 });
         final AlertDialog alert = builder.create();
-        if(!((Activity) this).isFinishing())
-        {
-        alert.show();
+        if (!((Activity) this).isFinishing()) {
+            alert.show();
         }
     }
 
@@ -1033,8 +1032,8 @@ void stopSession(){
 
                 if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer"))
 
-                reqData.put("trainer_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
-             else
+                    reqData.put("trainer_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
+                else
                     reqData.put("trainer_id", trainer_id);
 
 
@@ -1175,6 +1174,7 @@ void stopSession(){
 //            }
 //        }, 2000);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -1182,7 +1182,8 @@ void stopSession(){
                 onBackPressed();
                 break;
 
-            default: return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
         return true;
     }

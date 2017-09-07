@@ -304,7 +304,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
         @Override
         protected String doInBackground(String... strings) {
             try {
-                reqData.put(Constants.user_id,PreferencesUtils.getData(Constants.user_id,getApplicationContext(),""));
+                reqData.put("trainee_id",PreferencesUtils.getData(Constants.user_id,getApplicationContext(),""));
                 reqData.put(Constants.gender,sgender);
                 reqData.put("category",category);
                 reqData.put(Constants.latitude,lat);
@@ -327,21 +327,29 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 
             try {
                 JSONObject obj = new JSONObject(s);
-                if (obj.getInt("status") == 1) { CommonCall.hideLoader();
-                    JSONObject jsonObject = obj.getJSONObject("data");
-                    PreferencesUtils.saveData(Constants.trainer_id,jsonObject.getString("trainer_id"),getApplicationContext());
-                    PreferencesUtils.saveData(trainer_Data,jsonObject.toString(),getApplicationContext());
+                if (obj.getInt("status") == 1) {
 
-                    PreferencesUtils.saveData(start_session,"true",getApplicationContext());
-
-                    Intent intent = new Intent(getApplicationContext(),SessionReady.class);
-                    intent.putExtra("TrainerData",jsonObject.toString());
-                    startActivity(intent);
+//                    CommonCall.hideLoader();
+//
+//                    JSONObject jsonObject = obj.getJSONObject("data");
+//                    PreferencesUtils.saveData(Constants.trainer_id,jsonObject.getString("trainer_id"),getApplicationContext());
+//                    PreferencesUtils.saveData(trainer_Data,jsonObject.toString(),getApplicationContext());
+//
+//                    PreferencesUtils.saveData(start_session,"true",getApplicationContext());
+//
+//                    Intent intent = new Intent(getApplicationContext(),SessionReady.class);
+//                    intent.putExtra("TrainerData",jsonObject.toString());
+//                    startActivity(intent);
 
                 }else if(obj.getInt("status") == 2){ CommonCall.hideLoader();
                     Toast.makeText(MapTrainee.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+
+
                 }else{
                     CommonCall.hideLoader();
+
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -444,6 +452,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 
 
             } catch (JSONException e) {
+                CommonCall.hideLoader();
                 e.printStackTrace(); CommonCall.hideLoader();
             }
         }

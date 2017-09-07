@@ -38,9 +38,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import buddyapp.com.R;
 
-/**
- * Created by abhay yadav on 09-Aug-16.
- */
+
 public class MapRipple {
     private GoogleMap googleMap;
 
