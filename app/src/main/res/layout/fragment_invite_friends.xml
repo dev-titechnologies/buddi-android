@@ -15,19 +15,35 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             app:cardCornerRadius="5dp"
-            app:cardElevation="10dp">
-
-            <TextView
+            app:cardElevation="5dp">
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="Search for people" />
+                android:id="@+id/search_contact"
+                android:visibility="visible"
+                android:background="@android:color/transparent"
+                android:drawablePadding="10dp"
+                android:drawableLeft="@drawable/ic_search"
+                android:hint="Search for People"
+                android:singleLine="true"
+                android:padding="10dp"/>
         </android.support.v7.widget.CardView>
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/contact_list"></ListView>
-    </LinearLayout>
 
+    </LinearLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="INVITE"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        android:layout_marginTop="20dp"
+        android:id="@+id/invite"
+        android:textAllCaps="true"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:background="@color/login_bgcolor"/>
 </FrameLayout>

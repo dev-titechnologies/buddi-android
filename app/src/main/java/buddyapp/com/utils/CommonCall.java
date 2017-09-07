@@ -398,30 +398,7 @@ try {
             }
         });
     }
-    public static void chatConnect(){
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
 
-
-                JSONObject jsonObject = new JSONObject();
-                try {
-
-                    jsonObject.put("url", Urls.BASEURL+String.format("/connectSocket/connectSocket/"));
-//
-//                    JSONObject object = new JSONObject();
-//
-//                    object.put("user_id", PreferencesUtils.getData(Constants.user_id,Controller.getAppContext(),""));
-//                    object.put("trainer_id",PreferencesUtils.getData(Constants.trainer_id,Controller.getAppContext(),""));
-//
-//                    jsonObject.put("data",object);
-                    Controller.mSocket.emit("post", jsonObject);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     public static void getSenderMessage() {
         AsyncTask.execute(new Runnable() {

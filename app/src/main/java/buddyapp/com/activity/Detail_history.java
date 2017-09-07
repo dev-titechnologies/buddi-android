@@ -78,6 +78,8 @@ public class Detail_history extends AppCompatActivity {
             addresses = geocoder.getFromLocation(lat, lng, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
         } catch (IOException e) {
             e.printStackTrace();
+        }catch(Exception e1){
+            e1.printStackTrace();
         }
 
         String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()

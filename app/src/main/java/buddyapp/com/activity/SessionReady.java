@@ -82,6 +82,7 @@ import buddyapp.com.utils.RippleMap.MapRipple;
 import buddyapp.com.utils.Urls;
 
 
+import static buddyapp.com.Controller.chatConnect;
 import static buddyapp.com.Controller.mSocket;
 import static buddyapp.com.Controller.updateSocket;
 import static buddyapp.com.R.id.map;
@@ -157,7 +158,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
                 updateSocket();
-                Controller.mSocket.connect();
+                mSocket.connect();
+                chatConnect();
                 startService(new Intent(getApplicationContext(), LocationService.class));
             } else {
 
@@ -176,10 +178,11 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                 updateSocket();
                 Controller.mSocket.connect();
+                chatConnect();
 
                 CommonCall.socketGetTrainerLocation();
             }
-
+            Controller.listenEvent();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -493,7 +496,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                             @Override
                             public void onFinish() {
                                 LoadmapTask();
-                                animateMarker(pos_Marker, camera, false, 0.0f);
+//                                animateMarker(pos_Marker, camera, false, 0.0f);
                             }
 
                             @Override
@@ -508,7 +511,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
         );
 
-        Controller.listenEvent();
+
         startauto();
         stopauto();
         registerReceiver(br, new IntentFilter(Timer_Service.str_receiver));
@@ -601,6 +604,7 @@ void stopSession(){
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(br);
+//        mSocket.disconnect();
     }
 
     public void animateMarker(final Marker marker, final LatLng toPosition,
