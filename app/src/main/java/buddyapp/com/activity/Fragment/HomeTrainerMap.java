@@ -44,9 +44,9 @@ import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.TraineeProfileView;
 import buddyapp.com.services.GPSTracker;
 
-import buddyapp.com.timmer.Timer_Service;
 
 import buddyapp.com.services.LocationService;
+import buddyapp.com.timmer.Timer_Service;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 

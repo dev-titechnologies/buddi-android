@@ -205,6 +205,10 @@ public class ChooseSpecification extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(), "Please select you choice", Toast.LENGTH_SHORT).show();
                                         }
 
+                                    }else{
+
+                                        Toast.makeText(ChooseSpecification.this, "Unable to fetch your current location!", Toast.LENGTH_SHORT).show();
+
                                     }
                                 }
                             });
