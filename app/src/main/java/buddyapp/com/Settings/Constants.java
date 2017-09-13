@@ -88,4 +88,7 @@ public class Constants {
     public static String settings_longitude = "setting_longitude";
 
     public static String settings_cat_id = "settings_cat_id";
+    public static String flag_rating = "flag_rating";
+    public static String trainer_image = "trainer_image";
+    public static String trainee_image = "trainee_image";
 }

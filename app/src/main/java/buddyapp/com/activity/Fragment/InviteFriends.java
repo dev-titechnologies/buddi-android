@@ -75,7 +75,7 @@ public class InviteFriends extends Fragment {
             @Override
             public void onClick(View view) {
                 new sendInvite().execute();
-                map.clear();
+
             }
         });
         searchContact.addTextChangedListener(new TextWatcher() {
@@ -268,23 +268,34 @@ public class InviteFriends extends Fragment {
 
             holder = new CustomViewHolder();
             holder.name = (TextView) view.findViewById(R.id.contact_name);
-            holder.number = (TextView) view.findViewById(R.id.contact_number);
+//            holder.number = (TextView) view.findViewById(R.id.contact_number);
             view.setTag(holder);
             holder.name.setId(i);
-            holder.name.setText(contactArray.get(i).getName());
+            holder.name.setText(contactArray.get(i).getName()+"\n"+contactArray.get(i).getNumber());
             view.setTag(R.string.name, contactArray.get(i).getName());
-            holder.number.setText(contactArray.get(i).getNumber());
+//            holder.number.setText(contactArray.get(i).getNumber());
             view.setTag(R.string.number, contactArray.get(i).getNumber());
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    if (!map.contains("+91"+view.getTag(R.string.number).toString())) {
-                        map.add(validateNumber(view.getTag(R.string.number).toString()));
-                        holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_tick, 0);
+                    String temp = null;
+                    if(view.getTag(R.string.number).toString().contains("+91")){
+                        temp = view.getTag(R.string.number).toString();
+                    }else if(view.getTag(R.string.number).toString().contains("91")){
+                        temp = "+"+view.getTag(R.string.number).toString();
+                     }
+                    else{
+                        temp = "+91"+view.getTag(R.string.number).toString();
+                    }
+                    if (!map.contains(temp)) {
+                        map.add(validateNumber(temp).toString());
+//                        holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_tick, 0);
+                        ((TextView)view).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_tick, 0);
                     } else {
-                        map.remove("+91"+view.getTag(R.string.number).toString());
+                        map.remove(temp);
+                        ((TextView)view).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_circle_outline, 0);
+
                     }
                     CommonCall.PrintLog("map---", map.toString());
                     if(map.size()>0){
@@ -391,7 +402,8 @@ public class InviteFriends extends Fragment {
         @Override
         protected String doInBackground(String... strings) {
             try {
-                reqData.put("mobile_array", map.toString());
+                JSONArray jsonArray = new JSONArray(map);
+                reqData.put("mobile_array", jsonArray);
                 reqData.put("invited_mobile", PreferencesUtils.getData(Constants.mobile, getActivity(), ""));
                 response = NetworkCalls.POST(Urls.getInviteURL(), reqData.toString());
 
@@ -410,7 +422,9 @@ public class InviteFriends extends Fragment {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
                     Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                    map.clear();
                     invite.setVisibility(View.GONE);
+
                 } else if (obj.getInt("status") == 2) {
                     Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                 } else if (obj.getInt("status") == 3) {

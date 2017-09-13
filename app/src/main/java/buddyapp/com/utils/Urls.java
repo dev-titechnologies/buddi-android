@@ -210,4 +210,10 @@ public class Urls {
         return BASEURL+getInvite;
     }
 
+    public static String addReview = "/review/addReview";
+
+    public static String getAddReviewURL(){
+        return BASEURL + addReview;
+    }
+
 }

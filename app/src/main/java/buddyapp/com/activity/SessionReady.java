@@ -76,6 +76,7 @@ import buddyapp.com.activity.chat.ChatActivity;
 import buddyapp.com.services.GPSTracker;
 import buddyapp.com.services.LocationService;
 import buddyapp.com.timmer.Timer_Service;
+import buddyapp.com.utils.AlertDialoge.RatingDialog;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.RippleMap.MapRipple;
@@ -106,7 +107,6 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     String disatance, name;
     private HashMap<Marker, String> hashMarker = new HashMap<Marker, String>();
     private FusedLocationProviderClient mFusedLocationClient;
-
 
     LinearLayout start, cancel, profile, message;
     ImageView startactionIcon, stopactionIcon, profileactionIcon, messageactionIcon, cancelactionIcon;
@@ -157,6 +157,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 lat = data.getJSONObject("trainee_details").getString("trainee_latitude");
                 lng = data.getJSONObject("trainee_details").getString("trainee_longitude");
 
+                if(data.getString("trainer_user_image").length()>1){
+                    PreferencesUtils.saveData(Constants.trainer_image,data.getString("trainee_user_image"),getApplicationContext());
+                }
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
                 updateSocket();
                 mSocket.connect();
@@ -176,6 +179,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 name = trainerDetail.getString("trainer_first_name") + " " + trainerDetail.getString("trainer_last_name");
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
 
+        if(trainerDetail.getString("trainer_user_image").length()>1){
+            PreferencesUtils.saveData(Constants.trainer_image,trainerDetail.getString("trainer_user_image"),getApplicationContext());
+        }
 
                 updateSocket();
                 Controller.mSocket.connect();
@@ -589,7 +595,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-
+                        PreferencesUtils.saveData(Constants.flag_rating,"true",getApplicationContext());
                         stopSession();
 
                     }

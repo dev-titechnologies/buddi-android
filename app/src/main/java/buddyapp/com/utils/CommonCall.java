@@ -489,7 +489,7 @@ if (activity!=null)
                 final JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
 
-
+                    PreferencesUtils.saveData(Constants.flag_rating,"true",activity);
                     //clearing last payment id to avoid multiple payments
                     PreferencesUtils.saveData(Constants.transactionId,"",activity);
 

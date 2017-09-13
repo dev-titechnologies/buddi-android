@@ -49,6 +49,7 @@ import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.ChooseSpecification;
 import buddyapp.com.activity.ProfileScreen;
 import buddyapp.com.services.LocationService;
+import buddyapp.com.utils.AlertDialoge.RatingDialog;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
@@ -89,7 +90,7 @@ public class TrainerProfileFragment extends Fragment {
         // Required empty public constructor
     }
     LocationManager mLocationManager;
-
+    RatingDialog ratingDialog;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -117,7 +118,11 @@ public class TrainerProfileFragment extends Fragment {
         placeLayout = (LinearLayout) view.findViewById(R.id.place_layout);
         trainerImageView = (CircleImageView) view.findViewById(R.id.trainerimageView);
         imageTrainer = (LinearLayout) view.findViewById(R.id.image_trainer); // Trainer profile image View layout
-
+        if(PreferencesUtils.getData(Constants.flag_rating,getActivity(),"false").equals("true")){
+            PreferencesUtils.saveData(Constants.flag_rating,"false",getActivity());
+            ratingDialog = new RatingDialog(getActivity());
+            ratingDialog.show();
+        }
 
   if (  PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {
       updateSocket();

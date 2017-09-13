@@ -33,6 +33,7 @@ import buddyapp.com.activity.questions.Question1;
 import buddyapp.com.adapter.CategoryAdapter;
 import buddyapp.com.adapter.HomeCategoryAdapter;
 import buddyapp.com.database.DatabaseHandler;
+import buddyapp.com.utils.AlertDialoge.RatingDialog;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
@@ -49,7 +50,7 @@ public class HomeCategory extends Fragment {
     public static CardView instantCard;
     LinearLayout instantBooking;
     public static ArrayList<String> cat_selectedID = new ArrayList<>();
-
+    RatingDialog ratingDialog;
     ImageView errorImage;
 
     public HomeCategory() {
@@ -70,13 +71,18 @@ public class HomeCategory extends Fragment {
         instantCard = (CardView) view.findViewById(R.id.card_instant);
         instantBooking = (LinearLayout) view.findViewById(R.id.instant_booking);
         errorImage = (ImageView) view.findViewById(R.id.errorImage);
-
-        if(db.getAllCATForTrainee().length()>0) {
-            loadData(db.getAllCATForTrainee());
+        if(PreferencesUtils.getData(Constants.flag_rating,getActivity(),"").equals("true")){
+            PreferencesUtils.saveData(Constants.flag_rating,"false",getActivity());
+            ratingDialog = new RatingDialog(getActivity());
+            ratingDialog.show();
         }else {
-            new getCategoryList().execute();
-        }
+            if (db.getAllCATForTrainee().length() > 0) {
+                loadData(db.getAllCATForTrainee());
 
+            } else {
+                new getCategoryList().execute();
+            }
+        }
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

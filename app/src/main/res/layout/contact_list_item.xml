@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center|top"
-    android:padding="@dimen/medium">
-<TextView
-    android:layout_width="match_parent"
+
+<TextView android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="name"
     android:textColor="@color/black"
     android:id="@+id/contact_name"
     android:gravity="center_vertical"
     android:drawableRight="@drawable/ic_circle_outline"
-    android:padding="10dp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:id="@+id/contact_number"/>
-</LinearLayout>
+    android:padding="10dp"
+    android:layout_marginLeft="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"/>
