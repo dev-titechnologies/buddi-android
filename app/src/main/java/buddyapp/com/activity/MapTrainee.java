@@ -400,6 +400,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
             JSONObject req= new JSONObject();
             try {
                 req.put("nonce",nounce);
+                req.put("training_time",duration);
 
             } catch (JSONException e) {
                 e.printStackTrace();

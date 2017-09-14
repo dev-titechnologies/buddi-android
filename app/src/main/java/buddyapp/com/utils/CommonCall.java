@@ -480,7 +480,7 @@ public class CommonCall {
             JSONObject req= new JSONObject();
             try {
                 req.put("nonce",nounce);
-                req.put("time",time);
+                req.put("training_time",time);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -760,8 +760,15 @@ CommonCall.hideLoader();
 //                                        }
                                             dialog.dismiss();
                                             if (!Timer_Service.stopFlag) {
+                                                 if(PreferencesUtils.getData(Constants.user_type,activity,"").equals("trainee"))
+                                                    CommonCall.showExtendBokingDialog(activity);
+                                                 else{
+                                                     Intent intent = new Intent(activity, HomeActivity.class);
+                                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                     activity.startActivity(intent);
+                                                     activity.finish();
 
-                                                CommonCall.showExtendBokingDialog(activity);
+                                                 }
                                             } else {
 
                                                 Intent intent = new Intent(activity, HomeActivity.class);

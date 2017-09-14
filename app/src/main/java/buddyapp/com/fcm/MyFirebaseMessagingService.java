@@ -150,7 +150,7 @@ startActivity(resultIntent);
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
 
 
-                Intent intent = new Intent("BUDDI_TRAINER_STOP");
+                Intent intent = new Intent("BUDDI_TRAINER_CANCEL");
 
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
