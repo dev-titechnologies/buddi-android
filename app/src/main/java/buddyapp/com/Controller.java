@@ -46,7 +46,8 @@ public class Controller extends Application {
             {
 //                mSocket= null;
                     socket();
-                listenEvent();
+
+//                listenEvent();
 
 //                if (PreferencesUtils.getData(Constants.token,context,"").length()>0 &&
 //                        PreferencesUtils.getData(Constants.user_type,context,"").equals(Constants.trainer)&&
@@ -100,6 +101,7 @@ public class Controller extends Application {
         mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
+
                 CommonCall.PrintLog("Socket","Connected");
             }
         });
@@ -125,9 +127,9 @@ public class Controller extends Application {
                     CommonCall.PrintLog("lat", object.getString("latitude"));
                     CommonCall.PrintLog("lng", object.getString("longitude"));
                     CommonCall.PrintLog("availabilityStatus", object.getString("availabilityStatus"));
-                }else if(jsonObject.getString("type").equals("message")){
-                    JSONObject object = jsonObject.getJSONObject("chat");
-                    sendBroadcastChatMessage(object.getString("text"),object.getString("fromId"),
+                }else if(jsonObject.getString("type").equals("chat")){
+                    JSONObject object = jsonObject.getJSONObject("message");
+                    sendBroadcastChatMessage(object.getString("text"),object.getString("from_id"),
                             object.getString("from_name"),object.getString("from_img"));
 
                 }
@@ -194,7 +196,7 @@ public class Controller extends Application {
         }
     }
 
-    public static void sendBroadcastChatMessage(String image, String fromName, String msg, String fromId) {
+    public static void sendBroadcastChatMessage( String msg, String fromId,String fromName,String image) {
         Intent intent = new Intent("SOCKET_BUDDI_CHAT");
         intent.putExtra("CHAT_FROMID", fromId);
         intent.putExtra("CHAT_MESSAGE",msg);

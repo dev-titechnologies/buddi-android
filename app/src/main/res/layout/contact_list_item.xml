@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:padding="@dimen/medium">
-<TextView
-    android:layout_width="match_parent"
+
+<TextView android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="name"
     android:textColor="@color/black"
-    android:id="@+id/textbox"
+    android:id="@+id/contact_name"
     android:gravity="center_vertical"
-    android:layout_weight="1"
     android:drawableRight="@drawable/ic_circle_outline"
-    android:padding="10dp"/>
-</LinearLayout>
+    android:padding="10dp"
+    android:layout_marginLeft="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"/>

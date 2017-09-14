@@ -1,5 +1,6 @@
 package buddyapp.com.activity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
@@ -18,8 +19,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONArray;
@@ -36,18 +43,23 @@ import buddyapp.com.utils.Urls;
 
 public class ChooseSpecification extends AppCompatActivity {
     int sessionDuration = 0;
-    String sgender="";
-    LinearLayout duration, gender;
+    String sgender="", prefAddress = "", pick_location;
+    LinearLayout duration, gender, location;
     TextView session, trainerGender;
-    TextView  thirty, hour, male, female, noPreference;
-    int id =0, ids=0;
-    Animation a,b;
+    TextView  locationPref, fourty, hour, male, female, noPreference, maddress;
+    int id =0, ids=0, id1= 0;
+    Animation a,b,c;
     Button next;
-    Boolean check1=false, check2=false;
+    private static final int PLACE_PICKER_REQUEST = 1;
+    Boolean check1=false, check2=false, check3 =false;
+    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 
     private FusedLocationProviderClient mFusedLocationClient;
     LocationManager mLocationManager;
-    double longitude, latitude;
+    double longitude, latitude, mlongitude,mlatitude;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,13 +72,15 @@ public class ChooseSpecification extends AppCompatActivity {
         gender = (LinearLayout) findViewById(R.id.gender);
         session = (TextView) findViewById(R.id.session);
         trainerGender = (TextView) findViewById(R.id.trainer_gender);
-        thirty = (TextView) findViewById(R.id.thirty);
+        fourty = (TextView) findViewById(R.id.thirty);
         hour = (TextView) findViewById(R.id.hour);
         male = (TextView) findViewById(R.id.male);
         female = (TextView) findViewById(R.id.female);
         next= (Button) findViewById(R.id.next);
         noPreference = (TextView) findViewById(R.id.no_preference);
-
+        locationPref = (TextView) findViewById(R.id.locaton_preference);
+        location = (LinearLayout) findViewById(R.id.locationSettings);
+        maddress = (TextView) findViewById(R.id.address);
 // ************************Get Current location*********************
         mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -91,9 +105,11 @@ public class ChooseSpecification extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (id == 0) {
+                    session.setText("Choose Session Duration" + getTextSession());
                     id = 1;
                     b = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
                     b.reset();
+                    session.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_sign_to_navigate, 0);
                     duration.setVisibility(View.VISIBLE);
                     duration.startAnimation(b);
 
@@ -102,6 +118,7 @@ public class ChooseSpecification extends AppCompatActivity {
                 {
                     id =0;
                     b.reset();
+                    session.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
                     duration.setVisibility(View.GONE);
                 }
             }
@@ -114,6 +131,7 @@ public class ChooseSpecification extends AppCompatActivity {
                     ids = 1;
                     a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
                     a.reset();
+                    trainerGender.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_sign_to_navigate, 0);
                     gender.setVisibility(View.VISIBLE);
                     gender.startAnimation(a);
 
@@ -122,46 +140,109 @@ public class ChooseSpecification extends AppCompatActivity {
                 {
                     ids =0;
                     a.reset();
+                    trainerGender.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
                     gender.setVisibility(View.GONE);
                 }
             }
         });
 
+        locationPref.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (id1 == 0) {
+                    id1 = 1;
+                    c = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
+                    c.reset();
+                    locationPref.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_sign_to_navigate, 0);
+                    location.setVisibility(View.VISIBLE);
+                    location.startAnimation(c);
+                    if(maddress.getText().length()<1)
+                    maddress.performClick();
 
-        thirty.setOnClickListener(new View.OnClickListener() {                                           @Override
+                } else
+
+                {
+                    id1 =0;
+                    c.reset();
+                    locationPref.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
+                    location.setVisibility(View.GONE);
+                }
+
+            }
+        });
+
+        maddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                placePicker();
+            }
+        });
+
+        fourty.setOnClickListener(new View.OnClickListener() {                                           @Override
         public void onClick(View view) {
             check1 = true;
             setFourty();
-            if(check2)
+            if(check2 && check3)
                 next.setVisibility(View.VISIBLE);
+
+            id =0;
+            b.reset();
+            session.setText("Choose Session Duration" +"\t\t\t\t\t\t\t\t\t40 Minutes");
+            session.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
+            duration.setVisibility(View.GONE);
+
         }
         });
         hour.setOnClickListener(new View.OnClickListener() {                                           @Override
         public void onClick(View view) {
             check1 = true;setHour();
-            if(check2)
+            if(check2 && check3)
                 next.setVisibility(View.VISIBLE);
+
+            id =0;
+            b.reset();
+            session.setText("Choose Session Duration" +"\t\t\t\t\t\t\t\t\t1 Hour");
+            session.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
+            duration.setVisibility(View.GONE);
+
         }
         });
         male.setOnClickListener(new View.OnClickListener() {                                           @Override
         public void onClick(View view) {
+            trainerGender.setText("Choose Trainer Gender \t\t\t\t\t\t\t\t\t\t"+ "Male");
             check2 = true;setMale();
-            if(check1)
+            ids =0;
+            a.reset();
+            trainerGender.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
+            gender.setVisibility(View.GONE);
+            if(check1 && check3)
                 next.setVisibility(View.VISIBLE);
         }
         });
         female.setOnClickListener(new View.OnClickListener() {                                           @Override
         public void onClick(View view) {
+            trainerGender.setText("Choose Trainer Gender \t\t\t\t\t\t\t\t\t\t"+ "Female");
             check2 = true;setFemale();
-            if(check1)
+            ids =0;
+            a.reset();
+            trainerGender.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
+            gender.setVisibility(View.GONE);
+
+            if(check1 && check3)
                 next.setVisibility(View.VISIBLE);
         }
         });
         noPreference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                trainerGender.setText("Choose Trainer Gender \t\t\t\t\t\t\t\t\t\t"+ "No Preference");
                 check2 = true;setNoPreference();
-                if(check1)
+                ids =0;
+                a.reset();
+                trainerGender.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
+                gender.setVisibility(View.GONE);
+
+                if(check1 && check3)
                     next.setVisibility(View.VISIBLE);
             }
         });
@@ -220,6 +301,15 @@ public class ChooseSpecification extends AppCompatActivity {
         });
     }
 
+    private String getTextSession() {
+        if(sessionDuration == 40)
+            return "\t\t\t\t\t\t\t\t\t40 Minutes";
+        else if(sessionDuration == 60)
+            return "\t\t\t\t\t\t\t\t\t1 Hour";
+        else
+            return "";
+    }
+
     private void setNoPreference() {
         sgender = "nopreference";
         noPreference.setTextColor(getResources().getColor(R.color.white));
@@ -251,17 +341,17 @@ public class ChooseSpecification extends AppCompatActivity {
     void setFourty(){
         sessionDuration = 40;
 
-        thirty.setTextColor(getResources().getColor(R.color.white));
+        fourty.setTextColor(getResources().getColor(R.color.white));
         hour.setTextColor(getResources().getColor(R.color.black));
-        thirty.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        fourty.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         hour.setBackgroundColor(getResources().getColor(R.color.white));
     }
     void setHour(){
         sessionDuration = 60;
 
-        thirty.setTextColor(getResources().getColor(R.color.black));
+        fourty.setTextColor(getResources().getColor(R.color.black));
         hour.setTextColor(getResources().getColor(R.color.white));
-        thirty.setBackgroundColor(getResources().getColor(R.color.white));
+        fourty.setBackgroundColor(getResources().getColor(R.color.white));
         hour.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
     }
     void setMale(){
@@ -281,6 +371,47 @@ public class ChooseSpecification extends AppCompatActivity {
         female.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         noPreference.setTextColor(getResources().getColor(R.color.black));
         noPreference.setBackgroundColor(getResources().getColor(R.color.white));
+    }
+
+    private void placePicker(){
+        try {
+            PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
+            intentBuilder.setLatLngBounds(BOUNDS_MOUNTAIN_VIEW);
+            Intent intent = intentBuilder.build(ChooseSpecification.this);
+            startActivityForResult(intent, PLACE_PICKER_REQUEST);
+
+        } catch (GooglePlayServicesRepairableException
+                | GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void onActivityResult(int requestCode,
+                                 int resultCode, Intent data) {
+        try {
+
+            if (requestCode == PLACE_PICKER_REQUEST
+                    && resultCode == Activity.RESULT_OK) {
+
+                final Place place = PlacePicker.getPlace(getApplicationContext(), data);
+                CommonCall.PrintLog("Place",place.toString());
+                final CharSequence name = place.getName();
+                final CharSequence address = place.getAddress();
+                check3 =true;
+                pick_location = name.toString();
+                locationPref.setText("Choose Training Location \t\t\t\t\t"+name.toString() );
+                prefAddress = name.toString()+" "+ address.toString();
+                maddress.setText(prefAddress );
+                mlatitude = place.getLatLng().latitude;
+                mlongitude = place.getLatLng().longitude;
+                if(check1 && check2)
+                    next.setVisibility(View.VISIBLE);
+            } else {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     class SearchTrainer extends AsyncTask<String,String,String> {
         String response = "";
@@ -324,6 +455,9 @@ public class ChooseSpecification extends AppCompatActivity {
                         intent.putExtra(Constants.latitude, String.valueOf(latitude));
                         intent.putExtra(Constants.longitude, String.valueOf(longitude));
                         intent.putExtra(Constants.duration, String.valueOf(sessionDuration));
+                        intent.putExtra("pick_latitude",mlatitude+"");
+                        intent.putExtra("pick_longitude",mlongitude+"");
+                        intent.putExtra("pick_location",pick_location);
                         startActivity(intent);
 
                     }else

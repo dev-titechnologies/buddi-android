@@ -211,4 +211,16 @@ public class Urls {
         return BASEURL+getAllMessage;
     }
 
+    public static String getInvite = "/invite/inviteContacts";
+
+    public static String getInviteURL(){
+        return BASEURL+getInvite;
+    }
+
+    public static String addReview = "/review/addReview";
+
+    public static String getAddReviewURL(){
+        return BASEURL + addReview;
+    }
+
 }

@@ -54,7 +54,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
     Double latitude, longitude;
     LocationManager mLocationManager;
     Button select;
-    String sgender,lat, lng, category,duration;
+    String sgender,lat, lng, category,duration, pick_latitude,pick_longitude,pick_location;
     private HashMap<Marker, String> hashMarker = new HashMap<Marker, String>();
 
 
@@ -76,13 +76,12 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
         lat = intent.getStringExtra(Constants.latitude);
         lng = intent.getStringExtra(Constants.longitude);
         duration = intent.getStringExtra(Constants.duration);
-
+        pick_latitude = intent.getStringExtra("pick_latitude");
+        pick_longitude = intent.getStringExtra("pick_longitude");
+        pick_location = intent.getStringExtra("pick_location");
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
 
                     {
 
@@ -312,8 +311,11 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 reqData.put(Constants.amount,PreferencesUtils.getData(Constants.amount,getApplicationContext(),""));
                 reqData.put(Constants.transaction_status,PreferencesUtils.getData(Constants.transaction_status,getApplicationContext(),""));
                 reqData.put("transaction_id",PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),""));
-
                 reqData.put("training_time",duration);
+                reqData.put("pick_latitude",pick_latitude);
+                reqData.put("pick_longitude",pick_longitude);
+                reqData.put("pick_location",pick_location);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

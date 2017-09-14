@@ -26,10 +26,7 @@ import static buddyapp.com.Settings.Constants.start_session;
 import static buddyapp.com.Settings.Constants.trainee_Data;
 import static buddyapp.com.Settings.Constants.trainer_Data;
 
-/**
- * Created by Ravi Tamada on 08/08/16.
- * www.androidhive.info
- */
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
@@ -125,7 +122,7 @@ startActivity(resultIntent);
 
             }else if(json.getInt("type")==2){
 
-
+/** Complete session **/
                 Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
                 resultIntent.putExtra("message","");
 

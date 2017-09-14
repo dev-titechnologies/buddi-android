@@ -394,8 +394,7 @@ public class CommonCall {
     }
 
 
-    public static void
-    getSenderMessage() {
+    public static void getSenderMessage() {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -733,7 +732,7 @@ CommonCall.hideLoader();
                 final JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
 
-
+                    PreferencesUtils.saveData(Constants.flag_rating,"true",activity);
                     //clearing last payment id to avoid multiple payments
                     PreferencesUtils.saveData(Constants.transactionId, "", activity);
 

@@ -66,6 +66,7 @@ import java.util.Calendar;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import buddyapp.com.Controller;
 import buddyapp.com.R;
@@ -75,6 +76,7 @@ import buddyapp.com.activity.chat.ChatActivity;
 import buddyapp.com.services.GPSTracker;
 import buddyapp.com.services.LocationService;
 import buddyapp.com.timmer.Timer_Service;
+import buddyapp.com.utils.AlertDialoge.RatingDialog;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.RippleMap.MapRipple;
@@ -106,11 +108,11 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     private HashMap<Marker, String> hashMarker = new HashMap<Marker, String>();
     private FusedLocationProviderClient mFusedLocationClient;
 
-
     LinearLayout start, cancel, profile, message;
     ImageView startactionIcon, stopactionIcon, profileactionIcon, messageactionIcon, cancelactionIcon;
     TextView startactionTitle, stopactionTitle, profileactionTitle, messageactionTitle, sessionTimmer;
 
+    String pick_latitude, pick_longitude, pick_location;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,13 +157,18 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 name = data.getJSONObject("trainee_details").getString("trainee_first_name") + " " + data.getJSONObject("trainee_details").getString("trainee_last_name");
                 lat = data.getJSONObject("trainee_details").getString("trainee_latitude");
                 lng = data.getJSONObject("trainee_details").getString("trainee_longitude");
-
+                pick_latitude = data.getJSONObject("trainee_details").getString("pick_latitude");
+                pick_longitude = data.getJSONObject("trainee_details").getString("pick_longitude");
+                pick_location = data.getJSONObject("trainee_details").getString("pick_location");
+                PreferencesUtils.saveData(Constants.trainee_name,name,getApplicationContext());
+                if(data.getString("trainer_user_image").length()>1){
+                    PreferencesUtils.saveData(Constants.trainer_image,data.getString("trainee_user_image"),getApplicationContext());
+                }
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
                 updateSocket();
                 mSocket.connect();
                 chatConnect();
                 startService(new Intent(getApplicationContext(), LocationService.class));
-
             } else {
 
                 JSONObject data = new JSONObject(PreferencesUtils.getData(trainer_Data, getApplicationContext(), ""));
@@ -175,7 +182,13 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 PreferencesUtils.saveData(Constants.bookid, book_id, getApplicationContext());
                 name = trainerDetail.getString("trainer_first_name") + " " + trainerDetail.getString("trainer_last_name");
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
-
+                pick_latitude = trainerDetail.getString("pick_latitude");
+                pick_longitude = trainerDetail.getString("pick_longitude");
+                pick_location = trainerDetail.getString("pick_location");
+                PreferencesUtils.saveData(Constants.trainer_name,name,getApplicationContext());
+        if(trainerDetail.getString("trainer_user_image").length()>1){
+            PreferencesUtils.saveData(Constants.trainer_image,trainerDetail.getString("trainer_user_image"),getApplicationContext());
+        }
 
                 updateSocket();
                 Controller.mSocket.connect();
@@ -183,7 +196,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                 CommonCall.socketGetTrainerLocation();
             }
-
+            Controller.listenEvent();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -499,6 +512,8 @@ void resetTimmer(){
 
     );
 
+
+
 }
     void startauto() {
 
@@ -574,7 +589,7 @@ void resetTimmer(){
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-
+                        PreferencesUtils.saveData(Constants.flag_rating,"true",getApplicationContext());
                         stopSession();
 
                     }

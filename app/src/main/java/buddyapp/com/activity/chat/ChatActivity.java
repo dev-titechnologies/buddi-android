@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,12 +22,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
 
 import buddyapp.com.Controller;
 import buddyapp.com.R;
@@ -52,8 +52,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton btnSend;
     private EditText editWriteMessage;
     private LinearLayoutManager linearLayoutManager;
-    public static HashMap<String, Bitmap> bitmapAvataFriend;
-    public Bitmap bitmapAvataUser;
+    public String bitmapAvataUser;
 
 
     @Override
@@ -61,28 +60,19 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         Intent intentData = getIntent();
-//        if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainee")){
-//            StaticConfig.UID=PreferencesUtils.getData(Constants.trainee_id,getApplicationContext(),"");
-//        }else{
-//            StaticConfig.UID=PreferencesUtils.getData(Constants.trainer_id,getApplicationContext(),"");
-//        }
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Buddi Chat");
 
         roomId = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
-
-
         CommonCall.PrintLog("socket : ", Controller.mSocket.connected() + "");
-        Log.e("idFrnd + roomid ", idFriend + "  " + roomId);
-//        String nameFriend = intentData.getStringExtra(StaticConfig.INTENT_KEY_CHAT_FRIEND);
 
         consersation = new Consersation();
         btnSend = (ImageButton) findViewById(R.id.btnSend);
         btnSend.setOnClickListener(this);
 
-//        String base64AvataUser = SharedPreferenceHelper.getInstance(this).getUserInfo().avata;
-//        if (!base64AvataUser.equals(StaticConfig.STR_DEFAULT_BASE64)) {
-//            byte[] decodedString = Base64.decode(base64AvataUser, Base64.DEFAULT);
-//            bitmapAvataUser = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-//        } else {
+
         bitmapAvataUser = null;
 //        }
 
@@ -92,51 +82,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerChat = (RecyclerView) findViewById(R.id.recyclerChat);
         recyclerChat.setLayoutManager(linearLayoutManager);
-//            adapter = new ListMessageAdapter(this, consersation, bitmapAvataFriend, bitmapAvataUser);
-    /*      FirebaseDatabase.getInstance().getReference().child("bookingID_" + roomId).addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    if (dataSnapshot.getValue() != null) {
-                        HashMap mapMessage = (HashMap) dataSnapshot.getValue();
-                        Message newMessage = new Message();
-                        newMessage.idSender = (String) mapMessage.get("idSender");
-                        newMessage.idReceiver = (String) mapMessage.get("idReceiver");
-                        newMessage.text = (String) mapMessage.get("text");
-                        newMessage.timestamp = (long) mapMessage.get("timestamp");
-                        consersation.getListMessageData().add(newMessage);
-                        adapter.notifyDataSetChanged();
-                        linearLayoutManager.scrollToPosition(consersation.getListMessageData().size() - 1);
-                    }
-                }
 
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });*/
-//            recyclerChat.setAdapter(adapter);
-//        }
         String content = "";
         String id = "";
 
 
         new getMessages().execute();
-//        loadMessage(content, id);
+
     }
 
     @Override
@@ -146,10 +98,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                        fromId = intent.getStringExtra("CHAT_FROMID");
-                        receiveMsg = intent.getStringExtra("CHAT_MESSAGE");
-                        chatName = intent.getStringExtra("CHAT_NAME");
-                        chatImage = intent.getStringExtra("CHAT_IMAGE");
+
+                       fromId = intent.getStringExtra("CHAT_FROMID");
+                       receiveMsg = intent.getStringExtra("CHAT_MESSAGE");
+                       chatName = intent.getStringExtra("CHAT_NAME");
+                       chatImage = intent.getStringExtra("CHAT_IMAGE");
+        if(!fromId.equals(PreferencesUtils.getData(Constants.user_id,getApplicationContext(),"")))
+                        loadMessageFromSocket(receiveMsg,fromId,chatImage);
+
                     }
                 }, new IntentFilter("SOCKET_BUDDI_CHAT")
 
@@ -158,7 +114,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void loadMessage(String content) {
-        adapter = new ListMessageAdapter(this, consersation, bitmapAvataFriend, bitmapAvataUser);
+        adapter = new ListMessageAdapter(this, consersation);
         Message newMessage = new Message();
         newMessage.idSender = PreferencesUtils.getData(Constants.user_id, getApplicationContext(), "");
 
@@ -168,6 +124,25 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             newMessage.idReceiver = PreferencesUtils.getData(Constants.trainee_id, getApplicationContext(), "");
 
         newMessage.text = content;
+        newMessage.image = PreferencesUtils.getData(Constants.user_image,getApplicationContext(),"");
+//        newMessage.timestamp = (long) mapMessage.get("timestamp");
+        consersation.getListMessageData().add(newMessage);
+        adapter.notifyDataSetChanged();
+        linearLayoutManager.scrollToPosition(consersation.getListMessageData().size() - 1);
+        recyclerChat.setAdapter(adapter);
+    }
+    private void loadMessageFromSocket(String receiveMsg, String fromId, String img){
+        adapter = new ListMessageAdapter(this, consersation);
+        Message newMessage = new Message();
+        newMessage.idSender = fromId;
+
+        if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainee"))
+            newMessage.idReceiver = PreferencesUtils.getData(Constants.trainer_id,getApplicationContext(),"");
+        else
+            newMessage.idReceiver = PreferencesUtils.getData(Constants.trainee_id,getApplicationContext(),"");
+
+        newMessage.text = receiveMsg;
+        newMessage.image = img;
 //        newMessage.timestamp = (long) mapMessage.get("timestamp");
         consersation.getListMessageData().add(newMessage);
         adapter.notifyDataSetChanged();
@@ -186,14 +161,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-//        Intent result = new Intent();
-//        result.putExtra("idFriend", idFriend.get(0));
-//        setResult(RESULT_OK, result);
         this.finish();
     }
 
     @Override
     public void onClick(View view) {
+        if(CommonCall.isNetworkAvailable()){
         if (view.getId() == R.id.btnSend) {
             String content = editWriteMessage.getText().toString().trim();
             if (content.length() > 0) {
@@ -211,10 +184,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 newMessage.timestamp = System.currentTimeMillis();
 //                FirebaseDatabase.getInstance().getReference().child("bookingID_" + roomId).push().setValue(newMessage);
                 emitUserMessage(content);
-
                 loadMessage(content);
             }
         }
+        }else{
+            Toast.makeText(getApplicationContext(),"Please check your internet connection",Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void emitUserMessage(final String content) {
@@ -290,15 +266,11 @@ class ListMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     private Consersation consersation;
-    private HashMap<String, Bitmap> bitmapAvata;
 
-    private Bitmap bitmapAvataUser;
 
-    public ListMessageAdapter(Context context, Consersation consersation, HashMap<String, Bitmap> bitmapAvata, Bitmap bitmapAvataUser) {
+    public ListMessageAdapter(Context context, Consersation consersation) {
         this.context = context;
         this.consersation = consersation;
-        this.bitmapAvata = bitmapAvata;
-        this.bitmapAvataUser = bitmapAvataUser;
 
     }
 
@@ -318,26 +290,29 @@ class ListMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemMessageFriendHolder) {
             ((ItemMessageFriendHolder) holder).txtContent.setText(consersation.getListMessageData().get(position).text);
+            CommonCall.LoadImage(context,consersation.getListMessageData().get(position).image,((ItemMessageFriendHolder) holder).avata,R.drawable.default_avata,R.drawable.default_avata);
+
 //            Bitmap currentAvata = bitmapAvata.get(consersation.getListMessageData().get(position).idSender);
 //            if (currentAvata != null) {
 //                ((ItemMessageFriendHolder) holder).avata.setImageBitmap(currentAvata);
 //            } else {
-            final String id = consersation.getListMessageData().get(position).idSender;
 
         } else if (holder instanceof ItemMessageUserHolder)
-
         {
+
             ((ItemMessageUserHolder) holder).txtContent.setText(consersation.getListMessageData().get(position).text);
+            CommonCall.LoadImage(context,consersation.getListMessageData().get(position).image,((ItemMessageUserHolder) holder).avata,R.drawable.default_avata,R.drawable.default_avata);
+
         }
         //            if (bitmapAvataUser != null) {
 //                ((ItemMessageUserHolder) holder).avata.setImageBitmap(bitmapAvataUser);
-    }
+   }
 //        }
 //    }
 
     @Override
     public int getItemViewType(int position) {
-        return consersation.getListMessageData().get(position).idSender.equals(StaticConfig.UID) ? ChatActivity.VIEW_TYPE_USER_MESSAGE : ChatActivity.VIEW_TYPE_FRIEND_MESSAGE;
+        return consersation.getListMessageData().get(position).idSender.equals(PreferencesUtils.getData(Constants.user_id,context,"")) ? ChatActivity.VIEW_TYPE_USER_MESSAGE : ChatActivity.VIEW_TYPE_FRIEND_MESSAGE;
     }
 
     @Override
@@ -353,7 +328,7 @@ class ItemMessageUserHolder extends RecyclerView.ViewHolder {
     public ItemMessageUserHolder(View itemView) {
         super(itemView);
         txtContent = (TextView) itemView.findViewById(R.id.textContentUser);
-        avata = (CircleImageView) itemView.findViewById(R.id.imageView2);
+        avata = (CircleImageView) itemView.findViewById(R.id.imageView);
     }
 }
 
@@ -364,7 +339,7 @@ class ItemMessageFriendHolder extends RecyclerView.ViewHolder {
     public ItemMessageFriendHolder(View itemView) {
         super(itemView);
         txtContent = (TextView) itemView.findViewById(R.id.textContentFriend);
-        avata = (CircleImageView) itemView.findViewById(R.id.imageView3);
+        avata = (CircleImageView) itemView.findViewById(R.id.imageView);
     }
 
 }

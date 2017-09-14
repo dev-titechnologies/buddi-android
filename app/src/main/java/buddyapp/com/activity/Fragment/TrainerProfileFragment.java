@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -49,6 +50,7 @@ import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.ChooseSpecification;
 import buddyapp.com.activity.ProfileScreen;
 import buddyapp.com.services.LocationService;
+import buddyapp.com.utils.AlertDialoge.RatingDialog;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
@@ -64,6 +66,7 @@ import static buddyapp.com.Controller.updateSocket;
  * A simple {@link Fragment} subclass.
  */
 public class TrainerProfileFragment extends Fragment {
+    ImageView facebook, instagram,linkedin,snapchat,twitter,youtube;
     CountryCodePicker ccp;
     String smobile;
     boolean editflag = false;
@@ -89,7 +92,7 @@ public class TrainerProfileFragment extends Fragment {
         // Required empty public constructor
     }
     LocationManager mLocationManager;
-
+    RatingDialog ratingDialog;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -112,12 +115,22 @@ public class TrainerProfileFragment extends Fragment {
         height = (TextView) view.findViewById(R.id.height);
         weight = (TextView) view.findViewById(R.id.weight);
 
+        facebook = (ImageView) view.findViewById(R.id.nav_facebook);
+        instagram = (ImageView) view.findViewById(R.id.nav_instagram);
+        linkedin = (ImageView) view.findViewById(R.id.nav_linkedin);
+        snapchat = (ImageView) view.findViewById(R.id.nav_snapchat);
+        twitter = (ImageView) view.findViewById(R.id.nav_twitter);
+        youtube = (ImageView) view.findViewById(R.id.nav_youtube);
 
         trainerCategory = (LinearLayout) view.findViewById(R.id.trainer_category);
         placeLayout = (LinearLayout) view.findViewById(R.id.place_layout);
         trainerImageView = (CircleImageView) view.findViewById(R.id.trainerimageView);
         imageTrainer = (LinearLayout) view.findViewById(R.id.image_trainer); // Trainer profile image View layout
-
+        if(PreferencesUtils.getData(Constants.flag_rating,getActivity(),"false").equals("true")){
+            PreferencesUtils.saveData(Constants.flag_rating,"false",getActivity());
+            ratingDialog = new RatingDialog(getActivity());
+            ratingDialog.show();
+        }
 
   if (  PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {
       updateSocket();

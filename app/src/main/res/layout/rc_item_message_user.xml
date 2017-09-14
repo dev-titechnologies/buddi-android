@@ -7,7 +7,7 @@
     android:layout_marginBottom="5dp">
 
     <buddyapp.com.utils.CircleImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageView"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentTop="true"
@@ -25,13 +25,13 @@
         android:background="@drawable/rounded_corner2"
         android:padding="10dp"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@id/imageView2"
+        android:layout_toStartOf="@id/imageView"
         android:layout_marginEnd="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_marginStart="20dp"
         android:text="a"
         android:textColor="#ffffff"
-        android:layout_toLeftOf="@id/imageView2"
+        android:layout_toLeftOf="@id/imageView"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="5dp" />
 
