@@ -179,7 +179,8 @@ startActivity(resultIntent);
                 resultIntent.putExtra("message",data.toString());
                 resultIntent.putExtra("title",title);
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
-/*
+
+                /*
 *
 *
 * clearing notification of new request after 30 seconds
@@ -196,6 +197,15 @@ startActivity(resultIntent);
 
             }
             else if(json.getInt("type")==6){
+                JSONObject data = json.getJSONObject("data");
+                Intent resultIntent = new Intent(getApplicationContext(), RequestActivity.class);
+                resultIntent.putExtra("message",data.toString());
+                resultIntent.putExtra("title",title);
+                showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
+
+                Intent intent = new Intent("BUDDI_SESSION_EXTEND");
+
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
 
             }

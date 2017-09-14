@@ -71,18 +71,19 @@ public class HomeCategory extends Fragment {
         instantCard = (CardView) view.findViewById(R.id.card_instant);
         instantBooking = (LinearLayout) view.findViewById(R.id.instant_booking);
         errorImage = (ImageView) view.findViewById(R.id.errorImage);
-        if(PreferencesUtils.getData(Constants.flag_rating,getActivity(),"").equals("true")){
-            PreferencesUtils.saveData(Constants.flag_rating,"false",getActivity());
-            ratingDialog = new RatingDialog(getActivity());
-            ratingDialog.show();
-        }else {
+
             if (db.getAllCATForTrainee().length() > 0) {
                 loadData(db.getAllCATForTrainee());
 
             } else {
                 new getCategoryList().execute();
             }
-        }
+             if(PreferencesUtils.getData(Constants.flag_rating,getActivity(),"").equals("true")){
+                 PreferencesUtils.saveData(Constants.flag_rating,"false",getActivity());
+                 ratingDialog = new RatingDialog(getActivity());
+                 ratingDialog.show();
+             }
+
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
