@@ -21,7 +21,7 @@
                 android:id="@+id/session"
                 android:textColor="@color/black"
                 android:drawableRight="@drawable/ic_right_arrow"
-                android:text="Choose Session Duration"/>
+                android:text="@string/session_duration"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

@@ -29,6 +29,8 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
+    <string name="session_duration">Choose Session Duration</string>
+
     <string name="enter_zipcode">ENTER ZIPCODE</string>
 
     <string name="list_gym_sub">List any current gym subscriptions you currently have?</string>

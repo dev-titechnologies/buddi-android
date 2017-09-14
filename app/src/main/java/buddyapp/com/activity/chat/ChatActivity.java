@@ -22,11 +22,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -296,7 +291,7 @@ class ListMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private Consersation consersation;
     private HashMap<String, Bitmap> bitmapAvata;
-    private HashMap<String, DatabaseReference> bitmapAvataDB;
+
     private Bitmap bitmapAvataUser;
 
     public ListMessageAdapter(Context context, Consersation consersation, HashMap<String, Bitmap> bitmapAvata, Bitmap bitmapAvataUser) {
@@ -304,7 +299,7 @@ class ListMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.consersation = consersation;
         this.bitmapAvata = bitmapAvata;
         this.bitmapAvataUser = bitmapAvataUser;
-        bitmapAvataDB = new HashMap<>();
+
     }
 
     @Override
@@ -328,29 +323,7 @@ class ListMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //                ((ItemMessageFriendHolder) holder).avata.setImageBitmap(currentAvata);
 //            } else {
             final String id = consersation.getListMessageData().get(position).idSender;
-            if (bitmapAvataDB.get(id) == null) {
-                bitmapAvataDB.put(id, FirebaseDatabase.getInstance().getReference().child("user/" + id + "/avata"));
-                bitmapAvataDB.get(id).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() != null) {
-                            String avataStr = (String) dataSnapshot.getValue();
-                            if (!avataStr.equals(StaticConfig.STR_DEFAULT_BASE64)) {
-                                byte[] decodedString = Base64.decode(avataStr, Base64.DEFAULT);
-                                ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length));
-                            } else {
-                                ChatActivity.bitmapAvataFriend.put(id, BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avata));
-                            }
-                            notifyDataSetChanged();
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
         } else if (holder instanceof ItemMessageUserHolder)
 
         {

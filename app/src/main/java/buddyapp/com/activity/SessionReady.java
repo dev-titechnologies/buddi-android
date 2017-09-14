@@ -217,6 +217,40 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             startactionIcon.setImageResource(R.mipmap.stop_blue);
         }
         LoadmapTask();
+
+
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        CommonCall.PrintLog("brodcastmsg", "brodcastmsg");
+                        lat = intent.getStringExtra("trainer_latitude");
+                        lng = intent.getStringExtra("trainer_longitude");
+                        // trainer location
+                        latitude = Double.valueOf(lat);
+                        longitude = Double.valueOf(lng);
+                        camera = new LatLng(latitude, longitude);
+                        origin = camera;
+
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 14), new GoogleMap.CancelableCallback() {
+                            @Override
+                            public void onFinish() {
+                                LoadmapTask();
+//                                animateMarker(pos_Marker, camera, false, 0.0f);
+                            }
+
+                            @Override
+                            public void onCancel() {
+
+                            }
+                        });
+
+                    }
+                }, new IntentFilter("SOCKET_BUDDI_TRAINER_LOCATION")
+
+
+        );
     }
 
     HorizontalScrollView horizontalScrollView;
@@ -349,42 +383,6 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 });
 
 
-//                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        switch (which){
-//                            case DialogInterface.BUTTON_POSITIVE:
-//                                //Yes button clicked
-//
-//                                if (input.getText().toString().length()>2) {
-//
-//                                    new CommonCall.timerUpdate(SessionReady.this, "cancel", book_id).execute();
-//                                    dialog.dismiss();
-////                                    break;
-//                                }else {
-//
-//                                    input.setError("Please enter your reason to cancel.");
-//
-//
-//                                }
-//
-//                            case DialogInterface.BUTTON_NEGATIVE:
-//                                //No button clicked
-////                                break;
-//                        }
-//                    }
-//                };
-//
-//                AlertDialog.Builder builder = new AlertDialog.Builder(SessionReady.this);
-//
-//                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-//                        LinearLayout.LayoutParams.MATCH_PARENT,
-//                        LinearLayout.LayoutParams.MATCH_PARENT);
-//                input.setLayoutParams(lp);
-//                builder.setView(input);
-//                builder.setMessage("Do you want to cancel this session?").setPositiveButton("Yes", dialogClickListener)
-//                        .setNegativeButton("No", dialogClickListener).show();
-
 
             }
         });
@@ -458,10 +456,10 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                 Toast.makeText(getApplicationContext(), "Session Completed", Toast.LENGTH_SHORT).show();
 
-                Intent intenthome = new Intent(getApplicationContext(), HomeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intenthome);
-                finish();
+//                Intent intenthome = new Intent(getApplicationContext(), HomeActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(intenthome);
+//                finish();
 
 
             }
@@ -477,44 +475,31 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     @Override
     protected void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        CommonCall.PrintLog("brodcastmsg", "brodcastmsg");
-                        lat = intent.getStringExtra("trainer_latitude");
-                        lng = intent.getStringExtra("trainer_longitude");
-                        // trainer location
-                        latitude = Double.valueOf(lat);
-                        longitude = Double.valueOf(lng);
-                        camera = new LatLng(latitude, longitude);
-                        origin = camera;
-
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 14), new GoogleMap.CancelableCallback() {
-                            @Override
-                            public void onFinish() {
-                                LoadmapTask();
-//                                animateMarker(pos_Marker, camera, false, 0.0f);
-                            }
-
-                            @Override
-                            public void onCancel() {
-
-                            }
-                        });
-
-                    }
-                }, new IntentFilter("SOCKET_BUDDI_TRAINER_LOCATION")
-
-
-        );
 
         Controller.listenEvent();
         startauto();
         stopauto();
         registerReceiver(br, new IntentFilter(Timer_Service.str_receiver));
-    }
+        resetTimmer();
 
+    }
+void resetTimmer(){
+
+    LocalBroadcastManager.getInstance(this).registerReceiver(
+            new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+                    startactionTitle.setText("Start");
+                    startactionIcon.setImageResource(R.mipmap.play);
+
+                }
+            }, new IntentFilter("BUDDI_SESSION_EXTEND")
+
+
+    );
+
+}
     void startauto() {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
@@ -597,6 +582,21 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
         );
+
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        String bookid = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
+
+                        new CommonCall.timerUpdate(SessionReady.this, "complete", bookid, "").execute();
+
+                    }
+                }, new IntentFilter("BUDDI_TRAINER_SESSION_FINISH")
+
+
+        );
     }
 
 
@@ -604,6 +604,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(br);
+
 //        mSocket.disconnect();
     }
 
@@ -736,7 +737,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
 
         this.googleMap = googleMap;
 
@@ -762,6 +763,10 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 //        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(getActivity(), R.raw.my_map_style);
 //        googleMap.setMapStyle(style);
         googleMap.setInfoWindowAdapter(SessionReady.this);
+
+
+
+
     }
 
     @Override
@@ -1069,8 +1074,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
                     PreferencesUtils.saveData("data", date_time, getApplicationContext());
-                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
-//                    PreferencesUtils.saveData("hours",  "1", getApplicationContext());
+//                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
+                    PreferencesUtils.saveData("hours",  "1", getApplicationContext());
 
 
                     startService(new Intent(getApplicationContext(), Timer_Service.class));

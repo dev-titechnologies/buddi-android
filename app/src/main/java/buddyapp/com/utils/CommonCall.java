@@ -2,6 +2,7 @@ package buddyapp.com.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,10 +14,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.braintreepayments.api.dropin.DropInResult;
@@ -48,6 +53,7 @@ import buddyapp.com.activity.MapTrainee;
 import buddyapp.com.activity.Payments.PaymentType;
 import buddyapp.com.activity.WelcomeActivity;
 import buddyapp.com.services.LocationService;
+import buddyapp.com.timmer.Timer_Service;
 
 import static buddyapp.com.Settings.Constants.start_session;
 
@@ -140,9 +146,9 @@ public class CommonCall {
         ImageLoader.getInstance().clearMemoryCache();
     }
 
-    public static void PrintLog(String s1,String s2){
+    public static void PrintLog(String s1, String s2) {
 
-        Log.e(s1,s2);
+        Log.e(s1, s2);
 
     }
 
@@ -150,9 +156,6 @@ public class CommonCall {
         return PreferencesUtils.getData(Constants.token, context, "");
 
     }
-
-
-
 
 
     public static int timeDifference(String date) {
@@ -167,8 +170,8 @@ public class CommonCall {
             mills = deviceDate.getTime() - formattedDate.getTime();
             int Hours = (int) (mills / (1000 * 60 * 60));
             int Mins = (int) (mills / (1000 * 60)) % 60;
-            if(Hours>=48)
-                Hours=Hours+Mins;
+            if (Hours >= 48)
+                Hours = Hours + Mins;
             time = Hours;
         } catch (ParseException e) {
             e.printStackTrace();
@@ -249,12 +252,6 @@ public class CommonCall {
     }*/
 
 
-
-
-
-
-
-
     private static final NavigableMap<Long, String> suffixes = new TreeMap<>();
 
     static {
@@ -287,58 +284,54 @@ public class CommonCall {
     }
 
 
+    public static ProgressDialog pd;
+
+    public static void showLoader(Activity yourActivity) {
+
+        pd = new ProgressDialog(yourActivity);
+        pd.setMessage("loading");
+        pd.setCancelable(false);
+        if (!((Activity) yourActivity).isFinishing()) {
+            pd.show();
+        }
 
 
-    public static   ProgressDialog pd;
-
-public static void showLoader(Activity yourActivity){
-
-     pd = new ProgressDialog(yourActivity);
-    pd.setMessage("loading");
-    pd.setCancelable(false);
-    if(!((Activity) yourActivity).isFinishing())
-    {
-        pd.show();
     }
 
-
-}
-
-public static void hideLoader(){
-    if (pd!=null){
-try {
-    pd.dismiss();
-}catch (Exception e){
-    e.printStackTrace();
-}}
-}
+    public static void hideLoader() {
+        if (pd != null) {
+            try {
+                pd.dismiss();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     public static boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
-                = (ConnectivityManager) Controller.getAppContext(). getSystemService(Controller.getAppContext().CONNECTIVITY_SERVICE);
+                = (ConnectivityManager) Controller.getAppContext().getSystemService(Controller.getAppContext().CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 
     // log out **************
-    public static void sessionout( Context context){
+    public static void sessionout(Context context) {
 
-        String fcmId = PreferencesUtils.getData(Constants.device_id,Controller.getAppContext(),"");
+        String fcmId = PreferencesUtils.getData(Constants.device_id, Controller.getAppContext(), "");
 
         PreferencesUtils.cleardata(context);
 
         context.stopService(new Intent(context, LocationService.class));
-        PreferencesUtils.saveData(Constants.device_id,fcmId,Controller.getAppContext());
+        PreferencesUtils.saveData(Constants.device_id, fcmId, Controller.getAppContext());
 
 
         LoginManager.getInstance().logOut();
-                    Intent intent = new Intent(context,WelcomeActivity.class);
-                    context.startActivity(intent);
+        Intent intent = new Intent(context, WelcomeActivity.class);
+        context.startActivity(intent);
     }
-
-
 
 
     public static void emitTrainerLocation(final double lat, final double lng) {
@@ -359,11 +352,11 @@ try {
                     object.put("longitude", lng);
 //                    object.put("avail_status",PreferencesUtils.getData(Constants.availStatus,Controller.getAppContext(),""));
 
-                    if (PreferencesUtils.getData(Constants.start_session,Controller.getAppContext(),"false").equals("false"))
+                    if (PreferencesUtils.getData(Constants.start_session, Controller.getAppContext(), "false").equals("false"))
 
-                    object.put("avail_status", "online");
+                        object.put("avail_status", "online");
                     else
-                    object.put("avail_status", "booked");
+                        object.put("avail_status", "booked");
 
 
                     jsonObject.put("data", object);
@@ -374,7 +367,8 @@ try {
             }
         });
     }
-    public static void socketGetTrainerLocation(){
+
+    public static void socketGetTrainerLocation() {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -383,14 +377,14 @@ try {
                 JSONObject jsonObject = new JSONObject();
                 try {
 
-                    jsonObject.put("url", Urls.BASEURL+String.format("/location/receiveTrainerLocation"));
+                    jsonObject.put("url", Urls.BASEURL + String.format("/location/receiveTrainerLocation"));
 
                     JSONObject object = new JSONObject();
 
-                    object.put("user_id", PreferencesUtils.getData(Constants.user_id,Controller.getAppContext(),""));
-                    object.put("trainer_id",PreferencesUtils.getData(Constants.trainer_id,Controller.getAppContext(),""));
+                    object.put("user_id", PreferencesUtils.getData(Constants.user_id, Controller.getAppContext(), ""));
+                    object.put("trainer_id", PreferencesUtils.getData(Constants.trainer_id, Controller.getAppContext(), ""));
 
-                    jsonObject.put("data",object);
+                    jsonObject.put("data", object);
                     Controller.mSocket.emit("post", jsonObject);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -410,18 +404,18 @@ try {
                 JSONObject jsonObject = new JSONObject();
                 try {
 
-                    jsonObject.put("url", "http://git.titechnologies.in:4001"+String.format("/connectSocket/getMessages"));
+                    jsonObject.put("url", "http://git.titechnologies.in:4001" + String.format("/connectSocket/getMessages"));
 
                     JSONObject object = new JSONObject();
 
-                    object.put("from_id",PreferencesUtils.getData(Constants.user_id,Controller.getAppContext(),""));
+                    object.put("from_id", PreferencesUtils.getData(Constants.user_id, Controller.getAppContext(), ""));
 
-                    if(PreferencesUtils.getData(Constants.user_type,Controller.getAppContext(),"").equals("trainee"))
-                        object.put("to_id",PreferencesUtils.getData(Constants.trainer_id,Controller.getAppContext(),""));
+                    if (PreferencesUtils.getData(Constants.user_type, Controller.getAppContext(), "").equals("trainee"))
+                        object.put("to_id", PreferencesUtils.getData(Constants.trainer_id, Controller.getAppContext(), ""));
                     else
-                        object.put("to_id",PreferencesUtils.getData(Constants.trainee_id,Controller.getAppContext(),""));
+                        object.put("to_id", PreferencesUtils.getData(Constants.trainee_id, Controller.getAppContext(), ""));
 
-                    jsonObject.put("data",object);
+                    jsonObject.put("data", object);
                     Controller.mSocket.emit("post", jsonObject);
                     CommonCall.PrintLog("getmsg", jsonObject.toString());
                 } catch (JSONException e) {
@@ -430,41 +424,290 @@ try {
             }
         });
     }
-    public static  class timerUpdate extends AsyncTask<String,String,String> {
 
 
-        String type,bookid,reason;
+   public static void intPayment(final Activity activity, final String sessionTime){
+
+        /*
+*
+*
+* getting payment
+*
+* */
+        CommonCall.showLoader(activity);
+
+        DropInResult.fetchDropInResult(activity, PreferencesUtils.getData(Constants.clientToken,activity,""), new DropInResult.DropInResultListener() {
+            @Override
+            public void onError(Exception exception) {
+                exception.printStackTrace();
+            }
+
+            @Override
+            public void onResult(DropInResult result) {
+
+
+
+
+
+                  if (result.getPaymentMethodNonce()!=null) {
+
+                    String  nounce=result.getPaymentMethodNonce().getNonce();
+
+
+                     new checkoutforExtendSession(activity,nounce,sessionTime).execute();
+
+                    }else{
+                      Toast.makeText(activity, "Something went Wrong!", Toast.LENGTH_SHORT).show();
+                  }
+
+            }
+        });
+    }
+
+    public  static class checkoutforExtendSession extends  AsyncTask<String,String,String>{
+
         Activity activity;
-        public timerUpdate(Activity act,String type,String bookid,String reason){
-            this.type= type;
-            this.bookid= bookid;
-            this.reason= reason;
+        String time;
+        public checkoutforExtendSession(Activity act,String nounce,String time){
+            this.activity=act;
+            this.nounce=nounce;
+            this.time=time;
+        }
+        String nounce ;
 
-            this.activity= act;
+        @Override
+        protected String doInBackground(String... strings) {
+
+            JSONObject req= new JSONObject();
+            try {
+                req.put("nonce",nounce);
+                req.put("time",time);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String res = NetworkCalls.POST(Urls.getcheckoutURL(),req.toString());
+            return res;
+
         }
 
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            try {
+                final JSONObject response = new JSONObject(s);
+
+                if (response.getInt(Constants.status) == 1) {
+
+                    JSONObject data = response.getJSONObject("data");
+                    PreferencesUtils.saveData(Constants.transactionId,data.getString("transactionId"),activity);
+                    PreferencesUtils.saveData(Constants.amount, data.getString("amount"),activity);
+                    PreferencesUtils.saveData(Constants.transaction_status,data.getString("status"),activity);
+
+                    Toast.makeText(activity, "Payment  Successful!", Toast.LENGTH_SHORT).show();
+
+                    new extendSession(activity,data.getString("transactionId"),PreferencesUtils.getData(Constants.bookid,activity,""),time).execute();
+
+                } else if (response.getInt(Constants.status) == 2) {
+                    CommonCall.hideLoader();
+
+                } else if (response.getInt(Constants.status) == 3) {
+                    CommonCall.hideLoader();
+                    CommonCall.sessionout(activity);
+                }
+
+
+            } catch (JSONException e) {
+                CommonCall.hideLoader();
+                e.printStackTrace(); CommonCall.hideLoader();
+            }
+        }
+    }
+
+
+
+
+    public static void picSessionTimeDialog(final Activity activity) {
+        final Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // Include dialog.xml file
+        dialog.setContentView(R.layout.session_time_pic_dialog);
+
+        dialog.setCancelable(false);
+
+
+        dialog.show();
+
+        TextView fourty = (TextView) dialog.findViewById(R.id.fourty);
+        TextView onehour = (TextView) dialog.findViewById(R.id.onehour);
+        fourty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+
+                 intPayment(activity,"40");
+
+
+
+            }
+        });
+
+        onehour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                dialog.dismiss();
+                intPayment(activity,"60");
+            }
+        });
+
+    }
+
+    public static void showExtendBokingDialog(final Activity activity) {
+        DialogInterface.OnClickListener extbuilderdialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //Yes button clicked
+
+                        picSessionTimeDialog(activity);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+
+
+                        Intent intent = new Intent(activity, HomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        activity.startActivity(intent);
+                        activity.finish();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder extbuilder = new AlertDialog.Builder(activity);
+        extbuilder.setCancelable(false);
+        extbuilder.setMessage("Are you sure you want to Extend this session?").setPositiveButton("Yes", extbuilderdialogClickListener)
+                .setNegativeButton("No", extbuilderdialogClickListener).show();
+
+    }
+
+    public static class extendSession extends AsyncTask<String, String, String> {
+
+
+        Activity activity;
+        String transaction_id, book_id, extended_time;
+
+        public extendSession(Activity activity, String transaction_id, String book_id, String extended_time) {
+
+            this.activity = activity;
+            this.transaction_id = transaction_id;
+            this.book_id = book_id;
+            this.extended_time = extended_time;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String res = "";
+            try {
+                JSONObject req = new JSONObject();
+
+                req.put("book_id", book_id);
+
+                req.put("extended_time", extended_time);
+                req.put("transaction_id", transaction_id);
+
+                res = NetworkCalls.POST(Urls.getextendBookingURL(), req.toString());
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            return res;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+CommonCall.hideLoader();
+            try {
+                JSONObject res = new JSONObject(s);
+         if (res.getInt(Constants.status)==1){
+
+             Intent intent = new Intent("BUDDI_SESSION_EXTEND");
+
+             LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
+             Toast.makeText(activity, "Your Training Session Has Extented!", Toast.LENGTH_SHORT).show();
+
+
+
+         }else if (res.getInt(Constants.status)==2){
+             Toast.makeText(activity, res.getString(Constants.message), Toast.LENGTH_SHORT).show();
+
+
+         }else{
+
+
+         }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+
+        }
+    }
+
+    public static class timerUpdate extends AsyncTask<String, String, String> {
+
+
+        String type, bookid, reason;
+        Activity activity;
+
+        public timerUpdate(Activity act, String type, String bookid, String reason) {
+            this.type = type;
+            this.bookid = bookid;
+            this.reason = reason;
+
+            this.activity = act;
+        }
 
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-if (activity!=null)
-            showLoader(activity);
+            if (activity != null)
+                showLoader(activity);
         }
 
         @Override
         protected String doInBackground(String... strings) {
 
-            String res="";
+            String res = "";
             try {
-            JSONObject req= new JSONObject();
+                JSONObject req = new JSONObject();
 
-                req.put("book_id",bookid);
+                req.put("book_id", bookid);
 
-                req.put("reason",reason);
-            req.put("action",type);
+                req.put("reason", reason);
+                req.put("action", type);
 
-             res = NetworkCalls.POST(Urls.getbookingActionURL(),req.toString());
+                res = NetworkCalls.POST(Urls.getbookingActionURL(), req.toString());
 
 
             } catch (JSONException e) {
@@ -481,8 +724,8 @@ if (activity!=null)
             super.onPostExecute(s);
 
 
-            PreferencesUtils.saveData(start_session,"false",Controller.getAppContext());
-            if (activity!=null)
+            PreferencesUtils.saveData(start_session, "false", Controller.getAppContext());
+            if (activity != null)
                 CommonCall.hideLoader();
 
             try {
@@ -492,13 +735,10 @@ if (activity!=null)
 
 
                     //clearing last payment id to avoid multiple payments
-                    PreferencesUtils.saveData(Constants.transactionId,"",activity);
+                    PreferencesUtils.saveData(Constants.transactionId, "", activity);
 
 
-
-
-
-                    if (activity!=null) {
+                    if (activity != null) {
 
                         AlertDialog.Builder builder;
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -506,47 +746,48 @@ if (activity!=null)
                         } else {
                             builder = new AlertDialog.Builder(activity);
                         }
-                        if(!((Activity) activity).isFinishing())
+//                        if(!((Activity) activity).isFinishing())
                         {
 
-                        builder.setMessage(obj.getString("message"))
-                                .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // continue with delete
+                            builder.setMessage(obj.getString("message"))
+                                    .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // continue with delete
 
 //                                        try {
 //                                            Toast.makeText(activity, obj.getString("message"), Toast.LENGTH_SHORT).show();
 //                                        } catch (JSONException e) {
 //                                            e.printStackTrace();
 //                                        }
+                                            dialog.dismiss();
+                                            if (!Timer_Service.stopFlag) {
 
-                                        Intent intent = new Intent(activity, HomeActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        activity.startActivity(intent);
-                                        activity.finish();
+                                                CommonCall.showExtendBokingDialog(activity);
+                                            } else {
 
-                                    }
-                                })
+                                                Intent intent = new Intent(activity, HomeActivity.class);
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                activity.startActivity(intent);
+                                                activity.finish();
 
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
+
+                                            }
+                                        }
+                                    })
+
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
                             //show dialog
-                        }else{
-                            Intent intent = new Intent(activity, HomeActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            activity.startActivity(intent);
-                            activity.finish();
-
                         }
 
-                    }
 
+                    }
 
 
                 } else if (obj.getInt("status") == 2) {
                     Toast.makeText(activity, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
-                }else if (obj.getInt("status") == 3) {
+                } else if (obj.getInt("status") == 3) {
                     Toast.makeText(activity, "Session out", Toast.LENGTH_SHORT).show();
                     CommonCall.sessionout(activity);
                 }

@@ -1,6 +1,7 @@
 package buddyapp.com.timmer;
 
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -14,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -40,7 +42,10 @@ public class Timer_Service extends Service {
     String strDate;
     Date date_current, date_diff;
 
-public static boolean stopFlag =false;
+    Activity activity;
+
+
+    public static boolean stopFlag = false;
 
     private Timer mTimer = null;
     public static final long NOTIFY_INTERVAL = 1000;
@@ -49,6 +54,7 @@ public static boolean stopFlag =false;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+
         return null;
     }
 
@@ -64,7 +70,7 @@ public static boolean stopFlag =false;
         mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 5, NOTIFY_INTERVAL);
         intent = new Intent(str_receiver);
         CreateNotification();
-    PreferencesUtils.saveData(Constants.timmer_status,"true",getApplicationContext());
+        PreferencesUtils.saveData(Constants.timmer_status, "true", getApplicationContext());
     }
 
 
@@ -91,7 +97,6 @@ public static boolean stopFlag =false;
     }
 
 
-
     public String twoDatesBetweenTime() {
 
 
@@ -102,7 +107,7 @@ public static boolean stopFlag =false;
         }
 
         try {
-            date_diff = simpleDateFormat.parse(PreferencesUtils.getData("data",getApplicationContext(), ""));
+            date_diff = simpleDateFormat.parse(PreferencesUtils.getData("data", getApplicationContext(), ""));
         } catch (Exception e) {
 
         }
@@ -111,7 +116,7 @@ public static boolean stopFlag =false;
 
 
             long diff = date_current.getTime() - date_diff.getTime();
-            int int_hours = Integer.valueOf(PreferencesUtils.getData("hours",getApplicationContext(), "0"));
+            int int_hours = Integer.valueOf(PreferencesUtils.getData("hours", getApplicationContext(), "0"));
 
             long int_timer = TimeUnit.MINUTES.toMillis(int_hours);
             long long_hours = int_timer - diff;
@@ -131,7 +136,7 @@ public static boolean stopFlag =false;
                 mTimer.cancel();
                 stopSelf();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             mTimer.cancel();
             mTimer.purge();
 
@@ -145,15 +150,15 @@ public static boolean stopFlag =false;
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e("Service finish","Finish");
+        Log.e("Service finish", "Finish");
         fn_update("Session Completed");
         sessionCompleted("Session Completed");
-        PreferencesUtils.saveData(Constants.timmer_status,"false",getApplicationContext());
+        PreferencesUtils.saveData(Constants.timmer_status, "false", getApplicationContext());
     }
 
-    private void fn_update(String str_time){
+    private void fn_update(String str_time) {
 
-        intent.putExtra("time",str_time);
+        intent.putExtra("time", str_time);
         sendBroadcast(intent);
 
         updateTimerNoti(str_time);
@@ -161,7 +166,8 @@ public static boolean stopFlag =false;
 
     NotificationCompat.Builder builder;
     NotificationManager mNotificationManager;
-    void CreateNotification(){
+
+    void CreateNotification() {
         mNotificationManager =
 
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -188,14 +194,14 @@ public static boolean stopFlag =false;
 //            startForeground(100, builder.build());
     }
 
-    void updateTimerNoti(String text){
+    void updateTimerNoti(String text) {
         //Second time
         builder.setContentTitle(text);
         mNotificationManager.notify(100, builder.build());
 
     }
 
-    void sessionCompleted(String text){
+    void sessionCompleted(String text) {
         //Second time
 
 
@@ -207,23 +213,28 @@ public static boolean stopFlag =false;
 
 //        stopForeground(true);
         createStopSessionNoti("Session Completed");
-        PreferencesUtils.saveData(Constants.timerstarted,"false",getApplicationContext());
-        PreferencesUtils.saveData(Constants.trainee_Data,"",getApplicationContext());
-        PreferencesUtils.saveData(Constants.trainer_Data,"",getApplicationContext());
+        PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
+        PreferencesUtils.saveData(Constants.trainee_Data, "", getApplicationContext());
+        PreferencesUtils.saveData(Constants.trainer_Data, "", getApplicationContext());
 
-        String bookid = PreferencesUtils.getData(Constants.bookid,getApplicationContext(),"");
 
-if (!stopFlag)
-        new CommonCall.timerUpdate(null,"complete",bookid,"").execute();
+        if (!stopFlag) {
+            Intent intent = new Intent("BUDDI_TRAINER_SESSION_FINISH");
+
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+
+
+//            new CommonCall.timerUpdate((Activity) getApplicationContext(), "complete", bookid, "").execute();
+
+
+        }
 //        mNotificationManager.cancel(100);
 //        mNotificationManager = null;
 //        createStopSessionNoti(text);
 
     }
 
-    void createStopSessionNoti(String text){
-
-
+    void createStopSessionNoti(String text) {
 
 
         mNotificationManager =
@@ -254,6 +265,6 @@ if (!stopFlag)
 
     private int getNotificationIcon() {
         boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
-        return useWhiteIcon ? R.mipmap.ic_launcher :  R.mipmap.ic_launcher ;
+        return useWhiteIcon ? R.mipmap.ic_launcher : R.mipmap.ic_launcher;
     }
 }

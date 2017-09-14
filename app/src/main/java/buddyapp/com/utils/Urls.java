@@ -59,6 +59,13 @@ public class Urls {
 
     public static String declineSelection= "/search/declineSelection";
 
+    public static String extendBooking= "/booking/extendBooking";
+
+    public static String getextendBookingURL(){
+
+        return BASEURL+extendBooking;
+    }
+
     public static String getDeclineSelectionURL(){
 
         return BASEURL+declineSelection;

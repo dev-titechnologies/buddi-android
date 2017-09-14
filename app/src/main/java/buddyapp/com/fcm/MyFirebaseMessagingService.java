@@ -2,6 +2,7 @@ package buddyapp.com.fcm;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -181,8 +182,19 @@ startActivity(resultIntent);
                 resultIntent.putExtra("message",data.toString());
                 resultIntent.putExtra("title",title);
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
+/*
+*
+*
+* clearing notification of new request after 30 seconds
+* */
+                Handler h = new Handler();
+                long delayInMilliseconds = 30000;
+                h.postDelayed(new Runnable() {
+                    public void run() {
 
-
+                        NotificationUtils.clearNotifications(getApplicationContext());
+                    }
+                }, delayInMilliseconds);
 
 
             }
