@@ -121,7 +121,7 @@ startActivity(resultIntent);
 
             }else if(json.getInt("type")==2){
 
-
+/** Complete session **/
                 Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
                 resultIntent.putExtra("message","");
 

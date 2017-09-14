@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -65,6 +66,7 @@ import static buddyapp.com.Controller.updateSocket;
  * A simple {@link Fragment} subclass.
  */
 public class TrainerProfileFragment extends Fragment {
+    ImageView facebook, instagram,linkedin,snapchat,twitter,youtube;
     CountryCodePicker ccp;
     String smobile;
     boolean editflag = false;
@@ -113,6 +115,12 @@ public class TrainerProfileFragment extends Fragment {
         height = (TextView) view.findViewById(R.id.height);
         weight = (TextView) view.findViewById(R.id.weight);
 
+        facebook = (ImageView) view.findViewById(R.id.nav_facebook);
+        instagram = (ImageView) view.findViewById(R.id.nav_instagram);
+        linkedin = (ImageView) view.findViewById(R.id.nav_linkedin);
+        snapchat = (ImageView) view.findViewById(R.id.nav_snapchat);
+        twitter = (ImageView) view.findViewById(R.id.nav_twitter);
+        youtube = (ImageView) view.findViewById(R.id.nav_youtube);
 
         trainerCategory = (LinearLayout) view.findViewById(R.id.trainer_category);
         placeLayout = (LinearLayout) view.findViewById(R.id.place_layout);

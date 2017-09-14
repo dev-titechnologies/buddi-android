@@ -1,6 +1,7 @@
 package buddyapp.com.activity;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,10 +39,12 @@ import org.json.JSONObject;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.prefs.PreferenceChangeEvent;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.utils.AlertDialoge.SocialMediaURLAlertDialog;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
@@ -54,13 +58,13 @@ public class ProfileScreen extends AppCompatActivity {
     private String userChoosenTask;
     boolean isValid = false;
     Uri image_uri;
-
+    ImageView facebook, instagram,linkedin,snapchat,twitter,youtube;
     EditText rbmale;
     EditText firstName, lastName, eMail, password, mobile;
     CircleImageView userImageView, trainerImageView;
     LinearLayout trainerCategory,placeLayout, imageTrainer, imageUser;
     String semail, sfname, slname, sgender = "", scountrycode, spassword, sfacebookId = "", sgoogleplusId = "";
-    String register_type = "normal";
+    String register_type = "normal", facebookUrl,snapchatUrl,instagramUrl,linkedinUrl,twitterUrl,youtubeUrl;
     private PopupMenu popupMenu;
     String user_image;
     private static final int CAMERA_REQUEST = 1888;
@@ -69,6 +73,8 @@ public class ProfileScreen extends AppCompatActivity {
     String imageurl = "";
     Menu menu;
     TextView fullname, typeAge, height , weight;
+    public static String fbusername,snapchatusername,twitterusername,linkedinusername,instagramusername,youtubeusername;
+    SocialMediaURLAlertDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +103,14 @@ public class ProfileScreen extends AppCompatActivity {
         trainerImageView = (CircleImageView) findViewById(R.id.trainerimageView);
         imageTrainer = (LinearLayout) findViewById(R.id.image_trainer); // Trainer profile image View layout
         imageUser = (LinearLayout) findViewById(R.id.image_user); // user profile image View layout
+
+        facebook = (ImageView) findViewById(R.id.nav_facebook);
+        instagram = (ImageView) findViewById(R.id.nav_instagram);
+        linkedin = (ImageView) findViewById(R.id.nav_linkedin);
+        snapchat = (ImageView) findViewById(R.id.nav_snapchat);
+        twitter = (ImageView) findViewById(R.id.nav_twitter);
+        youtube = (ImageView) findViewById(R.id.nav_youtube);
+
         //****
         // *****check for trainer or trainee
         if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
@@ -155,6 +169,69 @@ public class ProfileScreen extends AppCompatActivity {
             }
         });
 
+        facebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                facebooktask();
+            }
+        });
+        instagram.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                instagramtask();
+            }
+        });
+        linkedin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linkedintask();
+            }
+        });
+        snapchat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                snapchattask();
+            }
+        });
+        twitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                twittertask();
+            }
+        });
+        youtube.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                youtubetask();
+            }
+        });
+    }
+
+    private void youtubetask() {
+        new SocialMediaURLAlertDialog(ProfileScreen.this,"youtube");
+    }
+
+    private void twittertask() {
+        new SocialMediaURLAlertDialog(ProfileScreen.this,"twitter");
+
+    }
+
+    private void snapchattask() {
+        new SocialMediaURLAlertDialog(ProfileScreen.this,"snapchat");
+    }
+
+    private void linkedintask() {
+        new SocialMediaURLAlertDialog(ProfileScreen.this,"linkedin");
+    }
+
+    private void instagramtask() {
+        new SocialMediaURLAlertDialog(ProfileScreen.this,"instagram");
+        instagramUrl = "https://www.instagram.com/"+instagramusername;
+    }
+
+    private void facebooktask() {
+        new SocialMediaURLAlertDialog(ProfileScreen.this,"facebook");
+        facebookUrl = "https://www.facebook.com/"+fbusername;
     }
 
     private void galleryIntent() {
@@ -398,9 +475,36 @@ public class ProfileScreen extends AppCompatActivity {
                            weight.setVisibility(View.GONE);
                        }else
                        { weight.setText(jsonObject.getString("weight"));}
+                       if(jsonObject.getString("facebook_url").equals("null")){
+                           facebookUrl = "";
+                       }else
+                       {facebookUrl = jsonObject.getString("facebook_url");}
+                       if(jsonObject.getString("instagram_url").equals("null")){
+                           instagramUrl = "";
+                       }else
+                       {instagramUrl = jsonObject.getString("instagram_url");}
+                       if(jsonObject.getString("linkedin_url").equals("null")){
+                           linkedinUrl = "";
+                       }else
+                       {linkedinUrl = jsonObject.getString("linkedin_url");}
+
+                       if(jsonObject.getString("snapchat_url").equals("null")){
+                           snapchatUrl = "";
+                       }else
+                       {snapchatUrl = jsonObject.getString("snapchat_url");}
+
+                       if(jsonObject.getString("twitter_url").equals("null")){
+                           twitterUrl = "";
+                       }else
+                       {twitterUrl = jsonObject.getString("twitter_url");}
+                       if(jsonObject.getString("youtube_url").equals("null")){
+                           youtubeUrl = "";
+                       }else
+                       {youtubeUrl = jsonObject.getString("youtube_url");}
 
                     PreferencesUtils.saveData(Constants.category_submitted,obj.getJSONArray("category_submitted").toString(),getApplicationContext());
                     PreferencesUtils.saveData(Constants.category_approved,obj.getJSONArray("category_approved").toString(),getApplicationContext());
+
                    }
                     loadProfile();
 

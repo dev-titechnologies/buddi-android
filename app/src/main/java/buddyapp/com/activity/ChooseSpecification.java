@@ -43,21 +43,22 @@ import buddyapp.com.utils.Urls;
 
 public class ChooseSpecification extends AppCompatActivity {
     int sessionDuration = 0;
-    String sgender="", prefAddress = "";
+    String sgender="", prefAddress = "", pick_location;
     LinearLayout duration, gender, location;
     TextView session, trainerGender;
-    TextView  locationPref, thirty, hour, male, female, noPreference, maddress;
+    TextView  locationPref, fourty, hour, male, female, noPreference, maddress;
     int id =0, ids=0, id1= 0;
     Animation a,b,c;
     Button next;
     private static final int PLACE_PICKER_REQUEST = 1;
-    Boolean check1=false, check2=false;
+    Boolean check1=false, check2=false, check3 =false;
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 
     private FusedLocationProviderClient mFusedLocationClient;
     LocationManager mLocationManager;
     double longitude, latitude, mlongitude,mlatitude;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class ChooseSpecification extends AppCompatActivity {
         gender = (LinearLayout) findViewById(R.id.gender);
         session = (TextView) findViewById(R.id.session);
         trainerGender = (TextView) findViewById(R.id.trainer_gender);
-        thirty = (TextView) findViewById(R.id.thirty);
+        fourty = (TextView) findViewById(R.id.thirty);
         hour = (TextView) findViewById(R.id.hour);
         male = (TextView) findViewById(R.id.male);
         female = (TextView) findViewById(R.id.female);
@@ -177,11 +178,11 @@ public class ChooseSpecification extends AppCompatActivity {
             }
         });
 
-        thirty.setOnClickListener(new View.OnClickListener() {                                           @Override
+        fourty.setOnClickListener(new View.OnClickListener() {                                           @Override
         public void onClick(View view) {
             check1 = true;
             setFourty();
-            if(check2)
+            if(check2 && check3)
                 next.setVisibility(View.VISIBLE);
 
             id =0;
@@ -195,7 +196,7 @@ public class ChooseSpecification extends AppCompatActivity {
         hour.setOnClickListener(new View.OnClickListener() {                                           @Override
         public void onClick(View view) {
             check1 = true;setHour();
-            if(check2)
+            if(check2 && check3)
                 next.setVisibility(View.VISIBLE);
 
             id =0;
@@ -214,7 +215,7 @@ public class ChooseSpecification extends AppCompatActivity {
             a.reset();
             trainerGender.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
             gender.setVisibility(View.GONE);
-            if(check1)
+            if(check1 && check3)
                 next.setVisibility(View.VISIBLE);
         }
         });
@@ -227,7 +228,7 @@ public class ChooseSpecification extends AppCompatActivity {
             trainerGender.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
             gender.setVisibility(View.GONE);
 
-            if(check1)
+            if(check1 && check3)
                 next.setVisibility(View.VISIBLE);
         }
         });
@@ -241,7 +242,7 @@ public class ChooseSpecification extends AppCompatActivity {
                 trainerGender.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
                 gender.setVisibility(View.GONE);
 
-                if(check1)
+                if(check1 && check3)
                     next.setVisibility(View.VISIBLE);
             }
         });
@@ -340,17 +341,17 @@ public class ChooseSpecification extends AppCompatActivity {
     void setFourty(){
         sessionDuration = 40;
 
-        thirty.setTextColor(getResources().getColor(R.color.white));
+        fourty.setTextColor(getResources().getColor(R.color.white));
         hour.setTextColor(getResources().getColor(R.color.black));
-        thirty.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        fourty.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         hour.setBackgroundColor(getResources().getColor(R.color.white));
     }
     void setHour(){
         sessionDuration = 60;
 
-        thirty.setTextColor(getResources().getColor(R.color.black));
+        fourty.setTextColor(getResources().getColor(R.color.black));
         hour.setTextColor(getResources().getColor(R.color.white));
-        thirty.setBackgroundColor(getResources().getColor(R.color.white));
+        fourty.setBackgroundColor(getResources().getColor(R.color.white));
         hour.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
     }
     void setMale(){
@@ -396,13 +397,15 @@ public class ChooseSpecification extends AppCompatActivity {
                 CommonCall.PrintLog("Place",place.toString());
                 final CharSequence name = place.getName();
                 final CharSequence address = place.getAddress();
-
+                check3 =true;
+                pick_location = name.toString();
                 locationPref.setText("Choose Training Location \t\t\t\t\t"+name.toString() );
                 prefAddress = name.toString()+" "+ address.toString();
                 maddress.setText(prefAddress );
                 mlatitude = place.getLatLng().latitude;
                 mlongitude = place.getLatLng().longitude;
-
+                if(check1 && check2)
+                    next.setVisibility(View.VISIBLE);
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
@@ -452,6 +455,9 @@ public class ChooseSpecification extends AppCompatActivity {
                         intent.putExtra(Constants.latitude, String.valueOf(latitude));
                         intent.putExtra(Constants.longitude, String.valueOf(longitude));
                         intent.putExtra(Constants.duration, String.valueOf(sessionDuration));
+                        intent.putExtra("pick_latitude",mlatitude+"");
+                        intent.putExtra("pick_longitude",mlongitude+"");
+                        intent.putExtra("pick_location",pick_location);
                         startActivity(intent);
 
                     }else
