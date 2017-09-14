@@ -112,7 +112,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     ImageView startactionIcon, stopactionIcon, profileactionIcon, messageactionIcon, cancelactionIcon;
     TextView startactionTitle, stopactionTitle, profileactionTitle, messageactionTitle, sessionTimmer;
 
-    String pick_latitude, pick_longitude, pick_location;
+    String pick_latitude="0", pick_longitude="0", pick_location;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,9 +157,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 name = data.getJSONObject("trainee_details").getString("trainee_first_name") + " " + data.getJSONObject("trainee_details").getString("trainee_last_name");
                 lat = data.getJSONObject("trainee_details").getString("trainee_latitude");
                 lng = data.getJSONObject("trainee_details").getString("trainee_longitude");
-                pick_latitude = data.getJSONObject("trainee_details").getString("pick_latitude");
-                pick_longitude = data.getJSONObject("trainee_details").getString("pick_longitude");
-                pick_location = data.getJSONObject("trainee_details").getString("pick_location");
+                pick_latitude = data.getString("pick_latitude");
+                pick_longitude = data.getString("pick_longitude");
+                pick_location = data.getString("pick_location");
                 PreferencesUtils.saveData(Constants.trainee_name,name,getApplicationContext());
                 if(data.getString("trainer_user_image").length()>1){
                     PreferencesUtils.saveData(Constants.trainer_image,data.getString("trainee_user_image"),getApplicationContext());
@@ -182,9 +182,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 PreferencesUtils.saveData(Constants.bookid, book_id, getApplicationContext());
                 name = trainerDetail.getString("trainer_first_name") + " " + trainerDetail.getString("trainer_last_name");
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
-                pick_latitude = trainerDetail.getString("pick_latitude");
-                pick_longitude = trainerDetail.getString("pick_longitude");
-                pick_location = trainerDetail.getString("pick_location");
+                pick_latitude = data.getString("pick_latitude");
+                pick_longitude = data.getString("pick_longitude");
+                pick_location = data.getString("pick_location");
                 PreferencesUtils.saveData(Constants.trainer_name,name,getApplicationContext());
         if(trainerDetail.getString("trainer_user_image").length()>1){
             PreferencesUtils.saveData(Constants.trainer_image,trainerDetail.getString("trainer_user_image"),getApplicationContext());
@@ -206,8 +206,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
 // trainer location
-        latitude = Double.valueOf(lat);
-        longitude = Double.valueOf(lng);
+        latitude = Double.valueOf(pick_latitude);
+        longitude = Double.valueOf(pick_latitude);
         camera = new LatLng(latitude, longitude);
 
         mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);

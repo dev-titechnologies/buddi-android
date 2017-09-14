@@ -179,7 +179,8 @@ startActivity(resultIntent);
                 resultIntent.putExtra("message",data.toString());
                 resultIntent.putExtra("title",title);
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
-/*
+
+                /*
 *
 *
 * clearing notification of new request after 30 seconds
