@@ -762,6 +762,8 @@ CommonCall.hideLoader();
                                             if (!Timer_Service.stopFlag) {
 
                                                 CommonCall.showExtendBokingDialog(activity);
+
+
                                             } else {
 
                                                 Intent intent = new Intent(activity, HomeActivity.class);
