@@ -480,7 +480,7 @@ public class CommonCall {
             JSONObject req= new JSONObject();
             try {
                 req.put("nonce",nounce);
-                req.put("time",time);
+                req.put("training_time",time);
 
             } catch (JSONException e) {
                 e.printStackTrace();

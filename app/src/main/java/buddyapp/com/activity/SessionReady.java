@@ -16,6 +16,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
@@ -67,6 +68,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import buddyapp.com.Controller;
 import buddyapp.com.R;
@@ -556,6 +559,8 @@ void resetTimmer(){
     }
 
     void stopSession() {
+
+
         Timer_Service.stopFlag = true;
         PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
 
@@ -583,14 +588,43 @@ void resetTimmer(){
 
     }
 
+
+    public CountDownTimer Count;
     void stopauto() {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                        PreferencesUtils.saveData(Constants.flag_rating,"true",getApplicationContext());
-                        stopSession();
+
+if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")) {
+    Count = new android.os.CountDownTimer(30000, 1000) {
+        public void onTick(long millisUntilFinished) {
+//                                textic.setText("Time Left: " + millisUntilFinished / 1000);
+
+
+            CommonCall.PrintLog("timmer ", "tick" + millisUntilFinished / 1000);
+        }
+
+        public void onFinish() {
+//                                textic.setText("OUT OF TIME!");
+
+            CommonCall.PrintLog("timmer ", "tick onFinish");
+
+
+            PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+            stopSession();
+
+        }
+    };
+
+}else{
+
+    CommonCall.PrintLog("NO TIMMER  ", "NO TIMMER ");
+
+    PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+    stopSession();
+}
 
                     }
                 }, new IntentFilter("BUDDI_TRAINER_STOP")
@@ -1089,8 +1123,8 @@ void resetTimmer(){
 
 
                     PreferencesUtils.saveData("data", date_time, getApplicationContext());
-//                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
-                    PreferencesUtils.saveData("hours",  "1", getApplicationContext());
+                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
+//                    PreferencesUtils.saveData("hours",  "1", getApplicationContext());
 
 
                     startService(new Intent(getApplicationContext(), Timer_Service.class));
