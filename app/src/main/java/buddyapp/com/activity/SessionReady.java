@@ -116,6 +116,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     TextView startactionTitle, stopactionTitle, profileactionTitle, messageactionTitle, sessionTimmer;
 
     String pick_latitude, pick_longitude, pick_location;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,9 +164,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 pick_latitude = data.getJSONObject("trainee_details").getString("pick_latitude");
                 pick_longitude = data.getJSONObject("trainee_details").getString("pick_longitude");
                 pick_location = data.getJSONObject("trainee_details").getString("pick_location");
-                PreferencesUtils.saveData(Constants.trainee_name,name,getApplicationContext());
-                if(data.getString("trainer_user_image").length()>1){
-                    PreferencesUtils.saveData(Constants.trainer_image,data.getString("trainee_user_image"),getApplicationContext());
+                PreferencesUtils.saveData(Constants.trainee_name, name, getApplicationContext());
+                if (data.getString("trainer_user_image").length() > 1) {
+                    PreferencesUtils.saveData(Constants.trainer_image, data.getString("trainee_user_image"), getApplicationContext());
                 }
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
                 updateSocket();
@@ -188,10 +189,10 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 pick_latitude = trainerDetail.getString("pick_latitude");
                 pick_longitude = trainerDetail.getString("pick_longitude");
                 pick_location = trainerDetail.getString("pick_location");
-                PreferencesUtils.saveData(Constants.trainer_name,name,getApplicationContext());
-        if(trainerDetail.getString("trainer_user_image").length()>1){
-            PreferencesUtils.saveData(Constants.trainer_image,trainerDetail.getString("trainer_user_image"),getApplicationContext());
-        }
+                PreferencesUtils.saveData(Constants.trainer_name, name, getApplicationContext());
+                if (trainerDetail.getString("trainer_user_image").length() > 1) {
+                    PreferencesUtils.saveData(Constants.trainer_image, trainerDetail.getString("trainer_user_image"), getApplicationContext());
+                }
 
                 updateSocket();
                 Controller.mSocket.connect();
@@ -233,7 +234,6 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             startactionIcon.setImageResource(R.mipmap.stop_blue);
         }
         LoadmapTask();
-
 
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
@@ -399,7 +399,6 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 });
 
 
-
             }
         });
 
@@ -498,26 +497,49 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         registerReceiver(br, new IntentFilter(Timer_Service.str_receiver));
         resetTimmer();
 
+        cancelAuto();
+
     }
-void resetTimmer(){
-
-    LocalBroadcastManager.getInstance(this).registerReceiver(
-            new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-
-                    startactionTitle.setText("Start");
-                    startactionIcon.setImageResource(R.mipmap.play);
-
-                }
-            }, new IntentFilter("BUDDI_SESSION_EXTEND")
-
-
-    );
 
 
 
-}
+    void cancelAuto(){
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+
+                        PreferencesUtils.saveData(Constants.flag_rating, "false", getApplicationContext());
+                        stopSession();
+
+
+                    }
+                }, new IntentFilter("BUDDI_TRAINER_CANCEL")
+
+
+        );
+    }
+
+    void resetTimmer() {
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+
+                        startactionTitle.setText("Start");
+                        startactionIcon.setImageResource(R.mipmap.play);
+
+                    }
+                }, new IntentFilter("BUDDI_SESSION_EXTEND")
+
+
+        );
+
+
+    }
+
     void startauto() {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
@@ -590,6 +612,7 @@ void resetTimmer(){
 
 
     public CountDownTimer Count;
+
     void stopauto() {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
@@ -597,34 +620,34 @@ void resetTimmer(){
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
-if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")) {
-    Count = new android.os.CountDownTimer(30000, 1000) {
-        public void onTick(long millisUntilFinished) {
+                        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
+                            Count = new android.os.CountDownTimer(30000, 1000) {
+                                public void onTick(long millisUntilFinished) {
 //                                textic.setText("Time Left: " + millisUntilFinished / 1000);
 
 
-            CommonCall.PrintLog("timmer ", "tick" + millisUntilFinished / 1000);
-        }
+                                    CommonCall.PrintLog("timmer ", "tick" + millisUntilFinished / 1000);
+                                }
 
-        public void onFinish() {
+                                public void onFinish() {
 //                                textic.setText("OUT OF TIME!");
 
-            CommonCall.PrintLog("timmer ", "tick onFinish");
+                                    CommonCall.PrintLog("timmer ", "tick onFinish");
 
 
-            PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
-            stopSession();
+                                    PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+                                    stopSession();
 
-        }
-    };
+                                }
+                            };
 
-}else{
+                        } else {
 
-    CommonCall.PrintLog("NO TIMMER  ", "NO TIMMER ");
+                            CommonCall.PrintLog("NO TIMMER  ", "NO TIMMER ");
 
-    PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
-    stopSession();
-}
+                            PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+                            stopSession();
+                        }
 
                     }
                 }, new IntentFilter("BUDDI_TRAINER_STOP")
@@ -812,8 +835,6 @@ if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equ
 //        MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(getActivity(), R.raw.my_map_style);
 //        googleMap.setMapStyle(style);
         googleMap.setInfoWindowAdapter(SessionReady.this);
-
-
 
 
     }
