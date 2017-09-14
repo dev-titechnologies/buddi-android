@@ -732,7 +732,7 @@ CommonCall.hideLoader();
                 final JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
 
-                    PreferencesUtils.saveData(Constants.flag_rating,"true",activity);
+
                     //clearing last payment id to avoid multiple payments
                     PreferencesUtils.saveData(Constants.transactionId, "", activity);
 
@@ -760,8 +760,12 @@ CommonCall.hideLoader();
 //                                        }
                                             dialog.dismiss();
                                             if (!Timer_Service.stopFlag) {
+
                                                  if(PreferencesUtils.getData(Constants.user_type,activity,"").equals("trainee"))
-                                                    CommonCall.showExtendBokingDialog(activity);
+                                                 {
+                                                     PreferencesUtils.saveData(Constants.flag_rating,"true",activity);
+                                                     CommonCall.showExtendBokingDialog(activity);
+                                                 }
                                                  else{
                                                      Intent intent = new Intent(activity, HomeActivity.class);
                                                      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

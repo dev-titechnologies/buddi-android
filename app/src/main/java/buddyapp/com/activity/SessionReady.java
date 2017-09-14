@@ -563,7 +563,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     void stopAction() {
         Timer_Service.stopFlag = true;
         PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
-
+        PreferencesUtils.saveData(Constants.flag_rating,"true",getApplicationContext());
 
         startactionTitle.setText("Start");
         startactionIcon.setImageResource(R.mipmap.play);
@@ -1146,8 +1146,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
                     PreferencesUtils.saveData("data", date_time, getApplicationContext());
-                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
-//                    PreferencesUtils.saveData("hours",  "1", getApplicationContext());
+//                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
+                    PreferencesUtils.saveData("hours",  "1", getApplicationContext());
 
 
                     startService(new Intent(getApplicationContext(), Timer_Service.class));
