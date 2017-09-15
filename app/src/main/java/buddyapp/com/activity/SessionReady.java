@@ -653,6 +653,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
+
                         CommonCall.showLoader(SessionReady.this,"Completing session Please wait.");
                         if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
                             Count = new android.os.CountDownTimer(60000, 1000) {
@@ -675,7 +676,10 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                                 }
                             };
                             Count.start();
-                        } else {
+                        } else
+
+
+                            {
 
                             CommonCall.PrintLog("NO TIMMER  ", "NO TIMMER ");
 
@@ -696,12 +700,69 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                     public void onReceive(Context context, Intent intent) {
 
 
-                        String bookid = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
+//                        if (!Timer_Service.stopFlag)
+
+                        {
+
+                            if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainee")
+
+                                    &&  !cancelFlag) {
+
+
+
+                                CommonCall.showExtendBokingDialog(SessionReady.this);
+
+
+                            } else{
+
+//                                Intent intenthome = new Intent(getApplicationContext(), HomeActivity.class);
+//                                intenthome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                startActivity(intenthome);
+//                                finish();
+
+
+
+                                CommonCall.showLoader(SessionReady.this,"Completing session Please wait.");
+                                if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
+                                    Count = new android.os.CountDownTimer(60000, 1000) {
+                                        public void onTick(long millisUntilFinished) {
+//                                textic.setText("Time Left: " + millisUntilFinished / 1000);
+
+
+                                            CommonCall.PrintLog("timmer ", "tick" + millisUntilFinished / 1000);
+                                        }
+
+                                        public void onFinish() {
+//                                textic.setText("OUT OF TIME!");
+                                            CommonCall.hideLoader();
+                                            CommonCall.PrintLog("timmer ", "tick onFinish");
+
+
+                                            PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+                                            String bookid = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
+
+
+                                            new CommonCall.timerUpdate(SessionReady.this, "complete", bookid, "").execute();
+
+                                        }
+                                    };
+                                    Count.start();
+                                }else {
+
+
+                                    String bookid = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
+
+
+                                    new CommonCall.timerUpdate(SessionReady.this, "complete", bookid, "").execute();
+                                }
+                            }
+
+                        }
 
 
 
 
-                        new CommonCall.timerUpdate(SessionReady.this, "complete", bookid, "").execute();
+//
 
 
 

@@ -51,6 +51,7 @@ import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.MapTrainee;
 import buddyapp.com.activity.Payments.PaymentType;
+import buddyapp.com.activity.SessionReady;
 import buddyapp.com.activity.WelcomeActivity;
 import buddyapp.com.services.LocationService;
 import buddyapp.com.timmer.Timer_Service;
@@ -611,10 +612,19 @@ public class CommonCall {
                         //No button clicked
                         handler.removeCallbacks(runnable);
 
-                        Intent intent = new Intent(activity, HomeActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        activity.startActivity(intent);
-                        activity.finish();
+//                        Intent intent = new Intent(activity, HomeActivity.class);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                        activity.startActivity(intent);
+//                        activity.finish();
+
+
+                        String bookid = PreferencesUtils.getData(Constants.bookid, activity, "");
+
+
+
+
+                        new CommonCall.timerUpdate(activity, "complete", bookid, "").execute();
+
                         break;
                 }
             }
@@ -811,23 +821,11 @@ CommonCall.hideLoader();
 //                                            e.printStackTrace();
 //                                        }
                                             dialog.dismiss();
-                                            if (!Timer_Service.stopFlag) {
 
-                                                 if(PreferencesUtils.getData(Constants.user_type,activity,"").equals("trainee")
 
-                                                     &&  !cancelFlag)
 
-                                                    CommonCall.showExtendBokingDialog(activity);
-                                                 else{
 
-                                                     Intent intent = new Intent(activity, HomeActivity.class);
-                                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                     activity.startActivity(intent);
-                                                     activity.finish();
-
-                                                 }
-
-                                            } else {
+                                                {
 
                                                 Intent intent = new Intent(activity, HomeActivity.class);
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
