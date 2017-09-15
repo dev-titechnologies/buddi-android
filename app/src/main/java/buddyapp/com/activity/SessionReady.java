@@ -696,9 +696,78 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                     public void onReceive(Context context, Intent intent) {
 
 
-                        String bookid = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
 
-                        new CommonCall.timerUpdate(SessionReady.this, "complete", bookid, "").execute();
+
+
+
+//                        new CommonCall.timerUpdate(SessionReady.this, "complete", bookid, "").execute();
+
+                        {
+
+                            PreferencesUtils.saveData(Constants.flag_rating,"true",getApplicationContext());
+                            //clearing last payment id to avoid multiple payments
+                            PreferencesUtils.saveData(Constants.transactionId, "", getApplicationContext());
+
+
+
+
+                            {
+
+                                android.app.AlertDialog.Builder builder;
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    builder = new android.app.AlertDialog.Builder(getApplicationContext(), android.R.style.Theme_Material_Dialog_Alert);
+                                } else {
+                                    builder = new android.app.AlertDialog.Builder(getApplicationContext());
+                                }
+//                        if(!((Activity) activity).isFinishing())
+                                {
+
+                                    builder.setMessage("Session has completed")
+                                            .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    // continue with delete
+
+//
+                                                    dialog.dismiss();
+                                                    if (!Timer_Service.stopFlag) {
+
+                                                        if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainee")
+
+                                                                &&  !cancelFlag)
+
+                                                            CommonCall.showExtendBokingDialog(SessionReady.this);
+                                                        else{
+
+                                                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                         startActivity(intent);
+                                                            finish();
+
+                                                        }
+
+                                                    } else {
+
+                                                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                       startActivity(intent);
+                                                       finish();
+
+
+                                                    }
+                                                }
+                                            })
+
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .show();
+                                    //show dialog
+                                }
+
+
+                            }
+
+
+                        }
+
 
                     }
                 }, new IntentFilter("BUDDI_TRAINER_SESSION_FINISH")
