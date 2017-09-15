@@ -119,9 +119,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     String pick_latitude = "0", pick_longitude = "0", pick_location;
 
 
+    public static boolean cancelFlag = false;
 
-
-   public  static boolean cancelFlag =false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -396,7 +395,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                         if (reason.getText().toString().length() > 1) {
                             dialog.dismiss();
-                            cancelFlag=true;
+                            cancelFlag = true;
                             new CommonCall.timerUpdate(SessionReady.this, "cancel", book_id, reason.getText().toString()).execute();
 
 
@@ -548,10 +547,11 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                     public void onReceive(Context context, Intent intent) {
 
 
-
-
                         CommonCall.hideLoader();
-                        Count.cancel();
+
+                        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer"))
+                            Count.cancel();
+
                         startactionTitle.setText("Start");
                         startactionIcon.setImageResource(R.mipmap.play);
 
@@ -565,19 +565,19 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 //                        if(!((Activity) activity).isFinishing())
 
 
-                            builder.setMessage("Session has been extended ")
-                                    .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
+                        builder.setMessage("Session has been extended ")
+                                .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
 
 
-                                            dialog.dismiss();
+                                        dialog.dismiss();
 
-                                        }
-                                    })
+                                    }
+                                })
 
-                                    .setIcon(android.R.drawable.ic_dialog_alert)
-                                    .show();
-                            //show dialog
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                        //show dialog
                     }
                 }, new IntentFilter("BUDDI_SESSION_EXTEND")
 
@@ -608,7 +608,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     void stopAction() {
         Timer_Service.stopFlag = true;
         PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
-        PreferencesUtils.saveData(Constants.flag_rating,"true",getApplicationContext());
+        PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
 
         startactionTitle.setText("Start");
         startactionIcon.setImageResource(R.mipmap.play);
@@ -658,7 +658,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     }
 
 
-    public  CountDownTimer Count;
+    public CountDownTimer Count;
 
     void stopauto() {
 
@@ -667,7 +667,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
-                        CommonCall.showLoader(SessionReady.this,"Completing session Please wait.");
+                        CommonCall.showLoader(SessionReady.this, "Completing session Please wait.");
                         if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
                             Count = new android.os.CountDownTimer(60000, 1000) {
                                 public void onTick(long millisUntilFinished) {
@@ -692,7 +692,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                         } else
 
 
-                            {
+                        {
 
                             CommonCall.PrintLog("NO TIMMER  ", "NO TIMMER ");
 
@@ -717,16 +717,15 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                         {
 
-                            if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainee")
+                            if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee")
 
-                                    &&  !cancelFlag) {
-
+                                    && !cancelFlag) {
 
 
                                 CommonCall.showExtendBokingDialog(SessionReady.this);
 
 
-                            } else{
+                            } else {
 
 //                                Intent intenthome = new Intent(getApplicationContext(), HomeActivity.class);
 //                                intenthome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -734,8 +733,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 //                                finish();
 
 
-
-                                CommonCall.showLoader(SessionReady.this,"Completing session Please wait.");
+                                CommonCall.showLoader(SessionReady.this, "Completing session Please wait.");
                                 if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
                                     Count = new android.os.CountDownTimer(60000, 1000) {
                                         public void onTick(long millisUntilFinished) {
@@ -760,7 +758,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                                         }
                                     };
                                     Count.start();
-                                }else {
+                                } else {
 
 
                                     String bookid = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
@@ -773,12 +771,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                         }
 
 
-
-
 //
-
-
-
 
 
                     }
@@ -1262,7 +1255,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                     PreferencesUtils.saveData("data", date_time, getApplicationContext());
 //                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
-                    PreferencesUtils.saveData("hours",  "1", getApplicationContext());
+                    PreferencesUtils.saveData("hours", "1", getApplicationContext());
 
 
                     startService(new Intent(getApplicationContext(), Timer_Service.class));
