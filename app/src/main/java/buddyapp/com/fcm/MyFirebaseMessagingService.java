@@ -198,7 +198,7 @@ startActivity(resultIntent);
             }
             else if(json.getInt("type")==6){
                 JSONObject data = json.getJSONObject("data");
-                Intent resultIntent = new Intent(getApplicationContext(), RequestActivity.class);
+                Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
                 resultIntent.putExtra("message",data.toString());
                 resultIntent.putExtra("title",title);
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);

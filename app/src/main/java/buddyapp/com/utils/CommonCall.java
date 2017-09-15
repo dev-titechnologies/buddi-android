@@ -578,21 +578,38 @@ public class CommonCall {
         });
 
     }
-
+    static AlertDialog dialogExtend = null;
     public static void showExtendBokingDialog(final Activity activity) {
+
+        // Hide after some seconds
+        final Handler handler  = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (dialogExtend.isShowing()) {
+                    dialogExtend.dismiss();
+
+                    Intent intent = new Intent(activity, HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    activity.startActivity(intent);
+                    activity.finish();
+                }
+            }
+        };
+
         DialogInterface.OnClickListener extbuilderdialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         //Yes button clicked
-
+                        handler.removeCallbacks(runnable);
                         picSessionTimeDialog(activity);
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
                         //No button clicked
-
+                        handler.removeCallbacks(runnable);
 
                         Intent intent = new Intent(activity, HomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -603,12 +620,33 @@ public class CommonCall {
             }
         };
 
-        AlertDialog.Builder extbuilder = new AlertDialog.Builder(activity);
+
+
+
+        final AlertDialog.Builder extbuilder = new AlertDialog.Builder(activity);
         extbuilder.setCancelable(false);
         extbuilder.setMessage("Are you sure you want to Extend this session?").setPositiveButton("Yes", extbuilderdialogClickListener)
-                .setNegativeButton("No", extbuilderdialogClickListener).show();
+                .setNegativeButton("No", extbuilderdialogClickListener);
+
+        dialogExtend = extbuilder.create();
+        dialogExtend.show();
+
+        handler.postDelayed(runnable, 30000);
+
+        dialogExtend.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                handler.removeCallbacks(runnable);
+
+
+            }
+        });
 
     }
+
+
+
+
 
     public static class extendSession extends AsyncTask<String, String, String> {
 
