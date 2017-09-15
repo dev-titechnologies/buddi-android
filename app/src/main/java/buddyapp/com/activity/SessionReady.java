@@ -16,6 +16,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -532,11 +533,38 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
+
+
+
+
                         CommonCall.hideLoader();
                         Count.cancel();
                         startactionTitle.setText("Start");
                         startactionIcon.setImageResource(R.mipmap.play);
 
+
+                        android.app.AlertDialog.Builder builder;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            builder = new android.app.AlertDialog.Builder(SessionReady.this, android.R.style.Theme_Material_Dialog_Alert);
+                        } else {
+                            builder = new android.app.AlertDialog.Builder(SessionReady.this);
+                        }
+//                        if(!((Activity) activity).isFinishing())
+
+
+                            builder.setMessage("Session has been extended ")
+                                    .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+
+
+                                            dialog.dismiss();
+
+                                        }
+                                    })
+
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                            //show dialog
                     }
                 }, new IntentFilter("BUDDI_SESSION_EXTEND")
 
@@ -627,7 +655,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                     public void onReceive(Context context, Intent intent) {
                         CommonCall.showLoader(SessionReady.this,"Completing session Please wait.");
                         if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
-                            Count = new android.os.CountDownTimer(30000, 1000) {
+                            Count = new android.os.CountDownTimer(60000, 1000) {
                                 public void onTick(long millisUntilFinished) {
 //                                textic.setText("Time Left: " + millisUntilFinished / 1000);
 

@@ -198,6 +198,7 @@ startActivity(resultIntent);
             }
             else if(json.getInt("type")==6){
 
+
                 if (PreferencesUtils.getData(Constants.user_type,Controller.getAppContext(),"").equals("trainer")) {
                     JSONObject data = json.getJSONObject("data");
                     Intent resultIntent = new Intent(getApplicationContext(), RequestActivity.class);
