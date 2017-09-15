@@ -196,6 +196,7 @@
                         android:gravity="center"
                         android:textColor="@color/white"
                         android:id="@+id/address"
+                        android:hint="Place"
                         android:background="@color/colorPrimary"
                         android:text=""/>
                 </android.support.v7.widget.CardView>

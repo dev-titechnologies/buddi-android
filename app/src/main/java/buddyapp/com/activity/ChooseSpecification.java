@@ -52,13 +52,10 @@ public class ChooseSpecification extends AppCompatActivity {
     Button next;
     private static final int PLACE_PICKER_REQUEST = 1;
     Boolean check1=false, check2=false, check3 =false;
-    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
-            new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
-
+    static LatLngBounds BOUNDS_MOUNTAIN_VIEW = null;
     private FusedLocationProviderClient mFusedLocationClient;
     LocationManager mLocationManager;
     double longitude, latitude, mlongitude,mlatitude;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +95,9 @@ public class ChooseSpecification extends AppCompatActivity {
                             latitude = location.getLatitude();
                             PreferencesUtils.saveData(Constants.latitude, String.valueOf(latitude), getApplicationContext());
                             PreferencesUtils.saveData(Constants.longitude, String.valueOf(longitude),getApplicationContext());
+                            BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+                                    new LatLng(latitude, longitude), new LatLng(longitude, longitude));
+
                         }
                     }
                 });
