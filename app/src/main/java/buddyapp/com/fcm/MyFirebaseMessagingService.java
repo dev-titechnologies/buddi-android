@@ -207,7 +207,7 @@ startActivity(resultIntent);
                     showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
 
                     Intent intent = new Intent("BUDDI_SESSION_EXTEND");
-
+                    intent.putExtra("extend_time",data.getString("extend_time"));
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                 }
 

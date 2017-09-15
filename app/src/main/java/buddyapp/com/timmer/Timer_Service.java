@@ -213,22 +213,26 @@ public class Timer_Service extends Service {
 
 //        stopForeground(true);
         createStopSessionNoti("Session Completed");
-        PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
-        PreferencesUtils.saveData(Constants.trainee_Data, "", getApplicationContext());
-        PreferencesUtils.saveData(Constants.trainer_Data, "", getApplicationContext());
+//        PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
+//        PreferencesUtils.saveData(Constants.trainee_Data, "", getApplicationContext());
+//        PreferencesUtils.saveData(Constants.trainer_Data, "", getApplicationContext());
 
-
+CommonCall.PrintLog("BEFORE BROADCAST",stopFlag+"");
         if (!stopFlag)
         {
+
+
             Intent intent = new Intent("BUDDI_TRAINER_SESSION_FINISH");
 
             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-
+            CommonCall.PrintLog("AFTER BROADCAST",stopFlag+"");
 
 //            new CommonCall.timerUpdate((Activity) getApplicationContext(), "complete", bookid, "").execute();
 
 
         }
+
+        CommonCall.PrintLog("AFTER BROADCAST 2",stopFlag+"");
 //        mNotificationManager.cancel(100);
 //        mNotificationManager = null;
 //        createStopSessionNoti(text);

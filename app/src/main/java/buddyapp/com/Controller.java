@@ -121,12 +121,13 @@ public class Controller extends Application {
             CommonCall.PrintLog("received socket", jsonObject.toString());
             try {
                 if(jsonObject.getString("type").equals("location")) {
-                    JSONObject object = jsonObject.getJSONObject("message");
+
+//                    JSONObject object = jsonObject.getJSONObject("message");
 
 //                    sendBroadcastTrainerLocation(object.getString("latitude"), object.getString("longitude"));
-                    CommonCall.PrintLog("lat", object.getString("latitude"));
-                    CommonCall.PrintLog("lng", object.getString("longitude"));
-                    CommonCall.PrintLog("availabilityStatus", object.getString("availabilityStatus"));
+//                    CommonCall.PrintLog("lat", object.getString("latitude"));
+//                    CommonCall.PrintLog("lng", object.getString("longitude"));
+//                    CommonCall.PrintLog("availabilityStatus", object.getString("availabilityStatus"));
                 }else if(jsonObject.getString("type").equals("chat")){
                     JSONObject object = jsonObject.getJSONObject("message");
                     sendBroadcastChatMessage(object.getString("text"),object.getString("from_id"),

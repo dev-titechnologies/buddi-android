@@ -330,7 +330,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             public void onClick(View view) {
 
                 if (startactionTitle.getText().toString().equals("Start")) {
-
+                    Timer_Service.stopFlag = false;
                     new StartSession().execute();
                     profile.setEnabled(false);
                     message.setEnabled(false);
@@ -510,7 +510,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     protected void onResume() {
         super.onResume();
 
-        Controller.listenEvent();
+//        Controller.listenEvent();
         startauto();
         stopauto();
         registerReceiver(br, new IntentFilter(Timer_Service.str_receiver));
@@ -553,8 +553,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                             Count.cancel();
 
                         startactionTitle.setText("Start");
+                        duration = intent.getStringExtra("extend_time");
                         startactionIcon.setImageResource(R.mipmap.play);
-
+start.performClick();
                         Toast.makeText(context, "Your Session has been Extended.", Toast.LENGTH_SHORT).show();
             }
                 }, new IntentFilter("BUDDI_SESSION_EXTEND")
@@ -644,41 +645,59 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
+if (Count==null) {
+    CommonCall.showLoader(SessionReady.this, "Completing session Please wait.");
+    if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
 
-                        CommonCall.showLoader(SessionReady.this, "Completing session Please wait.");
-                        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
-                            Count = new android.os.CountDownTimer(60000, 1000) {
-                                public void onTick(long millisUntilFinished) {
+
+        Count = new android.os.CountDownTimer(60000, 1000) {
+            public void onTick(long millisUntilFinished) {
 //                                textic.setText("Time Left: " + millisUntilFinished / 1000);
 
 
-                                    CommonCall.PrintLog("timmer ", "tick" + millisUntilFinished / 1000);
-                                }
+                CommonCall.PrintLog("timmer ", "tick" + millisUntilFinished / 1000);
+            }
 
-                                public void onFinish() {
+            public void onFinish() {
 //                                textic.setText("OUT OF TIME!");
-                                    CommonCall.hideLoader();
-                                    CommonCall.PrintLog("timmer ", "tick onFinish");
+                CommonCall.hideLoader();
+                CommonCall.PrintLog("timmer ", "tick onFinish");
 
 
-                                    PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
-                                    stopSession();
+                PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+                stopSession();
 
-                                }
-                            };
-                            Count.start();
-                        } else
+            }
+        };
+        Count.start();
+    } else
 
 
-                        {
+    {
 
-                            CommonCall.PrintLog("NO TIMMER  ", "NO TIMMER ");
+        CommonCall.PrintLog("NO TIMMER  ", "NO TIMMER ");
 
-                            PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
-                            stopSession();
-                        }
+        PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+        stopSession();
+    }
+}else{
 
+    /*
+    *
+    * if alredy showing the loader and get stop auto from push
+    *
+    * */
+    Count.cancel();
+    CommonCall.hideLoader();
+    CommonCall.PrintLog("timmer ", "tick onFinish");
+
+
+    PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+    stopSession();
+}
                     }
+
+
                 }, new IntentFilter("BUDDI_TRAINER_STOP")
 
 
@@ -765,7 +784,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         super.onDestroy();
         unregisterReceiver(br);
 
-//        mSocket.disconnect();
+
+        if (mSocket!=null)
+        mSocket.disconnect();
     }
 
     public void animateMarker(final Marker marker, final LatLng toPosition,
@@ -1217,6 +1238,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 if (obj.getInt("status") == 1) {
 
 
+
+                    if (!obj.getString("message").equals("Already Requested!"))
+
                     Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
 
 
@@ -1244,7 +1268,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
                 } else if (obj.getInt("status") == 2) {
-//                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
 
                 } else if (obj.getInt("status") == 3) {
                     Toast.makeText(getApplicationContext(), "Session out", Toast.LENGTH_SHORT).show();
