@@ -171,9 +171,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 pick_longitude = data.getString("pick_longitude");
                 pick_location = data.getString("pick_location");
                 PreferencesUtils.saveData(Constants.trainee_name, name, getApplicationContext());
-                if (data.getString("trainer_user_image").length() > 1) {
-                    PreferencesUtils.saveData(Constants.trainer_image, data.getString("trainee_user_image"), getApplicationContext());
-                }
+//                if (data.getString("trainer_user_image").length() > 1) {
+//                    PreferencesUtils.saveData(Constants.trainer_image, data.getString("trainee_user_image"), getApplicationContext());
+//                }
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
                 updateSocket();
                 mSocket.connect();
@@ -228,8 +228,21 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
         }
 
-        origin = camera;
-        dest = usercamera;
+        origin = usercamera;
+        dest = camera;
+        LoadmapTask();
+        /*googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usercamera, 14), new GoogleMap.CancelableCallback() {
+            @Override
+            public void onFinish() {
+                LoadmapTask();
+//                                animateMarker(pos_Marker, camera, false, 0.0f);
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });*/
 
 
 /****
@@ -240,10 +253,10 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             cancel.setEnabled(false);
             startactionIcon.setImageResource(R.mipmap.stop_blue);
         }
-        LoadmapTask();
+//        LoadmapTask();
 
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(
+/*        LocalBroadcastManager.getInstance(this).registerReceiver(
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
@@ -273,7 +286,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 }, new IntentFilter("SOCKET_BUDDI_TRAINER_LOCATION")
 
 
-        );
+        );*/
     }
 
     HorizontalScrollView horizontalScrollView;
@@ -696,75 +709,15 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                     public void onReceive(Context context, Intent intent) {
 
 
-
-
-//                        new CommonCall.timerUpdate(SessionReady.this, "complete", bookid, "").execute();
-
-                        {
-
-                            PreferencesUtils.saveData(Constants.flag_rating,"true",getApplicationContext());
-                            //clearing last payment id to avoid multiple payments
-                            PreferencesUtils.saveData(Constants.transactionId, "", getApplicationContext());
+                        String bookid = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
 
 
 
 
-                            {
-
-                                android.app.AlertDialog.Builder builder;
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    builder = new android.app.AlertDialog.Builder(getApplicationContext(), android.R.style.Theme_Material_Dialog_Alert);
-                                } else {
-                                    builder = new android.app.AlertDialog.Builder(getApplicationContext());
-                                }
-//                        if(!((Activity) activity).isFinishing())
-                                {
-
-                                    builder.setMessage("Session has completed")
-                                            .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    // continue with delete
-
-//
-                                                    dialog.dismiss();
-                                                    if (!Timer_Service.stopFlag) {
-
-                                                        if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainee")
-
-                                                                &&  !cancelFlag)
-
-                                                            CommonCall.showExtendBokingDialog(SessionReady.this);
-                                                        else{
-
-                                                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                         startActivity(intent);
-                                                            finish();
-
-                                                        }
-
-                                                    } else {
-
-                                                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                       startActivity(intent);
-                                                       finish();
+                        new CommonCall.timerUpdate(SessionReady.this, "complete", bookid, "").execute();
 
 
-                                                    }
-                                                }
-                                            })
 
-                                            .setIcon(android.R.drawable.ic_dialog_alert)
-                                            .show();
-                                    //show dialog
-                                }
-
-
-                            }
-
-
-                        }
 
 
                     }
