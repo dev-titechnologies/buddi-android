@@ -56,6 +56,7 @@ import buddyapp.com.services.LocationService;
 import buddyapp.com.timmer.Timer_Service;
 
 import static buddyapp.com.Settings.Constants.start_session;
+import static buddyapp.com.activity.SessionReady.cancelFlag;
 
 /**
  * Created by Ajay on 15/6/16.
@@ -285,6 +286,19 @@ public class CommonCall {
 
 
     public static ProgressDialog pd;
+
+    public static void showLoader(Activity yourActivity,String msg) {
+
+        pd = new ProgressDialog(yourActivity);
+        pd.setMessage(msg);
+        pd.setCancelable(false);
+        if (!((Activity) yourActivity).isFinishing()) {
+            pd.show();
+        }
+
+
+    }
+
 
     public static void showLoader(Activity yourActivity) {
 
@@ -761,11 +775,12 @@ CommonCall.hideLoader();
                                             dialog.dismiss();
                                             if (!Timer_Service.stopFlag) {
 
-                                                 if(PreferencesUtils.getData(Constants.user_type,activity,"").equals("trainee"))
-                                                 {
-                                                     PreferencesUtils.saveData(Constants.flag_rating,"true",activity);
-                                                     CommonCall.showExtendBokingDialog(activity);
-                                                 }
+
+                                                 if(PreferencesUtils.getData(Constants.user_type,activity,"").equals("trainee")
+
+                                                     &&  !cancelFlag)
+
+                                                    CommonCall.showExtendBokingDialog(activity);
                                                  else{
                                                      Intent intent = new Intent(activity, HomeActivity.class);
                                                      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -773,6 +788,7 @@ CommonCall.hideLoader();
                                                      activity.finish();
 
                                                  }
+
                                             } else {
 
                                                 Intent intent = new Intent(activity, HomeActivity.class);

@@ -218,7 +218,8 @@ public class Timer_Service extends Service {
         PreferencesUtils.saveData(Constants.trainer_Data, "", getApplicationContext());
 
 
-        if (!stopFlag) {
+        if (!stopFlag)
+        {
             Intent intent = new Intent("BUDDI_TRAINER_SESSION_FINISH");
 
             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);

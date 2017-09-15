@@ -115,8 +115,12 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     ImageView startactionIcon, stopactionIcon, profileactionIcon, messageactionIcon, cancelactionIcon;
     TextView startactionTitle, stopactionTitle, profileactionTitle, messageactionTitle, sessionTimmer;
 
-    String pick_latitude="0", pick_longitude="0", pick_location;
+    String pick_latitude = "0", pick_longitude = "0", pick_location;
 
+
+
+
+   public  static boolean cancelFlag =false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,9 +169,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 pick_latitude = data.getString("pick_latitude");
                 pick_longitude = data.getString("pick_longitude");
                 pick_location = data.getString("pick_location");
-                PreferencesUtils.saveData(Constants.trainee_name,name,getApplicationContext());
-                if(data.getString("trainer_user_image").length()>1){
-                    PreferencesUtils.saveData(Constants.trainer_image,data.getString("trainee_user_image"),getApplicationContext());
+                PreferencesUtils.saveData(Constants.trainee_name, name, getApplicationContext());
+                if (data.getString("trainer_user_image").length() > 1) {
+                    PreferencesUtils.saveData(Constants.trainer_image, data.getString("trainee_user_image"), getApplicationContext());
                 }
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
                 updateSocket();
@@ -191,10 +195,10 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 pick_latitude = data.getString("pick_latitude");
                 pick_longitude = data.getString("pick_longitude");
                 pick_location = data.getString("pick_location");
-                PreferencesUtils.saveData(Constants.trainer_name,name,getApplicationContext());
-        if(trainerDetail.getString("trainer_user_image").length()>1){
-            PreferencesUtils.saveData(Constants.trainer_image,trainerDetail.getString("trainer_user_image"),getApplicationContext());
-        }
+                PreferencesUtils.saveData(Constants.trainer_name, name, getApplicationContext());
+                if (trainerDetail.getString("trainer_user_image").length() > 1) {
+                    PreferencesUtils.saveData(Constants.trainer_image, trainerDetail.getString("trainer_user_image"), getApplicationContext());
+                }
 
                 updateSocket();
                 Controller.mSocket.connect();
@@ -378,7 +382,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                         if (reason.getText().toString().length() > 1) {
                             dialog.dismiss();
-
+                            cancelFlag=true;
                             new CommonCall.timerUpdate(SessionReady.this, "cancel", book_id, reason.getText().toString()).execute();
 
 
@@ -504,8 +508,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     }
 
 
-
-    void cancelAuto(){
+    void cancelAuto() {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 new BroadcastReceiver() {
@@ -529,7 +532,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-
+                        CommonCall.hideLoader();
+                        Count.cancel();
                         startactionTitle.setText("Start");
                         startactionIcon.setImageResource(R.mipmap.play);
 
@@ -613,7 +617,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     }
 
 
-    public CountDownTimer Count;
+    public  CountDownTimer Count;
 
     void stopauto() {
 
@@ -621,7 +625,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-
+                        CommonCall.showLoader(SessionReady.this,"Completing session Please wait.");
                         if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
                             Count = new android.os.CountDownTimer(30000, 1000) {
                                 public void onTick(long millisUntilFinished) {
@@ -633,7 +637,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                                 public void onFinish() {
 //                                textic.setText("OUT OF TIME!");
-
+                                    CommonCall.hideLoader();
                                     CommonCall.PrintLog("timmer ", "tick onFinish");
 
 
@@ -642,7 +646,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                                 }
                             };
-
+                            Count.start();
                         } else {
 
                             CommonCall.PrintLog("NO TIMMER  ", "NO TIMMER ");
@@ -662,9 +666,13 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
+
+
                         String bookid = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
 
+
                         new CommonCall.timerUpdate(SessionReady.this, "complete", bookid, "").execute();
+                        CommonCall.PrintLog("test","before timmer update");
 
                     }
                 }, new IntentFilter("BUDDI_TRAINER_SESSION_FINISH")
@@ -1158,7 +1166,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
                 } else if (obj.getInt("status") == 2) {
-                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
 
                 } else if (obj.getInt("status") == 3) {
                     Toast.makeText(getApplicationContext(), "Session out", Toast.LENGTH_SHORT).show();

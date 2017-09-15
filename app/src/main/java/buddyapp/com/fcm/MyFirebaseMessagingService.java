@@ -198,6 +198,17 @@ startActivity(resultIntent);
             }
             else if(json.getInt("type")==6){
 
+                if (PreferencesUtils.getData(Constants.user_type,Controller.getAppContext(),"").equals("trainer")) {
+                    JSONObject data = json.getJSONObject("data");
+                    Intent resultIntent = new Intent(getApplicationContext(), RequestActivity.class);
+                    resultIntent.putExtra("message", data.toString());
+                    resultIntent.putExtra("title", title);
+                    showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
+
+                    Intent intent = new Intent("BUDDI_SESSION_EXTEND");
+
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                }
 
             }
 
