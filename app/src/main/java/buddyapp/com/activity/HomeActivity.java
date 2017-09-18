@@ -47,6 +47,7 @@ import buddyapp.com.activity.Fragment.TrainerProfileFragment;
 import buddyapp.com.activity.Payments.PaymentType;
 import buddyapp.com.fcm.Config;
 import buddyapp.com.fcm.NotificationUtils;
+import buddyapp.com.timmer.Timer_Service;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
@@ -228,18 +229,27 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
+            if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
 
-            getSupportActionBar().setTitle("Buddi");
+                startService(new Intent(getApplicationContext(), Timer_Service.class));
 
-            if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)) {
-                Fragment fragment = new TrainerProfileFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+                startActivity(new Intent(getApplicationContext(), SessionReady.class));
+                finish();
+            } else {
+                getSupportActionBar().setTitle("Buddi");
 
-            }else {
-                Fragment fragment = new HomeCategory();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+                if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals(Constants.trainer)) {
+                    Fragment fragment = new TrainerProfileFragment();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+
+                } else {
+                    Fragment fragment = new HomeCategory();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+                }
+
+
             }
 
         } else if (id == R.id.nav_settings) {
