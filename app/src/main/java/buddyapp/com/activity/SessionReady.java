@@ -11,16 +11,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -31,8 +26,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Interpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
@@ -44,9 +37,7 @@ import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -823,7 +814,7 @@ new BroadcastReceiver() {
         String sensor = "sensor=false";
         String mode = "mode=driving";
 
-        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+        String parameters = str_origin + "&" + str_dest + "&" + sensor+"&Key="+getString(R.string.google_api_key);
 
         // Building the parameters to the web service
 //            String parameters = origin + "&" + dest + "&" + sensor + "&" + mode;
@@ -910,24 +901,10 @@ new BroadcastReceiver() {
 
         this.googleMap = googleMap;
 
-/*
-        MapRipple mapRipple = new MapRipple(googleMap, usercamera, getApplicationContext());
-        mapRipple.withNumberOfRipples(1);
-        mapRipple.withFillColor(getResources().getColor(R.color.login_bgcolor));
-        mapRipple.withStrokeColor(Color.BLACK);
-        mapRipple.withStrokewidth(1);      // 10dp
-        mapRipple.withDistance(100);      // 2000 metres radius
-        mapRipple.withRippleDuration(5000);    //12000ms
-        mapRipple.withTransparency(0.9f);
-        mapRipple.startRippleMapAnimation();
-*/
-
         showMarker();
         googleMap.setMyLocationEnabled(true);
 
-
-
-        /*googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 13));
+      /*googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 13));
         Marker pos_Marker =  googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher)).title("Starting Location").draggable(false));
         pos_Marker.showInfoWindow();*/
 
@@ -952,7 +929,7 @@ new BroadcastReceiver() {
 
     @Override
     public void onLocationChanged(Location location) {
-
+        if(googleMap!=null)
         googleMap.clear();
 
         MarkerOptions mp = new MarkerOptions();
@@ -963,8 +940,8 @@ new BroadcastReceiver() {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(location.getLatitude(), location.getLongitude()), 16));
         origin = new LatLng(location.getLatitude(),location.getLongitude());
-//        if(origin.latitude!=0)
-//        LoadmapTask();
+        if(origin.latitude!=0)
+        LoadmapTask();
     }
 
     @Override
