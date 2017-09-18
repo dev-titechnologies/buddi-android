@@ -42,7 +42,7 @@ dependencies {
     compile 'com.braintreepayments.api:drop-in:3.0.8'
     compile 'com.google.firebase:firebase-messaging:11.0.4'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-
+    compile 'com.wang.avi:library:2.1.3'
 }
 
 

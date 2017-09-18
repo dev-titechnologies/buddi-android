@@ -56,12 +56,20 @@ public class RatingDialog extends Dialog {
         submit  = (TextView) findViewById(R.id.submit);
 
         if(PreferencesUtils.getData(Constants.user_type,context,"").equals("trainee")){
+
         if(PreferencesUtils.getData(Constants.trainer_image,context,"").length()>1)
             CommonCall.LoadImage(context,PreferencesUtils.getData(Constants.trainer_image,context,""),userImage,R.drawable.ic_account,R.drawable.ic_account);
         else
             userImage.setImageResource(R.drawable.ic_account);
+
+        name.setText(PreferencesUtils.getData(Constants.trainer_name,context,"").toString());
+        userType.setText("Trainer");
+
         }else{
-         if(PreferencesUtils.getData(Constants.trainee_image,context,"").length()>1)
+            name.setText(PreferencesUtils.getData(Constants.trainee_name,context,"").toString());
+            userType.setText("Trainee");
+
+            if(PreferencesUtils.getData(Constants.trainee_image,context,"").length()>1)
              CommonCall.LoadImage(context,PreferencesUtils.getData(Constants.trainee_image,context,""),userImage,R.drawable.ic_account,R.drawable.ic_account);
          else
              userImage.setImageResource(R.drawable.ic_account);

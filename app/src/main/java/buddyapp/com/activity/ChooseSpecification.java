@@ -376,7 +376,7 @@ public class ChooseSpecification extends AppCompatActivity {
     private void placePicker(){
         try {
             PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
-            intentBuilder.setLatLngBounds(BOUNDS_MOUNTAIN_VIEW);
+//            intentBuilder.setLatLngBounds(BOUNDS_MOUNTAIN_VIEW);
             Intent intent = intentBuilder.build(ChooseSpecification.this);
             startActivityForResult(intent, PLACE_PICKER_REQUEST);
 

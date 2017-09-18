@@ -204,11 +204,11 @@ public class GPSTracker extends Service implements LocationListener {
                 dialog.cancel();
             }
         });
-        AlertDialog dialog = alertDialog.create();
-        dialog.show();
+       /* AlertDialog dialog = alertDialog.create();
+        dialog.show();*/
         // Showing Alert Message
         alertDialog.show();
-            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false); //BUTTON1 is positive button
+//            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false); //BUTTON1 is positive button
     }
 
     /**

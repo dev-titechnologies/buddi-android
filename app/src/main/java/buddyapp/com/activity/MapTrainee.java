@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,6 +58,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
     String sgender,lat, lng, category,duration, pick_latitude,pick_longitude,pick_location;
     private HashMap<Marker, String> hashMarker = new HashMap<Marker, String>();
 
+    AVLoadingIndicatorView avi;
 
     int resultPayment=403;
     @Override
@@ -82,7 +84,8 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                avi = new AVLoadingIndicatorView(getApplicationContext());
+        avi.hide();
                     {
 
                     if (PreferencesUtils.getData(Constants.clientToken, getApplicationContext(), "").length() > 1) {
@@ -122,8 +125,8 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 * getting payment
 *
 * */
-        CommonCall.showLoader(MapTrainee.this);
-
+//        CommonCall.showLoader(MapTrainee.this);
+        avi.show();
         DropInResult.fetchDropInResult(MapTrainee.this, PreferencesUtils.getData(Constants.clientToken,getApplicationContext(),""), new DropInResult.DropInResultListener() {
             @Override
             public void onError(Exception exception) {
@@ -347,18 +350,22 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 
 
 
-                }else if(obj.getInt("status") == 2){ CommonCall.hideLoader();
+                }else if(obj.getInt("status") == 2){
+                    avi.hide();
+//                    CommonCall.hideLoader();
                     Toast.makeText(MapTrainee.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
 
 
                 }else{
+                    avi.hide();
                     CommonCall.hideLoader();
 
 
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+                avi.hide();
                 CommonCall.hideLoader();
                 Toast.makeText(MapTrainee.this, Constants.server_error_message, Toast.LENGTH_SHORT).show();
 
@@ -433,7 +440,8 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                     new RandomSelect().execute();
 
                 } else if (response.getInt(Constants.status) == 2) {
-                    CommonCall.hideLoader();
+                    avi.hide();
+//                    CommonCall.hideLoader();
 //                Snackbar snackbar = Snackbar
 //                        .make(root, response.getString(Constants.message), Snackbar.LENGTH_INDEFINITE)
 //                        .setAction("RETRY", new View.OnClickListener() {
@@ -453,13 +461,15 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 //
 //                snackbar.show();
                 } else if (response.getInt(Constants.status) == 3) {
-                    CommonCall.hideLoader();
+                avi.hide();
+// CommonCall.hideLoader();
                     CommonCall.sessionout(activity);
                 }
 
 
             } catch (JSONException e) {
-                CommonCall.hideLoader();
+                avi.hide();
+//                CommonCall.hideLoader();
                 e.printStackTrace(); CommonCall.hideLoader();
             }
         }
@@ -475,12 +485,13 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 intPayment();
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // the user canceled
-
-                CommonCall.hideLoader();
+                avi.hide();
+//                CommonCall.hideLoader();
                 Toast.makeText(this, "Payment cancelled", Toast.LENGTH_SHORT).show();
 
             } else {
-                CommonCall.hideLoader();
+                avi.hide();
+//                CommonCall.hideLoader();
                 CommonCall.PrintLog("mylog", "Error :403 " );
             }
         }
