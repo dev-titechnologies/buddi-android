@@ -37,8 +37,6 @@ public class RequestActivity extends AppCompatActivity {
 
         title = (TextView) findViewById(R.id.title);
         title.setText(getIntent().getStringExtra("title"));
-
-
         accept = (Button) findViewById(R.id.accept);
         reject = (Button) findViewById(R.id.reject);
 

@@ -11,15 +11,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.Point;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -29,8 +25,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.Interpolator;
-import android.view.animation.LinearInterpolator;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
@@ -42,9 +37,7 @@ import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -68,9 +61,6 @@ import java.util.Calendar;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import buddyapp.com.Controller;
 import buddyapp.com.R;
@@ -80,10 +70,8 @@ import buddyapp.com.activity.chat.ChatActivity;
 import buddyapp.com.services.GPSTracker;
 import buddyapp.com.services.LocationService;
 import buddyapp.com.timmer.Timer_Service;
-import buddyapp.com.utils.AlertDialoge.RatingDialog;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
-import buddyapp.com.utils.RippleMap.MapRipple;
 import buddyapp.com.utils.Urls;
 
 
@@ -91,13 +79,12 @@ import static buddyapp.com.Controller.chatConnect;
 import static buddyapp.com.Controller.mSocket;
 import static buddyapp.com.Controller.updateSocket;
 import static buddyapp.com.R.id.map;
-import static buddyapp.com.R.id.stop;
 import static buddyapp.com.Settings.Constants.start_session;
 import static buddyapp.com.Settings.Constants.trainee_Data;
 import static buddyapp.com.Settings.Constants.trainer_Data;
 
-public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWindowAdapter, OnMapReadyCallback, LocationSource.OnLocationChangedListener {
-    Marker pos_Marker;
+public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWindowAdapter, OnMapReadyCallback, LocationListener {
+    Marker pos_Marker, user_Marker;
     GoogleMap googleMap;
     GPSTracker gps;
     LatLng origin;
@@ -116,7 +103,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     ImageView startactionIcon, stopactionIcon, profileactionIcon, messageactionIcon, cancelactionIcon;
     TextView startactionTitle, stopactionTitle, profileactionTitle, messageactionTitle, sessionTimmer;
 
-    String pick_latitude = "0", pick_longitude = "0", pick_location;
+    Double pick_latitude, pick_longitude;
+    String pick_location;
 
 
     public static boolean cancelFlag = false;
@@ -133,22 +121,22 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
         intstartStop();
 // check if GPS enabled
+
         gps = new GPSTracker(SessionReady.this);
+
         if (gps.canGetLocation()) {
             userlat = gps.getLatitude();
             userlng = gps.getLongitude();
-            usercamera = new LatLng(userlat, userlng); // user current location
+            usercamera = new LatLng(userlat, userlng);
+            if(userlat==null)
+                gps.showSettingsAlert();// user current location
         } else {
-            gps.showSettingsAlert();
-
+            mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+            if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                buildAlertMessageNoGps();
+            }
+           // gps.showSettingsAlert();
         }
-
-      /*  Intent intent = getIntent();
-        lat = intent.getStringExtra(Constants.latitude);
-        lng = intent.getStringExtra(Constants.longitude);
-        name = intent.getStringExtra("name");
-        disatance = intent.getStringExtra("distance");
-*/
 
         try {
 
@@ -166,8 +154,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 lat = data.getJSONObject("trainee_details").getString("trainee_latitude");
                 lng = data.getJSONObject("trainee_details").getString("trainee_longitude");
 
-                pick_latitude = data.getString("pick_latitude");
-                pick_longitude = data.getString("pick_longitude");
+                pick_latitude = Double.valueOf(data.getString("pick_latitude"));
+                pick_longitude = Double.valueOf(data.getString("pick_longitude"));
                 pick_location = data.getString("pick_location");
                 PreferencesUtils.saveData(Constants.trainee_name, name, getApplicationContext());
 //                if (data.getString("trainer_user_image").length() > 1) {
@@ -192,8 +180,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 name = trainerDetail.getString("trainer_first_name") + " " + trainerDetail.getString("trainer_last_name");
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
 
-                pick_latitude = data.getString("pick_latitude");
-                pick_longitude = data.getString("pick_longitude");
+                pick_latitude =  Double.valueOf(data.getString("pick_latitude"));
+                pick_longitude = Double.valueOf(data.getString("pick_longitude"));
                 pick_location = data.getString("pick_location");
                 PreferencesUtils.saveData(Constants.trainer_name, name, getApplicationContext());
                 if (trainerDetail.getString("trainer_user_image").length() > 1) {
@@ -213,12 +201,12 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             e.printStackTrace();
         }
 
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getSupportFragmentManager()
-                .findFragmentById(map);
-        mapFragment.getMapAsync(this);
-// trainer location
+//        SupportMapFragment mapFragment = (SupportMapFragment) this.getSupportFragmentManager()
+//                .findFragmentById(map);
+//        mapFragment.getMapAsync(this);
+// trainging location location
         latitude = Double.valueOf(pick_latitude);
-        longitude = Double.valueOf(pick_latitude);
+        longitude = Double.valueOf(pick_longitude);
         camera = new LatLng(latitude, longitude);
 
         mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
@@ -227,10 +215,10 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             buildAlertMessageNoGps();
 
         }
-
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 100, this );
         origin = usercamera;
         dest = camera;
-        LoadmapTask();
+//        LoadmapTask();
         /*googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usercamera, 14), new GoogleMap.CancelableCallback() {
             @Override
             public void onFinish() {
@@ -524,8 +512,17 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         super.onResume();
 
 //        Controller.listenEvent();
+        if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+        }else{
+            if(origin.latitude!=0) {
+                SupportMapFragment mapFragment = (SupportMapFragment) this.getSupportFragmentManager()
+                        .findFragmentById(map);
+                mapFragment.getMapAsync(this);
+            }
+        }
 
-
+//        LoadmapTask();
     }
 
 
@@ -806,43 +803,6 @@ new BroadcastReceiver() {
         mSocket.disconnect();
     }
 
-    public void animateMarker(final Marker marker, final LatLng toPosition,
-                              final boolean hideMarker, final Float bearing) {
-        final Handler handler = new Handler();
-        final long start = SystemClock.uptimeMillis();
-        Projection proj = googleMap.getProjection();
-        Point startPoint = proj.toScreenLocation(marker.getPosition());
-        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
-        final long duration = 500;
-
-        final Interpolator interpolator = new LinearInterpolator();
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long elapsed = SystemClock.uptimeMillis() - start;
-                float t = interpolator.getInterpolation((float) elapsed
-                        / duration);
-                double lng = t * toPosition.longitude + (1 - t)
-                        * startLatLng.longitude;
-                double lat = t * toPosition.latitude + (1 - t)
-                        * startLatLng.latitude;
-                marker.setPosition(new LatLng(lat, lng));
-                marker.setRotation(bearing);
-                if (t < 1.0) {
-                    // Post again 16ms later.
-                    handler.postDelayed(this, 16);
-                } else {
-                    if (hideMarker) {
-                        marker.setVisible(false);
-                    } else {
-                        marker.setVisible(true);
-                    }
-                }
-            }
-        });
-    }
-
     private void LoadmapTask() {
         if (googleMap != null)
             googleMap.clear();
@@ -854,7 +814,7 @@ new BroadcastReceiver() {
         String sensor = "sensor=false";
         String mode = "mode=driving";
 
-        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+        String parameters = str_origin + "&" + str_dest + "&" + sensor+"&Key="+getString(R.string.google_api_key);
 
         // Building the parameters to the web service
 //            String parameters = origin + "&" + dest + "&" + sensor + "&" + mode;
@@ -870,19 +830,19 @@ new BroadcastReceiver() {
         FetchUrl.execute(url);
 
     }
-
+/******
+ * Showing Training location & Trainer||Trainee location on map
+ ******/
     private void showMarker() {
 
-        try {
+/*      try {
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 13), new GoogleMap.CancelableCallback() {
                 @Override
                 public void onFinish() {
                     try {
 
-
-                        pos_Marker = googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title(name.toUpperCase()).draggable(false));
-                        pos_Marker.showInfoWindow();
-
+//                        user_Marker = googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_man)).title(name.toUpperCase()).draggable(false));
+//                        user_Marker.showInfoWindow();
                         googleMap.setInfoWindowAdapter(SessionReady.this);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -900,11 +860,12 @@ new BroadcastReceiver() {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
+*/
+        pos_Marker = googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title(pick_location).draggable(false));
+        pos_Marker.showInfoWindow();
     }
 
-    private void buildAlertMessageNoGps() {
+    public void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(SessionReady.this, android.R.style.Theme_Material_Dialog_Alert);
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
@@ -919,6 +880,7 @@ new BroadcastReceiver() {
                     }
                 });
         final AlertDialog alert = builder.create();
+        alert.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         if (!((Activity) this).isFinishing()) {
             alert.show();
         }
@@ -939,22 +901,10 @@ new BroadcastReceiver() {
 
         this.googleMap = googleMap;
 
-        MapRipple mapRipple = new MapRipple(googleMap, usercamera, getApplicationContext());
-        mapRipple.withNumberOfRipples(1);
-        mapRipple.withFillColor(getResources().getColor(R.color.login_bgcolor));
-        mapRipple.withStrokeColor(Color.BLACK);
-        mapRipple.withStrokewidth(1);      // 10dp
-        mapRipple.withDistance(100);      // 2000 metres radius
-        mapRipple.withRippleDuration(5000);    //12000ms
-        mapRipple.withTransparency(0.9f);
-        mapRipple.startRippleMapAnimation();
-
         showMarker();
         googleMap.setMyLocationEnabled(true);
 
-
-
-        /*googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 13));
+      /*googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 13));
         Marker pos_Marker =  googleMap.addMarker(new MarkerOptions().position(camera).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher)).title("Starting Location").draggable(false));
         pos_Marker.showInfoWindow();*/
 
@@ -962,12 +912,24 @@ new BroadcastReceiver() {
 //        googleMap.setMapStyle(style);
         googleMap.setInfoWindowAdapter(SessionReady.this);
 
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 14), new GoogleMap.CancelableCallback() {
+            @Override
+            public void onFinish() {
+                LoadmapTask();
+//                                animateMarker(pos_Marker, camera, false, 0.0f);
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
 
     }
 
     @Override
     public void onLocationChanged(Location location) {
-
+        if(googleMap!=null)
         googleMap.clear();
 
         MarkerOptions mp = new MarkerOptions();
@@ -977,6 +939,23 @@ new BroadcastReceiver() {
 
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(location.getLatitude(), location.getLongitude()), 16));
+        origin = new LatLng(location.getLatitude(),location.getLongitude());
+        if(origin.latitude!=0)
+        LoadmapTask();
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
 
     }
 
