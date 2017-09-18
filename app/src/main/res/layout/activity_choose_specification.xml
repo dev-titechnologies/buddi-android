@@ -168,7 +168,7 @@
                 android:textColor="@color/black"
                 android:id="@+id/locaton_preference"
                 android:drawableRight="@drawable/ic_right_arrow"
-                android:text="Location Preference"/>
+                android:text="Choose training location"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
