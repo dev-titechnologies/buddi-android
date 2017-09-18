@@ -206,6 +206,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                 CommonCall.socketGetTrainerLocation();
             }
+
             Controller.listenEvent();
 
         } catch (JSONException e) {
@@ -286,6 +287,18 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
         );*/
+/*
+*
+* br register
+*
+* */
+
+        startauto();
+        stopauto();
+        registerReceiver(br, new IntentFilter(Timer_Service.str_receiver));
+        resetTimmer();
+
+        cancelAuto();
     }
 
     HorizontalScrollView horizontalScrollView;
@@ -511,12 +524,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         super.onResume();
 
 //        Controller.listenEvent();
-        startauto();
-        stopauto();
-        registerReceiver(br, new IntentFilter(Timer_Service.str_receiver));
-        resetTimmer();
 
-        cancelAuto();
 
     }
 
@@ -549,9 +557,11 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                         CommonCall.hideLoader();
 
-                        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer"))
-                            Count.cancel();
+                        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
 
+                           if (Count!=null)
+                            Count.cancel();
+                        }
                         startactionTitle.setText("Start");
                         duration = intent.getStringExtra("extend_time");
                         startactionIcon.setImageResource(R.mipmap.play);
@@ -645,7 +655,12 @@ start.performClick();
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-if (Count==null) {
+
+
+                        stopService(new Intent(getApplicationContext(), Timer_Service.class));
+
+
+                        if (Count==null) {
     CommonCall.showLoader(SessionReady.this, "Completing session Please wait.");
     if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
 
@@ -704,25 +719,32 @@ if (Count==null) {
         );
 
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
+        LocalBroadcastManager.getInstance(this).registerReceiver(brfinsih
+                , new IntentFilter("BUDDI_TRAINER_SESSION_FINISH")
+
+
+        );
+    }
+
+    BroadcastReceiver brfinsih =
+new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
 
 
 //                        if (!Timer_Service.stopFlag)
 
-                        {
+            {
 
-                            if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee")
+                if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee")
 
-                                    && !cancelFlag) {
-
-
-                                CommonCall.showExtendBokingDialog(SessionReady.this);
+                        && !cancelFlag) {
 
 
-                            } else {
+                        CommonCall.showExtendBokingDialog(SessionReady.this);
+
+
+                } else {
 
 //                                Intent intenthome = new Intent(getApplicationContext(), HomeActivity.class);
 //                                intenthome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -730,60 +752,55 @@ if (Count==null) {
 //                                finish();
 
 
-                                CommonCall.showLoader(SessionReady.this, "Completing session Please wait.");
-                                if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
-                                    Count = new android.os.CountDownTimer(60000, 1000) {
-                                        public void onTick(long millisUntilFinished) {
+                    CommonCall.showLoader(SessionReady.this, "Completing session Please wait.");
+                    if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
+                        Count = new android.os.CountDownTimer(60000, 1000) {
+                            public void onTick(long millisUntilFinished) {
 //                                textic.setText("Time Left: " + millisUntilFinished / 1000);
 
 
-                                            CommonCall.PrintLog("timmer ", "tick" + millisUntilFinished / 1000);
-                                        }
-
-                                        public void onFinish() {
-//                                textic.setText("OUT OF TIME!");
-                                            CommonCall.hideLoader();
-                                            CommonCall.PrintLog("timmer ", "tick onFinish");
-
-
-                                            PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
-                                            String bookid = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
-
-
-                                            new CommonCall.timerUpdate(SessionReady.this, "complete", bookid, "").execute();
-
-                                        }
-                                    };
-                                    Count.start();
-                                } else {
-
-
-                                    String bookid = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
-
-
-                                    new CommonCall.timerUpdate(SessionReady.this, "complete", bookid, "").execute();
-                                }
+                                CommonCall.PrintLog("timmer ", "tick" + millisUntilFinished / 1000);
                             }
 
-                        }
+                            public void onFinish() {
+//                                textic.setText("OUT OF TIME!");
+                                CommonCall.hideLoader();
+                                CommonCall.PrintLog("timmer ", "tick onFinish");
+
+
+                                PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+                                String bookid = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
+
+
+                                new CommonCall.timerUpdate(SessionReady.this, "complete", bookid, "").execute();
+
+                            }
+                        };
+                        Count.start();
+                    } else {
+
+
+                        String bookid = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
+
+
+                        new CommonCall.timerUpdate(SessionReady.this, "complete", bookid, "").execute();
+                    }
+                }
+
+            }
 
 
 //
 
 
-                    }
-                }, new IntentFilter("BUDDI_TRAINER_SESSION_FINISH")
-
-
-        );
-    }
-
+        }
+    };
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(br);
-
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(brfinsih);
 
         if (mSocket!=null)
         mSocket.disconnect();

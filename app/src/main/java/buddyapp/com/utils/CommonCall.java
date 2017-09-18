@@ -580,7 +580,10 @@ public class CommonCall {
 
     }
     public static  AlertDialog dialogExtend = null;
+
     public static void showExtendBokingDialog(final Activity activity) {
+
+
 
         // Hide after some seconds
         final Handler handler  = new Handler();

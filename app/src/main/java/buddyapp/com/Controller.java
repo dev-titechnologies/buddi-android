@@ -113,10 +113,16 @@ public class Controller extends Application {
             }
         });
     }
+
+
+    public static boolean listenFlag=true;
     public static void listenEvent() {
+
+        if (listenFlag)
     mSocket.on("message",  new Emitter.Listener() {
         @Override
         public void call(Object... args) {
+            listenFlag=false;
             final JSONObject jsonObject = (JSONObject)args[0];
             CommonCall.PrintLog("received socket", jsonObject.toString());
             try {
