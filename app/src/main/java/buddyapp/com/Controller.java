@@ -113,20 +113,27 @@ public class Controller extends Application {
             }
         });
     }
+
+
+    public static boolean listenFlag=true;
     public static void listenEvent() {
+
+        if (listenFlag)
     mSocket.on("message",  new Emitter.Listener() {
         @Override
         public void call(Object... args) {
+            listenFlag=false;
             final JSONObject jsonObject = (JSONObject)args[0];
             CommonCall.PrintLog("received socket", jsonObject.toString());
             try {
                 if(jsonObject.getString("type").equals("location")) {
-                    JSONObject object = jsonObject.getJSONObject("message");
+
+//                    JSONObject object = jsonObject.getJSONObject("message");
 
 //                    sendBroadcastTrainerLocation(object.getString("latitude"), object.getString("longitude"));
-                    CommonCall.PrintLog("lat", object.getString("latitude"));
-                    CommonCall.PrintLog("lng", object.getString("longitude"));
-                    CommonCall.PrintLog("availabilityStatus", object.getString("availabilityStatus"));
+//                    CommonCall.PrintLog("lat", object.getString("latitude"));
+//                    CommonCall.PrintLog("lng", object.getString("longitude"));
+//                    CommonCall.PrintLog("availabilityStatus", object.getString("availabilityStatus"));
                 }else if(jsonObject.getString("type").equals("chat")){
                     JSONObject object = jsonObject.getJSONObject("message");
                     sendBroadcastChatMessage(object.getString("text"),object.getString("from_id"),

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -334,7 +335,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
 
-
+                    timeOut(obj.getInt("length"));
 
 //                    CommonCall.hideLoader();
 //
@@ -373,6 +374,37 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 
         }
     }
+   public static CountDownTimer CountTimeout;
+    void timeOut(int length){
+/*
+*
+* timeout to finding a trainer
+*
+* */
+
+        CountTimeout = new android.os.CountDownTimer(60000*length, 1000) {
+            public void onTick(long millisUntilFinished) {
+//                                textic.setText("Time Left: " + millisUntilFinished / 1000);
+
+
+                CommonCall.PrintLog("timmer ", "tick" + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+
+                CommonCall.hideLoader();
+
+
+             Toast.makeText(MapTrainee.this, "Timeout for finding Trainer.", Toast.LENGTH_SHORT).show();
+             finish();
+
+
+
+            }
+        };
+        CountTimeout.start();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

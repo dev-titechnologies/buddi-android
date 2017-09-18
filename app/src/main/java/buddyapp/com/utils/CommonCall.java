@@ -579,8 +579,11 @@ public class CommonCall {
         });
 
     }
-    static AlertDialog dialogExtend = null;
+    public static  AlertDialog dialogExtend = null;
+
     public static void showExtendBokingDialog(final Activity activity) {
+
+
 
         // Hide after some seconds
         final Handler handler  = new Handler();
@@ -590,10 +593,22 @@ public class CommonCall {
                 if (dialogExtend.isShowing()) {
                     dialogExtend.dismiss();
 
-                    Intent intent = new Intent(activity, HomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    activity.startActivity(intent);
-                    activity.finish();
+//                    Intent intent = new Intent(activity, HomeActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    activity.startActivity(intent);
+//                    activity.finish();
+
+
+
+                    PreferencesUtils.saveData(Constants.flag_rating, "true", activity);
+
+                    String bookid = PreferencesUtils.getData(Constants.bookid, activity, "");
+
+
+
+
+                    new CommonCall.timerUpdate(activity, "complete", bookid, "").execute();
+
                 }
             }
         };
@@ -799,6 +814,10 @@ CommonCall.hideLoader();
                     PreferencesUtils.saveData(Constants.transactionId, "", activity);
 
 
+                            PreferencesUtils.saveData(Constants.timerstarted, "false", activity);
+        PreferencesUtils.saveData(Constants.trainee_Data, "", activity);
+        PreferencesUtils.saveData(Constants.trainer_Data, "", activity);
+
                     if (activity != null) {
 
                         AlertDialog.Builder builder;
@@ -807,7 +826,7 @@ CommonCall.hideLoader();
                         } else {
                             builder = new AlertDialog.Builder(activity);
                         }
-//                        if(!((Activity) activity).isFinishing())
+                        if(!((Activity) activity).isFinishing())
                         {
 
                             builder.setMessage(obj.getString("message"))
@@ -837,6 +856,12 @@ CommonCall.hideLoader();
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
                             //show dialog
+                        }else{
+                            Intent intent = new Intent(activity, HomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            activity.startActivity(intent);
+                            activity.finish();
+
                         }
 
 

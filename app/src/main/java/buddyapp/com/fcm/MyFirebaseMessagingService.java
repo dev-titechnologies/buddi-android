@@ -3,6 +3,7 @@ package buddyapp.com.fcm;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,6 +26,7 @@ import buddyapp.com.utils.CommonCall;
 import static buddyapp.com.Settings.Constants.start_session;
 import static buddyapp.com.Settings.Constants.trainee_Data;
 import static buddyapp.com.Settings.Constants.trainer_Data;
+import static buddyapp.com.activity.MapTrainee.CountTimeout;
 
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -87,7 +89,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         try {
 
             if (json.getInt("type")==1) {
-
+                CountTimeout.cancel();//to cancel the timmer for timeout in maptrainee
                 CommonCall.hideLoader();
                 JSONObject data = json.getJSONObject("data");
                 PreferencesUtils.saveData(Constants.trainer_id,data.getJSONObject("trainer_details").getString("trainer_id"),getApplicationContext());
@@ -185,7 +187,8 @@ startActivity(resultIntent);
 *
 * clearing notification of new request after 30 seconds
 * */
-                Handler h = new Handler();
+
+                Handler h = new Handler(Looper.getMainLooper());
                 long delayInMilliseconds = 30000;
                 h.postDelayed(new Runnable() {
                     public void run() {
@@ -207,7 +210,7 @@ startActivity(resultIntent);
                     showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
 
                     Intent intent = new Intent("BUDDI_SESSION_EXTEND");
-
+                    intent.putExtra("extend_time",data.getString("extend_time"));
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                 }
 
