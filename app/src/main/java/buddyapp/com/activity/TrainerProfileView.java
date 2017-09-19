@@ -34,6 +34,7 @@ public class TrainerProfileView extends Activity {
     ImageView faceBook, instagram, linkedIn, snapChat, twitter, youTube,back;
     String imageurl = "", distance="", latitude="", longitude="",status="",userId, name, trainerId;
     Alertdialoge pd;
+    TextView desc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +65,10 @@ public class TrainerProfileView extends Activity {
                 finish();
             }
         });
+        desc = (TextView) findViewById(R.id.description);
 
+//        String text = "You guys are meeting at "+PreferencesUtils.getData(Constants.pickup_location,getApplicationContext(),"")+" to train "+
+//        desc.setText();
         /*Intent intent = getIntent();
         data = intent.getStringExtra("TrainerData");
         if(data.length()>0)*/
@@ -75,7 +79,7 @@ public class TrainerProfileView extends Activity {
     private void loadTrainerProfile() {
         try {
 
-            JSONObject trainer_Data= new JSONObject(PreferencesUtils.getData(Constants.trainer_Data,getApplicationContext(),""));
+            JSONObject trainer_Data= new JSONObject(PreferencesUtils.getData(Constants.trainee_Profile_Data,getApplicationContext(),""));
             JSONObject obj = trainer_Data.getJSONObject("trainer_details");
 
             name = obj.getString("trainer_first_name") + " "+obj.getString("trainer_last_name");
@@ -142,7 +146,7 @@ public class TrainerProfileView extends Activity {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt(Constants.status) == 1) {
                     JSONObject jsonObject = obj.getJSONObject("data");
-                    PreferencesUtils.saveData(Constants.trainer_Data,obj.getJSONObject("data").toString(),getApplicationContext());
+                    PreferencesUtils.saveData(Constants.trainer_Profile_Data,obj.getJSONObject("data").toString(),getApplicationContext());
 
                     fullname.setText(jsonObject.getString(Constants.fname) + " "+jsonObject.getString(Constants.lname));
                     if(jsonObject.getString("age").equals("null")){

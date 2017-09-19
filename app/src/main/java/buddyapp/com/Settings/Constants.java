@@ -99,4 +99,8 @@ public class Constants {
     public static String trainee_name = "trainee_name";
     public static String settings_address_name = "settings_address_name";
     public static String instant_booking = "instant_booking";
+    public static String pickup_location = "pickup_location";
+
+    public static String trainer_Profile_Data = "trainer_Profile_Data";
+    public static String trainee_Profile_Data = "trainee_Profile_Data";
 }
