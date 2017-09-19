@@ -343,7 +343,7 @@ done.setVisibility(View.VISIBLE);
                 PaymentMethodNonce nonce = result.getPaymentMethodNonce();
                 String stringNonce = nonce.getNonce();
                 Log.d("mylog", "Result: " + stringNonce);
-
+                displaycard(result);
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // the user canceled
                 Log.d("mylog", "user cancelled");

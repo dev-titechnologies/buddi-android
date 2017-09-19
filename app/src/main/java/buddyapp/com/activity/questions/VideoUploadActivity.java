@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialcamera.MaterialCamera;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -110,7 +111,7 @@ public class VideoUploadActivity extends AppCompatActivity {
 
 
                     try {
-                        Constants.questionData.put("video_data",videoUpload.toString());
+                        Constants.questionData.put("video_data",new JSONArray(videoUpload.toString()));
 
                         CommonCall.PrintLog("video data",Constants.questionData.toString());
 

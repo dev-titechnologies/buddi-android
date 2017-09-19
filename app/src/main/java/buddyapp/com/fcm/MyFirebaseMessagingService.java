@@ -221,7 +221,7 @@ startActivity(resultIntent);
         } catch (JSONException e) {
             Log.e(TAG, "Json Exception: " + e.getMessage());
         } catch (Exception e) {
-            Log.e(TAG, "Exception: " + e.getMessage());
+        e.printStackTrace();
         }
     }
 
