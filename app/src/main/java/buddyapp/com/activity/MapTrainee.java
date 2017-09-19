@@ -90,6 +90,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
             pick_location = PreferencesUtils.getData(Constants.settings_address_name,getApplicationContext(),"");
             pick_latitude = PreferencesUtils.getData(Constants.settings_latitude,getApplicationContext(),"");
             pick_longitude = PreferencesUtils.getData(Constants.settings_longitude,getApplicationContext(),"");
+            PreferencesUtils.saveData(Constants.instant_booking,"false",getApplicationContext());
         }
 
         select.setOnClickListener(new View.OnClickListener() {

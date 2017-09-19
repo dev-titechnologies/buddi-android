@@ -60,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import java.util.HashMap;
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 
 import buddyapp.com.Controller;
@@ -76,6 +77,7 @@ import buddyapp.com.utils.Urls;
 
 
 import static buddyapp.com.Controller.chatConnect;
+import static buddyapp.com.Controller.getAppContext;
 import static buddyapp.com.Controller.mSocket;
 import static buddyapp.com.Controller.updateSocket;
 import static buddyapp.com.R.id.map;
@@ -161,6 +163,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 //                if (data.getString("trainer_user_image").length() > 1) {
 //                    PreferencesUtils.saveData(Constants.trainer_image, data.getString("trainee_user_image"), getApplicationContext());
 //                }
+                CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.trainee_image,getApplicationContext(),""),profileactionIcon,R.drawable.ic_man,R.drawable.ic_man);
+
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
                 updateSocket();
                 mSocket.connect();
@@ -183,6 +187,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 pick_latitude =  Double.valueOf(data.getString("pick_latitude"));
                 pick_longitude = Double.valueOf(data.getString("pick_longitude"));
                 pick_location = data.getString("pick_location");
+                CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.trainer_image,getApplicationContext(),""),profileactionIcon,R.drawable.ic_man,R.drawable.ic_man);
                 PreferencesUtils.saveData(Constants.trainer_name, name, getApplicationContext());
                 if (trainerDetail.getString("trainer_user_image").length() > 1) {
                     PreferencesUtils.saveData(Constants.trainer_image, trainerDetail.getString("trainer_user_image"), getApplicationContext());

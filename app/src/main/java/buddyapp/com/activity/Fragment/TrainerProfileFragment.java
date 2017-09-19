@@ -305,15 +305,15 @@ public class TrainerProfileFragment extends Fragment {
 //                    PreferencesUtils.saveData(Constants.user_type, jsonObject.getString(Constants.user_type), getApplicationContext());
                     PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getActivity());
                     fullname.setText(jsonObject.getString(Constants.fname) + " "+jsonObject.getString(Constants.lname));
-                    if(jsonObject.getString("age").equals("null")){
+                    if(jsonObject.getString("age").toString().equals("null")){
                         typeAge.setText("Trainer");
                     }else
                         typeAge.setText("Trainer("+jsonObject.getString("age")+")");
-                    if(jsonObject.getString("height").equals("null")){
+                    if(jsonObject.getString("height").toString().equals("null")){
                         height.setVisibility(View.GONE);
                     }else
                         height.setText(jsonObject.getString("height"));
-                    if(jsonObject.getString("weight").equals("null")){
+                    if(jsonObject.getString("weight").toString().equals("null")){
                         weight.setVisibility(View.GONE);
                     }else
                         weight.setText(jsonObject.getString("weight"));

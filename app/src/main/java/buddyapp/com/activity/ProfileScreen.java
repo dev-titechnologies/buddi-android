@@ -18,6 +18,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,8 +74,9 @@ public class ProfileScreen extends AppCompatActivity {
     String imageurl = "";
     Menu menu;
     TextView fullname, typeAge, height , weight;
-    public static String fbusername,snapchatusername,twitterusername,linkedinusername,instagramusername,youtubeusername;
+    String fbusername,snapchatusername,twitterusername,linkedinusername,instagramusername,youtubeusername;
     SocialMediaURLAlertDialog dialog;
+    String m_Text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,37 +174,43 @@ public class ProfileScreen extends AppCompatActivity {
         facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showDialogpop("Enter or paste your facebook link", "facebook");
                 facebooktask();
             }
         });
         instagram.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showDialogpop("Enter or paste your instagram link", "instagram");
                 instagramtask();
             }
         });
         linkedin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showDialogpop("Enter or paste your linkedin link", "linkedin");
                 linkedintask();
             }
         });
         snapchat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showDialogpop("Enter or paste your snapchat link", "snapchat");
                 snapchattask();
             }
         });
         twitter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showDialogpop("Enter or paste your twitter link", "twitter");
                 twittertask();
             }
         });
         youtube.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                youtubetask();
+                showDialogpop("Enter or paste your youtube link", "youtube");
+
             }
         });
     }
@@ -463,15 +471,15 @@ public class ProfileScreen extends AppCompatActivity {
                    if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
                     fullname.setText(jsonObject.getString("first_name") + " "+jsonObject.getString("last_name"));
 
-                       if(jsonObject.getString("age").equals("null")){
+                       if(jsonObject.getString("age").toString().equals("null")){
                            typeAge.setText("Trainer");
                        }else{
                            typeAge.setText("Trainer("+jsonObject.getString("age")+")");}
-                       if(jsonObject.getString("height").equals("null")){
+                       if(jsonObject.getString("height").toString().equals("null")){
                            height.setVisibility(View.GONE);
                        }else
                        { height.setText(jsonObject.getString("height"));}
-                       if(jsonObject.getString("weight").equals("null")){
+                       if(jsonObject.getString("weight").toString().equals("null")){
                            weight.setVisibility(View.GONE);
                        }else
                        { weight.setText(jsonObject.getString("weight"));}
@@ -833,18 +841,9 @@ public class ProfileScreen extends AppCompatActivity {
 
             Log.e("CUrent source", "gallery");
 
-//            userImageView.setImageURI(Uri.parse(imageurl));
             new upLoad().execute();
-//                CommonMethods.createAlert(CommentsPage.this, "Please select an image with minimum width of 580"
-//                        , "Alert");
-
 
         }
-//		    if(requestCode == CAMERA_REQUEST && resultCode==0){
-//		    	Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//				//startActivityForResult(pickPhoto , 1);
-//	            startActivityForResult(takePicture, CAMERA_REQUEST);
-//		    }
 
     }
 
@@ -889,4 +888,64 @@ public class ProfileScreen extends AppCompatActivity {
             }
         }
     }
+
+    public void showDialogpop(String dialog_title, final String from){
+        String title = dialog_title;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+
+// Set up the input
+        final EditText input = new EditText(this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT );
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                m_Text = input.getText().toString();
+                if(m_Text.length()>0)
+                    savedata(m_Text,from);
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+/********************* saving social media url  **********/
+    public void savedata(String text, String from){
+        switch (from){
+            case "facebook" :
+                fbusername = text;
+                Log.e("youtube url",text);
+                break;
+            case "instagram" :
+                instagramusername = text;
+                break;
+            case "snapchat" :
+                snapchatusername = text;
+                break;
+            case "linkedin" :
+                linkedinusername = text;
+                break;
+            case "twitter" :
+                twitterusername = text;
+                break;
+            case "youtube" :
+                youtubeusername = text;
+                Log.e("youtube url",text);
+                break;
+            default:
+                break;
+        }
+    }
+
 }

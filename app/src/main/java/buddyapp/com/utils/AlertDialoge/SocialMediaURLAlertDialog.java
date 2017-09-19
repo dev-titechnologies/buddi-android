@@ -40,7 +40,7 @@ TextView submit, title;
             @Override
             public void onClick(View view) {
                 if(input.getText().length()>0){
-                    switch (from){
+                    /*switch (from){
                         case "facebook" :
                             ProfileScreen.fbusername = input.getText().toString();
                             break;
@@ -61,7 +61,7 @@ TextView submit, title;
                             break;
                         default:
                             break;
-                     }
+                     }*/
                      dismiss();
                 }else{
                     input.setHint("Enter here");
