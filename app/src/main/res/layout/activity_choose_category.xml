@@ -23,6 +23,13 @@
         android:gravity="center"
         android:layout_height="match_parent"></GridView>
 
+<TextView
+    android:layout_width="wrap_content"
+    android:id="@+id/nocat_text"
+    android:visibility="gone"
+    android:layout_centerInParent="true"
 
+    android:text="No More Category to Add"
+    android:layout_height="wrap_content" />
 
 </RelativeLayout>

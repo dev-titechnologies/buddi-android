@@ -32,6 +32,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import buddyapp.com.Controller;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
@@ -111,7 +112,12 @@ public class VideoUploadActivity extends AppCompatActivity {
 
 
                     try {
-                        Constants.questionData.put("video_data",new JSONArray(videoUpload.toString()));
+
+                        JSONArray temp = new JSONArray();
+                        temp.put(videoUpload.toString());
+
+
+                        Constants.questionData.put("video_data", temp);
 
                         CommonCall.PrintLog("video data",Constants.questionData.toString());
 
@@ -593,8 +599,28 @@ try {
 
                     Toast.makeText(VideoUploadActivity.this, "  Success.", Toast.LENGTH_SHORT).show();
 
+                    JSONArray pending = new JSONArray(PreferencesUtils.getData(Constants.pending, Controller.getAppContext(),"[]"));
 
-                    PreferencesUtils.saveData(Constants.pending, ChooseCategory.cat_selectedID.toString(),getApplicationContext());
+
+                    ArrayList       arrayaP = new ArrayList(pending.length());
+                    for(int i=0;i < pending.length();i++){
+
+                        arrayaP.add(pending.get(i).toString());
+
+                    }
+
+
+                    for(int i=0;i < ChooseCategory.cat_selectedID.size();i++){
+
+                        arrayaP.add(ChooseCategory.cat_selectedID.get(i).toString());
+
+                    }
+
+
+
+
+                   PreferencesUtils.saveData(Constants.pending, arrayaP.toString(),getApplicationContext());
+
                     Intent exit = new Intent(getApplicationContext(), DoneActivity.class);
                     startActivity(exit);
 

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -39,6 +40,7 @@ public class ChooseCategory extends AppCompatActivity {
     DatabaseHandler db;
     GridView grid;
     CategoryAdapter categoryAdapter;
+    TextView notext;
  public static   ArrayList<String> cat_selectedID = new ArrayList<>();
 
     ImageView errorImage;
@@ -52,6 +54,9 @@ public class ChooseCategory extends AppCompatActivity {
 
 
         db = new DatabaseHandler(getApplicationContext());
+
+        notext = (TextView) findViewById(R.id.nocat_text);
+
         root = (RelativeLayout) findViewById(R.id.root);
         grid = (GridView) findViewById(R.id.grid);
 
@@ -63,6 +68,12 @@ void loadData(JSONArray data){
 
     categoryAdapter = new CategoryAdapter(getApplicationContext(),data);
     grid.setAdapter(categoryAdapter);
+
+    if (categoryAdapter.getCount()==0){
+
+        notext.setVisibility(View.VISIBLE);
+
+    }
 
 }
     class getCategoryList extends AsyncTask<String, String, String> {
