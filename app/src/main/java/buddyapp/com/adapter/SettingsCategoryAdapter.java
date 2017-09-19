@@ -17,6 +17,8 @@ import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.ChooseCategory;
 import buddyapp.com.activity.Fragment.HomeCategory;
+import buddyapp.com.activity.Fragment.Settings;
+import buddyapp.com.activity.SettingsCategory;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 
@@ -96,9 +98,12 @@ public class SettingsCategoryAdapter extends BaseAdapter {
             holder.cat_card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    SettingsCategory.done.setVisibility(View.VISIBLE);
                     if (settings_cat_selectedID.contains(view.getTag().toString())) {
 //                        id=0;
                         settings_cat_selectedID.clear();
+                        SettingsCategory.done.setVisibility(View.GONE);
                     } else{
                         settings_cat_selectedID.clear();
 //                    {if(id==0) {

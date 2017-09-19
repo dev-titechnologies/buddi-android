@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -30,7 +31,7 @@ public class SettingsCategory extends AppCompatActivity {
     GridView grid;
     SettingsCategoryAdapter settingsCategoryAdapter;
     public static ArrayList<String> settings_cat_selectedID = new ArrayList<>();
-
+    public static Button done;
     ImageView errorImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class SettingsCategory extends AppCompatActivity {
         db = new DatabaseHandler(getApplicationContext());
         root = (RelativeLayout) findViewById(R.id.root);
         grid = (GridView) findViewById(R.id.grid);
+        done = (Button) findViewById(R.id.next);
 
         errorImage = (ImageView) findViewById(R.id.errorImage);
 
@@ -51,7 +53,12 @@ public class SettingsCategory extends AppCompatActivity {
         }else {
             new getCategoryList().execute();
         }
-
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     void loadData(JSONArray data){

@@ -30,9 +30,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
-import buddyapp.com.activity.ChooseSpecification;
 import buddyapp.com.activity.SettingsCategory;
-import it.sephiroth.android.library.easing.Linear;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -186,7 +184,6 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
     private void placePicker(){
         try {
             PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
-            intentBuilder.setLatLngBounds(BOUNDS_MOUNTAIN_VIEW);
             Intent intent = intentBuilder.build(getActivity());
             startActivityForResult(intent, PLACE_PICKER_REQUEST);
 
@@ -272,6 +269,7 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
             String prefAddress = (String) address;
             maddress.setText(address );
             PreferencesUtils.saveData(Constants.settings_address, prefAddress,getActivity());
+            PreferencesUtils.saveData(Constants.settings_address_name,name.toString(),getActivity());
             PreferencesUtils.saveData(Constants.settings_latitude, String.valueOf(place.getLatLng().latitude),getActivity());
             PreferencesUtils.saveData(Constants.settings_longitude, String.valueOf(place.getLatLng().longitude),getActivity());
 

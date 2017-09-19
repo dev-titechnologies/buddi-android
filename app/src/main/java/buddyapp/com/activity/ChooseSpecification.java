@@ -399,7 +399,7 @@ public class ChooseSpecification extends AppCompatActivity {
                 final CharSequence address = place.getAddress();
                 check3 =true;
                 pick_location = name.toString();
-                locationPref.setText("Choose Training Location \t\t\t\t\t"+name.toString() );
+//                locationPref.setText("Choose Training Location \t\t\t\t\t"+name.toString() );
                 prefAddress = name.toString()+" "+ address.toString();
                 maddress.setText(prefAddress );
                 mlatitude = place.getLatLng().latitude;

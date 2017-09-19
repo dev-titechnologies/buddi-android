@@ -929,17 +929,18 @@ new BroadcastReceiver() {
 
     @Override
     public void onLocationChanged(Location location) {
-        if(googleMap!=null)
-        googleMap.clear();
+        if(googleMap!=null) {
+            googleMap.clear();
 
-        MarkerOptions mp = new MarkerOptions();
-        mp.position(new LatLng(location.getLatitude(), location.getLongitude()));
+            MarkerOptions mp = new MarkerOptions();
+            mp.position(new LatLng(location.getLatitude(), location.getLongitude()));
 
-        googleMap.addMarker(mp);
+            googleMap.addMarker(mp);
 
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(location.getLatitude(), location.getLongitude()), 16));
-        origin = new LatLng(location.getLatitude(),location.getLongitude());
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(location.getLatitude(), location.getLongitude()), 16));
+            origin = new LatLng(location.getLatitude(), location.getLongitude());
+        }
         if(origin.latitude!=0)
         LoadmapTask();
     }

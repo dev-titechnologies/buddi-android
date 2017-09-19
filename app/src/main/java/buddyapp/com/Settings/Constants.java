@@ -93,4 +93,6 @@ public class Constants {
     public static String trainee_image = "trainee_image";
     public static String trainer_name = "trainer_name";
     public static String trainee_name = "trainee_name";
+    public static String settings_address_name = "settings_address_name";
+    public static String instant_booking = "instant_booking";
 }

@@ -28,6 +28,8 @@
     <com.wang.avi.AVLoadingIndicatorView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/aviloader"
+        android:visibility="gone"
         android:paddingTop="180dp"
         android:paddingLeft="120dp"
         android:paddingRight="120dp"

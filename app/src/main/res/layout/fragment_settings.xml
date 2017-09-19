@@ -59,7 +59,7 @@
                 android:textColor="@color/white"
                 android:id="@+id/address"
                 android:background="@color/colorPrimary"
-                android:text=""/>
+                android:text="Place"/>
         </android.support.v7.widget.CardView>
 
     </LinearLayout>

@@ -82,14 +82,23 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
         pick_latitude = intent.getStringExtra("pick_latitude");
         pick_longitude = intent.getStringExtra("pick_longitude");
         pick_location = intent.getStringExtra("pick_location");
+        avi = (AVLoadingIndicatorView) findViewById(R.id.aviloader);
+        avi.setVisibility(View.VISIBLE);
+        select.setClickable(false);
+        if(PreferencesUtils.getData(Constants.instant_booking,getApplicationContext(),"false").equals("true"))
+        {
+            pick_location = PreferencesUtils.getData(Constants.settings_address_name,getApplicationContext(),"");
+            pick_latitude = PreferencesUtils.getData(Constants.settings_latitude,getApplicationContext(),"");
+            pick_longitude = PreferencesUtils.getData(Constants.settings_longitude,getApplicationContext(),"");
+        }
+
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                avi = new AVLoadingIndicatorView(getApplicationContext());
-        avi.hide();
-                    {
+                            {
 
                     if (PreferencesUtils.getData(Constants.clientToken, getApplicationContext(), "").length() > 1) {
+
                         intPayment();
 
                     } else {
@@ -119,7 +128,8 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
 
     void intPayment(){
-
+        avi.setVisibility(View.VISIBLE);
+        select.setClickable(false);
         /*
 *
 *
@@ -127,7 +137,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 *
 * */
 //        CommonCall.showLoader(MapTrainee.this);
-        avi.show();
+
         DropInResult.fetchDropInResult(MapTrainee.this, PreferencesUtils.getData(Constants.clientToken,getApplicationContext(),""), new DropInResult.DropInResultListener() {
             @Override
             public void onError(Exception exception) {
@@ -171,8 +181,8 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
     }
 
     void showMarker(final JSONArray places) {
-
-
+            avi.setVisibility(View.GONE);
+            select.setClickable(true);
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 14), new GoogleMap.CancelableCallback() {
                 @Override
                 public void onFinish() {
@@ -213,13 +223,6 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 
                 }
             });
-
-
-
-
-
-
-
     }
 
     private void buildAlertMessageNoGps() {
@@ -300,8 +303,8 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-
+            avi.setVisibility(View.VISIBLE);
+            select.setClickable(false);
         }
 
         @Override
@@ -352,22 +355,21 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 
 
                 }else if(obj.getInt("status") == 2){
-                    avi.hide();
+                    avi.setVisibility(View.GONE);
+                    select.setClickable(true);
 //                    CommonCall.hideLoader();
                     Toast.makeText(MapTrainee.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
 
 
                 }else{
-                    avi.hide();
-                    CommonCall.hideLoader();
-
-
+                    avi.setVisibility(View.GONE);
+                    select.setClickable(true);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                avi.hide();
-                CommonCall.hideLoader();
+                avi.setVisibility(View.GONE);
+                select.setClickable(true);
                 Toast.makeText(MapTrainee.this, Constants.server_error_message, Toast.LENGTH_SHORT).show();
 
             }
@@ -392,8 +394,8 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 
             public void onFinish() {
 
-                CommonCall.hideLoader();
-
+                avi.setVisibility(View.GONE);
+                select.setClickable(true);
 
              Toast.makeText(MapTrainee.this, "Timeout for finding Trainer.", Toast.LENGTH_SHORT).show();
              finish();
@@ -430,11 +432,8 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-
-
-
-
+            avi.setVisibility(View.VISIBLE);
+            select.setClickable(false);
         }
 
         @Override
@@ -472,7 +471,8 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                     new RandomSelect().execute();
 
                 } else if (response.getInt(Constants.status) == 2) {
-                    avi.hide();
+                    avi.setVisibility(View.GONE);
+                    select.setClickable(true);
 //                    CommonCall.hideLoader();
 //                Snackbar snackbar = Snackbar
 //                        .make(root, response.getString(Constants.message), Snackbar.LENGTH_INDEFINITE)
@@ -493,14 +493,16 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 //
 //                snackbar.show();
                 } else if (response.getInt(Constants.status) == 3) {
-                avi.hide();
+                    avi.setVisibility(View.GONE);
+                    select.setClickable(true);
 // CommonCall.hideLoader();
                     CommonCall.sessionout(activity);
                 }
 
 
             } catch (JSONException e) {
-                avi.hide();
+                avi.setVisibility(View.GONE);
+                select.setClickable(true);
 //                CommonCall.hideLoader();
                 e.printStackTrace(); CommonCall.hideLoader();
             }
@@ -517,12 +519,14 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 intPayment();
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // the user canceled
-                avi.hide();
+                avi.setVisibility(View.GONE);
+                select.setClickable(true);
 //                CommonCall.hideLoader();
                 Toast.makeText(this, "Payment cancelled", Toast.LENGTH_SHORT).show();
 
             } else {
-                avi.hide();
+                avi.setVisibility(View.GONE);
+                select.setClickable(true);
 //                CommonCall.hideLoader();
                 CommonCall.PrintLog("mylog", "Error :403 " );
             }
