@@ -636,6 +636,7 @@ public class CommonCall {
                         String bookid = PreferencesUtils.getData(Constants.bookid, activity, "");
 
 
+                        PreferencesUtils.saveData(Constants.flag_rating, "true", activity);
 
 
                         new CommonCall.timerUpdate(activity, "complete", bookid, "").execute();

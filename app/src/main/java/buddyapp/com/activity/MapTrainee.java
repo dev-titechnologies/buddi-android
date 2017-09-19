@@ -328,7 +328,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 reqData.put("pick_latitude",pick_latitude);
                 reqData.put("pick_longitude",pick_longitude);
                 reqData.put("pick_location",pick_location);
-                reqData.put("promo_code",PreferencesUtils.getData(Constants.promo_code,getApplicationContext(),""));
+                reqData.put("promocode",PreferencesUtils.getData(Constants.promo_code,getApplicationContext(),""));
 
 
             } catch (JSONException e) {

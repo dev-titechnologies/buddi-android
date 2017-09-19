@@ -159,7 +159,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
          arraypending = new ArrayList(pending.length());
-        for(int i=0;i < aproved.length();i++){
+        for(int i=0;i < pending.length();i++){
 
                 arraypending.add(pending.get(i).toString());
 

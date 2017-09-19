@@ -138,13 +138,31 @@ public class HomeActivity extends AppCompatActivity
          {
              menu.findItem(R.id.nav_trainer).setVisible(true);
 
-             menu.findItem(R.id.nav_settings).setVisible(false);
+
          }
          else{
-             menu.findItem(R.id.nav_trainer).setVisible(false);
+                menu.findItem(R.id.nav_trainer).setVisible(false);
 
-            menu.findItem(R.id.nav_settings).setVisible(true);}
+
+
+         }
         }
+
+
+
+            if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer"))
+            {
+
+
+                menu.findItem(R.id.nav_settings).setVisible(false);
+            }
+            else{
+
+
+                menu.findItem(R.id.nav_settings).setVisible(true);
+
+            }
+
 
 
         userImageView = (CircleImageView) hView.findViewById(R.id.userImageView);
