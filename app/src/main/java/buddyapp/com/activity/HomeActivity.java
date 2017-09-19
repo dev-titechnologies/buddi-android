@@ -137,10 +137,16 @@ public class HomeActivity extends AppCompatActivity
          if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer"))
          {
              menu.findItem(R.id.nav_trainer).setVisible(true);
+
+             menu.findItem(R.id.nav_settings).setVisible(false);
          }
-         else
+         else{
              menu.findItem(R.id.nav_trainer).setVisible(false);
+
+            menu.findItem(R.id.nav_settings).setVisible(true);}
         }
+
+
         userImageView = (CircleImageView) hView.findViewById(R.id.userImageView);
         name = (TextView) hView.findViewById(R.id.name);
         email = (TextView) hView.findViewById(R.id.email);

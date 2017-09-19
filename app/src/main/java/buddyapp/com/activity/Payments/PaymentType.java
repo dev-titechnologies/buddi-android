@@ -46,9 +46,9 @@ import static buddyapp.com.R.id.root;
 public class PaymentType extends BaseActivity implements PaymentMethodNonceCreatedListener,
         BraintreeCancelListener, BraintreeErrorListener, DropInResult.DropInResultListener {
 LinearLayout root;
-    CardView addPayment, credit_card;
+    CardView addPayment, credit_card,promocodeView;
     final int REQUEST_CODE = 1;
-    TextView credit_card_text,applyPromo;
+    TextView credit_card_text,applyPromo,promoText;
 EditText promocode;
 ImageView payment_image;
 Button done;
@@ -63,9 +63,14 @@ Button done;
         promocode = (EditText) findViewById(R.id.promocode);
         addPayment = (CardView) findViewById(R.id.addPayment);
         credit_card = (CardView) findViewById(R.id.credit_card);
+
+        promocodeView = (CardView) findViewById(R.id.promocode_view);
         payment_image = (ImageView) findViewById(R.id.payment_image);
         done = (Button) findViewById(R.id.done);
         credit_card_text = (TextView) findViewById(R.id.credit_card_text);
+
+        promoText = (TextView) findViewById(R.id.promocode_text);
+
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -82,6 +87,7 @@ Button done;
 
             }
         });
+        showPromocode();
 CommonCall.showLoader(PaymentType.this);
 
         done.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +109,19 @@ CommonCall.showLoader(PaymentType.this);
         });
     }
 
+void showPromocode(){
 
+
+    if (PreferencesUtils.getData(Constants.promo_code,getApplicationContext(),"").length()>0) {
+        promoText.setText("Applied Promocode : "+PreferencesUtils.getData(Constants.promo_code,getApplicationContext(),""));
+promocodeView.setVisibility(View.VISIBLE);
+
+    }else{
+
+        promocodeView.setVisibility(View.GONE);
+
+    }
+}
     class applyPromo extends AsyncTask<String,String,String>{
         JSONObject req = new JSONObject();
         @Override
@@ -141,10 +159,14 @@ CommonCall.showLoader(PaymentType.this);
 
                 if (response.getInt(Constants.status) == 1) {
 
-
+                    promocode.setText("");
                     Toast.makeText(PaymentType.this, "Promocode Applied Succesfully!", Toast.LENGTH_SHORT).show();
 
 
+
+              PreferencesUtils.saveData(Constants.promo_code,response.getJSONObject("data").getString("code"),getApplicationContext());
+
+                    showPromocode();
                 } else if (response.getInt(Constants.status) == 2) {
 
                     Snackbar snackbar = Snackbar

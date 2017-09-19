@@ -99,8 +99,13 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
                     if (PreferencesUtils.getData(Constants.clientToken, getApplicationContext(), "").length() > 1) {
 
-                        intPayment();
+                        if (PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "").length() ==0) {
 
+                            intPayment();
+                        }else{
+
+                            new RandomSelect().execute();
+                        }
                     } else {
 
                         Intent payment = new Intent(getApplicationContext(), PaymentType.class);
@@ -322,6 +327,8 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 reqData.put("pick_latitude",pick_latitude);
                 reqData.put("pick_longitude",pick_longitude);
                 reqData.put("pick_location",pick_location);
+                reqData.put("promo_code",PreferencesUtils.getData(Constants.promo_code,getApplicationContext(),""));
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -339,6 +346,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 if (obj.getInt("status") == 1) {
 
                     timeOut(obj.getInt("length"));
+                    PreferencesUtils.saveData(Constants.promo_code,"",getApplicationContext());
 
 //                    CommonCall.hideLoader();
 //
@@ -517,6 +525,8 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
             if (resultCode == Activity.RESULT_OK) {
 
                 intPayment();
+
+
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // the user canceled
                 avi.setVisibility(View.GONE);
