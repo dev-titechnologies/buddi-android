@@ -181,7 +181,9 @@ startActivity(resultIntent);
                 resultIntent.putExtra("message",data.toString());
                 resultIntent.putExtra("title",title);
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
+                resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
 
+                startActivity(resultIntent);
                 /*
 *
 *
