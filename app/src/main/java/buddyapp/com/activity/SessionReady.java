@@ -11,16 +11,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -468,9 +473,16 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             String millisUntilFinished = intent.getStringExtra("time");
             CommonCall.PrintLog("service", "Countdown seconds remaining: " + millisUntilFinished);
 
-            sessionTimmer.setText(millisUntilFinished);
-            if (millisUntilFinished.equals("Session Completed")) {
+            final SpannableStringBuilder sb = new SpannableStringBuilder(millisUntilFinished);
 
+
+            final ForegroundColorSpan fcs = new ForegroundColorSpan(ContextCompat.getColor(getApplicationContext(),R.color.colorAccent));
+
+
+            sb.setSpan(fcs, 3, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            sessionTimmer.setText(sb);
+            if (millisUntilFinished.equals("Session Completed")) {
+                sessionTimmer.setText("00:00");
                 /*
                 *
                 * this will execute when timmer has complted
@@ -583,18 +595,26 @@ start.performClick();
 
     }
 
+
+    BroadcastReceiver startAuto=  new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            start.performClick();
+            if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
+                Toast.makeText(getApplicationContext(),"Trainee "+name+" has started the session. " , Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(getApplicationContext(),"Trainer "+name+" has started the session. " , Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+    };
+
     void startauto() {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-
-                        start.performClick();
-
-
-                    }
-                }, new IntentFilter("BUDDI_TRAINER_START")
+                startAuto, new IntentFilter("BUDDI_TRAINER_START")
 
 
         );
@@ -808,7 +828,7 @@ new BroadcastReceiver() {
         super.onDestroy();
         unregisterReceiver(br);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(brfinsih);
-
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(startAuto);
         if (mSocket!=null)
         mSocket.disconnect();
     }
@@ -1246,9 +1266,7 @@ new BroadcastReceiver() {
 
 
 
-                    if (!obj.getString("message").equals("Already Requested!"))
 
-                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
 
 
                     startactionTitle.setText("Stop");
