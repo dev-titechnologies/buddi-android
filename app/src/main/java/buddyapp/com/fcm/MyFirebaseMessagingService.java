@@ -89,6 +89,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         try {
 
             if (json.getInt("type")==1) {
+                if (CountTimeout!=null)
                 CountTimeout.cancel();//to cancel the timmer for timeout in maptrainee
                 CommonCall.hideLoader();
                 JSONObject data = json.getJSONObject("data");

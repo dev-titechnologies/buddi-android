@@ -1285,8 +1285,8 @@ new BroadcastReceiver() {
 
 
                     PreferencesUtils.saveData("data", date_time, getApplicationContext());
-                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
-//                    PreferencesUtils.saveData("hours", "1", getApplicationContext());
+//                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
+                    PreferencesUtils.saveData("hours", "1", getApplicationContext());
 
 
                     startService(new Intent(getApplicationContext(), Timer_Service.class));
