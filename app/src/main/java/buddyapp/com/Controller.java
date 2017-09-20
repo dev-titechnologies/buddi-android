@@ -9,6 +9,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LargestLimitedMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -32,12 +34,26 @@ public class Controller extends Application {
     private static Context context;
     private static Controller mInstance;
     public static Socket mSocket;
+    private static GoogleAnalytics sAnalytics;
+    private static Tracker sTracker;
 
+    /**
+     * Gets the default {@link Tracker} for this {@link Application}.
+     * @return tracker
+     */
+    synchronized public Tracker getDefaultTracker() {
+        // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+        if (sTracker == null) {
+            sTracker = sAnalytics.newTracker(R.xml.global_tracker);
+        }
+
+        return sTracker;
+    }
     @Override
     public void onCreate() {
         super.onCreate();
 
-
+        sAnalytics = GoogleAnalytics.getInstance(this);
         initImageLoader(getApplicationContext());
         Controller.context = getApplicationContext();
         mInstance = this;
