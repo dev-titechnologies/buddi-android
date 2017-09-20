@@ -182,14 +182,14 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
                             builder = new AlertDialog.Builder(MapTrainee.this);
 
-
+                            builder.setCancelable(false);
                             if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals("40") && duration.equals("60"))
-                                builder.setMessage("You've already been paid for a 40 minute session. If you proceed, 1 hour session amount will be deducted. Would you like to continue with 1 hour session ?");
+                                builder.setMessage("You've already been paid for a 40 minutes session. If you proceed, 1 hour session amount will be deducted. Would you like to continue with 1 hour session ?");
                             else
-                                builder.setMessage("You've already been paid for a 1 hour session. If you proceed, 40 minute session amount will be deducted. Would you like to continue with 40 minute session ?");
+                                builder.setMessage("You've already been paid for a 1 hour session. If you proceed, 40 minutes session amount will be deducted. Would you like to continue with 40 minute session ?");
 
 
-                            builder.setTitle("Alert")
+                            builder.setTitle("Warning!")
 
 
                                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
