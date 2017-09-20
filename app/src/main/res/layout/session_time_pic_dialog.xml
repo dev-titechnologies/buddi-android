@@ -12,7 +12,10 @@
         android:layout_margin="@dimen/medium"
         android:text="@string/session_duration"
         android:gravity="center"
-        android:padding="@dimen/medium"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_height="wrap_content"
 
         />
