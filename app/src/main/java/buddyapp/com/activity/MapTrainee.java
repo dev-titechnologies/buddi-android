@@ -346,7 +346,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
 
-                    timeOut(obj.getInt("length"));
+//                    timeOut(obj.getInt("length"));
                     PreferencesUtils.saveData(Constants.promo_code,"",getApplicationContext());
 
 //                    CommonCall.hideLoader();
