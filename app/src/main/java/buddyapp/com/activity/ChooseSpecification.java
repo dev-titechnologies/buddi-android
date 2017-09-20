@@ -156,8 +156,8 @@ public class ChooseSpecification extends AppCompatActivity {
                     locationPref.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_sign_to_navigate, 0);
                     location.setVisibility(View.VISIBLE);
                     location.startAnimation(c);
-                    if(maddress.getText().length()<1)
-                    maddress.performClick();
+//                    if(maddress.getText().length()<1)
+//                    maddress.performClick();
 
                 } else
 
@@ -303,9 +303,9 @@ public class ChooseSpecification extends AppCompatActivity {
 
     private String getTextSession() {
         if(sessionDuration == 40)
-            return "\t\t\t\t\t\t\t\t\t40 Minutes";
+            return "\t40 Minutes";
         else if(sessionDuration == 60)
-            return "\t\t\t\t\t\t\t\t\t1 Hour";
+            return "\t\t\t\t\t\t\t1 Hour";
         else
             return "";
     }
