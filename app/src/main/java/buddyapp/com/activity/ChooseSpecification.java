@@ -187,7 +187,7 @@ public class ChooseSpecification extends AppCompatActivity {
 
             id =0;
             b.reset();
-            session.setText("Choose Session Duration" +"\t\t\t\t\t\t\t\t\t40 Minutes");
+            session.setText("Choose Session Duration" +"\t\t\t\t\t\t40 Minutes");
             session.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
             duration.setVisibility(View.GONE);
 
@@ -201,7 +201,7 @@ public class ChooseSpecification extends AppCompatActivity {
 
             id =0;
             b.reset();
-            session.setText("Choose Session Duration" +"\t\t\t\t\t\t\t\t\t1 Hour");
+            session.setText("Choose Session Duration" +"\t\t\t\t\t\t\t\t1 Hour");
             session.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
             duration.setVisibility(View.GONE);
 
@@ -303,7 +303,7 @@ public class ChooseSpecification extends AppCompatActivity {
 
     private String getTextSession() {
         if(sessionDuration == 40)
-            return "\t40 Minutes";
+            return "\t\t\t\t\40 Minutes";
         else if(sessionDuration == 60)
             return "\t\t\t\t\t\t\t1 Hour";
         else
