@@ -196,7 +196,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 pick_longitude = Double.valueOf(data.getString("pick_longitude"));
                 pick_location = data.getString("pick_location");
                 PreferencesUtils.saveData(Constants.pickup_location,pick_location,getApplicationContext());
-                CommonCall.LoadImage(getApplicationContext(), data.getString("trainer_user_image"),profileactionIcon,R.drawable.ic_man,R.drawable.ic_man);
+                CommonCall.LoadImage(getApplicationContext(), trainerDetail.getString("trainer_user_image"),profileactionIcon,R.drawable.ic_man,R.drawable.ic_man);
                 PreferencesUtils.saveData(Constants.trainer_name, name, getApplicationContext());
                 if (trainerDetail.getString("trainer_user_image").length() > 1) {
                     PreferencesUtils.saveData(Constants.trainer_image, trainerDetail.getString("trainer_user_image"), getApplicationContext());
