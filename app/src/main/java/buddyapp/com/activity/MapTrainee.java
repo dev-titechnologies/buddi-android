@@ -167,50 +167,50 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
                     if (PreferencesUtils.getData(Constants.transactionId, getApplicationContext(), "").length() > 1) {
 
-
-                        if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals(duration))
-
-
-                            new RandomSelect().execute();
-                        else {
-
-                            avi.setVisibility(View.GONE);
-
-
-                            AlertDialog.Builder builder;
-
-
-                            builder = new AlertDialog.Builder(MapTrainee.this);
-
-                            builder.setCancelable(false);
-                            if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals("40") && duration.equals("60"))
-                                builder.setMessage("You've already been paid for a 40 minutes session. If you proceed, 1 hour session amount will be deducted. Would you like to continue with 1 hour session ?");
-                            else
-                                builder.setMessage("You've already been paid for a 1 hour session. If you proceed, 40 minutes session amount will be deducted. Would you like to continue with 40 minute session ?");
-
-
-                            builder.setTitle("Warning!")
-
-
-                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            // continue  with delete
-                                            avi.setVisibility(View.VISIBLE);
-PreferencesUtils.saveData(Constants.transactionId,"",getApplicationContext());
-                                            intPayment();
-                                        }
-                                    })
-                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            // do nothing
-                                            avi.setVisibility(View.GONE);
-                                        }
-                                    })
-                                    .setIcon(android.R.drawable.ic_dialog_alert)
-                                    .show();
-
-
-                        }
+                        new RandomSelect().execute();
+//                        if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals(duration))
+//
+//
+//                              new RandomSelect().execute();
+//                        else {
+//
+//                            avi.setVisibility(View.GONE);
+//
+//
+//                            AlertDialog.Builder builder;
+//
+//
+//                            builder = new AlertDialog.Builder(MapTrainee.this);
+//
+//                            builder.setCancelable(false);
+//                            if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals("40") && duration.equals("60"))
+//                                builder.setMessage("You've already been paid for a 40 minutes session. If you proceed, 1 hour session amount will be deducted. Would you like to continue with 1 hour session ?");
+//                            else
+//                                builder.setMessage("You've already been paid for a 1 hour session. If you proceed, 40 minutes session amount will be deducted. Would you like to continue with 40 minute session ?");
+//
+//
+//                            builder.setTitle("Warning!")
+//
+//
+//                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            // continue  with delete
+//                                            avi.setVisibility(View.VISIBLE);
+//PreferencesUtils.saveData(Constants.transactionId,"",getApplicationContext());
+//                                            intPayment();
+//                                        }
+//                                    })
+//                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            // do nothing
+//                                            avi.setVisibility(View.GONE);
+//                                        }
+//                                    })
+//                                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                                    .show();
+//
+//
+//                        }
 
                     } else {
 
