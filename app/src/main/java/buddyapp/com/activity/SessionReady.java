@@ -168,9 +168,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 pick_location = data.getString("pick_location");
                 PreferencesUtils.saveData(Constants.pickup_location,pick_location,getApplicationContext());
                 PreferencesUtils.saveData(Constants.trainee_name, name, getApplicationContext());
-//                if (data.getString("trainer_user_image").length() > 1) {
-//                    PreferencesUtils.saveData(Constants.trainer_image, data.getString("trainee_user_image"), getApplicationContext());
-//                }
+                if (data.getString("trainer_user_image").length() > 1) {
+                    PreferencesUtils.saveData(Constants.trainer_image, data.getJSONObject("trainee_details").getString("trainee_user_image"), getApplicationContext());
+                }
                 CommonCall.LoadImage(getApplicationContext(),data.getJSONObject("trainee_details").getString("trainee_user_image"),profileactionIcon,R.drawable.ic_man,R.drawable.ic_man);
 
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
@@ -933,7 +933,7 @@ new BroadcastReceiver() {
 
         this.googleMap = googleMap;
 
-        showMarker();
+
         googleMap.setMyLocationEnabled(true);
 
       /*googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 13));
@@ -948,6 +948,7 @@ new BroadcastReceiver() {
             @Override
             public void onFinish() {
                 LoadmapTask();
+                showMarker();
 //                                animateMarker(pos_Marker, camera, false, 0.0f);
             }
 
