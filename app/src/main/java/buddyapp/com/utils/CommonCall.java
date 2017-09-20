@@ -819,54 +819,12 @@ CommonCall.hideLoader();
         PreferencesUtils.saveData(Constants.trainee_Data, "", activity);
         PreferencesUtils.saveData(Constants.trainer_Data, "", activity);
 
-                    if (activity != null) {
 
-                        AlertDialog.Builder builder;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            builder = new AlertDialog.Builder(activity, android.R.style.Theme_Material_Dialog_Alert);
-                        } else {
-                            builder = new AlertDialog.Builder(activity);
-                        }
-                        if(!((Activity) activity).isFinishing())
-                        {
-
-                            builder.setMessage(obj.getString("message"))
-                                    .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            // continue with delete
-
-//                                        try {
-//                                            Toast.makeText(activity, obj.getString("message"), Toast.LENGTH_SHORT).show();
-//                                        } catch (JSONException e) {
-//                                            e.printStackTrace();
-//                                        }
-                                            dialog.dismiss();
-
-                                                {
-
-                                                Intent intent = new Intent(activity, HomeActivity.class);
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                activity.startActivity(intent);
-                                                activity.finish();
-
-
-                                            }
-                                        }
-                                    })
-
-                                    .setIcon(android.R.drawable.ic_dialog_alert)
-                                    .show();
-                            //show dialog
-                        }else{
-                            Intent intent = new Intent(activity, HomeActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            activity.startActivity(intent);
-                            activity.finish();
-
-                        }
-
-
-                    }
+                    Toast.makeText(activity, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(activity, HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    activity.startActivity(intent);
+                    activity.finish();
 
 
                 } else if (obj.getInt("status") == 2) {

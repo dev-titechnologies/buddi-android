@@ -469,6 +469,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         }
     };
 
+
     private void updateGUI(Intent intent) {
         if (intent.getExtras() != null) {
 
@@ -481,8 +482,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             final ForegroundColorSpan fcs = new ForegroundColorSpan(ContextCompat.getColor(getApplicationContext(),R.color.black));
 
 
-            sb.setSpan(fcs, 3, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            sessionTimmer.setText(sb);
+//            sb.setSpan(fcs, 3, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            sessionTimmer.setText(millisUntilFinished);
             if (millisUntilFinished.equals("Session Completed")) {
                 sessionTimmer.setText("00:00");
                 /*
