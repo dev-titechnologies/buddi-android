@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -131,7 +132,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         linearLayoutManager.scrollToPosition(consersation.getListMessageData().size() - 1);
         recyclerChat.setAdapter(adapter);
     }
-    private void loadMessageFromSocket(String receiveMsg, String fromId, String img){
+    public void loadMessageFromSocket(String receiveMsg, String fromId, String img){
         adapter = new ListMessageAdapter(this, consersation);
         Message newMessage = new Message();
         newMessage.idSender = fromId;
@@ -237,7 +238,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected String doInBackground(String... strings) {
             try {
-                reqData.put("from_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
+                reqData.put("book_id", PreferencesUtils.getData(Constants.bookid, getApplicationContext(), ""));
 
 
                 if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee"))
@@ -247,16 +248,27 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return NetworkCalls.POST(Urls.getAllMessageURL(), reqData.toString());
+            return NetworkCalls.POST(Urls.getChatHistoryURL(), reqData.toString());
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
             String ss = s;
-//                final JSONObject response = new JSONObject(s);
             CommonCall.PrintLog("AllMessages", ss);
+            JSONObject obj = null;
+            try {
+                obj = new JSONObject(s);
+            if (obj.getInt("status") == 1) {
+                JSONArray jsonArray = obj.getJSONArray("data");
+                for(int i =0; i<jsonArray.length();i++){
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    loadMessageFromSocket(jsonObject.getString("message"),jsonObject.getString("from_id"),jsonObject.getString("from_img"));
+                }
+             }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
         }
     }

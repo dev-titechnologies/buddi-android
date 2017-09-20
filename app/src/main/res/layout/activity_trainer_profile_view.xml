@@ -5,13 +5,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="buddyapp.com.activity.TrainerProfileView">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:id="@+id/layout"
+    android:background="@mipmap/profile_trainer"
+    android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="165dp"
+                    android:layout_height="wrap_content"
                     android:id="@+id/image_trainer"
                     android:paddingTop="30dp"
-                    android:background="@mipmap/profile_trainer"
                     android:gravity="left"
                     android:orientation="horizontal">
 
@@ -19,7 +23,10 @@
                         android:id="@+id/trainerimageView"
                         android:layout_width="75dp"
                         android:layout_height="75dp"
-                        android:layout_margin="30dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginBottom="20dp"
                         android:clickable="false"
                         android:src="@mipmap/ic_launcher_round" />
                     <LinearLayout
@@ -59,7 +66,19 @@
                             android:drawableLeft="@mipmap/kg"
                         />
                     </LinearLayout>
+
                 </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/description"
+            android:textColor="@color/black"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text=""/>
+
+</LinearLayout>
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:id="@+id/toolbar"
@@ -92,7 +111,7 @@
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/image_trainer">
+                    android:layout_below="@+id/layout">
 
                 <LinearLayout
                     android:layout_width="match_parent"

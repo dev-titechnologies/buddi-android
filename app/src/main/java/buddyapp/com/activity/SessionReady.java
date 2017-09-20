@@ -164,6 +164,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 pick_latitude = Double.valueOf(data.getString("pick_latitude"));
                 pick_longitude = Double.valueOf(data.getString("pick_longitude"));
                 pick_location = data.getString("pick_location");
+                PreferencesUtils.saveData(Constants.pickup_location,pick_location,getApplicationContext());
                 PreferencesUtils.saveData(Constants.trainee_name, name, getApplicationContext());
 //                if (data.getString("trainer_user_image").length() > 1) {
 //                    PreferencesUtils.saveData(Constants.trainer_image, data.getString("trainee_user_image"), getApplicationContext());
@@ -192,6 +193,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 pick_latitude =  Double.valueOf(data.getString("pick_latitude"));
                 pick_longitude = Double.valueOf(data.getString("pick_longitude"));
                 pick_location = data.getString("pick_location");
+                PreferencesUtils.saveData(Constants.pickup_location,pick_location,getApplicationContext());
                 CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.trainer_image,getApplicationContext(),""),profileactionIcon,R.drawable.ic_man,R.drawable.ic_man);
                 PreferencesUtils.saveData(Constants.trainer_name, name, getApplicationContext());
                 if (trainerDetail.getString("trainer_user_image").length() > 1) {
@@ -208,6 +210,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             Controller.listenEvent();
 
         } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 

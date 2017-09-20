@@ -81,8 +81,8 @@ ListView list;
                 if (obj.getInt("status") == 1) {
                     JSONArray jsonArray = obj.getJSONArray("data");
                     if(jsonArray.length()!=0){
-
-                        for(int i=0; i<jsonArray.length();i++)
+                        JSONArray jsonarray = new JSONArray();
+                        for(int i=jsonArray.length()-1; i>=0;i--)
                         {
                             JSONObject jsonObject= jsonArray.getJSONObject(i);
                             jsonObject.put("booking_id",jsonObject.getString("booking_id"));
@@ -96,16 +96,17 @@ ListView list;
                             jsonObject.put("location",jsonObject.getString("location"));
                             jsonObject.put("trained_date",jsonObject.getString("trained_date"));
 
+                            jsonarray.put(jsonObject);
                             db.insertHistroy(jsonObject);
 
                         }
 //                        loadHistory(db.getAllHistory());
-                        historyAdapter = new HistoryAdapter(getActivity(),jsonArray);
+                        historyAdapter = new HistoryAdapter(getActivity(),jsonarray);
                         list.setAdapter(historyAdapter);
                     }
                 }
             } catch (JSONException e) {
-
+                e.printStackTrace();
             }
         }
     }

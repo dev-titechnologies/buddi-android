@@ -223,4 +223,10 @@ public class Urls {
         return BASEURL + addReview;
     }
 
+    public static String chatHistory = "/chat/chatHistory";
+
+    public static String getChatHistoryURL(){
+        return BASEURL + chatHistory;
+    }
+
 }
