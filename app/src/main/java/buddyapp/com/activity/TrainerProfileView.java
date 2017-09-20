@@ -162,7 +162,7 @@ public class TrainerProfileView extends Activity {
                     }else
                     weight.setText(jsonObject.getString("weight"));
 
-                    imageurl = PreferencesUtils.getData(Constants.user_image, getApplicationContext(), "");
+                    imageurl = jsonObject.getString("user_image");
 
                     String gender = PreferencesUtils.getData(Constants.gender, getApplicationContext(), "");
 

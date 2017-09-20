@@ -76,6 +76,7 @@ import buddyapp.com.activity.chat.ChatActivity;
 import buddyapp.com.services.GPSTracker;
 import buddyapp.com.services.LocationService;
 import buddyapp.com.timmer.Timer_Service;
+import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
@@ -107,7 +108,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     private FusedLocationProviderClient mFusedLocationClient;
 
     LinearLayout start, cancel, profile, message;
-    ImageView startactionIcon, stopactionIcon, profileactionIcon, messageactionIcon, cancelactionIcon;
+    CircleImageView profileactionIcon;
+    ImageView startactionIcon, stopactionIcon,  messageactionIcon, cancelactionIcon;
     TextView startactionTitle, stopactionTitle, profileactionTitle, messageactionTitle, sessionTimmer;
 
     Double pick_latitude, pick_longitude;
@@ -318,7 +320,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
         startactionIcon = (ImageView) findViewById(R.id.startactionIcon);
         stopactionIcon = (ImageView) findViewById(R.id.stopactionIcon);
-        profileactionIcon = (ImageView) findViewById(R.id.profileactionIcon);
+        profileactionIcon = (CircleImageView) findViewById(R.id.profileactionIcon);
         messageactionIcon = (ImageView) findViewById(R.id.messageactionIcon);
         cancelactionIcon = (ImageView) findViewById(R.id.cancelactionIcon);
 
