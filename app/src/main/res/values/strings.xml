@@ -16,7 +16,7 @@
     <string name="facebook_app_id">1934978090076246</string>
     <string name="fb_login_protocol_scheme">fb1934978090076246</string>
 
-    <string name="forgotpassword_desc">Do not worry just enter your email id below \n
+    <string name="forgotpassword_desc">Do not worry just enter your email address below \n
         we will send you the password reset instructions.
     </string>
     <string name="pref_key_transition_time" translatable="false">pref_key_transition_time</string>
@@ -29,7 +29,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
-    <string name="session_duration">Choose Session Duration</string>
+    <string name="session_duration">Choose a session duration</string>
 
     <string name="enter_zipcode">ENTER ZIPCODE</string>
 
