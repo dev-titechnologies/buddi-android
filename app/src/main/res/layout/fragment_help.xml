@@ -61,7 +61,7 @@
             android:gravity="center"
             android:lineSpacingExtra="4dp"
             android:padding="2dp"
-            android:text="Send us an email at:\nbuddyhelp@buddyapp.tv"
+            android:text="Send us an email at:\nh@buddiuniverse.com"
             android:textColor="@color/black" />
 
         <TextView
