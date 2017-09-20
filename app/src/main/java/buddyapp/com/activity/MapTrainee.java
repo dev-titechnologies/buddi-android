@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -56,12 +57,13 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
     Double latitude, longitude;
     LocationManager mLocationManager;
     Button select;
-    String sgender,lat, lng, category,duration, pick_latitude,pick_longitude,pick_location;
+    String sgender, lat, lng, category, duration, pick_latitude, pick_longitude, pick_location;
     private HashMap<Marker, String> hashMarker = new HashMap<Marker, String>();
 
     AVLoadingIndicatorView avi;
 
-    int resultPayment=403;
+    int resultPayment = 403;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,25 +87,24 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
         avi = (AVLoadingIndicatorView) findViewById(R.id.aviloader);
         avi.setVisibility(View.VISIBLE);
         select.setClickable(false);
-        if(PreferencesUtils.getData(Constants.instant_booking,getApplicationContext(),"false").equals("true"))
-        {
-            pick_location = PreferencesUtils.getData(Constants.settings_address_name,getApplicationContext(),"");
-            pick_latitude = PreferencesUtils.getData(Constants.settings_latitude,getApplicationContext(),"");
-            pick_longitude = PreferencesUtils.getData(Constants.settings_longitude,getApplicationContext(),"");
-            PreferencesUtils.saveData(Constants.instant_booking,"false",getApplicationContext());
+        if (PreferencesUtils.getData(Constants.instant_booking, getApplicationContext(), "false").equals("true")) {
+            pick_location = PreferencesUtils.getData(Constants.settings_address_name, getApplicationContext(), "");
+            pick_latitude = PreferencesUtils.getData(Constants.settings_latitude, getApplicationContext(), "");
+            pick_longitude = PreferencesUtils.getData(Constants.settings_longitude, getApplicationContext(), "");
+            PreferencesUtils.saveData(Constants.instant_booking, "false", getApplicationContext());
         }
 
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                            {
+                {
 
                     if (PreferencesUtils.getData(Constants.clientToken, getApplicationContext(), "").length() > 1) {
 
-                        if (PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "").length() ==0) {
+                        if (PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "").length() == 0) {
 
                             intPayment();
-                        }else{
+                        } else {
 
                             new RandomSelect().execute();
                         }
@@ -121,8 +122,8 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
 
-        latitude = Double.valueOf(PreferencesUtils.getData(Constants.latitude,getApplicationContext(),""));
-        longitude = Double.valueOf(PreferencesUtils.getData(Constants.longitude,getApplicationContext(),""));
+        latitude = Double.valueOf(PreferencesUtils.getData(Constants.latitude, getApplicationContext(), ""));
+        longitude = Double.valueOf(PreferencesUtils.getData(Constants.longitude, getApplicationContext(), ""));
         camera = new LatLng(latitude, longitude);
 
         mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
@@ -133,7 +134,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
     }
 
 
-    void intPayment(){
+    void intPayment() {
         avi.setVisibility(View.VISIBLE);
         select.setClickable(false);
         /*
@@ -144,7 +145,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 * */
 //        CommonCall.showLoader(MapTrainee.this);
 
-        DropInResult.fetchDropInResult(MapTrainee.this, PreferencesUtils.getData(Constants.clientToken,getApplicationContext(),""), new DropInResult.DropInResultListener() {
+        DropInResult.fetchDropInResult(MapTrainee.this, PreferencesUtils.getData(Constants.clientToken, getApplicationContext(), ""), new DropInResult.DropInResultListener() {
             @Override
             public void onError(Exception exception) {
                 exception.printStackTrace();
@@ -154,29 +155,78 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
             public void onResult(DropInResult result) {
 
 
-                if (result.getPaymentMethodNonce()==null) {
+                if (result.getPaymentMethodNonce() == null) {
 
                     Intent payment = new Intent(getApplicationContext(), PaymentType.class);
                     payment.putExtra("result", true);
-                    startActivityForResult(payment,resultPayment);
+                    startActivityForResult(payment, resultPayment);
 
 
-                }else{
-                String  nounce=result.getPaymentMethodNonce().getNonce();
+                } else {
+                    final String nounce = result.getPaymentMethodNonce().getNonce();
 
-if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"").length()>1){
-
-    new RandomSelect().execute();
+                    if (PreferencesUtils.getData(Constants.transactionId, getApplicationContext(), "").length() > 1) {
 
 
-}else
-                new checkout(MapTrainee.this,nounce).execute();}
+                        if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals(duration))
+
+
+                            new RandomSelect().execute();
+                        else {
+
+                            avi.setVisibility(View.GONE);
+
+
+                            AlertDialog.Builder builder;
+
+
+                            builder = new AlertDialog.Builder(MapTrainee.this);
+
+
+                            if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals("40") && duration.equals("60"))
+                                builder.setMessage("You've already been paid for a 40 minute session. If you proceed, 1 hour session amount will be deducted. Would you like to continue with 1 hour session ?");
+                            else
+                                builder.setMessage("You've already been paid for a 1 hour session. If you proceed, 40 minute session amount will be deducted. Would you like to continue with 40 minute session ?");
+
+
+                            builder.setTitle("Alert")
+
+
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // continue  with delete
+                                            avi.setVisibility(View.VISIBLE);
+PreferencesUtils.saveData(Constants.transactionId,"",getApplicationContext());
+                                            intPayment();
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // do nothing
+                                            avi.setVisibility(View.GONE);
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+
+
+                        }
+
+                    } else {
+
+
+                        new checkout(MapTrainee.this, nounce).execute();
+                    }
+
+
+                }
 
             }
         });
     }
+
     private void getTrainerMarker() {
-        String array = PreferencesUtils.getData("searchArray",getApplicationContext(),"");
+        String array = PreferencesUtils.getData("searchArray", getApplicationContext(), "");
         try {
             JSONArray jsonarray = new JSONArray(array);
             showMarker(jsonarray);
@@ -187,15 +237,15 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
     }
 
     void showMarker(final JSONArray places) {
-            avi.setVisibility(View.GONE);
-            select.setClickable(true);
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 14), new GoogleMap.CancelableCallback() {
-                @Override
-                public void onFinish() {
-                    for (int k = 0; k < places.length(); k++) {
-                        JSONObject place = null;
-                        try {
-                            place = places.getJSONObject(k);
+        avi.setVisibility(View.GONE);
+        select.setClickable(true);
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 14), new GoogleMap.CancelableCallback() {
+            @Override
+            public void onFinish() {
+                for (int k = 0; k < places.length(); k++) {
+                    JSONObject place = null;
+                    try {
+                        place = places.getJSONObject(k);
 
 
 //                Marker marker = googleMap.addMarker(new MarkerOptions()
@@ -213,22 +263,22 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 
                         Marker pos_Marker = null;
 
-                            pos_Marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(place.getString("latitude")), Double.parseDouble(place.getString("longitude")))).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title("Trainer").draggable(false));
-                            pos_Marker.showInfoWindow();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-                        googleMap.setInfoWindowAdapter(MapTrainee.this);
+                        pos_Marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(place.getString("latitude")), Double.parseDouble(place.getString("longitude")))).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker)).title("Trainer").draggable(false));
+                        pos_Marker.showInfoWindow();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }
 
-                @Override
-                public void onCancel() {
 
+                    googleMap.setInfoWindowAdapter(MapTrainee.this);
                 }
-            });
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
 
     private void buildAlertMessageNoGps() {
@@ -248,6 +298,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
         final AlertDialog alert = builder.create();
         alert.show();
     }
+
     @Override
     public View getInfoWindow(Marker marker) {
         return null;
@@ -262,7 +313,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
 
-        MapRipple mapRipple = new MapRipple(googleMap,camera, getApplicationContext());
+        MapRipple mapRipple = new MapRipple(googleMap, camera, getApplicationContext());
         mapRipple.withNumberOfRipples(1);
         mapRipple.withFillColor(getResources().getColor(R.color.login_bgcolor));
         mapRipple.withStrokeColor(Color.BLACK);
@@ -285,6 +336,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 
 
     }
+
     @Override
     public void onLocationChanged(Location location) {
 
@@ -303,9 +355,10 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 
     }
 
-    public  class RandomSelect extends AsyncTask<String,String,String> {
+    public class RandomSelect extends AsyncTask<String, String, String> {
         String response;
         JSONObject reqData = new JSONObject();
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -316,25 +369,25 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
         @Override
         protected String doInBackground(String... strings) {
             try {
-                reqData.put("trainee_id",PreferencesUtils.getData(Constants.user_id,getApplicationContext(),""));
-                reqData.put(Constants.gender,sgender);
-                reqData.put("category",category);
-                reqData.put(Constants.latitude,lat);
-                reqData.put(Constants.longitude,lng);
-                reqData.put(Constants.amount,PreferencesUtils.getData(Constants.amount,getApplicationContext(),""));
-                reqData.put(Constants.transaction_status,PreferencesUtils.getData(Constants.transaction_status,getApplicationContext(),""));
-                reqData.put("transaction_id",PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),""));
-                reqData.put("training_time",duration);
-                reqData.put("pick_latitude",pick_latitude);
-                reqData.put("pick_longitude",pick_longitude);
-                reqData.put("pick_location",pick_location);
-                reqData.put("promocode",PreferencesUtils.getData(Constants.promo_code,getApplicationContext(),""));
+                reqData.put("trainee_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
+                reqData.put(Constants.gender, sgender);
+                reqData.put("category", category);
+                reqData.put(Constants.latitude, lat);
+                reqData.put(Constants.longitude, lng);
+                reqData.put(Constants.amount, PreferencesUtils.getData(Constants.amount, getApplicationContext(), ""));
+                reqData.put(Constants.transaction_status, PreferencesUtils.getData(Constants.transaction_status, getApplicationContext(), ""));
+                reqData.put("transaction_id", PreferencesUtils.getData(Constants.transactionId, getApplicationContext(), ""));
+                reqData.put("training_time", duration);
+                reqData.put("pick_latitude", pick_latitude);
+                reqData.put("pick_longitude", pick_longitude);
+                reqData.put("pick_location", pick_location);
+                reqData.put("promocode", PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), ""));
 
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            response = NetworkCalls.POST(Urls.getRandomSelectURL(),reqData.toString());
+            response = NetworkCalls.POST(Urls.getRandomSelectURL(), reqData.toString());
             return response;
         }
 
@@ -347,7 +400,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 if (obj.getInt("status") == 1) {
 
 //                    timeOut(obj.getInt("length"));
-                    PreferencesUtils.saveData(Constants.promo_code,"",getApplicationContext());
+                    PreferencesUtils.saveData(Constants.promo_code, "", getApplicationContext());
 
 //                    CommonCall.hideLoader();
 //
@@ -362,16 +415,14 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 //                    startActivity(intent);
 
 
-
-                }else if(obj.getInt("status") == 2){
+                } else if (obj.getInt("status") == 2) {
                     avi.setVisibility(View.GONE);
                     select.setClickable(true);
 //                    CommonCall.hideLoader();
                     Toast.makeText(MapTrainee.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
 
 
-
-                }else{
+                } else {
                     avi.setVisibility(View.GONE);
                     select.setClickable(true);
                 }
@@ -385,15 +436,17 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
 
         }
     }
-   public static CountDownTimer CountTimeout;
-    void timeOut(int length){
+
+    public static CountDownTimer CountTimeout;
+
+    void timeOut(int length) {
 /*
 *
 * timeout to finding a trainer
 *
 * */
 
-        CountTimeout = new android.os.CountDownTimer(60000*length, 1000) {
+        CountTimeout = new android.os.CountDownTimer(60000 * length, 1000) {
             public void onTick(long millisUntilFinished) {
 //                                textic.setText("Time Left: " + millisUntilFinished / 1000);
 
@@ -406,9 +459,8 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 avi.setVisibility(View.GONE);
                 select.setClickable(true);
 
-             Toast.makeText(MapTrainee.this, "Timeout for finding Trainer.", Toast.LENGTH_SHORT).show();
-             finish();
-
+                Toast.makeText(MapTrainee.this, "Timeout for finding Trainer.", Toast.LENGTH_SHORT).show();
+                finish();
 
 
             }
@@ -423,21 +475,24 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 finish();
                 break;
 
-            default: return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
         return true;
     }
 
 
-
-    public  class checkout extends  AsyncTask<String,String,String>{
+    public class checkout extends AsyncTask<String, String, String> {
 
         Activity activity;
-        public checkout(Activity act,String nounce){
-            this.activity=act;
-            this.nounce=nounce;
+
+        public checkout(Activity act, String nounce) {
+            this.activity = act;
+            this.nounce = nounce;
         }
-        String nounce ;
+
+        String nounce;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -448,15 +503,15 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
         @Override
         protected String doInBackground(String... strings) {
 
-            JSONObject req= new JSONObject();
+            JSONObject req = new JSONObject();
             try {
-                req.put("nonce",nounce);
-                req.put("training_time",duration);
+                req.put("nonce", nounce);
+                req.put("training_time", duration);
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            String res = NetworkCalls.POST(Urls.getcheckoutURL(),req.toString());
+            String res = NetworkCalls.POST(Urls.getcheckoutURL(), req.toString());
             return res;
 
         }
@@ -471,9 +526,10 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 if (response.getInt(Constants.status) == 1) {
 
                     JSONObject data = response.getJSONObject("data");
-                    PreferencesUtils.saveData(Constants.transactionId,data.getString("transactionId"),getApplicationContext());
-                    PreferencesUtils.saveData(Constants.amount, data.getString("amount"),getApplicationContext());
-                    PreferencesUtils.saveData(Constants.transaction_status,data.getString("status"),getApplicationContext());
+                    PreferencesUtils.saveData(Constants.transactionId, data.getString("transactionId"), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.amount, data.getString("amount"), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.transaction_status, data.getString("status"), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.duration, duration, getApplicationContext());
 
                     Toast.makeText(activity, "Payment  Successful!", Toast.LENGTH_SHORT).show();
 
@@ -513,7 +569,8 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 avi.setVisibility(View.GONE);
                 select.setClickable(true);
 //                CommonCall.hideLoader();
-                e.printStackTrace(); CommonCall.hideLoader();
+                e.printStackTrace();
+                CommonCall.hideLoader();
             }
         }
     }
@@ -539,7 +596,7 @@ if (PreferencesUtils.getData(Constants.transactionId,getApplicationContext(),"")
                 avi.setVisibility(View.GONE);
                 select.setClickable(true);
 //                CommonCall.hideLoader();
-                CommonCall.PrintLog("mylog", "Error :403 " );
+                CommonCall.PrintLog("mylog", "Error :403 ");
             }
         }
 

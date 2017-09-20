@@ -471,7 +471,7 @@ public class ChooseSpecification extends AppCompatActivity {
                     CommonCall.sessionout(ChooseSpecification.this);
                 }
             } catch (JSONException e) {
-
+e.printStackTrace();
             }
         }
     }
