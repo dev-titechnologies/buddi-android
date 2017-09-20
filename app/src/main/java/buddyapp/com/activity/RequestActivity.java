@@ -2,6 +2,8 @@ package buddyapp.com.activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +17,7 @@ import org.json.JSONObject;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.fcm.NotificationUtils;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
@@ -28,6 +31,20 @@ public class RequestActivity extends AppCompatActivity {
     TextView title;
 
     Button accept, reject;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Handler h = new Handler(Looper.getMainLooper());
+        long delayInMilliseconds = 30000;
+        h.postDelayed(new Runnable() {
+            public void run() {
+
+              finish();
+            }
+        }, delayInMilliseconds);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

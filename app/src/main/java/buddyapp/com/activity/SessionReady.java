@@ -206,7 +206,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                 CommonCall.socketGetTrainerLocation();
             }
-
+            sessionTimmer.setText("00:"+training_time);
             Controller.listenEvent();
 
         } catch (JSONException e) {
@@ -476,7 +476,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             final SpannableStringBuilder sb = new SpannableStringBuilder(millisUntilFinished);
 
 
-            final ForegroundColorSpan fcs = new ForegroundColorSpan(ContextCompat.getColor(getApplicationContext(),R.color.colorAccent));
+            final ForegroundColorSpan fcs = new ForegroundColorSpan(ContextCompat.getColor(getApplicationContext(),R.color.black));
 
 
             sb.setSpan(fcs, 3, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
