@@ -65,6 +65,20 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
     int resultPayment = 403;
 
     @Override
+    public void onBackPressed() {
+
+
+        if (avi.getVisibility()==View.VISIBLE){
+
+            return ;
+        }else{
+
+            super.onBackPressed();
+
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_trainee);
@@ -364,6 +378,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
             super.onPreExecute();
             avi.setVisibility(View.VISIBLE);
             select.setClickable(false);
+
         }
 
         @Override
