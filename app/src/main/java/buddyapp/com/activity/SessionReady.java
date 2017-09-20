@@ -171,7 +171,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 //                if (data.getString("trainer_user_image").length() > 1) {
 //                    PreferencesUtils.saveData(Constants.trainer_image, data.getString("trainee_user_image"), getApplicationContext());
 //                }
-                CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.trainee_image,getApplicationContext(),""),profileactionIcon,R.drawable.ic_man,R.drawable.ic_man);
+                CommonCall.LoadImage(getApplicationContext(),data.getJSONObject("trainee_details").getString("trainee_user_image"),profileactionIcon,R.drawable.ic_man,R.drawable.ic_man);
 
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
                 updateSocket();
@@ -196,7 +196,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 pick_longitude = Double.valueOf(data.getString("pick_longitude"));
                 pick_location = data.getString("pick_location");
                 PreferencesUtils.saveData(Constants.pickup_location,pick_location,getApplicationContext());
-                CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.trainer_image,getApplicationContext(),""),profileactionIcon,R.drawable.ic_man,R.drawable.ic_man);
+                CommonCall.LoadImage(getApplicationContext(), data.getString("trainer_user_image"),profileactionIcon,R.drawable.ic_man,R.drawable.ic_man);
                 PreferencesUtils.saveData(Constants.trainer_name, name, getApplicationContext());
                 if (trainerDetail.getString("trainer_user_image").length() > 1) {
                     PreferencesUtils.saveData(Constants.trainer_image, trainerDetail.getString("trainer_user_image"), getApplicationContext());
