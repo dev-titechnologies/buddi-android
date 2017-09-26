@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,7 +22,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Database Name
     private static final String DATABASE_NAME = "Buddy";
@@ -55,7 +56,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String PAYMENT_STATUS = "payment_status";
     private static final String LOCATION = "location";
     private static final String TRAINED_DATE = "trained_date";
-
+    private static final String CATEGORY_BOOOKED_IMAGE = "categoryBookedImage";
+    private static final String PROFILE_IMAGE = "profile_img";
+    private static final String AMOUNT = "amount";
+    private static final String RATING = "rating";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -88,7 +92,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + TRAINING_STATUS + " TEXT,"
                 + PAYMENT_STATUS + " TEXT,"
                 + LOCATION + " TEXT,"
-                + TRAINED_DATE + " TEXT" + ")";
+                + TRAINED_DATE + " TEXT,"
+                + AMOUNT + " TEXT,"
+                + RATING + " TEXT,"
+                + PROFILE_IMAGE + " TEXT" + ")";
 
 
         db.execSQL(CREATE_SUB_CAT_TABLE);
@@ -389,6 +396,9 @@ else
             statement.put(PAYMENT_STATUS, jsonObject.getString(PAYMENT_STATUS));
             statement.put(LOCATION, jsonObject.getString(LOCATION));
             statement.put(TRAINED_DATE, jsonObject.getString(TRAINED_DATE));
+            statement.put(PROFILE_IMAGE,jsonObject.getString(PROFILE_IMAGE));
+            statement.put(AMOUNT,jsonObject.getString(AMOUNT));
+            statement.put(RATING,jsonObject.getString(RATING));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -399,7 +409,7 @@ else
 
     public JSONArray getAllHistory() {
         JSONArray jsonArray = new JSONArray();
-        String selectQuery = "SELECT  * FROM " + TABLE_HISTORY + "";
+        String selectQuery = "SELECT  * FROM " + TABLE_HISTORY + " ORDER BY "+ BOOKING_ID + " DESC ";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -408,16 +418,22 @@ else
             do {
                 JSONObject obj = new JSONObject();
                 try {
-                    obj.put(BOOKING_ID, cursor.getString(0));
-                    obj.put(TRAINEE_ID, cursor.getString(1));
-                    obj.put(TRAINEE_NAME, cursor.getString(2));
-                    obj.put(TRAINER_NAME, cursor.getString(3));
-                    obj.put(TRAINER_ID, cursor.getString(4));
-                    obj.put(CATEGORY, cursor.getString(5));
-                    obj.put(TRAINING_STATUS, cursor.getString(6));
-                    obj.put(PAYMENT_STATUS, cursor.getString(7));
-                    obj.put(LOCATION, cursor.getString(8));
-                    obj.put(TRAINED_DATE, cursor.getString(9));
+                    obj.put(KEY_ID, cursor.getString(0));
+                    obj.put(BOOKING_ID, cursor.getString(1));
+                    obj.put(TRAINEE_ID, cursor.getString(2));
+                    obj.put(TRAINEE_NAME, cursor.getString(3));
+                    obj.put(TRAINER_NAME, cursor.getString(4));
+                    obj.put(TRAINER_ID, cursor.getString(5));
+                    obj.put(CATEGORY, cursor.getString(6));
+                    obj.put(TRAINING_STATUS, cursor.getString(7));
+                    obj.put(PAYMENT_STATUS, cursor.getString(8));
+                    obj.put(LOCATION, cursor.getString(9));
+                    obj.put(TRAINED_DATE, cursor.getString(10));
+                    obj.put(AMOUNT, cursor.getString(11));
+                    obj.put(RATING, cursor.getString(12));
+                    obj.put(PROFILE_IMAGE, cursor.getString(13));
+                    jsonArray.put(obj);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -425,5 +441,12 @@ else
             } while (cursor.moveToNext());
         }
         return jsonArray;
+    }
+
+    public void deleteHistory() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_HISTORY, null,
+                null);
+        db.close();
     }
 }

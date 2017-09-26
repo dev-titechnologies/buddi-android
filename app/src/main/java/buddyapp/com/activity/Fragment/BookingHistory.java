@@ -4,6 +4,8 @@ package buddyapp.com.activity.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ import buddyapp.com.utils.Urls;
 public class BookingHistory extends Fragment {
     DatabaseHandler db;
 HistoryAdapter historyAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
     public BookingHistory() {
         // Required empty public constructor
     }
@@ -41,10 +44,25 @@ ListView list;
 
         View view=  inflater.inflate(R.layout.fragment_booking_history, container, false);
         list = (ListView)view.findViewById(R.id.list);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
+
         db = new DatabaseHandler(getActivity());
-        new LoadBookingHistory().execute();
+       if(db.getAllHistory().length()>1) {
+           JSONArray jsonarray= db.getAllHistory();
+           historyAdapter = new HistoryAdapter(getActivity(),jsonarray);
+           list.setAdapter(historyAdapter);
+       }else{
 
+       }
 
+       swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+           @Override
+           public void onRefresh() {
+               swipeRefreshLayout.setRefreshing(true);
+               db.deleteHistory();
+               new LoadBookingHistory().execute();
+           }
+       });
 
         return  view;
     }
@@ -57,7 +75,7 @@ ListView list;
         protected void onPreExecute() {
             super.onPreExecute();
             CommonCall.showLoader(getActivity());
-
+            swipeRefreshLayout.setRefreshing(false);
         }
 
         @Override
@@ -79,6 +97,7 @@ ListView list;
                 CommonCall.hideLoader();
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
+                    db.deleteHistory();
                     JSONArray jsonArray = obj.getJSONArray("data");
                     if(jsonArray.length()!=0){
                         JSONArray jsonarray = new JSONArray();
@@ -95,12 +114,14 @@ ListView list;
                             jsonObject.put("payment_status",jsonObject.getString("payment_status"));
                             jsonObject.put("location",jsonObject.getString("location"));
                             jsonObject.put("trained_date",jsonObject.getString("trained_date"));
-
+                            jsonObject.put("profile_img",jsonObject.getString("profile_img"));
+                            jsonObject.put("category",jsonObject.getString("category"));
+                            jsonObject.put("amount",jsonObject.getString("amount"));
                             jsonarray.put(jsonObject);
                             db.insertHistroy(jsonObject);
 
                         }
-//                        loadHistory(db.getAllHistory());
+                        jsonarray= db.getAllHistory();
                         historyAdapter = new HistoryAdapter(getActivity(),jsonarray);
                         list.setAdapter(historyAdapter);
                     }
@@ -111,7 +132,4 @@ ListView list;
         }
     }
 
-    private void loadHistory(JSONArray allHistory) {
-
-    }
 }

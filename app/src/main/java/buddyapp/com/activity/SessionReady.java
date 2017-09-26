@@ -168,8 +168,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 pick_location = data.getString("pick_location");
                 PreferencesUtils.saveData(Constants.pickup_location,pick_location,getApplicationContext());
                 PreferencesUtils.saveData(Constants.trainee_name, name, getApplicationContext());
-                if (data.getJSONObject("trainee_details").getString("trainer_user_image").length() > 1) {
-                    PreferencesUtils.saveData(Constants.trainer_image, data.getJSONObject("trainee_details").getString("trainee_user_image"), getApplicationContext());
+                if (data.getJSONObject("trainee_details").getString("trainee_user_image").length() > 1) {
+                    PreferencesUtils.saveData(Constants.trainee_image, data.getJSONObject("trainee_details").getString("trainee_user_image"), getApplicationContext());
                 }
                 CommonCall.LoadImage(getApplicationContext(),data.getJSONObject("trainee_details").getString("trainee_user_image"),profileactionIcon,R.drawable.ic_man,R.drawable.ic_man);
 
@@ -537,7 +537,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         super.onResume();
 
 //        Controller.listenEvent();
-        if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (!mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             buildAlertMessageNoGps();
         }else{
             if(origin.latitude!=0) {
@@ -605,9 +605,9 @@ start.performClick();
 
             start.performClick();
             if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
-                Toast.makeText(getApplicationContext(),"Trainee "+name+" has started the session. " , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext()," "+name+" has started the session. " , Toast.LENGTH_SHORT).show();
             }else{
-                Toast.makeText(getApplicationContext(),"Trainer "+name+" has started the session. " , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext()," "+name+" has started the session. " , Toast.LENGTH_SHORT).show();
 
             }
 
@@ -678,72 +678,77 @@ start.performClick();
 
 
     public CountDownTimer Count;
-
-    void stopauto() {
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
+BroadcastReceiver stopAutobr= new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
 
 
-                        stopService(new Intent(getApplicationContext(), Timer_Service.class));
+        stopService(new Intent(getApplicationContext(), Timer_Service.class));
 
 
-                        if (Count==null) {
-    CommonCall.showLoader(SessionReady.this, "Completing session Please wait.");
-    if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
+        if (Count==null) {
+            CommonCall.showLoader(SessionReady.this, "Completing session Please wait.");
+            if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
 
 
-        Count = new android.os.CountDownTimer(60000, 1000) {
-            public void onTick(long millisUntilFinished) {
+                Count = new android.os.CountDownTimer(60000, 1000) {
+                    public void onTick(long millisUntilFinished) {
 //                                textic.setText("Time Left: " + millisUntilFinished / 1000);
 
 
-                CommonCall.PrintLog("timmer ", "tick" + millisUntilFinished / 1000);
-            }
+                        CommonCall.PrintLog("timmer ", "tick" + millisUntilFinished / 1000);
+                    }
 
-            public void onFinish() {
+                    public void onFinish() {
 //                                textic.setText("OUT OF TIME!");
-                CommonCall.hideLoader();
-                CommonCall.PrintLog("timmer ", "tick onFinish");
+                        CommonCall.hideLoader();
+                        CommonCall.PrintLog("timmer ", "tick onFinish");
 
+
+                        PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+                        stopSession();
+
+                    }
+                };
+                Count.start();
+            } else
+
+
+            {
+
+                CommonCall.PrintLog("NO TIMMER  ", "NO TIMMER ");
 
                 PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
                 stopSession();
-
             }
-        };
-        Count.start();
-    } else
-
-
-    {
-
-        CommonCall.PrintLog("NO TIMMER  ", "NO TIMMER ");
-
-        PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
-        stopSession();
-    }
-}else{
+        }else{
 
     /*
     *
     * if alredy showing the loader and get stop auto from push
     *
     * */
-    Count.cancel();
-    CommonCall.hideLoader();
-    CommonCall.PrintLog("timmer ", "tick onFinish");
+            Count.cancel();
+            CommonCall.hideLoader();
+            CommonCall.PrintLog("timmer ", "tick onFinish");
 
 
-    PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
-    stopSession();
-}
-                    }
+            PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+            stopSession();
+        }
+    }
 
 
-                }, new IntentFilter("BUDDI_TRAINER_STOP")
+};
+    void stopauto() {
+
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("BUDDI_TRAINER_STOP");
+        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                stopAutobr , intentFilter
 
 
         );
@@ -1288,8 +1293,8 @@ new BroadcastReceiver() {
 
 
                     PreferencesUtils.saveData("data", date_time, getApplicationContext());
-                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
-//                    PreferencesUtils.saveData("hours", "1", getApplicationContext());
+//                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
+                    PreferencesUtils.saveData("hours", "2", getApplicationContext());
 
 
                     startService(new Intent(getApplicationContext(), Timer_Service.class));
