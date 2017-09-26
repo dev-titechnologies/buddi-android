@@ -48,8 +48,6 @@ import buddyapp.com.utils.RippleMap.MapRipple;
 import buddyapp.com.utils.Urls;
 
 import static buddyapp.com.R.id.map;
-import static buddyapp.com.Settings.Constants.start_session;
-import static buddyapp.com.Settings.Constants.trainer_Data;
 
 public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindowAdapter, OnMapReadyCallback, LocationSource.OnLocationChangedListener {
     GoogleMap googleMap;
@@ -487,7 +485,17 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if (avi.getVisibility()==View.VISIBLE){
+
+                    return false;
+                }else{
+
+                    finish();
+
+                }
+
+
+
                 break;
 
             default:

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -20,8 +21,9 @@ public class Detail_history extends AppCompatActivity {
 
     ImageView background,profileImage;
     TextView name,category, training_status,payment_status,location,date, trainer, trainee,
-            trainedDate,description;
-
+            trainedDate,description, amount,textRated;
+    RatingBar ratingBar;
+    Float rate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +43,28 @@ public class Detail_history extends AppCompatActivity {
 
         training_status = (TextView) findViewById(R.id.training_status);
         payment_status = (TextView) findViewById(R.id.payment_status);
-
-
+        amount = (TextView) findViewById(R.id.amount);
+        ratingBar = (RatingBar) findViewById(R.id.rating);
+        textRated = (TextView) findViewById(R.id.text_rated);
 
         trainedDate.setText(CommonCall.convertTime1(String.valueOf(getIntent().getExtras().get("trained_date"))));
         description.setText(getIntent().getExtras().getString("desc"));
         training_status.setText(getIntent().getExtras().getString("trainingStatus"));
         payment_status.setText(getIntent().getExtras().getString("paymentStatus"));
+        amount.setText("$"+getIntent().getExtras().getString("amount"));
+        textRated.setText("You rated "+getIntent().getExtras().getString("name"));
+
+        if(getIntent().getExtras().getString("rating").equals("null"))
+        rate =0f;
+        else
+        rate = Float.parseFloat(getIntent().getExtras().getString("rating"));
+
+        ratingBar.setRating(rate);
+        ratingBar.setClickable(false);
 
         try {
-            CommonCall.LoadImage(getApplicationContext(), getIntent().getExtras().getString("image"), background, R.drawable.ic_no_image, R.drawable.ic_no_image);
-            CommonCall.LoadImage(getApplicationContext(), getIntent().getExtras().getString("profileImage"), profileImage, R.drawable.ic_no_image, R.drawable.ic_no_image);
+            CommonCall.LoadImage(getApplicationContext(), getIntent().getExtras().getString("image"), background, R.drawable.ic_account, R.drawable.ic_account);
+            CommonCall.LoadImage(getApplicationContext(), getIntent().getExtras().getString("profileImage"), profileImage, R.drawable.ic_account, R.drawable.ic_account);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -81,10 +94,13 @@ public class Detail_history extends AppCompatActivity {
         }catch(Exception e1){
             e1.printStackTrace();
         }
-
+try{
         String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
 
-        location.setText(address);
+        location.setText(address);}
+catch (Exception e){
+    e.printStackTrace();
+}
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

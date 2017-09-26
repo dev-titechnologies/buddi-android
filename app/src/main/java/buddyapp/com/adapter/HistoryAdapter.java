@@ -33,7 +33,7 @@ import buddyapp.com.utils.CommonCall;
 public class HistoryAdapter extends BaseAdapter {
     Context context;
     JSONArray jsonArray;
-    String bookingId, traineeId,traineeName,trainerName,trainerId,
+    String bookingId, traineeId,traineeName,trainerName,trainerId,samount,
     category,trainingStatus,paymentStatus,location,trained_date, desc, image, name,profileImage;
     public HistoryAdapter(Context context, JSONArray jsonArray){
         this.context = context;
@@ -66,7 +66,7 @@ public class HistoryAdapter extends BaseAdapter {
             holder.background = (ImageView) view.findViewById(R.id.background);
             holder.trainedDate = (TextView) view.findViewById(R.id.trained_date);
             holder.description = (TextView) view.findViewById(R.id.description);
-
+            holder.amount = (TextView) view.findViewById(R.id.amount);
 
 
 //        } else {
@@ -97,7 +97,7 @@ public class HistoryAdapter extends BaseAdapter {
             paymentStatus= jsonObject.getString("payment_status");
             location= jsonObject.getString("location");
             trained_date= jsonObject.getString("trained_date");
-
+            samount = jsonObject.getString("amount");
             desc = category+" session with "+name;
 
             view.setTag(jsonObject);
@@ -120,7 +120,7 @@ public class HistoryAdapter extends BaseAdapter {
 //            String country = addresses.get(0).getCountryName();
 //            String postalCode = addresses.get(0).getPostalCode();
 //            String knownName = addresses.get(0).getFeatureName();
-
+            holder.amount.setText("$"+samount);
             holder.trainedDate.setText(CommonCall.convertTime1(trained_date));
             holder.description.setText(category+" session with "+name);
             view.setTag(jsonObject);
@@ -149,6 +149,9 @@ public class HistoryAdapter extends BaseAdapter {
                     intent.putExtra("trained_date",jsonObject.getString("trained_date"));
                     intent.putExtra("profileImage",jsonObject.getString("profile_img"));
                     intent.putExtra("desc",desc);
+                    intent.putExtra("name",name);
+                    intent.putExtra("amount",samount);
+                    intent.putExtra("rating",jsonObject.getString("rating"));
                     intent.putExtra("image",array.getJSONObject(0).getString("categoryBookImage"));
                     context.startActivity(intent);
                     } catch (JSONException e) {
@@ -165,7 +168,7 @@ public class HistoryAdapter extends BaseAdapter {
 
     public class CustomViewHolder {
 
-        TextView category, trainedDate,description;
+        TextView category, trainedDate,description,amount;
         CardView cat_card;
         ImageView background;
 

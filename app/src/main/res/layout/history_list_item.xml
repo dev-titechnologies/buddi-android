@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:orientation="vertical">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/small"
@@ -35,8 +35,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
+            android:layout_alignParentLeft="true"
             android:id="@+id/trained_date"/>
-    </LinearLayout>
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_alignParentRight="true"
+        android:id="@+id/amount"/>
+    </RelativeLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

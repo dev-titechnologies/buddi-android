@@ -116,8 +116,8 @@ public class LocationService extends Service implements
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         updateUI();
-        Toast.makeText(this,("Updating User Location..."),
-                Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this,("Updating User Location..."),
+//                Toast.LENGTH_SHORT).show();
     }
 
     @Override

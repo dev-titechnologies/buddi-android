@@ -279,10 +279,6 @@ done.setVisibility(View.VISIBLE);
 *
 * */
 
-
-
-
-
                 setResult(RESULT_OK,new Intent());
                 finish();
 
