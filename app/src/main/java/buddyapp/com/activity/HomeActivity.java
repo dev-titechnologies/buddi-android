@@ -403,7 +403,7 @@ public class HomeActivity extends AppCompatActivity
                 new IntentFilter(Config.REGISTRATION_COMPLETE));
 
         // clear the notification area when the app is opened
-        NotificationUtils.clearNotifications(getApplicationContext());
+//        NotificationUtils.clearNotifications(getApplicationContext());
     }
     public void clearBackstack() {
 

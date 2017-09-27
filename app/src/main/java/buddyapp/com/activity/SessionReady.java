@@ -123,12 +123,16 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_session_ready);
 
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle("Training Session");
 
         intstartStop();
+
+
+
 // check if GPS enabled
 
         gps = new GPSTracker(SessionReady.this);
@@ -141,9 +145,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 gps.showSettingsAlert();// user current location
         } else {
             mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
-            if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                buildAlertMessageNoGps();
-            }
+//            if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//                buildAlertMessageNoGps();
+//            }
            // gps.showSettingsAlert();
         }
 
@@ -227,11 +231,11 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         camera = new LatLng(latitude, longitude);
 
         mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
-        if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-
-            buildAlertMessageNoGps();
-
-        }
+//        if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//
+//            buildAlertMessageNoGps();
+//
+//        }
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 100, this );
         origin = usercamera;
         dest = camera;
@@ -292,18 +296,11 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
         );*/
-/*
-*
-* br register
-*
-* */
 
-        startauto();
-        stopauto();
-        registerReceiver(br, new IntentFilter(Timer_Service.str_receiver));
-        resetTimmer();
 
-        cancelAuto();
+
+
+
     }
 
     HorizontalScrollView horizontalScrollView;
@@ -547,6 +544,63 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             }
         }
 
+
+/*
+*
+* br register
+*
+* */
+
+        startauto();
+        stopauto();
+        registerReceiver(br, new IntentFilter(Timer_Service.str_receiver));
+        resetTimmer();
+
+        cancelAuto();
+
+        if (getIntent().getStringExtra("push_session")!=null) {
+            Intent intent;
+            switch (getIntent().getStringExtra("push_session")) {
+
+
+                case "1":
+
+                    break;
+                case "2":
+                    intent = new Intent("BUDDI_TRAINER_START");
+
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                    break;
+                case "3":
+
+                    PreferencesUtils.saveData(start_session, "false", Controller.getAppContext());
+
+                    intent = new Intent("BUDDI_TRAINER_CANCEL");
+
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+
+
+                    break;
+                case "4":
+                    intent = new Intent("BUDDI_TRAINER_STOP");
+
+                    sendBroadcast(intent);
+                    break;
+                case "5":
+
+                    break;
+                case "6":
+                    intent = new Intent("BUDDI_SESSION_EXTEND");
+                    intent.putExtra("extend_time",getIntent().getStringExtra("extend_time"));
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                    break;
+
+            }
+
+
+        }
+
+
 //        LoadmapTask();
     }
 
@@ -677,12 +731,16 @@ start.performClick();
     }
 
 
+
+
+
+
     public CountDownTimer Count;
 BroadcastReceiver stopAutobr= new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-
+        Timer_Service.stopFlag =true;
         stopService(new Intent(getApplicationContext(), Timer_Service.class));
 
 
@@ -745,9 +803,8 @@ BroadcastReceiver stopAutobr= new BroadcastReceiver() {
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("BUDDI_TRAINER_STOP");
-        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
-        LocalBroadcastManager.getInstance(this).registerReceiver(
+
+        registerReceiver(
                 stopAutobr , intentFilter
 
 
@@ -831,12 +888,23 @@ new BroadcastReceiver() {
         }
     };
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(br);
+
+        unregisterReceiver(stopAutobr);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(brfinsih);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(startAuto);
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(br);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(brfinsih);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(startAuto);
+
+
         if (mSocket!=null)
         mSocket.disconnect();
     }
@@ -1100,7 +1168,7 @@ new BroadcastReceiver() {
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             try {
-                CommonCall.hideLoader();
+
                 ArrayList<LatLng> points;
                 PolylineOptions lineOptions = null;
                 // Traversing through all the routes

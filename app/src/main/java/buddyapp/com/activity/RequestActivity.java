@@ -118,7 +118,7 @@ public class RequestActivity extends AppCompatActivity {
         protected void onPostExecute(String res) {
             super.onPostExecute(res);
 
-
+NotificationUtils.clearNotifications(getApplicationContext());
             try {
                 JSONObject obj = new JSONObject(res);
                 if (obj.getInt("status") == 1) {

@@ -97,7 +97,7 @@ public class NotificationUtils {
  
         Notification notification;
         notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
-                .setAutoCancel(true)
+                .setAutoCancel(false)
                 .setContentTitle(title)
                 .setContentIntent(resultPendingIntent)
                 .setSound(alarmSound)
@@ -119,7 +119,7 @@ public class NotificationUtils {
         bigPictureStyle.bigPicture(bitmap);
         Notification notification;
         notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
-                .setAutoCancel(true)
+                .setAutoCancel(false)
                 .setContentTitle(title)
                 .setContentIntent(resultPendingIntent)
                 .setSound(alarmSound)
