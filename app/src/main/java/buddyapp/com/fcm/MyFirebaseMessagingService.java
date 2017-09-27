@@ -1,9 +1,15 @@
 package buddyapp.com.fcm;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,13 +20,17 @@ import com.google.firebase.messaging.RemoteMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Random;
+
 import buddyapp.com.Controller;
+import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.Fragment.HomeCategory;
 import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.RequestActivity;
 import buddyapp.com.activity.SessionReady;
+import buddyapp.com.timmer.Timer_Service;
 import buddyapp.com.utils.CommonCall;
 
 import static buddyapp.com.Settings.Constants.start_session;
@@ -140,7 +150,6 @@ startActivity(resultIntent);
             }else if(json.getInt("type")==3){
 
 
-                PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
 
                 PreferencesUtils.saveData(start_session,"false", Controller.getAppContext());
 
@@ -159,20 +168,21 @@ startActivity(resultIntent);
 
 
             }else if(json.getInt("type")==4){
+
+
                 PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
 
                 PreferencesUtils.saveData(start_session,"false", Controller.getAppContext());
 
-                Intent resultIntent = new Intent(getApplicationContext(), HomeCategory.class);
-                resultIntent.putExtra("message","");
 
-                showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
+
+
+                showNotificationMessage(getApplicationContext(), "Buddi", title, "");
 
 
                 Intent intent = new Intent("BUDDI_TRAINER_STOP");
 
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
-
+                sendBroadcast(intent);
 
 
             }else if(json.getInt("type")==5){
@@ -191,14 +201,14 @@ startActivity(resultIntent);
 * clearing notification of new request after 30 seconds
 * */
 
-                Handler h = new Handler(Looper.getMainLooper());
-                long delayInMilliseconds = 30000;
-                h.postDelayed(new Runnable() {
-                    public void run() {
-
-                        NotificationUtils.clearNotifications(getApplicationContext());
-                    }
-                }, delayInMilliseconds);
+//                Handler h = new Handler(Looper.getMainLooper());
+//                long delayInMilliseconds = 30000;
+//                h.postDelayed(new Runnable() {
+//                    public void run() {
+//
+//                        NotificationUtils.clearNotifications(getApplicationContext());
+//                    }
+//                }, delayInMilliseconds);
 
 
             }
@@ -231,9 +241,45 @@ startActivity(resultIntent);
     /**
      * Showing notification with text only
      */
+    private int getNotificationIcon() {
+        boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
+        return useWhiteIcon ? R.mipmap.ic_launcher : R.mipmap.ic_launcher;
+    }
+    private void showNotificationMessage(Context context, String title, String message, String timeStamp) {
+
+        //AppController.getSharedPreferences().edit().putString(Constants.CALL_CASE_ID, notifObject.getCaseDetails().getCaseID()).commit();
+        Intent intent = new Intent(this, SessionReady.class);
+        intent.putExtra("stop_session", "true");
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1001, intent, 0);
+
+        NotificationManager     mNotificationManager =
+
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        //First time
+
+        NotificationCompat.Builder    builder = new NotificationCompat.Builder(getApplicationContext())
+                .setContentText(getApplicationContext().getString(R.string.app_name))
+                .setContentTitle("Session123")
+                .setSmallIcon(getNotificationIcon())
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                .setAutoCancel(true)
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .setContentIntent(
+                        pendingIntent
+                );
+
+
+        mNotificationManager.notify(1001, builder.build());
+
+    }
     private void showNotificationMessage(Context context, String title, String message, String timeStamp, Intent intent) {
         notificationUtils = new NotificationUtils(context);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
     }
 

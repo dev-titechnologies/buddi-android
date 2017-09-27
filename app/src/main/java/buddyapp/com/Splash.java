@@ -8,6 +8,7 @@ import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,6 +19,7 @@ import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.ChooseCategory;
 import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.IntroScreen;
+import buddyapp.com.activity.RequestActivity;
 import buddyapp.com.activity.Session;
 import buddyapp.com.activity.SessionReady;
 import buddyapp.com.activity.WelcomeActivity;
@@ -35,6 +37,64 @@ public class Splash extends AppCompatActivity {
         getSupportActionBar().hide();
 
 
+
+        if (getIntent().getStringExtra("type")!=null && getIntent().getStringExtra("type").equals("4")){
+
+            startActivity(new Intent(getApplicationContext(), SessionReady.class).putExtra("push_session","4"));
+
+            finish();
+        }else
+        if (getIntent().getStringExtra("type")!=null && getIntent().getStringExtra("type").equals("3")){
+
+            startActivity(new Intent(getApplicationContext(), SessionReady.class).putExtra("push_session","3"));
+
+            finish();
+        }else
+        if (getIntent().getStringExtra("type")!=null && getIntent().getStringExtra("type").equals("2")){
+
+            startActivity(new Intent(getApplicationContext(), SessionReady.class).putExtra("push_session","2"));
+
+            finish();
+        }
+        else
+        if (getIntent().getStringExtra("type")!=null && getIntent().getStringExtra("type").equals("6")){
+
+
+            JSONObject data = null;
+            try {
+                data = new JSONObject(getIntent().getStringExtra("data"));
+
+
+
+                startActivity(new Intent(getApplicationContext(), SessionReady.class)
+                        .putExtra("push_session","6").putExtra("extend_time",data.getString("extend_time")));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            finish();
+        }
+        else
+        if (getIntent().getStringExtra("type")!=null && getIntent().getStringExtra("type").equals("5")){
+
+            JSONObject data = null;
+            try {
+                data = new JSONObject(getIntent().getStringExtra("data"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            Intent resultIntent = new Intent(getApplicationContext(), RequestActivity.class);
+            resultIntent.putExtra("message",data.toString());
+            resultIntent.putExtra("title","title");
+
+            resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+
+            startActivity(resultIntent);
+        }
+else
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
