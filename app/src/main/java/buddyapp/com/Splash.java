@@ -37,7 +37,7 @@ public class Splash extends AppCompatActivity {
         getSupportActionBar().hide();
 
 
-
+Log.e("launcher activity",getIntent().getStringExtra("type")+"");
         if (getIntent().getStringExtra("type")!=null && getIntent().getStringExtra("type").equals("4")){
 
             startActivity(new Intent(getApplicationContext(), SessionReady.class).putExtra("push_session","4"));

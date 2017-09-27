@@ -176,8 +176,9 @@ startActivity(resultIntent);
 
 
 
-
-                showNotificationMessage(getApplicationContext(), "Buddi", title, "");
+                Intent resultIntent = new Intent(getApplicationContext(), HomeCategory.class);
+                resultIntent.putExtra("message","");
+                showNotificationMessage(getApplicationContext(), "Buddi", title, "",resultIntent);
 
 
                 Intent intent = new Intent("BUDDI_TRAINER_STOP");

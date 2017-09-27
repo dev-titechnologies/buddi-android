@@ -67,6 +67,7 @@ public class Timer_Service extends Service {
         simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
 
         mTimer = new Timer();
+
         mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 5, NOTIFY_INTERVAL);
         intent = new Intent(str_receiver);
         CreateNotification();

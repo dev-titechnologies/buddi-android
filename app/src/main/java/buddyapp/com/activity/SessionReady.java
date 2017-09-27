@@ -597,7 +597,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
             }
 
-
+            getIntent().removeExtra("push_session");
         }
 
 
@@ -641,6 +641,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                         startactionTitle.setText("Start");
                         duration = intent.getStringExtra("extend_time");
                         startactionIcon.setImageResource(R.mipmap.play);
+                        Log.e("clicked start","start clicked2");
 start.performClick();
                         Toast.makeText(context, "Your Session has been Extended.", Toast.LENGTH_SHORT).show();
             }
@@ -656,7 +657,7 @@ start.performClick();
     BroadcastReceiver startAuto=  new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
+            Log.e("clicked start","start clicked1");
             start.performClick();
             if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
                 Toast.makeText(getApplicationContext()," "+name+" has started the session. " , Toast.LENGTH_SHORT).show();
