@@ -2,11 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="20dp"
     tools:context="buddyapp.com.activity.Fragment.Help">
 
-<android.support.v7.widget.CardView
+<!--<android.support.v7.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="5dp"
@@ -25,7 +24,7 @@
     android:paddingTop="15dp"
     android:paddingBottom="15dp"/>
     </LinearLayout>
-</android.support.v7.widget.CardView>
+</android.support.v7.widget.CardView>-->
 
     <Button
         android:layout_width="match_parent"
@@ -50,9 +49,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:lineSpacingExtra="4dp"
-
             android:padding="2dp"
-            android:text="Still need help?"
+            android:text="Need some help?"
             android:textColor="@color/text_color" />
 
         <TextView
@@ -61,17 +59,19 @@
             android:gravity="center"
             android:lineSpacingExtra="4dp"
             android:padding="2dp"
-            android:text="Send us an email at:\nh@buddiuniverse.com"
+            android:text="Send us an email at:"
             android:textColor="@color/black" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="2dp"
-            android:text="OR"
-            android:textColor="@color/text_color"
-            android:textStyle="bold" />
+            android:id="@+id/send_mail"
+            android:textSize="20dp"
+            android:lineSpacingExtra="4dp"
+            android:inputType="textWebEmailAddress"
+            android:padding="4dp"
+            android:text="h@buddiuniverse.com"
+            android:textColor="@color/text_color" />
 
         <TextView
             android:layout_width="match_parent"
@@ -79,15 +79,9 @@
             android:gravity="center"
             android:lineSpacingExtra="4dp"
             android:padding="2dp"
-            android:text="Call our Help center at:"
+            android:text="We will get back to you within 24 hours."
             android:textColor="@color/black" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="2dp"
-            android:text="659-123-9000"
-            android:textColor="@color/text_color" />
+
     </LinearLayout>
 </FrameLayout>
