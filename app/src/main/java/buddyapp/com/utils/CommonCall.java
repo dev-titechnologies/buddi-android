@@ -184,7 +184,7 @@ public class CommonCall {
     public static String convertTime1(String date) {
 
         String formattedDate = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy, HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyy, hh:mm aa");
         try {
             formattedDate = sdf.format((Iso8601.toCalendar(date).getTime()));
 
@@ -810,6 +810,9 @@ CommonCall.hideLoader();
                 final JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
 
+                    if(type.equals("complete")){
+                        PreferencesUtils.saveData(Constants.flag_rating, "true", activity);
+                    }
 
                     //clearing last payment id to avoid multiple payments
                     PreferencesUtils.saveData(Constants.transactionId, "", activity);

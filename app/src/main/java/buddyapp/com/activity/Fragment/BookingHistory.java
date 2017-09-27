@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,7 +53,7 @@ ListView list;
            historyAdapter = new HistoryAdapter(getActivity(),jsonarray);
            list.setAdapter(historyAdapter);
        }else{
-
+           new LoadBookingHistory().execute();
        }
 
        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -125,6 +126,10 @@ ListView list;
                         historyAdapter = new HistoryAdapter(getActivity(),jsonarray);
                         list.setAdapter(historyAdapter);
                     }
+                }else if (obj.getInt("status") == 2) {
+                    Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                }else if (obj.getInt("status") == 3) {
+                    CommonCall.sessionout(getActivity());
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

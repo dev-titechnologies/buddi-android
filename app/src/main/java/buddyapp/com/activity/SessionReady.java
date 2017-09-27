@@ -558,7 +558,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
-                        PreferencesUtils.saveData(Constants.flag_rating, "false", getApplicationContext());
+//                        PreferencesUtils.saveData(Constants.flag_rating, "false", getApplicationContext());
                         stopSession();
 
 
@@ -627,7 +627,7 @@ start.performClick();
     void stopAction() {
         Timer_Service.stopFlag = true;
         PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
-        PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+//        PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
 
         startactionTitle.setText("Start");
         startactionIcon.setImageResource(R.mipmap.play);
@@ -705,7 +705,7 @@ BroadcastReceiver stopAutobr= new BroadcastReceiver() {
                         CommonCall.PrintLog("timmer ", "tick onFinish");
 
 
-                        PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+//                        PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
                         stopSession();
 
                     }
@@ -718,7 +718,7 @@ BroadcastReceiver stopAutobr= new BroadcastReceiver() {
 
                 CommonCall.PrintLog("NO TIMMER  ", "NO TIMMER ");
 
-                PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+//                PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
                 stopSession();
             }
         }else{
@@ -733,7 +733,7 @@ BroadcastReceiver stopAutobr= new BroadcastReceiver() {
             CommonCall.PrintLog("timmer ", "tick onFinish");
 
 
-            PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+//            PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
             stopSession();
         }
     }
@@ -803,7 +803,7 @@ new BroadcastReceiver() {
                                 CommonCall.PrintLog("timmer ", "tick onFinish");
 
 
-                                PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+//                                PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
                                 String bookid = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
 
 

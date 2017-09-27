@@ -122,6 +122,7 @@ public class HistoryAdapter extends BaseAdapter {
 //            String knownName = addresses.get(0).getFeatureName();
             holder.amount.setText("$"+samount);
             holder.trainedDate.setText(CommonCall.convertTime1(trained_date));
+            CommonCall.PrintLog("date",trained_date);
             holder.description.setText(category+" session with "+name);
             view.setTag(jsonObject);
             view.setOnClickListener(new View.OnClickListener() {
