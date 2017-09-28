@@ -194,9 +194,9 @@ public class Controller extends Application {
             try {
                 if(jsonObject.getString("type").equals("location")) {
 
-//                    JSONObject object = jsonObject.getJSONObject("message");
+                    JSONObject object = jsonObject.getJSONObject("message");
 
-//                    sendBroadcastTrainerLocation(object.getString("latitude"), object.getString("longitude"));
+                    sendBroadcastTrainerLocation(object.getString("latitude"), object.getString("longitude"));
 //                    CommonCall.PrintLog("lat", object.getString("latitude"));
 //                    CommonCall.PrintLog("lng", object.getString("longitude"));
 //                    CommonCall.PrintLog("availabilityStatus", object.getString("availabilityStatus"));
