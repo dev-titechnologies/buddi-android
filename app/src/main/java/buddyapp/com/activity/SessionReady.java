@@ -107,6 +107,10 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     private HashMap<Marker, String> hashMarker = new HashMap<Marker, String>();
     private FusedLocationProviderClient mFusedLocationClient;
 
+    LatLng trainerLocation;
+
+
+
     LinearLayout start, cancel, profile, message;
     CircleImageView profileactionIcon;
     ImageView startactionIcon, stopactionIcon,  messageactionIcon, cancelactionIcon;
@@ -239,19 +243,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 100, this );
         origin = usercamera;
         dest = camera;
-//        LoadmapTask();
-        /*googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usercamera, 14), new GoogleMap.CancelableCallback() {
-            @Override
-            public void onFinish() {
-                LoadmapTask();
-//                                animateMarker(pos_Marker, camera, false, 0.0f);
-            }
 
-            @Override
-            public void onCancel() {
-
-            }
-        });*/
 
 
 /****
@@ -265,37 +257,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 //        LoadmapTask();
 
 
-/*        LocalBroadcastManager.getInstance(this).registerReceiver(
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        CommonCall.PrintLog("brodcastmsg", "brodcastmsg");
-                        lat = intent.getStringExtra("trainer_latitude");
-                        lng = intent.getStringExtra("trainer_longitude");
-                        // trainer location
-                        latitude = Double.valueOf(lat);
-                        longitude = Double.valueOf(lng);
-                        camera = new LatLng(latitude, longitude);
-                        origin = camera;
 
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 14), new GoogleMap.CancelableCallback() {
-                            @Override
-                            public void onFinish() {
-                                LoadmapTask();
-//                                animateMarker(pos_Marker, camera, false, 0.0f);
-                            }
-
-                            @Override
-                            public void onCancel() {
-
-                            }
-                        });
-
-                    }
-                }, new IntentFilter("SOCKET_BUDDI_TRAINER_LOCATION")
-
-
-        );*/
 
 
 
@@ -345,11 +307,34 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             public void onClick(View view) {
 
                 if (startactionTitle.getText().toString().equals("Start")) {
-                    Timer_Service.stopFlag = false;
-                    new StartSession().execute();
-                    profile.setEnabled(false);
-                    message.setEnabled(false);
 
+
+
+
+
+
+                    if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainee")
+ ) {
+
+
+                        if (trainerLocation!=null && checktrainerDistance() ) {
+
+                            Timer_Service.stopFlag = false;
+                            new StartSession().execute();
+                            profile.setEnabled(false);
+                            message.setEnabled(false);
+                        }else{
+
+                            showAlert("It seems like trainer has not reached to the location. Please wait until your trainer arrives at the location.");
+                        }
+                    }else{
+
+                       showAlert("Please ask the Trainee to start the session.");
+
+
+
+                        
+                    }
                 } else {
 
                     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -641,8 +626,12 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                         startactionTitle.setText("Start");
                         duration = intent.getStringExtra("extend_time");
                         startactionIcon.setImageResource(R.mipmap.play);
-                        Log.e("clicked start","start clicked2");
-start.performClick();
+
+
+
+                        startclick();
+
+
                         Toast.makeText(context, "Your Session has been Extended.", Toast.LENGTH_SHORT).show();
             }
                 }, new IntentFilter("BUDDI_SESSION_EXTEND")
@@ -654,11 +643,20 @@ start.performClick();
     }
 
 
+    void startclick(){
+        Timer_Service.stopFlag = false;
+        new StartSession().execute();
+        profile.setEnabled(false);
+        message.setEnabled(false);
+    }
+
     BroadcastReceiver startAuto=  new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.e("clicked start","start clicked1");
-            start.performClick();
+
+
+            startclick();
+
             if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
                 Toast.makeText(getApplicationContext()," "+name+" has started the session. " , Toast.LENGTH_SHORT).show();
             }else{
@@ -669,6 +667,50 @@ start.performClick();
         }
     };
 
+    BroadcastReceiver trainerLocationbr=  new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+        CommonCall.PrintLog("brodcastmsg trainerLocationbr", "brodcastmsg trainerLocationbr");
+        String     slat = intent.getStringExtra("trainer_latitude");
+        String    slng = intent.getStringExtra("trainer_longitude");
+            // trainer location
+
+        trainerLocation = new LatLng(Double.parseDouble(slat),Double.parseDouble(slng));
+
+
+
+        }
+    };
+
+boolean checktrainerDistance(){
+
+    Location locationA = new Location("point A");
+
+    locationA.setLatitude(trainerLocation.latitude);
+    locationA.setLongitude(trainerLocation.longitude);
+
+    Location locationB = new Location("point B");
+
+    locationB.setLatitude(gps.getLatitude());
+    locationB.setLongitude(gps.getLongitude());
+
+    float distance = locationA.distanceTo(locationB);
+
+CommonCall.PrintLog("distance",distance+"");
+if (distance<=500){
+
+
+    return true;
+
+}else{
+
+    return false;
+    }
+
+
+}
+
+
     void startauto() {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
@@ -676,6 +718,11 @@ start.performClick();
 
 
         );
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(trainerLocationbr
+                , new IntentFilter("SOCKET_BUDDI_TRAINER_LOCATION"));
+
+
     }
 
 
@@ -898,6 +945,7 @@ new BroadcastReceiver() {
         unregisterReceiver(stopAutobr);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(brfinsih);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(startAuto);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(trainerLocationbr);
     }
 
 
@@ -1480,5 +1528,26 @@ new BroadcastReceiver() {
         }
         return true;
     }
+void showAlert(String msg){
 
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    //Yes button clicked
+
+
+                    break;
+
+
+            }
+        }
+    };
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(SessionReady.this);
+    builder.setMessage(msg).setPositiveButton("OK", dialogClickListener)
+            .show();
+
+}
 }
