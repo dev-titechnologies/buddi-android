@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,7 +43,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.Inet4Address;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,11 +58,11 @@ import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
 public class RegisterScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    TextView  next;
-    String semail, sfname,  slname, sgender="", scountrycode, smobilenumber, validnumber, spassword, sfacebookId="",sgoogleplusId="";
-    String register_type= "normal";
+    TextView next;
+    String semail, sfname, slname, sgender = "", scountrycode, smobilenumber, validnumber, spassword, sfacebookId = "", sgoogleplusId = "", sage, sweight, sheight;
+    String register_type = "normal";
     ImageView Google, facebook;
-    String user_image="";
+    String user_image = "";
 
     CountryCodePicker ccp;
     boolean isValid = false;
@@ -73,10 +71,10 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
     GoogleApiClient mGoogleApiClient;
     GoogleSignInOptions gso;
     int RC_SIGN_IN = 101;
-    LinearLayout ageLayout,weightLayout,heightLayout;
+    LinearLayout ageLayout, weightLayout, heightLayout;
     RadioGroup rg;
     RadioButton rbmale, rbfemale;
-    EditText firstName, lastName, eMail, password, mobile;
+    EditText firstName, lastName, eMail, password, mobile, age, height, weight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,21 +100,30 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         actionBar.setTitle("Sign Up");
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
+
+        ageLayout = (LinearLayout) findViewById(R.id.age_layout);
+        weightLayout = (LinearLayout) findViewById(R.id.weight_layout);
+        heightLayout = (LinearLayout) findViewById(R.id.height_layout);
+
+        age = (EditText) findViewById(R.id.age);
+        height = (EditText) findViewById(R.id.height);
+        weight = (EditText) findViewById(R.id.weight);
+
         Intent intent = getIntent();
-        try{
-        if(intent.hasExtra("email"))
-        {
-            eMail.setText(intent.getStringExtra("email"));
-            firstName.setText(intent.getStringExtra("sfname"));
-            lastName.setText(intent.getStringExtra("slname"));
-            if(intent.getStringExtra("facebook_id").length()>1)
-            {    sfacebookId = intent.getStringExtra("facebook_id");
-                 register_type = intent.getStringExtra("login_type");}
-            else if(intent.getStringExtra("google_id").length()>1)
-            {    sgoogleplusId = intent.getStringExtra("google_id");
-                 register_type = intent.getStringExtra("login_type");}
-        }
-        }catch (Exception e){
+        try {
+            if (intent.hasExtra("email")) {
+                eMail.setText(intent.getStringExtra("email"));
+                firstName.setText(intent.getStringExtra("sfname"));
+                lastName.setText(intent.getStringExtra("slname"));
+                if (intent.getStringExtra("facebook_id").length() > 1) {
+                    sfacebookId = intent.getStringExtra("facebook_id");
+                    register_type = intent.getStringExtra("login_type");
+                } else if (intent.getStringExtra("google_id").length() > 1) {
+                    sgoogleplusId = intent.getStringExtra("google_id");
+                    register_type = intent.getStringExtra("login_type");
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Google = (ImageView) findViewById(R.id.googleplus);
@@ -134,12 +141,12 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         Google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(CommonCall.isNetworkAvailable()) {
+                if (CommonCall.isNetworkAvailable()) {
                     Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                     startActivityForResult(signInIntent, RC_SIGN_IN);
-                }else{
-                        Toast.makeText(getApplicationContext(),"Please check your internet connection",Toast.LENGTH_SHORT).show();
-                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -151,12 +158,12 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
             public void onClick(View view) {
                 facebook.setEnabled(false);
                 LoginManager.getInstance().logOut();
-                if(CommonCall.isNetworkAvailable()) {
+                if (CommonCall.isNetworkAvailable()) {
                     facebook_loginbutton.performClick();
                     fblogin();
-                }else{
-                        Toast.makeText(getApplicationContext(),"Please check your internet connection",Toast.LENGTH_SHORT).show();
-                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -191,18 +198,17 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                     isValid = phoneUtil.isValidNumber(swissNumberProto); // returns true
                     if (isValid) {
                         CommonCall.PrintLog("Phone number", swissNumberProto.getNationalNumber() + "");
-                        validnumber = "+"+scountrycode+"-"+swissNumberProto.getNationalNumber();
-                    }
-                        else
+                        validnumber = "+" + scountrycode + "-" + swissNumberProto.getNationalNumber();
+                    } else
                         CommonCall.PrintLog("Invalid", "Invalid");
                 } catch (NumberParseException e) {
                     System.err.println("NumberParseException was thrown: " + e.toString());
                 }
-                if(validateFeelds()) {
-                    if(CommonCall.isNetworkAvailable())
-                   new sendOtp().execute();
-                    else{
-                        Toast.makeText(getApplicationContext(),"Please check your internet connection",Toast.LENGTH_SHORT).show();
+                if (validateFeelds()) {
+                    if (CommonCall.isNetworkAvailable())
+                        new sendOtp().execute();
+                    else {
+                        Toast.makeText(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
                     }
 //                    Intent mobReg = new Intent(getApplicationContext(), MobileVerificationActivity.class);
 //                    mobReg.putExtra("MOBILE", smobilenumber);
@@ -211,6 +217,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
             }
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -223,7 +230,8 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         }
         return true;
     }
-/********************** Field validation *******************/
+
+    /********************** Field validation *******************/
 
     private boolean validateFeelds() {
         View focusView = null;
@@ -272,11 +280,31 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
             focusView = password;
             focusView.requestFocus();
             return false;
+        } else if (age.getText().length() == 0) {
+            age.setError("Please enter your age");
+            focusView = age;
+            focusView.requestFocus();
+            return false;
+        } else if (height.getText().length() == 0) {
+            height.setError("Please enter your height");
+            focusView = height;
+            focusView.requestFocus();
+            return false;
+        } else if (weight.getText().length() == 0) {
+            weight.setError("Please enter your height");
+            focusView = weight;
+            focusView.requestFocus();
+            return false;
         } else {
+
             sfname = firstName.getText().toString();
             slname = lastName.getText().toString();
             semail = eMail.getText().toString();
             spassword = password.getText().toString();
+            sage = age.getText().toString();
+            sweight = weight.getText().toString();
+            sheight = height.getText().toString();
+
             return true;
         }
     }
@@ -293,7 +321,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
 
     }
 
-     /*********************** facebook login *********************/
+    /*********************** facebook login *********************/
 
     private void fblogin() {
         try {
@@ -310,20 +338,23 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                                     try {
 
 
-                                        CommonCall.PrintLog("facebookresponsse",object.toString());
-                                        register_type="facebook";
-                                        if(object.getString("first_name").length()!=0)
-                                        {sfname = object.getString("first_name");
-                                        firstName.setText(sfname);}
-                                        if(object.getString("last_name").length()!=0)
-                                        {slname = object.getString("last_name");
-                                        lastName.setText(slname);}
-                                        if (object.has("gender") && object.getString("gender") != null && object.getString("gender").toString().length() > 0)
-                                        { sgender = object.getString("gender");
-                                        if(object.getString("gender").equalsIgnoreCase("male"))
-                                            rbmale.setChecked(true);
-                                        else if(object.getString("gender").equalsIgnoreCase("female"))
-                                            rbfemale.setChecked(true);}
+                                        CommonCall.PrintLog("facebookresponsse", object.toString());
+                                        register_type = "facebook";
+                                        if (object.getString("first_name").length() != 0) {
+                                            sfname = object.getString("first_name");
+                                            firstName.setText(sfname);
+                                        }
+                                        if (object.getString("last_name").length() != 0) {
+                                            slname = object.getString("last_name");
+                                            lastName.setText(slname);
+                                        }
+                                        if (object.has("gender") && object.getString("gender") != null && object.getString("gender").toString().length() > 0) {
+                                            sgender = object.getString("gender");
+                                            if (object.getString("gender").equalsIgnoreCase("male"))
+                                                rbmale.setChecked(true);
+                                            else if (object.getString("gender").equalsIgnoreCase("female"))
+                                                rbfemale.setChecked(true);
+                                        }
                                         if ((object.has("email"))) {
                                             if ((object.getString("email")).trim().length() > 0) {
                                                 semail = object.getString("email");
@@ -334,11 +365,11 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                                         try {
                                             URL image_url = new URL("https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
                                             user_image = image_url.toString();
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
 
-                                   new login().execute();
+                                        new login().execute();
 
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -379,27 +410,23 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
-                register_type="google";
+                register_type = "google";
                 GoogleSignInAccount acct = result.getSignInAccount();
                 // Get account information
 //                mFullName = acct.getDisplayName();
 //                mEmail = acct.getEmail();
                 String[] splitednaame = acct.getDisplayName().split("\\s+");
-                if (splitednaame[0]!=null)
-                firstName.setText(splitednaame[0]);
+                if (splitednaame[0] != null)
+                    firstName.setText(splitednaame[0]);
 
-                if (splitednaame[1]!=null)
-                lastName.setText(splitednaame[1]);
+                if (splitednaame[1] != null)
+                    lastName.setText(splitednaame[1]);
                 sgoogleplusId = acct.getId();
 
-                if (acct.getPhotoUrl()!=null)
-               user_image = acct.getPhotoUrl().toString();
-else
-
-
-
-                if (acct.getEmail()!=null)
-                eMail.setText(acct.getEmail());
+                if (acct.getPhotoUrl() != null)
+                    user_image = acct.getPhotoUrl().toString();
+                else if (acct.getEmail() != null)
+                    eMail.setText(acct.getEmail());
                 new login().execute();
 //                Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();
             } else {
@@ -421,7 +448,7 @@ else
         Toast.makeText(this, "Google Connection Failed!", Toast.LENGTH_SHORT).show();
     }
 
-/***** register user ****/
+    /***** register user ****/
     class register extends AsyncTask<String, String, String> {
 
         JSONObject reqData = new JSONObject();
@@ -438,23 +465,25 @@ else
         protected String doInBackground(String... strings) {
             try {
                 reqData.put("register_type", register_type);
-                reqData.put("email",semail);
-                reqData.put("password",spassword);
-                reqData.put("first_name",sfname);
-                reqData.put("last_name",slname);
-                reqData.put("mobile",validnumber);
-                reqData.put("gender",sgender);
+                reqData.put("email", semail);
+                reqData.put("password", spassword);
+                reqData.put("first_name", sfname);
+                reqData.put("last_name", slname);
+                reqData.put("mobile", validnumber);
+                reqData.put("gender", sgender);
                 reqData.put("user_image", user_image);
-                reqData.put("user_type", PreferencesUtils.getData(Constants.user_type,getApplicationContext(),""));
-                reqData.put("profile_desc","Description");
-                reqData.put("facebook_id",sfacebookId);
-                reqData.put("google_id",sgoogleplusId);
+                reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
+                reqData.put("profile_desc", "Description");
+                reqData.put("facebook_id", sfacebookId);
+                reqData.put("google_id", sgoogleplusId);
+                reqData.put("height", sheight);
+                reqData.put("weight", sweight);
+                reqData.put("age", sage);
 
-                registerResponse = NetworkCalls.POST(Urls.getRegisterURL(),reqData.toString());
+                registerResponse = NetworkCalls.POST(Urls.getRegisterURL(), reqData.toString());
 
 
-            }
-            catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
             return registerResponse;
@@ -465,38 +494,37 @@ else
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             try {
-                JSONObject obj= new JSONObject(s);
-                if(obj.getInt("status")==1){
+                JSONObject obj = new JSONObject(s);
+                if (obj.getInt("status") == 1) {
 
                     PreferencesUtils.saveData(Constants.token, obj.getString(Constants.token), getApplicationContext());
                     PreferencesUtils.saveData(Constants.user_id, obj.getString(Constants.user_id), getApplicationContext());
 
                     PreferencesUtils.saveData(Constants.email, semail, getApplicationContext());
                     PreferencesUtils.saveData(Constants.fname, sfname, getApplicationContext());
-                    PreferencesUtils.saveData(Constants.lname,slname, getApplicationContext());
+                    PreferencesUtils.saveData(Constants.lname, slname, getApplicationContext());
                     PreferencesUtils.saveData(Constants.user_image, user_image, getApplicationContext());
 
 
+                    if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals(Constants.trainer)) {
 
-                    if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
+                        Intent intent = new Intent(getApplicationContext(), ChooseCategory.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
 
-                       Intent intent = new Intent(getApplicationContext(),ChooseCategory.class);
-                       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                       startActivity(intent);
-                       finish();
-
-                   }else {
-                       Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                       startActivity(intent);
-                       finish();
-                   }
-                }else if(obj.getInt("status")==2){
-                    Toast.makeText(RegisterScreen.this,obj.getString("message"), Toast.LENGTH_SHORT).show();
-                }else if(obj.getInt("status")==3){
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
+                } else if (obj.getInt("status") == 2) {
+                    Toast.makeText(RegisterScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                } else if (obj.getInt("status") == 3) {
                     CommonCall.sessionout(RegisterScreen.this);
                     finish();
-                }else{
+                } else {
 
                 }
 
@@ -507,59 +535,60 @@ else
 
         }
     }
-/*** OTP SENDING  ***/
-class sendOtp extends AsyncTask<String, String, String> {
 
-    JSONObject reqData = new JSONObject();
+    /*** OTP SENDING  ***/
+    class sendOtp extends AsyncTask<String, String, String> {
+
+        JSONObject reqData = new JSONObject();
 
 
-    @Override
-    protected void onPreExecute() {
-        CommonCall.showLoader(RegisterScreen.this);
+        @Override
+        protected void onPreExecute() {
+            CommonCall.showLoader(RegisterScreen.this);
 
-        try {
-            reqData.put("mobile", validnumber);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            try {
+                reqData.put("mobile", validnumber);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-    }
 
-    @Override
-    protected String doInBackground(String... strings) {
-
-
-        return NetworkCalls.POST(Urls.getSendOTPURL(), reqData.toString());
-    }
+        @Override
+        protected String doInBackground(String... strings) {
 
 
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-        CommonCall.hideLoader();
-
-        try {
-            final JSONObject response = new JSONObject(s);
-
-            if (response.getInt(Constants.status) == 1) {
-                Intent mobReg = new Intent(getApplicationContext(), MobileVerificationActivity.class);
-                mobReg.putExtra("MOBILE", validnumber);
-                startActivityForResult(mobReg, 156);
-            } else if (response.getInt(Constants.status) == 2) {
-                Toast.makeText(getApplicationContext(),response.getString("message"),Toast.LENGTH_SHORT).show();
-
-            } else if (response.getInt(Constants.status) == 3) {
+            return NetworkCalls.POST(Urls.getSendOTPURL(), reqData.toString());
+        }
 
 
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            CommonCall.hideLoader();
+
+            try {
+                final JSONObject response = new JSONObject(s);
+
+                if (response.getInt(Constants.status) == 1) {
+                    Intent mobReg = new Intent(getApplicationContext(), MobileVerificationActivity.class);
+                    mobReg.putExtra("MOBILE", validnumber);
+                    startActivityForResult(mobReg, 156);
+                } else if (response.getInt(Constants.status) == 2) {
+                    Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_SHORT).show();
+
+                } else if (response.getInt(Constants.status) == 3) {
+
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
 
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-
-
     }
-}
 
 
     class login extends AsyncTask<String, String, String> {
@@ -614,7 +643,7 @@ class sendOtp extends AsyncTask<String, String, String> {
                         PreferencesUtils.saveData(Constants.pending, jsonObject.getString(Constants.pending), getApplicationContext());
 
 
-                        if (new JSONArray( PreferencesUtils.getData(Constants.approved, getApplicationContext(), "[]")).length() == 0) {
+                        if (new JSONArray(PreferencesUtils.getData(Constants.approved, getApplicationContext(), "[]")).length() == 0) {
 
 
                             if (new JSONArray(PreferencesUtils.getData(Constants.pending, getApplicationContext(), "[]")).length() == 0) {
@@ -625,7 +654,7 @@ class sendOtp extends AsyncTask<String, String, String> {
                                 startActivity(intent);
                                 finish();
 
-                            }else {
+                            } else {
 
 
                                 Intent intent = new Intent(getApplicationContext(), DoneActivity.class);
@@ -658,7 +687,7 @@ class sendOtp extends AsyncTask<String, String, String> {
                         }
 
 
-                    }else{
+                    } else {
                         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
