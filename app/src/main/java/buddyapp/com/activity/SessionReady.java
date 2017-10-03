@@ -493,7 +493,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 nManager.cancelAll();
 
                 //clearing last payment id to avoid multiple payments
-                PreferencesUtils.saveData(Constants.transactionId, "", getApplicationContext());
+
+
 
 
                 Toast.makeText(getApplicationContext(), "Session Completed", Toast.LENGTH_SHORT).show();
@@ -648,7 +649,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         new StartSession().execute();
         profile.setEnabled(false);
         message.setEnabled(false);
-    }
+
+ }
 
     BroadcastReceiver startAuto=  new BroadcastReceiver() {
         @Override
@@ -697,6 +699,8 @@ boolean checktrainerDistance(){
     float distance = locationA.distanceTo(locationB);
 
 CommonCall.PrintLog("distance",distance+"");
+
+    Toast.makeText(getApplicationContext(), "Distance :"+distance+"", Toast.LENGTH_SHORT).show();
 if (distance<=500){
 
 
@@ -768,8 +772,7 @@ if (distance<=500){
         NotificationManager nManager = ((NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE));
         nManager.cancelAll();
 
-        //clearing last payment id to avoid multiple payments
-        PreferencesUtils.saveData(Constants.transactionId, "", getApplicationContext());
+
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
@@ -1394,7 +1397,15 @@ new BroadcastReceiver() {
                 if (obj.getInt("status") == 1) {
 
 
+                    if (training_time==40){
 
+                        PreferencesUtils.saveData(Constants.transactionId40, "", getApplicationContext());
+
+                    }else{
+                        PreferencesUtils.saveData(Constants.transactionId60, "", getApplicationContext());
+
+
+                    }
 
 
 

@@ -77,10 +77,20 @@ public class Constants {
     public static String duration = "duration";
     public static String availStatus = "avail_status";
 
-    public static String transactionId = "transactionId";
-    public static String amount ="amount";
-    public static String transaction_status = "transaction_status";
 
+    public static String transactionId40 = "transactionId40";
+    public static String transactionId60 = "transactionId60";
+
+
+
+
+    public static String transactionId = "transactionId";
+    public static String amount40 ="amount40";
+    public static String amount60 ="amount60";
+
+
+    public static String transaction_status40 = "transaction_status40";
+    public static String transaction_status60 = "transaction_status60";
     public static String category_submitted = "category_submitted";
     public static String category_approved = "category_approved";
 
