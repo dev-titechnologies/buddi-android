@@ -66,10 +66,10 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
     public void onBackPressed() {
 
 
-        if (avi.getVisibility()==View.VISIBLE){
+        if (avi.getVisibility() == View.VISIBLE) {
 
-            return ;
-        }else{
+            return;
+        } else {
 
             super.onBackPressed();
 
@@ -177,52 +177,82 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                 } else {
                     final String nounce = result.getPaymentMethodNonce().getNonce();
 
-                    if (PreferencesUtils.getData(Constants.transactionId, getApplicationContext(), "").length() > 1) {
 
-                        new RandomSelect().execute();
-//                        if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals(duration))
-//
-//
-//                              new RandomSelect().execute();
-//                        else {
-//
-//                            avi.setVisibility(View.GONE);
-//
-//
-//                            AlertDialog.Builder builder;
-//
-//
-//                            builder = new AlertDialog.Builder(MapTrainee.this);
-//
-//                            builder.setCancelable(false);
-//                            if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals("40") && duration.equals("60"))
-//                                builder.setMessage("You've already been paid for a 40 minutes session. If you proceed, 1 hour session amount will be deducted. Would you like to continue with 1 hour session ?");
-//                            else
-//                                builder.setMessage("You've already been paid for a 1 hour session. If you proceed, 40 minutes session amount will be deducted. Would you like to continue with 40 minute session ?");
-//
-//
-//                            builder.setTitle("Warning!")
-//
-//
-//                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-//                                        public void onClick(DialogInterface dialog, int which) {
-//                                            // continue  with delete
-//                                            avi.setVisibility(View.VISIBLE);
-//PreferencesUtils.saveData(Constants.transactionId,"",getApplicationContext());
-//                                            intPayment();
-//                                        }
-//                                    })
-//                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-//                                        public void onClick(DialogInterface dialog, int which) {
-//                                            // do nothing
-//                                            avi.setVisibility(View.GONE);
-//                                        }
-//                                    })
-//                                    .setIcon(android.R.drawable.ic_dialog_alert)
-//                                    .show();
-//
-//
-//                        }
+                   if (duration.equals("40"))
+                    if (PreferencesUtils.getData(Constants.transactionId40, getApplicationContext(), "").length()>1){
+                        PreferencesUtils.saveData(Constants.duration,"40",getApplicationContext());
+
+                    }
+
+                    if (duration.equals("60"))
+                    if (PreferencesUtils.getData(Constants.transactionId60, getApplicationContext(), "").length()>1)
+                    {
+                        PreferencesUtils.saveData(Constants.duration,"60",getApplicationContext());
+
+                    }
+
+
+
+                        if (PreferencesUtils.getData(Constants.transactionId40, getApplicationContext(), "").length() > 1
+                            || PreferencesUtils.getData(Constants.transactionId60, getApplicationContext(), "").length() > 1)
+
+
+                    {
+
+//                        new RandomSelect().execute();
+
+
+
+
+                        if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals(duration))
+
+
+                            new RandomSelect().execute();
+                        else {
+
+                            avi.setVisibility(View.GONE);
+
+
+                            AlertDialog.Builder builder;
+
+
+                            builder = new AlertDialog.Builder(MapTrainee.this);
+
+                            builder.setCancelable(false);
+                            if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals("40") && duration.equals("60"))
+                                builder.setMessage("You've already been paid for a 40 minutes session. If you proceed, 1 hour session amount will be deducted. Would you like to continue with 1 hour session ?");
+                            else
+                                builder.setMessage("You've already been paid for a 1 hour session. If you proceed, 40 minutes session amount will be deducted. Would you like to continue with 40 minute session ?");
+
+
+                            builder.setTitle("Warning!")
+
+
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // continue  with delete
+                                            avi.setVisibility(View.VISIBLE);
+
+
+
+                                            new checkout(MapTrainee.this, nounce).execute();
+
+
+
+
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // do nothing
+                                            avi.setVisibility(View.GONE);
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+
+
+                        }
 
                     } else {
 
@@ -387,9 +417,25 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                 reqData.put("category", category);
                 reqData.put(Constants.latitude, lat);
                 reqData.put(Constants.longitude, lng);
-                reqData.put(Constants.amount, PreferencesUtils.getData(Constants.amount, getApplicationContext(), ""));
-                reqData.put(Constants.transaction_status, PreferencesUtils.getData(Constants.transaction_status, getApplicationContext(), ""));
-                reqData.put("transaction_id", PreferencesUtils.getData(Constants.transactionId, getApplicationContext(), ""));
+
+
+
+
+               if (duration.equals("40")){
+                   reqData.put("transaction_id", PreferencesUtils.getData(Constants.transactionId40, getApplicationContext(), ""));
+                   reqData.put("transaction_status", PreferencesUtils.getData(Constants.transaction_status40, getApplicationContext(), ""));
+                   reqData.put("amount", PreferencesUtils.getData(Constants.amount40, getApplicationContext(), ""));
+
+
+               }else{
+                   reqData.put("transaction_status", PreferencesUtils.getData(Constants.transaction_status60, getApplicationContext(), ""));
+                   reqData.put("amount", PreferencesUtils.getData(Constants.amount60, getApplicationContext(), ""));
+
+                   reqData.put("transaction_id", PreferencesUtils.getData(Constants.transactionId60, getApplicationContext(), ""));
+
+               }
+
+
                 reqData.put("training_time", duration);
                 reqData.put("pick_latitude", pick_latitude);
                 reqData.put("pick_longitude", pick_longitude);
@@ -485,15 +531,14 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (avi.getVisibility()==View.VISIBLE){
+                if (avi.getVisibility() == View.VISIBLE) {
 
                     return false;
-                }else{
+                } else {
 
                     finish();
 
                 }
-
 
 
                 break;
@@ -550,9 +595,24 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
                     JSONObject data = response.getJSONObject("data");
                     PreferencesUtils.saveData(Constants.transactionId, data.getString("transactionId"), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.amount, data.getString("amount"), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.transaction_status, data.getString("status"), getApplicationContext());
+
+
                     PreferencesUtils.saveData(Constants.duration, duration, getApplicationContext());
+
+                    if (duration.equals("40")) {
+                        PreferencesUtils.saveData(Constants.transactionId40, data.getString("transactionId"), getApplicationContext());
+                        PreferencesUtils.saveData(Constants.amount40, data.getString("amount"), getApplicationContext());
+
+                        PreferencesUtils.saveData(Constants.transaction_status40, data.getString("status"), getApplicationContext());
+
+                    } else if (duration.equals("60")) {
+                        PreferencesUtils.saveData(Constants.transaction_status60, data.getString("status"), getApplicationContext());
+                        PreferencesUtils.saveData(Constants.amount60, data.getString("amount"), getApplicationContext());
+
+                        PreferencesUtils.saveData(Constants.transactionId60, data.getString("transactionId"), getApplicationContext());
+
+                    }
+
 
                     Toast.makeText(activity, "Payment  Successful!", Toast.LENGTH_SHORT).show();
 

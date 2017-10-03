@@ -251,6 +251,11 @@ public class ChooseSpecification extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
+
+
+
+
                 if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
                     Toast.makeText(ChooseSpecification.this, "You are already in a session", Toast.LENGTH_SHORT).show();
 
@@ -454,7 +459,12 @@ public class ChooseSpecification extends AppCompatActivity {
                         intent.putExtra("category", HomeCategory.cat_selectedID.get(0));
                         intent.putExtra(Constants.latitude, String.valueOf(latitude));
                         intent.putExtra(Constants.longitude, String.valueOf(longitude));
+
+
+
                         intent.putExtra(Constants.duration, String.valueOf(sessionDuration));
+
+
                         intent.putExtra("pick_latitude",mlatitude+"");
                         intent.putExtra("pick_longitude",mlongitude+"");
                         intent.putExtra("pick_location",pick_location);

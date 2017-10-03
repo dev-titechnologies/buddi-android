@@ -516,8 +516,19 @@ public class CommonCall {
 
                     JSONObject data = response.getJSONObject("data");
                     PreferencesUtils.saveData(Constants.transactionId,data.getString("transactionId"),activity);
-                    PreferencesUtils.saveData(Constants.amount, data.getString("amount"),activity);
-                    PreferencesUtils.saveData(Constants.transaction_status,data.getString("status"),activity);
+                    if (time.equals("40")) {
+                        PreferencesUtils.saveData(Constants.transactionId40, data.getString("transactionId"), activity);
+                        PreferencesUtils.saveData(Constants.amount40, data.getString("amount"),activity);
+
+                        PreferencesUtils.saveData(Constants.transaction_status40, data.getString("status"), activity);
+
+                    } else if (time.equals("60")) {
+                        PreferencesUtils.saveData(Constants.transaction_status60, data.getString("status"),activity);
+                        PreferencesUtils.saveData(Constants.amount60, data.getString("amount"),activity);
+
+                        PreferencesUtils.saveData(Constants.transactionId60, data.getString("transactionId"), activity);
+
+                    }
 
                     Toast.makeText(activity, "Payment  Successful!", Toast.LENGTH_SHORT).show();
 
