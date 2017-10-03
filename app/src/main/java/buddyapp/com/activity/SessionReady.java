@@ -219,12 +219,6 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             sessionTimmer.setText("00:"+training_time);
             Controller.listenEvent();
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
 
 //        SupportMapFragment mapFragment = (SupportMapFragment) this.getSupportFragmentManager()
 //                .findFragmentById(map);
@@ -232,6 +226,13 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 // trainging location location
         latitude = Double.valueOf(pick_latitude);
         longitude = Double.valueOf(pick_longitude);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
         camera = new LatLng(latitude, longitude);
 
         mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
@@ -626,6 +627,17 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                         }
                         startactionTitle.setText("Start");
                         duration = intent.getStringExtra("extend_time");
+
+                        if (duration.equals("40")){
+
+                            PreferencesUtils.saveData(Constants.transactionId40, "", getApplicationContext());
+
+                        }else{
+                            PreferencesUtils.saveData(Constants.transactionId60, "", getApplicationContext());
+
+
+                        }
+
                         startactionIcon.setImageResource(R.mipmap.play);
 
 
@@ -1425,8 +1437,11 @@ new BroadcastReceiver() {
                     PreferencesUtils.saveData("hours", "2", getApplicationContext());
 
 
-                    startService(new Intent(getApplicationContext(), Timer_Service.class));
 
+
+
+
+                    startService(new Intent(SessionReady.this, Timer_Service.class));
 
                     CommonCall.PrintLog("Service ", "Started service");
                     PreferencesUtils.saveData(Constants.timerstarted, "true", getApplicationContext());

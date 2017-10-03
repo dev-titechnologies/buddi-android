@@ -288,7 +288,7 @@ public class CommonCall {
 
     public static ProgressDialog pd;
 
-    public static void showLoader(Activity yourActivity,String msg) {
+    public static void showLoader(Activity yourActivity, String msg) {
 
         pd = new ProgressDialog(yourActivity);
         pd.setMessage(msg);
@@ -440,7 +440,7 @@ public class CommonCall {
     }
 
 
-   public static void intPayment(final Activity activity, final String sessionTime){
+    public static void intPayment(final Activity activity, final String sessionTime) {
 
         /*
 *
@@ -450,7 +450,7 @@ public class CommonCall {
 * */
         CommonCall.showLoader(activity);
 
-        DropInResult.fetchDropInResult(activity, PreferencesUtils.getData(Constants.clientToken,activity,""), new DropInResult.DropInResultListener() {
+        DropInResult.fetchDropInResult(activity, PreferencesUtils.getData(Constants.clientToken, activity, ""), new DropInResult.DropInResultListener() {
             @Override
             public void onError(Exception exception) {
                 exception.printStackTrace();
@@ -460,47 +460,126 @@ public class CommonCall {
             public void onResult(DropInResult result) {
 
 
+                if (result.getPaymentMethodNonce() != null) {
+
+                    final String nounce = result.getPaymentMethodNonce().getNonce();
 
 
+                    if (sessionTime.equals("40"))
+                        if (PreferencesUtils.getData(Constants.transactionId40, activity, "").length() > 1) {
+                            PreferencesUtils.saveData(Constants.duration, "40", activity);
 
-                  if (result.getPaymentMethodNonce()!=null) {
+                        }else{
 
-                    String  nounce=result.getPaymentMethodNonce().getNonce();
+                            PreferencesUtils.saveData(Constants.duration, "0", activity);
+                        }
+
+                    if (sessionTime.equals("60"))
+                        if (PreferencesUtils.getData(Constants.transactionId60, activity, "").length() > 1) {
+                            PreferencesUtils.saveData(Constants.duration, "60", activity);
+
+                        }else{
+
+                            PreferencesUtils.saveData(Constants.duration, "0", activity);
+                        }
 
 
-                     new checkoutforExtendSession(activity,nounce,sessionTime).execute();
+                    if (PreferencesUtils.getData(Constants.transactionId40, activity, "").length() > 1
+                            || PreferencesUtils.getData(Constants.transactionId60, activity, "").length() > 1)
 
-                    }else{
-                      Toast.makeText(activity, "Something went Wrong!", Toast.LENGTH_SHORT).show();
-                  }
+
+                    {
+
+                        if (PreferencesUtils.getData(Constants.duration, activity, "").equals(sessionTime)) {
+
+                            if (sessionTime.equals("40")) {
+                                new extendSession(activity, PreferencesUtils.getData(Constants.transactionId40, activity, ""), PreferencesUtils.getData(Constants.bookid, activity, ""), sessionTime).execute();
+
+                            } else {
+
+                                new extendSession(activity, PreferencesUtils.getData(Constants.transactionId60, activity, ""), PreferencesUtils.getData(Constants.bookid, activity, ""), sessionTime).execute();
+
+                            }
+
+
+                        } else {
+
+
+                            AlertDialog.Builder builder;
+
+
+                            builder = new AlertDialog.Builder(activity);
+
+                            builder.setCancelable(false);
+                            if (PreferencesUtils.getData(Constants.duration, activity, "").equals("40") && sessionTime.equals("60"))
+                                builder.setMessage("You've already been paid for a 40 minutes session. If you proceed, 1 hour session amount will be deducted. Would you like to continue with 1 hour session ?");
+                            else
+                                builder.setMessage("You've already been paid for a 1 hour session. If you proceed, 40 minutes session amount will be deducted. Would you like to continue with 40 minute session ?");
+
+
+                            builder.setTitle("Warning!")
+
+
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // continue  with delete
+
+
+                                            new checkoutforExtendSession(activity, nounce, sessionTime).execute();
+
+
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // do nothing
+                                            picSessionTimeDialog(activity);
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+
+
+                        }
+
+
+                    } else {
+
+                        new checkoutforExtendSession(activity, nounce, sessionTime).execute();
+                    }
+                } else {
+                    Toast.makeText(activity, "Something went Wrong!", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
     }
 
-    public  static class checkoutforExtendSession extends  AsyncTask<String,String,String>{
+    public static class checkoutforExtendSession extends AsyncTask<String, String, String> {
 
         Activity activity;
         String time;
-        public checkoutforExtendSession(Activity act,String nounce,String time){
-            this.activity=act;
-            this.nounce=nounce;
-            this.time=time;
+
+        public checkoutforExtendSession(Activity act, String nounce, String time) {
+            this.activity = act;
+            this.nounce = nounce;
+            this.time = time;
         }
-        String nounce ;
+
+        String nounce;
 
         @Override
         protected String doInBackground(String... strings) {
 
-            JSONObject req= new JSONObject();
+            JSONObject req = new JSONObject();
             try {
-                req.put("nonce",nounce);
-                req.put("training_time",time);
+                req.put("nonce", nounce);
+                req.put("training_time", time);
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            String res = NetworkCalls.POST(Urls.getcheckoutURL(),req.toString());
+            String res = NetworkCalls.POST(Urls.getcheckoutURL(), req.toString());
             return res;
 
         }
@@ -515,16 +594,16 @@ public class CommonCall {
                 if (response.getInt(Constants.status) == 1) {
 
                     JSONObject data = response.getJSONObject("data");
-                    PreferencesUtils.saveData(Constants.transactionId,data.getString("transactionId"),activity);
+                    PreferencesUtils.saveData(Constants.transactionId, data.getString("transactionId"), activity);
                     if (time.equals("40")) {
                         PreferencesUtils.saveData(Constants.transactionId40, data.getString("transactionId"), activity);
-                        PreferencesUtils.saveData(Constants.amount40, data.getString("amount"),activity);
+                        PreferencesUtils.saveData(Constants.amount40, data.getString("amount"), activity);
 
                         PreferencesUtils.saveData(Constants.transaction_status40, data.getString("status"), activity);
 
                     } else if (time.equals("60")) {
-                        PreferencesUtils.saveData(Constants.transaction_status60, data.getString("status"),activity);
-                        PreferencesUtils.saveData(Constants.amount60, data.getString("amount"),activity);
+                        PreferencesUtils.saveData(Constants.transaction_status60, data.getString("status"), activity);
+                        PreferencesUtils.saveData(Constants.amount60, data.getString("amount"), activity);
 
                         PreferencesUtils.saveData(Constants.transactionId60, data.getString("transactionId"), activity);
 
@@ -532,7 +611,7 @@ public class CommonCall {
 
                     Toast.makeText(activity, "Payment  Successful!", Toast.LENGTH_SHORT).show();
 
-                    new extendSession(activity,data.getString("transactionId"),PreferencesUtils.getData(Constants.bookid,activity,""),time).execute();
+                    new extendSession(activity, data.getString("transactionId"), PreferencesUtils.getData(Constants.bookid, activity, ""), time).execute();
 
                 } else if (response.getInt(Constants.status) == 2) {
                     CommonCall.hideLoader();
@@ -545,12 +624,11 @@ public class CommonCall {
 
             } catch (JSONException e) {
                 CommonCall.hideLoader();
-                e.printStackTrace(); CommonCall.hideLoader();
+                e.printStackTrace();
+                CommonCall.hideLoader();
             }
         }
     }
-
-
 
 
     public static void picSessionTimeDialog(final Activity activity) {
@@ -572,8 +650,7 @@ public class CommonCall {
                 dialog.dismiss();
 
 
-                 intPayment(activity,"40");
-
+                intPayment(activity, "40");
 
 
             }
@@ -585,19 +662,19 @@ public class CommonCall {
 
 
                 dialog.dismiss();
-                intPayment(activity,"60");
+                intPayment(activity, "60");
             }
         });
 
     }
-    public static  AlertDialog dialogExtend = null;
+
+    public static AlertDialog dialogExtend = null;
 
     public static void showExtendBokingDialog(final Activity activity) {
 
 
-
         // Hide after some seconds
-        final Handler handler  = new Handler();
+        final Handler handler = new Handler();
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -610,12 +687,9 @@ public class CommonCall {
 //                    activity.finish();
 
 
-
                     PreferencesUtils.saveData(Constants.flag_rating, "true", activity);
 
                     String bookid = PreferencesUtils.getData(Constants.bookid, activity, "");
-
-
 
 
                     new CommonCall.timerUpdate(activity, "complete", bookid, "").execute();
@@ -658,8 +732,6 @@ public class CommonCall {
         };
 
 
-
-
         final AlertDialog.Builder extbuilder = new AlertDialog.Builder(activity);
         extbuilder.setCancelable(false);
         extbuilder.setMessage("Are you sure you want to Extend this session?").setPositiveButton("Yes", extbuilderdialogClickListener)
@@ -680,9 +752,6 @@ public class CommonCall {
         });
 
     }
-
-
-
 
 
     public static class extendSession extends AsyncTask<String, String, String> {
@@ -730,32 +799,30 @@ public class CommonCall {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-CommonCall.hideLoader();
+            CommonCall.hideLoader();
             try {
                 JSONObject res = new JSONObject(s);
-         if (res.getInt(Constants.status)==1){
+                if (res.getInt(Constants.status) == 1) {
 
-             Intent intent = new Intent("BUDDI_SESSION_EXTEND");
-
-             LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
-             Toast.makeText(activity, "Your Training Session Has Extented!", Toast.LENGTH_SHORT).show();
-
-
-
-         }else if (res.getInt(Constants.status)==2){
-             Toast.makeText(activity, res.getString(Constants.message), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent("BUDDI_SESSION_EXTEND");
+intent.putExtra("extend_time",extended_time);
+                    LocalBroadcastManager.getInstance(activity).sendBroadcast(intent);
+                    Toast.makeText(activity, "Your Training Session Has Extented!", Toast.LENGTH_SHORT).show();
 
 
-         }else{
+                } else if (res.getInt(Constants.status) == 2) {
+                    Toast.makeText(activity, res.getString(Constants.message), Toast.LENGTH_SHORT).show();
 
 
-         }
+                } else {
+
+
+                }
 
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
 
 
         }
@@ -829,9 +896,9 @@ CommonCall.hideLoader();
                     PreferencesUtils.saveData(Constants.transactionId, "", activity);
 
 
-                            PreferencesUtils.saveData(Constants.timerstarted, "false", activity);
-        PreferencesUtils.saveData(Constants.trainee_Data, "", activity);
-        PreferencesUtils.saveData(Constants.trainer_Data, "", activity);
+                    PreferencesUtils.saveData(Constants.timerstarted, "false", activity);
+                    PreferencesUtils.saveData(Constants.trainee_Data, "", activity);
+                    PreferencesUtils.saveData(Constants.trainer_Data, "", activity);
 
 
                     Toast.makeText(activity, obj.getString("message"), Toast.LENGTH_SHORT).show();
