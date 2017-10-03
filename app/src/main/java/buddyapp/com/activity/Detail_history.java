@@ -11,11 +11,16 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import buddyapp.com.R;
 import buddyapp.com.utils.CommonCall;
+import buddyapp.com.utils.Iso8601;
 
 public class Detail_history extends AppCompatActivity {
 
@@ -113,5 +118,24 @@ catch (Exception e){
         }
         return true;
     }
-
+    public static int timeDifference(String date) {
+        Date formattedDate;
+        Date deviceDate;
+        long mills;
+        int time = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy HH:mm");
+        try {
+            formattedDate = sdf.parse(sdf.format((Iso8601.toCalendar(date).getTime())));
+            deviceDate = Calendar.getInstance().getTime();
+            mills = deviceDate.getTime() - formattedDate.getTime();
+            int Hours = (int) (mills / (1000 * 60 * 60));
+            int Mins = (int) (mills / (1000 * 60)) % 60;
+            if(Hours>=48)
+                Hours=Hours+Mins;
+            time = Hours;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return time;
+    }
 }

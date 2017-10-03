@@ -16,6 +16,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
@@ -23,6 +28,7 @@ import buddyapp.com.activity.LoginScreen;
 import buddyapp.com.adapter.HistoryAdapter;
 import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.utils.CommonCall;
+import buddyapp.com.utils.Iso8601;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
@@ -118,6 +124,8 @@ ListView list;
                             jsonObject.put("profile_img",jsonObject.getString("profile_img"));
                             jsonObject.put("category",jsonObject.getString("category"));
                             jsonObject.put("amount",jsonObject.getString("amount"));
+                            jsonObject.put("extend_start",jsonObject.getString("extend_start"));
+                            jsonObject.put("extend_end",jsonObject.getString("extend_end"));
                             jsonarray.put(jsonObject);
                             db.insertHistroy(jsonObject);
 
@@ -136,5 +144,4 @@ ListView list;
             }
         }
     }
-
 }
