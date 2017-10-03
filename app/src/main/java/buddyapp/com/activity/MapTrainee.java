@@ -182,6 +182,9 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                     if (PreferencesUtils.getData(Constants.transactionId40, getApplicationContext(), "").length()>1){
                         PreferencesUtils.saveData(Constants.duration,"40",getApplicationContext());
 
+                    }else{
+
+                        PreferencesUtils.saveData(Constants.duration,"0",getApplicationContext());
                     }
 
                     if (duration.equals("60"))
@@ -189,6 +192,9 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                     {
                         PreferencesUtils.saveData(Constants.duration,"60",getApplicationContext());
 
+                    }else{
+
+                        PreferencesUtils.saveData(Constants.duration,"0",getApplicationContext());
                     }
 
 
@@ -204,10 +210,16 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
 
 
-                        if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals(duration))
+                        if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals(duration)) {
 
 
                             new RandomSelect().execute();
+
+
+
+
+                        }
+
                         else {
 
                             avi.setVisibility(View.GONE);
@@ -422,16 +434,16 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
 
                if (duration.equals("40")){
-                   reqData.put("transaction_id", PreferencesUtils.getData(Constants.transactionId40, getApplicationContext(), ""));
-                   reqData.put("transaction_status", PreferencesUtils.getData(Constants.transaction_status40, getApplicationContext(), ""));
-                   reqData.put("amount", PreferencesUtils.getData(Constants.amount40, getApplicationContext(), ""));
+                   reqData.put("transaction_id", PreferencesUtils.getData(Constants.transactionId40, getApplicationContext(), "0"));
+                   reqData.put("transaction_status", PreferencesUtils.getData(Constants.transaction_status40, getApplicationContext(), "0"));
+                   reqData.put("amount", PreferencesUtils.getData(Constants.amount40, getApplicationContext(), "0"));
 
 
                }else{
-                   reqData.put("transaction_status", PreferencesUtils.getData(Constants.transaction_status60, getApplicationContext(), ""));
-                   reqData.put("amount", PreferencesUtils.getData(Constants.amount60, getApplicationContext(), ""));
+                   reqData.put("transaction_status", PreferencesUtils.getData(Constants.transaction_status60, getApplicationContext(), "0"));
+                   reqData.put("amount", PreferencesUtils.getData(Constants.amount60, getApplicationContext(), "0"));
 
-                   reqData.put("transaction_id", PreferencesUtils.getData(Constants.transactionId60, getApplicationContext(), ""));
+                   reqData.put("transaction_id", PreferencesUtils.getData(Constants.transactionId60, getApplicationContext(), "0"));
 
                }
 
