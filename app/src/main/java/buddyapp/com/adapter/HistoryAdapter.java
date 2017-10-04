@@ -17,14 +17,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.Detail_history;
 import buddyapp.com.utils.CommonCall;
+import buddyapp.com.utils.Iso8601;
 
 /**
  * Created by titech on 25/7/17.
@@ -154,6 +159,18 @@ public class HistoryAdapter extends BaseAdapter {
                     intent.putExtra("amount",samount);
                     intent.putExtra("rating",jsonObject.getString("rating"));
                     intent.putExtra("image",array.getJSONObject(0).getString("categoryBookImage"));
+
+                        if(!jsonObject.getString("start_time").equals("null")) {
+                            String time = timeDifference(jsonObject.getString("start_time"), jsonObject.getString("end_time"));
+                            intent.putExtra("duration", time+"");
+                        }
+                        else{
+                            intent.putExtra("duration", "null");
+                        }
+                        if(jsonObject.getString("extended").equals("true"))
+                            intent.putExtra("extended","true");
+                        else{}
+
                     context.startActivity(intent);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -173,5 +190,31 @@ public class HistoryAdapter extends BaseAdapter {
         CardView cat_card;
         ImageView background;
 
+    }
+
+    public static String timeDifference(String start,String end) {
+        Date startTime;
+        Date endTime;
+        long mills;
+        int time = 0;
+        String result = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy HH:mm");
+        try {
+            startTime = sdf.parse(sdf.format((Iso8601.toCalendar(start).getTime())));
+            endTime =sdf.parse(sdf.format((Iso8601.toCalendar(end).getTime())));
+            mills = endTime.getTime() - startTime.getTime();
+//            int Hours = (int) (mills / (1000 * 60 * 60));
+            int Mins = (int) (mills / (1000 * 60)) % 60;
+
+            long seconds = mills / 1000;
+            long minutes = seconds / 60;
+            long hours = minutes / 60;
+
+            result =  hours % 24 + ":" + minutes % 60 + " Minutes" ;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

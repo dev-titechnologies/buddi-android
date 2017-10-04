@@ -72,6 +72,7 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        NotificationUtils.clearNotifications(getApplicationContext());
         Controller.getInstance().trackScreenView("Home Screen");
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
@@ -403,7 +404,7 @@ public class HomeActivity extends AppCompatActivity
                 new IntentFilter(Config.REGISTRATION_COMPLETE));
 
         // clear the notification area when the app is opened
-//        NotificationUtils.clearNotifications(getApplicationContext());
+
     }
     public void clearBackstack() {
 

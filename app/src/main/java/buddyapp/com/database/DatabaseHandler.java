@@ -60,8 +60,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String PROFILE_IMAGE = "profile_img";
     private static final String AMOUNT = "amount";
     private static final String RATING = "rating";
-    private static final String EXTEND_START = "extend_start";
-    private static final String EXTEND_END = "extend_end";
+    private static final String STARTIME = "start_time";
+    private static final String ENDTIME = "end_time";
+    private static final String EXTENDED = "extended";
+
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -97,8 +99,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + TRAINED_DATE + " TEXT,"
                 + AMOUNT + " TEXT,"
                 + RATING + " TEXT,"
-                + EXTEND_START + " TEXT,"
-                + EXTEND_END + " TEXT,"
+                + STARTIME + " TEXT,"
+                + ENDTIME + " TEXT,"
+                + EXTENDED + " TEXT,"
                 + PROFILE_IMAGE + " TEXT" + ")";
 
 
@@ -403,8 +406,9 @@ else
             statement.put(PROFILE_IMAGE,jsonObject.getString(PROFILE_IMAGE));
             statement.put(AMOUNT,jsonObject.getString(AMOUNT));
             statement.put(RATING,jsonObject.getString(RATING));
-            statement.put(EXTEND_START,jsonObject.getString(EXTEND_START));
-            statement.put(EXTEND_END,jsonObject.getString(EXTEND_END));
+            statement.put(STARTIME,jsonObject.getString(STARTIME));
+            statement.put(ENDTIME,jsonObject.getString(ENDTIME));
+            statement.put(EXTENDED,jsonObject.getString(EXTENDED));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -437,11 +441,12 @@ else
                     obj.put(TRAINED_DATE, cursor.getString(10));
                     obj.put(AMOUNT, cursor.getString(11));
                     obj.put(RATING, cursor.getString(12));
-                    obj.put(PROFILE_IMAGE, cursor.getString(13));
-                    obj.put(EXTEND_START, cursor.getString(14));
-                    obj.put(EXTEND_END, cursor.getString(15));
+                    obj.put(STARTIME, cursor.getString(13));
+                    obj.put(ENDTIME, cursor.getString(14));
+                    obj.put(EXTENDED, cursor.getString(15));
+                    obj.put(PROFILE_IMAGE, cursor.getString(16));
                     jsonArray.put(obj);
-                Log.e("obj",obj.toString());
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

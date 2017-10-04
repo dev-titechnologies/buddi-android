@@ -124,8 +124,14 @@ ListView list;
                             jsonObject.put("profile_img",jsonObject.getString("profile_img"));
                             jsonObject.put("category",jsonObject.getString("category"));
                             jsonObject.put("amount",jsonObject.getString("amount"));
-                            jsonObject.put("extend_start",jsonObject.getString("extend_start"));
-                            jsonObject.put("extend_end",jsonObject.getString("extend_end"));
+                            jsonObject.put("start_time",jsonObject.getString("start_time"));
+                            jsonObject.put("end_time",jsonObject.getString("end_time"));
+
+                            if(jsonObject.getString("extend_start").equals("null"))
+                            jsonObject.put("extended","false");
+                            else
+                            jsonObject.put("extended","true");
+
                             jsonarray.put(jsonObject);
                             db.insertHistroy(jsonObject);
 
@@ -144,4 +150,5 @@ ListView list;
             }
         }
     }
+
 }

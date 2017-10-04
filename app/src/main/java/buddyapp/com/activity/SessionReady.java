@@ -224,6 +224,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 //                .findFragmentById(map);
 //        mapFragment.getMapAsync(this);
 // trainging location location
+            profileactionTitle.setText(name);
         latitude = Double.valueOf(pick_latitude);
         longitude = Double.valueOf(pick_longitude);
         } catch (JSONException e) {
@@ -1434,8 +1435,10 @@ new BroadcastReceiver() {
 
                     PreferencesUtils.saveData("data", date_time, getApplicationContext());
 //                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
+                    if(training_time==40)
                     PreferencesUtils.saveData("hours", "2", getApplicationContext());
-
+                    else
+                    PreferencesUtils.saveData("hours", "4", getApplicationContext());
 
 
 

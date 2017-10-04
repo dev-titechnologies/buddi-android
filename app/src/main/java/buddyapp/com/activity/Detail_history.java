@@ -6,30 +6,27 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import buddyapp.com.R;
 import buddyapp.com.utils.CommonCall;
-import buddyapp.com.utils.Iso8601;
 
 public class Detail_history extends AppCompatActivity {
 
     ImageView background,profileImage;
     TextView name,category, training_status,payment_status,location,date, trainer, trainee,
-            trainedDate,description, amount,textRated;
+            trainedDate,description, amount,textRated, duration;
     RatingBar ratingBar;
     Float rate;
-
+    LinearLayout durationLayer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,13 +48,23 @@ public class Detail_history extends AppCompatActivity {
         amount = (TextView) findViewById(R.id.amount);
         ratingBar = (RatingBar) findViewById(R.id.rating);
         textRated = (TextView) findViewById(R.id.text_rated);
-
+        duration = (TextView) findViewById(R.id.training_duration);
+        durationLayer = (LinearLayout) findViewById(R.id.duration_layer);
         trainedDate.setText(CommonCall.convertTime1(String.valueOf(getIntent().getExtras().get("trained_date"))));
         description.setText(getIntent().getExtras().getString("desc"));
         training_status.setText(getIntent().getExtras().getString("trainingStatus"));
         payment_status.setText(getIntent().getExtras().getString("paymentStatus"));
         amount.setText("$"+getIntent().getExtras().getString("amount"));
         textRated.setText("You rated "+getIntent().getExtras().getString("name"));
+
+        if(getIntent().hasExtra("extended"))
+            duration.setText(getIntent().getExtras().getString("duration")+" (Extended)");
+        else
+            duration.setText(getIntent().getExtras().getString("duration"));
+
+        if(getIntent().getExtras().getString("duration").equals("null")){
+            durationLayer.setVisibility(View.GONE);
+        }
 
         if(getIntent().getExtras().getString("rating").equals("null"))
         rate =0f;
@@ -118,24 +125,5 @@ catch (Exception e){
         }
         return true;
     }
-    public static int timeDifference(String date) {
-        Date formattedDate;
-        Date deviceDate;
-        long mills;
-        int time = 0;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy HH:mm");
-        try {
-            formattedDate = sdf.parse(sdf.format((Iso8601.toCalendar(date).getTime())));
-            deviceDate = Calendar.getInstance().getTime();
-            mills = deviceDate.getTime() - formattedDate.getTime();
-            int Hours = (int) (mills / (1000 * 60 * 60));
-            int Mins = (int) (mills / (1000 * 60)) % 60;
-            if(Hours>=48)
-                Hours=Hours+Mins;
-            time = Hours;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return time;
-    }
+
 }
