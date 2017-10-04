@@ -183,7 +183,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                 PreferencesUtils.saveData(Constants.trainee_id, traine_id, getApplicationContext());
                 updateSocket();
-                Controller.listenEvent();
+
                 mSocket.connect();
                 chatConnect();
                 startService(new Intent(getApplicationContext(), LocationService.class));
@@ -212,7 +212,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 }
 
                 updateSocket();
-                Controller.listenEvent();
+
                 Controller.mSocket.connect();
                 chatConnect();
 

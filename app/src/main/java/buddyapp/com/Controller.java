@@ -178,6 +178,7 @@ public class Controller extends Application {
                 CommonCall.PrintLog("Socket","Disconnected");
             }
         });
+        listenEvent();
     }
 
 
@@ -253,6 +254,24 @@ public class Controller extends Application {
             options.query = "__sails_io_sdk_version=0.12.13&token=" + PreferencesUtils.getData(Constants.token,getAppContext(),""); // Added this line
 
             mSocket = IO.socket(BASEURL,options);
+
+            mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+
+                    CommonCall.PrintLog("Socket","Connected");
+                }
+            });
+
+            mSocket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    CommonCall.PrintLog("Socket","Disconnected");
+                }
+            });
+            listenEvent();
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
