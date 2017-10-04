@@ -88,7 +88,12 @@ Log.e("launcher activity",getIntent().getStringExtra("type")+"");
 
             Intent resultIntent = new Intent(getApplicationContext(), RequestActivity.class);
             resultIntent.putExtra("message",data.toString());
-            resultIntent.putExtra("title","title");
+            try {
+                resultIntent.putExtra("title",data.getString("noti_title"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
 
             resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
 
