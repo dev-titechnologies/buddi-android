@@ -587,6 +587,16 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             }
 
             getIntent().removeExtra("push_session");
+        }else{
+
+
+            if (PreferencesUtils.getData(Constants.startSessionPush,getApplicationContext(),"").equals("true")){
+                PreferencesUtils.saveData(Constants.startSessionPush,"false",getApplicationContext());
+
+                Intent   intent = new Intent("BUDDI_TRAINER_START");
+
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+            }
         }
 
 
@@ -659,6 +669,15 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
     void startclick(){
+
+        /*
+        *
+        * for handling the start click even in other screen
+        *
+        * */
+        PreferencesUtils.saveData(Constants.startSessionPush,"false",getApplicationContext());
+
+
         Timer_Service.stopFlag = false;
         new StartSession().execute();
         profile.setEnabled(false);

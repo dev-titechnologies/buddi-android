@@ -138,12 +138,16 @@ startActivity(resultIntent);
 /** Complete session **/
                 Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
                 resultIntent.putExtra("message","");
-
+                resultIntent.putExtra("push_session","2");
+                resultIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
 
 
+                PreferencesUtils.saveData(Constants.startSessionPush,"true",getApplicationContext());
+
 
                 Intent intent = new Intent("BUDDI_TRAINER_START");
+intent.putExtra("push_session","2");
 
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
