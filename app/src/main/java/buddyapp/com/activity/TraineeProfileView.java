@@ -177,12 +177,12 @@ public class TraineeProfileView extends AppCompatActivity {
         mobile.setEnabled(false);
 
         try {
-            firstName.setText(PreferencesUtils.getData(Constants.fname, getApplicationContext(), ""));
-            lastName.setText(PreferencesUtils.getData(Constants.lname, getApplicationContext(), ""));
-            eMail.setText(PreferencesUtils.getData(Constants.email, getApplicationContext(), ""));
-            imageurl = PreferencesUtils.getData(Constants.user_image, getApplicationContext(), "");
+            firstName.setText(PreferencesUtils.getData("traineefname", getApplicationContext(), ""));
+            lastName.setText(PreferencesUtils.getData("traineelname", getApplicationContext(), ""));
+            eMail.setText(PreferencesUtils.getData("traineeEmail", getApplicationContext(), ""));
+            imageurl = PreferencesUtils.getData("traineeuser_image", getApplicationContext(), "");
 
-            String combined = PreferencesUtils.getData(Constants.mobile, getApplicationContext(), "");
+            String combined = PreferencesUtils.getData("traineemobile", getApplicationContext(), "");
             if (combined.contains("-")) {
                 String[] parts = combined.split("-");
                 scountrycode = parts[0].replace("+", "");
@@ -190,7 +190,7 @@ public class TraineeProfileView extends AppCompatActivity {
                 ccp.setCountryForPhoneCode(Integer.parseInt(scountrycode));
                 mobile.setText(smobile);
             }
-            String gender = PreferencesUtils.getData(Constants.gender, getApplicationContext(), "");
+            String gender = PreferencesUtils.getData("traineegender", getApplicationContext(), "");
 
             if (gender.equalsIgnoreCase("male")) {
                 rbmale.setVisibility(View.VISIBLE);
@@ -253,13 +253,13 @@ public class TraineeProfileView extends AppCompatActivity {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt(Constants.status) == 1) {
                     JSONObject jsonObject = obj.getJSONObject("data");
-                    PreferencesUtils.saveData(Constants.email, jsonObject.getString(Constants.email), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.fname, jsonObject.getString(Constants.fname), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.lname, jsonObject.getString(Constants.lname), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.user_image, jsonObject.getString(Constants.user_image), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
+                    PreferencesUtils.saveData("traineeEmail", jsonObject.getString(Constants.email), getApplicationContext());
+                    PreferencesUtils.saveData("traineefname", jsonObject.getString(Constants.fname), getApplicationContext());
+                    PreferencesUtils.saveData("traineelname", jsonObject.getString(Constants.lname), getApplicationContext());
+                    PreferencesUtils.saveData("traineeuser_image", jsonObject.getString(Constants.user_image), getApplicationContext());
+                    PreferencesUtils.saveData("traineegender", jsonObject.getString(Constants.gender), getApplicationContext());
 //                    PreferencesUtils.saveData(Constants.user_type, jsonObject.getString(Constants.user_type), getApplicationContext());
-                    PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
+                    PreferencesUtils.saveData("traineemobile", jsonObject.getString(Constants.mobile), getApplicationContext());
 
                     loadProfile();
 

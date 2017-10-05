@@ -30,7 +30,7 @@
         android:numColumns="2"
         android:id="@+id/grid"
         android:gravity="center"
-        android:paddingBottom="20dp"
+        android:paddingBottom="50dp"
         android:layout_height="match_parent"></GridView>
 
 
