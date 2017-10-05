@@ -256,6 +256,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         if (PreferencesUtils.getData(Constants.timerstarted, getApplicationContext(), "false").equals("true")) {
             cancel.setEnabled(false);
             startactionIcon.setImageResource(R.mipmap.stop_blue);
+            startService(new Intent(getApplicationContext(), LocationService.class));
         }
 //        LoadmapTask();
 
