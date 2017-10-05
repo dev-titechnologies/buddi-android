@@ -122,7 +122,7 @@ else
 
                                 if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
 
-                                    startService(new Intent(getApplicationContext(), Timer_Service.class));
+//                                    startService(new Intent(getApplicationContext(), Timer_Service.class));
 
                                     startActivity(new Intent(getApplicationContext(), SessionReady.class));
                                     finish();
@@ -149,7 +149,7 @@ else
 * */
                         if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
 
-                            startService(new Intent(getApplicationContext(), Timer_Service.class));
+//                            startService(new Intent(getApplicationContext(), Timer_Service.class));
 
                             startActivity(new Intent(getApplicationContext(), SessionReady.class));
                             finish();
