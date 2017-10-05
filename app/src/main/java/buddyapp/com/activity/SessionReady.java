@@ -309,63 +309,61 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (CommonCall.isNetworkAvailable()) {
 
-                if (startactionTitle.getText().toString().equals("Start")) {
-
-
-
+                    if (startactionTitle.getText().toString().equals("Start")) {
 
 
-
-                    if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainee")
- ) {
-
-
-                        if (trainerLocation!=null && checktrainerDistance() ) {
-
-                            Timer_Service.stopFlag = false;
-                            new StartSession().execute();
-                            profile.setEnabled(false);
-                            message.setEnabled(false);
-                        }else{
-
-                            showAlert("It seems like trainer has not reached to the location. Please wait until your trainer arrives at the location.");
-                        }
-                    }else{
-
-                       showAlert("Please ask the Trainee to start the session.");
+                        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee")
+                                ) {
 
 
+                            if (trainerLocation != null && checktrainerDistance()) {
 
-                        
-                    }
-                } else {
+                                Timer_Service.stopFlag = false;
+                                new StartSession().execute();
+                                profile.setEnabled(false);
+                                message.setEnabled(false);
+                            } else {
 
-                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which) {
-                                case DialogInterface.BUTTON_POSITIVE:
-                                    //Yes button clicked
-                                    stopAction();
-
-                                    break;
-
-                                case DialogInterface.BUTTON_NEGATIVE:
-                                    //No button clicked
-                                    break;
+                                showAlert("It seems like trainer has not reached to the location. Please wait until your trainer arrives at the location.");
                             }
+                        } else {
+
+                            showAlert("Please ask the Trainee to start the session.");
+
+
                         }
-                    };
+                    } else {
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SessionReady.this);
-                    builder.setMessage("Are you sure you want to stop this session?").setPositiveButton("Yes", dialogClickListener)
-                            .setNegativeButton("No", dialogClickListener).show();
+                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        //Yes button clicked
+                                        stopAction();
+
+                                        break;
+
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        //No button clicked
+                                        break;
+                                }
+                            }
+                        };
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(SessionReady.this);
+                        builder.setMessage("Are you sure you want to stop this session?").setPositiveButton("Yes", dialogClickListener)
+                                .setNegativeButton("No", dialogClickListener).show();
 
 
+                    }
+
+
+                } else {
+                    Toast.makeText(gps, "Please check your internet connection", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
 
@@ -602,7 +600,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
-//                        PreferencesUtils.saveData(Constants.flag_rating, "false", getApplicationContext());
+                        PreferencesUtils.saveData(Constants.flag_rating, "false", getApplicationContext());
                         stopSession();
 
 
@@ -842,7 +840,7 @@ BroadcastReceiver stopAutobr= new BroadcastReceiver() {
 
                 CommonCall.PrintLog("NO TIMMER  ", "NO TIMMER ");
 
-//                PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+                PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
                 stopSession();
             }
         }else{

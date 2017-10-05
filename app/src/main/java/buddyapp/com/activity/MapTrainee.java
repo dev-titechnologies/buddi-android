@@ -258,6 +258,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                                         public void onClick(DialogInterface dialog, int which) {
                                             // do nothing
                                             avi.setVisibility(View.GONE);
+                                            select.setClickable(true);
                                         }
                                     })
                                     .setIcon(android.R.drawable.ic_dialog_alert)

@@ -34,7 +34,8 @@ import buddyapp.com.utils.Urls;
 
 public class Question2 extends Activity {
     Button next;
-    TextView yes_military_installations,no_military_installations,gymtext;
+    TextView yes_military_installations,no_military_installations;
+    public static TextView  gymtext;
     MultiSelectionSpinner gym_sub;
     String military_installations_selected = "";
     ImageView back;
@@ -63,7 +64,11 @@ public class Question2 extends Activity {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 check2 = true;
+//                if(gym_sub.getSelectedStrings().size()>0)
+//                    gymtext.setVisibility(View.VISIBLE);
+//                else
                 gymtext.setVisibility(View.GONE);
+
                 gym_sub.setVisibility(View.VISIBLE);
                 return false;
             }

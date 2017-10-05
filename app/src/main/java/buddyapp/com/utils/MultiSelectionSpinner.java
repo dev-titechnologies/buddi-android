@@ -15,6 +15,8 @@ import java.util.List;
 import buddyapp.com.Controller;
 import buddyapp.com.R;
 
+import static buddyapp.com.activity.questions.Question2.gymtext;
+
 
 public class MultiSelectionSpinner extends Spinner implements
         DialogInterface.OnMultiChoiceClickListener
@@ -63,7 +65,9 @@ public class MultiSelectionSpinner extends Spinner implements
             @Override
             public void onClick(DialogInterface arg0, int arg1)
             {
-
+                if(getSelectedStrings().size()<1){
+                    gymtext.setVisibility(VISIBLE);
+                }
             }
         });
 
@@ -188,8 +192,8 @@ public class MultiSelectionSpinner extends Spinner implements
 
         if (sb.toString().trim().length()==0)
         {
-
-            return getResources().getString(R.string.please_select_gym) ;
+return sb.toString();
+//            return getResources().getString(R.string.please_select_gym) ;
         }else {
         return sb.toString();}
 
