@@ -68,7 +68,7 @@ public class Timer_Service extends Service {
 
         mTimer = new Timer();
 
-        mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 5, NOTIFY_INTERVAL);
+        mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 0, NOTIFY_INTERVAL);
         intent = new Intent(str_receiver);
         CreateNotification();
         PreferencesUtils.saveData(Constants.timmer_status, "true", getApplicationContext());
