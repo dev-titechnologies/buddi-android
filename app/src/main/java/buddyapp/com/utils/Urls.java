@@ -1,6 +1,6 @@
 package buddyapp.com.utils;
 
-import java.security.PublicKey;
+
 
 /**
  * Created by root on 19/7/17.
@@ -10,7 +10,7 @@ public class Urls {
 
     public static String BASEURL = "http://git.titechnologies.in:4001";
 //  public static String BASEURL= "http://192.168.1.66:9002";
-
+//
 //  public static String BASEURL= "http://192.168.1.20:9002";
 
     public static String LOGIN= "/login/login";

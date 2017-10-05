@@ -186,7 +186,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                 mSocket.connect();
                 chatConnect();
-                startService(new Intent(getApplicationContext(), LocationService.class));
+//                startService(new Intent(getApplicationContext(), LocationService.class));
             } else {
 
                 JSONObject data = new JSONObject(PreferencesUtils.getData(trainer_Data, getApplicationContext(), ""));
