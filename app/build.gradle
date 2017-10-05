@@ -20,11 +20,9 @@ android {
 }
 
 dependencies {
-    compile('com.github.nkzawa:socket.io-client:0.3.0') {
+    compile ('io.socket:socket.io-client:0.8.3') {
         exclude group: 'org.json', module: 'json'
     }
-
-
     compile 'com.googlecode.libphonenumber:libphonenumber:8.6.0'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.android.support:appcompat-v7:25.3.1'

@@ -96,28 +96,30 @@ public class HomeCategory extends Fragment {
         instantBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+if(CommonCall.isNetworkAvailable()) {
+
+    if (PreferencesUtils.getData(Constants.settings_cat_id, getActivity(), "").length() == 0) {
+
+        Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
+    } else if (PreferencesUtils.getData(Constants.settings_address, getActivity(), "").length() == 0) {
+
+        Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
+
+    } else if (PreferencesUtils.getData(Constants.trainer_gender, getActivity(), "").length() == 0) {
+        Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
 
 
-if (PreferencesUtils.getData(Constants.settings_cat_id,getActivity(),"").length()==0){
+    } else if (PreferencesUtils.getData(Constants.training_duration, getActivity(), "").length() == 0) {
 
-    Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
-}else if (PreferencesUtils.getData(Constants.settings_address,getActivity(),"").length()==0){
+        Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
 
-    Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
-
-}else if (PreferencesUtils.getData(Constants.trainer_gender,getActivity(),"").length()==0){
-    Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
-
-
-}else if (PreferencesUtils.getData(Constants.training_duration,getActivity(),"").length()==0){
-
-    Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
+    } else {
+        new SearchTrainer().execute();
+    }
 
 }else{
-new SearchTrainer().execute();
+    Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_SHORT).show();
 }
-
-
 
             }
         });

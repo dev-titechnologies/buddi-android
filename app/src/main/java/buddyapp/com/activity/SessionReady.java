@@ -986,7 +986,7 @@ new BroadcastReceiver() {
         String sensor = "sensor=false";
         String mode = "mode=driving";
 
-        String parameters = str_origin + "&" + str_dest + "&" + sensor+"&Key="+getString(R.string.google_api_key);
+        String parameters = str_origin + "&" + str_dest + "&" + sensor+"&Key="+getString(R.string.google_maps_key);
 
         // Building the parameters to the web service
 //            String parameters = origin + "&" + dest + "&" + sensor + "&" + mode;

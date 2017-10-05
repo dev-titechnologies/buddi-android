@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.IO;
-import com.github.nkzawa.socketio.client.Socket;
+
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
@@ -29,6 +27,9 @@ import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.utils.AnalyticsTrackers;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.Urls;
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 import static buddyapp.com.utils.Urls.BASEURL;
 
@@ -252,6 +253,13 @@ public class Controller extends Application {
 
             options.reconnection = true;
             options.query = "__sails_io_sdk_version=0.12.13&token=" + PreferencesUtils.getData(Constants.token,getAppContext(),""); // Added this line
+
+
+            if (mSocket!=null && mSocket.connected()){
+                mSocket.disconnect();
+                mSocket=null;
+
+            }
 
             mSocket = IO.socket(BASEURL,options);
 
