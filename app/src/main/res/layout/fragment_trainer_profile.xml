@@ -67,6 +67,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:id="@+id/height"
+                            android:visibility="gone"
                             android:drawableLeft="@drawable/ic_height_arrow"
                             />
                         <TextView
@@ -75,6 +76,7 @@
                             android:textColor="@color/white"
                             android:id="@+id/weight"
                             android:paddingLeft="6dp"
+                            android:visibility="gone"
                             android:drawablePadding="5dp"
                             android:drawableLeft="@mipmap/kg"
                             />

@@ -38,9 +38,9 @@ import buddyapp.com.activity.SettingsCategory;
 public class Settings extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
     int sessionDuration = 0;
     String sgender="";
-    LinearLayout duration, gender, location;
+    LinearLayout duration, gender, location, category;
     TextView  fourty, hour, male, female, noPreference,maddress;
-    TextView locationPref, categoryPref, genderPref, sessionPref;
+    TextView locationPref, categoryPref, genderPref, sessionPref,catname;
     int id =0, ids=0, id1=0,id2=0;
     Animation a,b,c,d;
     Button next;
@@ -71,14 +71,21 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
         next= (Button) view.findViewById(R.id.next);
         noPreference = (TextView) view.findViewById(R.id.no_preference);
         location = (LinearLayout) view.findViewById(R.id.locationSettings);
+        category = (LinearLayout) view.findViewById(R.id.categorySettings);
+        catname = (TextView) view.findViewById(R.id.category_name);
+
         loadScreen();
+        a = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
+        b = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
+        c = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
+        d = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
 
         locationPref.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (id1 == 0) {
                     id1 = 1;
-                    c = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
+
                     c.reset();
                     locationPref.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_sign_to_navigate, 0);
                     location.setVisibility(View.VISIBLE);
@@ -103,10 +110,39 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
         categoryPref.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (id2 == 0) {
+                    id2 = 1;
+
+                    d.reset();
+                    categoryPref.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_sign_to_navigate, 0);
+                    category.setVisibility(View.VISIBLE);
+                    category.startAnimation(d);
+
+                } else
+
+                {
+                    id2 =0;
+                    d.reset();
+                    categoryPref.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
+                    category.setVisibility(View.GONE);
+                }
+                if(PreferencesUtils.getData(Constants.settings_cat_name,getActivity(),"").length()==0){
                     Intent i  = new Intent(getActivity(), SettingsCategory.class);
-                    getActivity().startActivity(i);
+                    getActivity().startActivityForResult(i,111);
+                }else{
+                    catname.setText(PreferencesUtils.getData(Constants.settings_cat_name,getActivity(),""));
+                }
                }
         });
+        catname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i  = new Intent(getActivity(), SettingsCategory.class);
+                getActivity().startActivityForResult(i,111);
+            }
+        });
+
         maddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,7 +154,7 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
             public void onClick(View view) {
                 if (id == 0) {
                     id = 1;
-                    b = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
+
                     b.reset();
                     sessionPref.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_sign_to_navigate, 0);
                     duration.setVisibility(View.VISIBLE);
@@ -139,7 +175,7 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
             public void onClick(View view) {
                 if (ids == 0) {
                     ids = 1;
-                    a = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
+
                     a.reset();
                     genderPref.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_sign_to_navigate, 0);
                     gender.setVisibility(View.VISIBLE);
@@ -196,15 +232,35 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
 //        if(PreferencesUtils.)
         if(PreferencesUtils.getData(Constants.training_duration,getActivity(),"").equals("40")){
             setFourty();
+            id = 1;
+            duration.setVisibility(View.VISIBLE);
         }else if(PreferencesUtils.getData(Constants.training_duration,getActivity(),"").equals("60")){
             setHour();
+            id = 1;
+            duration.setVisibility(View.VISIBLE);
         }
         if(PreferencesUtils.getData(Constants.trainer_gender,getActivity(),"").equals("male")){
             setMale();
+            ids = 1;
+            gender.setVisibility(View.VISIBLE);
         }else if(PreferencesUtils.getData(Constants.trainer_gender,getActivity(),"").equals("female")){
             setFemale();
+            ids = 1;
+            gender.setVisibility(View.VISIBLE);
         }else if(PreferencesUtils.getData(Constants.trainer_gender,getActivity(),"").equals("nopreference")){
             setNoPreference();
+            ids = 1;
+            gender.setVisibility(View.VISIBLE);
+        }
+        if(PreferencesUtils.getData(Constants.settings_cat_name,getActivity(),"").length()>0){
+            catname.setText(PreferencesUtils.getData(Constants.settings_cat_name,getActivity(),""));
+            id2 = 1;
+            category.setVisibility(View.VISIBLE);
+        }
+        if(PreferencesUtils.getData(Constants.settings_address,getActivity(),"").length()>0){
+            maddress.setText(PreferencesUtils.getData(Constants.settings_address,getActivity(),""));
+            id1 = 1;
+            location.setVisibility(View.VISIBLE);
         }
     }
 
@@ -273,7 +329,11 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
             PreferencesUtils.saveData(Constants.settings_latitude, String.valueOf(place.getLatLng().latitude),getActivity());
             PreferencesUtils.saveData(Constants.settings_longitude, String.valueOf(place.getLatLng().longitude),getActivity());
 
-        } else {
+        }else if(requestCode == 111
+                && resultCode == Activity.RESULT_OK){
+
+        }
+        else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }catch (Exception e){
@@ -282,6 +342,13 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
     }
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        catname.setText(PreferencesUtils.getData(Constants.settings_cat_name,getActivity(),""));
 
     }
 }

@@ -49,6 +49,7 @@ import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.ChooseSpecification;
 import buddyapp.com.activity.ProfileScreen;
+import buddyapp.com.activity.TrainerCategory;
 import buddyapp.com.services.LocationService;
 import buddyapp.com.utils.AlertDialoge.RatingDialog;
 import buddyapp.com.utils.CircleImageView;
@@ -73,7 +74,7 @@ public class TrainerProfileFragment extends Fragment {
     private String userChoosenTask;
     boolean isValid = false;
     Uri image_uri;
-    TextView fullname, typeAge, height , weight;
+    TextView fullname, typeAge, height , weight, category;
     EditText rbmale;
     EditText firstName, lastName, eMail, password, mobile;
     CircleImageView  trainerImageView;
@@ -121,6 +122,9 @@ public class TrainerProfileFragment extends Fragment {
         snapchat = (ImageView) view.findViewById(R.id.nav_snapchat);
         twitter = (ImageView) view.findViewById(R.id.nav_twitter);
         youtube = (ImageView) view.findViewById(R.id.nav_youtube);
+
+        category = (TextView) view.findViewById(R.id.category);
+
 
         trainerCategory = (LinearLayout) view.findViewById(R.id.trainer_category);
         placeLayout = (LinearLayout) view.findViewById(R.id.place_layout);
@@ -177,6 +181,13 @@ public class TrainerProfileFragment extends Fragment {
 
         new getProfile().execute();
 
+        category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), TrainerCategory.class);
+                startActivity(intent);
+            }
+        });
 
 
         // Inflate the layout for this fragment
@@ -214,10 +225,13 @@ public class TrainerProfileFragment extends Fragment {
         mobile.setEnabled(false);
 
         try {
+
             firstName.setText(PreferencesUtils.getData(Constants.fname, getActivity(), ""));
             lastName.setText(PreferencesUtils.getData(Constants.lname, getActivity(), ""));
             eMail.setText(PreferencesUtils.getData(Constants.email, getActivity(), ""));
             imageurl = PreferencesUtils.getData(Constants.user_image, getActivity(), "");
+
+            fullname.setText(PreferencesUtils.getData(Constants.fname, getActivity(), "") + " "+PreferencesUtils.getData(Constants.lname, getActivity(), ""));
 
             /*fullname.setText(jsonObject.getString(Constants.fname) + " "+jsonObject.getString(Constants.lname));
             typeAge.setText("Trainer("+jsonObject.getString("age")+")");
@@ -311,12 +325,14 @@ public class TrainerProfileFragment extends Fragment {
                         typeAge.setText("Trainer("+jsonObject.getString("age")+")");
                     if(jsonObject.getString("height").toString().equals("null")){
                         height.setVisibility(View.GONE);
-                    }else
-                        height.setText(jsonObject.getString("height"));
+                    }else{
+                        height.setVisibility(View.VISIBLE);
+                        height.setText(jsonObject.getString("height"));}
                     if(jsonObject.getString("weight").toString().equals("null")){
                         weight.setVisibility(View.GONE);
                     }else
-                        weight.setText(jsonObject.getString("weight"));
+                    { height.setVisibility(View.VISIBLE);
+                        weight.setText(jsonObject.getString("weight"));}
                     loadProfile();
 
                 } else if (obj.getInt(Constants.status) == 2) {

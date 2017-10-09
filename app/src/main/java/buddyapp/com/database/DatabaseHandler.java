@@ -198,25 +198,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 values.put(CAT_IMAGE, item.getString("category_image"));
 
 
-                if (arrayaproved.contains(item.getString("category_id"))
-                        
-                      || arraypending.contains(item.getString("category_id"))  
-                        
-                        )
+                if (arrayaproved.contains(item.getString("category_id"))){
 
-                values.put(CAT_STATUS, ("0"));
-else
+
+                    values.put(CAT_STATUS, ("0"));//aproved
+                }
+
+                else if ( arraypending.contains(item.getString("category_id"))) {
+
+
+                    values.put(CAT_STATUS, ("2"));//pending
+                }else
                     values.put(CAT_STATUS, ("1"));
 
-                
-                
-                
-                
+
                 // Inserting main cat
-
-
-
-
 
                 db.insert(TABLE_CATEGORY, null, values);
                 // Inserting sub cat
@@ -231,6 +227,7 @@ else
 
         db.close(); // Closing database connection
     }
+
 
     public void deleteSubContact() {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -312,6 +309,40 @@ else
                     contact.put("category_name", cursor.getString(2));
                     contact.put("category_image", cursor.getString(3));
 
+
+                    categoryList.put(contact);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return categoryList;
+    }
+// For pending and approvel category
+    public JSONArray getCATForTrainer() {
+        JSONArray categoryList = new JSONArray();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_CATEGORY + " WHERE " + CAT_STATUS + " = 0" + " OR " + CAT_STATUS + " =2 " ;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                JSONObject contact = new JSONObject();
+
+                try {
+
+
+                    contact.put("category_id", cursor.getString(1));
+
+                    contact.put("category_name", cursor.getString(2));
+                    contact.put("category_image", cursor.getString(3));
+                    contact.put("category_status", cursor.getString(5));
 
                     categoryList.put(contact);
                 } catch (JSONException e) {
@@ -461,5 +492,10 @@ else
         db.delete(TABLE_HISTORY, null,
                 null);
         db.close();
+    }
+    public void deleteDB(){
+        deleteHistory();
+        deleteCat();
+        deleteSubContact();
     }
 }

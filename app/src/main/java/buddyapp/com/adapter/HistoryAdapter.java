@@ -156,7 +156,7 @@ public class HistoryAdapter extends BaseAdapter {
                     intent.putExtra("profileImage",jsonObject.getString("profile_img"));
                     intent.putExtra("desc",desc);
                     intent.putExtra("name",name);
-                    intent.putExtra("amount",samount);
+                    intent.putExtra("amount",jsonObject.getString("amount"));
                     intent.putExtra("rating",jsonObject.getString("rating"));
                     intent.putExtra("image",array.getJSONObject(0).getString("categoryBookImage"));
 
@@ -209,8 +209,15 @@ public class HistoryAdapter extends BaseAdapter {
             long seconds = mills / 1000;
             long minutes = seconds / 60;
             long hours = minutes / 60;
+            if(hours % 24 == 0){
+                result = minutes % 60 + " Minutes" ;
+            }else if(hours % 24 == 1)
+            {
+                result =  hours % 24 + " Hour " + minutes % 60 + " Minutes";
+            }else if(hours % 24 > 1){
+                result =  hours % 24 + " Hours " + minutes % 60 + " Minutes";
+            }
 
-            result =  hours % 24 + ":" + minutes % 60 + " Minutes" ;
 
         } catch (ParseException e) {
             e.printStackTrace();
