@@ -138,6 +138,9 @@ public class VideoUploadActivity extends AppCompatActivity {
                 }
 
 
+
+//                razzmatazz kacheripady vilamalalay acollage opp kochi bakery
+
             }
         });
         record.setOnClickListener(new View.OnClickListener() {
