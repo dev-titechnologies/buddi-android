@@ -104,6 +104,7 @@ public class Constants {
     public static String settings_latitude = "settings_latitude";
     public static String settings_longitude = "setting_longitude";
 
+    public static String settings_cat_name = "settings_cat_name";
     public static String settings_cat_id = "settings_cat_id";
     public static String flag_rating = "flag_rating";
     public static String trainer_image = "trainer_image";

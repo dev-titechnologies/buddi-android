@@ -29,7 +29,7 @@ Button exit;
         setContentView(R.layout.activity_done);
 
         exit=(Button)findViewById(R.id.exit);
-        new checkStatus().execute();
+//        new checkStatus().execute();
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,5 +113,11 @@ Button exit;
     public void onBackPressed() {
 //        super.onBackPressed();
         return;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new checkStatus().execute();
     }
 }

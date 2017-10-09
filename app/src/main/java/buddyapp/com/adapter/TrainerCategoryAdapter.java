@@ -13,33 +13,29 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import buddyapp.com.R;
-import buddyapp.com.Settings.Constants;
-import buddyapp.com.Settings.PreferencesUtils;
-import buddyapp.com.activity.SettingsCategory;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 
-import static buddyapp.com.activity.SettingsCategory.settings_cat_selectedID;
 
 /**
- * Created by titech on 28/8/17.
+ * Created by titech on 6/10/17.
  */
 
-public class SettingsCategoryAdapter extends BaseAdapter {
+public class TrainerCategoryAdapter extends BaseAdapter {
 
     JSONArray cat;
     Context context;
     int id =0 ;
 
 
-    public SettingsCategoryAdapter(Context context, JSONArray category) {
+    public TrainerCategoryAdapter(Context context, JSONArray category) {
         this.context = context;
         this.cat = category;
-        if(PreferencesUtils.getData(Constants.settings_cat_id,context,"").length()>0){
-            settings_cat_selectedID.add(PreferencesUtils.getData(Constants.settings_cat_id,context,""));
-        }else{
-            settings_cat_selectedID.clear();
-        }
+//        if(PreferencesUtils.getData(Constants.settings_cat_id,context,"").length()>0){
+//            settings_cat_selectedID.add(PreferencesUtils.getData(Constants.settings_cat_id,context,""));
+//        }else{
+//            settings_cat_selectedID.clear();
+//        }
     }
 
 
@@ -50,7 +46,13 @@ public class SettingsCategoryAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        return null;
+
+        try {
+            return cat.get(i);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    return "";
     }
 
     @Override
@@ -81,7 +83,7 @@ public class SettingsCategoryAdapter extends BaseAdapter {
         try {
             JSONObject catItem = cat.getJSONObject(i);
 
-            holder.catName.setText(catItem.getString("category_name"));
+
 
 
             CommonCall.LoadImage(context, catItem.getString("category_image"), holder.catImage
@@ -89,12 +91,24 @@ public class SettingsCategoryAdapter extends BaseAdapter {
 
 
             );
+
+            if (catItem.getInt("category_status")==0){
+                ( holder.cat_card ) .setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+                holder.catName.setText(catItem.getString("category_name")+"\n");
+                holder.catName.setTextColor(context.getResources().getColor(R.color.white));
+
+            }else{
+                holder.catName.setText(catItem.getString("category_name")+ ("\n ( Pending )"));
+                ( holder.cat_card ) .setCardBackgroundColor(context.getResources().getColor(R.color.white));
+                holder.catName.setTextColor(context.getResources().getColor(R.color.black));
+            }
+
             JSONObject object = new JSONObject();
             object.put("id",catItem.getString("category_id"));
             object.put("name",catItem.getString("category_name"));
             holder.cat_card.setTag(object);
 
-            holder.cat_card.setOnClickListener(new View.OnClickListener() {
+           /* holder.cat_card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -109,8 +123,6 @@ public class SettingsCategoryAdapter extends BaseAdapter {
 //                        id = 1;
                         try {
                             JSONObject jsonObject = new JSONObject(view.getTag().toString());
-                            PreferencesUtils.saveData(Constants.settings_cat_id,jsonObject.getString("id"),context);
-                            PreferencesUtils.saveData(Constants.settings_cat_name,jsonObject.getString("name"),context);
 
                             settings_cat_selectedID.add(jsonObject.getString("id"));
 
@@ -121,19 +133,11 @@ public class SettingsCategoryAdapter extends BaseAdapter {
                         //                    }
                     }
                     CommonCall.PrintLog("data cat ", settings_cat_selectedID.toString());
-                    notifyDataSetChanged();
+
                 }
-            });
+            });*/
 
-            if (settings_cat_selectedID.contains(catItem.getString("category_id"))){
-                ( holder.cat_card ) .setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
 
-                holder.catName.setTextColor(context.getResources().getColor(R.color.white));
-
-            }else{
-                ( holder.cat_card ) .setCardBackgroundColor(context.getResources().getColor(R.color.white));
-                holder.catName.setTextColor(context.getResources().getColor(R.color.black));
-            }
 
         } catch (JSONException e) {
             e.printStackTrace();

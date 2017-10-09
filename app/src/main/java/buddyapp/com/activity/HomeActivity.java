@@ -45,6 +45,7 @@ import buddyapp.com.activity.Fragment.Legal;
 import buddyapp.com.activity.Fragment.Settings;
 import buddyapp.com.activity.Fragment.TrainerProfileFragment;
 import buddyapp.com.activity.Payments.PaymentType;
+import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.fcm.Config;
 import buddyapp.com.fcm.NotificationUtils;
 import buddyapp.com.timmer.Timer_Service;
@@ -65,7 +66,7 @@ public class HomeActivity extends AppCompatActivity
     TextView name, email,rating;
     JSONObject data;
     Menu menu;
-
+    DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -381,7 +382,8 @@ public class HomeActivity extends AppCompatActivity
             try {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
-
+                    db = new DatabaseHandler(getApplicationContext());
+                    db.deleteDB();
 //
                     CommonCall.sessionout(HomeActivity.this);
                     finish();

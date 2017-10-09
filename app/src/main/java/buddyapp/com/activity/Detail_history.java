@@ -34,7 +34,7 @@ public class Detail_history extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setTitle("Detail");
+        actionBar.setTitle("Training details");
 
         trainedDate = (TextView) findViewById(R.id.trained_date);
         description = (TextView) findViewById(R.id.description);

@@ -75,6 +75,34 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/ash"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/categorySettings"
+        android:layout_marginBottom="10dp"
+        android:background="@color/ash">
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium"
+            android:layout_marginBottom="@dimen/medium"
+            android:layout_marginRight="@dimen/medium"
+            android:layout_marginLeft="@dimen/medium"
+            android:elevation="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/medium"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:id="@+id/category_name"
+                android:background="@color/colorPrimary"/>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

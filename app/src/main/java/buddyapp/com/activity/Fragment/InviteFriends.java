@@ -217,6 +217,8 @@ public class InviteFriends extends Fragment {
                             } else {
                                 contacts_item.put("number", phoneNo);
                             }
+
+
                             CONTACTS.put(contacts_item);
 
                         } catch (JSONException e) {
@@ -286,7 +288,7 @@ public class InviteFriends extends Fragment {
                         temp = "+"+view.getTag(R.string.number).toString();
                      }
                     else{
-                        temp = "+91"+view.getTag(R.string.number).toString();
+                        temp = view.getTag(R.string.number).toString();
                     }
                     if (!map.contains(temp)) {
                         map.add(validateNumber(temp).toString());

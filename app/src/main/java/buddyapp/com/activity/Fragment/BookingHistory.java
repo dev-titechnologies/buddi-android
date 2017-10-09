@@ -3,13 +3,16 @@ package buddyapp.com.activity.Fragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -25,6 +28,7 @@ import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.LoginScreen;
+import buddyapp.com.activity.TrainerCategory;
 import buddyapp.com.adapter.HistoryAdapter;
 import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.utils.CommonCall;
@@ -37,7 +41,9 @@ import buddyapp.com.utils.Urls;
  */
 public class BookingHistory extends Fragment {
     DatabaseHandler db;
+    TextView noHistroy;
 HistoryAdapter historyAdapter;
+    FrameLayout root;
     private SwipeRefreshLayout swipeRefreshLayout;
     public BookingHistory() {
         // Required empty public constructor
@@ -52,7 +58,8 @@ ListView list;
         View view=  inflater.inflate(R.layout.fragment_booking_history, container, false);
         list = (ListView)view.findViewById(R.id.list);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
-
+        noHistroy = (TextView) view.findViewById(R.id.no_history);
+        root = (FrameLayout) view.findViewById(R.id.root);
         db = new DatabaseHandler(getActivity());
        if(db.getAllHistory().length()>1) {
            JSONArray jsonarray= db.getAllHistory();
@@ -140,8 +147,30 @@ ListView list;
                         historyAdapter = new HistoryAdapter(getActivity(),jsonarray);
                         list.setAdapter(historyAdapter);
                     }
+                    else{
+                        noHistroy.setVisibility(View.VISIBLE);
+                        Toast.makeText(getActivity(),"No training sessions yet", Toast.LENGTH_LONG);
+                    }
                 }else if (obj.getInt("status") == 2) {
                     Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                    Snackbar snackbar = Snackbar
+                            .make(root, obj.getString(Constants.message), Snackbar.LENGTH_INDEFINITE)
+                            .setAction("RETRY", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+
+                                    Snackbar snackbar1 = null;
+
+                                    snackbar1 = Snackbar.make(root, "Loading", Snackbar.LENGTH_SHORT);
+
+                                    snackbar1.show();
+                                    new LoadBookingHistory().execute();
+
+                                }
+                            });
+
+                    snackbar.show();
                 }else if (obj.getInt("status") == 3) {
                     CommonCall.sessionout(getActivity());
                 }

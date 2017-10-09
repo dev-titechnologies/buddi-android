@@ -1,6 +1,7 @@
 package buddyapp.com.activity;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
+import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.adapter.SettingsCategoryAdapter;
 import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.utils.CommonCall;
@@ -56,6 +58,10 @@ public class SettingsCategory extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                finish();
+                Intent intent = new Intent();
+                intent.putExtra("name", PreferencesUtils.getData(Constants.settings_cat_name,getApplicationContext(),""));
+                setResult(111,intent);
                 finish();
             }
         });

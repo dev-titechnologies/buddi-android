@@ -365,6 +365,8 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                                         try {
                                             URL image_url = new URL("https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
                                             user_image = image_url.toString();
+                                            PreferencesUtils.saveData(Constants.user_image, user_image, getApplicationContext());
+
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
@@ -423,8 +425,10 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                     lastName.setText(splitednaame[1]);
                 sgoogleplusId = acct.getId();
 
-                if (acct.getPhotoUrl() != null)
+                if (acct.getPhotoUrl() != null) {
                     user_image = acct.getPhotoUrl().toString();
+                    PreferencesUtils.saveData(Constants.user_image, user_image, getApplicationContext());
+                }
                 else if (acct.getEmail() != null)
                     eMail.setText(acct.getEmail());
                 new login().execute();
@@ -471,7 +475,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                 reqData.put("last_name", slname);
                 reqData.put("mobile", validnumber);
                 reqData.put("gender", sgender);
-                reqData.put("user_image", user_image);
+                reqData.put("user_image", PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""));
                 reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
                 reqData.put("profile_desc", "Description");
                 reqData.put("facebook_id", sfacebookId);

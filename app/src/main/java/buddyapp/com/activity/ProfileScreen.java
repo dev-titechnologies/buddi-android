@@ -73,7 +73,7 @@ public class ProfileScreen extends AppCompatActivity {
     int REQUEST_CROP_PICTURE = 222;
     String imageurl = "";
     Menu menu;
-    TextView fullname, typeAge, height , weight;
+    TextView fullname, typeAge, height , weight, category;
     String fbusername,snapchatusername,twitterusername,linkedinusername,instagramusername,youtubeusername;
     SocialMediaURLAlertDialog dialog;
     String m_Text;
@@ -98,7 +98,7 @@ public class ProfileScreen extends AppCompatActivity {
         mobile = (EditText) findViewById(R.id.mobile);
 
         rbmale = (EditText) findViewById(R.id.male);
-
+        category = (TextView) findViewById(R.id.category);
         userImageView = (CircleImageView) findViewById(R.id.userimageView);
         trainerCategory = (LinearLayout) findViewById(R.id.trainer_category);
         placeLayout = (LinearLayout) findViewById(R.id.place_layout);
@@ -132,6 +132,14 @@ public class ProfileScreen extends AppCompatActivity {
         loadProfile();
 
         new getProfile().execute();
+
+        category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), TrainerCategory.class);
+                startActivity(intent);
+            }
+        });
 
         trainerImageView.setOnClickListener(new View.OnClickListener() {
             @Override
