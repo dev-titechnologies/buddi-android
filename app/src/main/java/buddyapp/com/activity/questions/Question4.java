@@ -232,7 +232,11 @@ public class Question4 extends Activity {
                         questionData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
 
 
-                        questionData.put("questions", question.toString());
+                        JSONArray temp = new JSONArray();
+                        temp.put(question);
+
+
+                        questionData.put("questions",temp.toString());
 
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -55,7 +55,7 @@ public class VideoUploadActivity extends AppCompatActivity {
     boolean allVideoUpload = false;
     int currentPos = 0;
 
-
+    JSONArray videoArray = new JSONArray();
     JSONObject videoUpload = new JSONObject();
 
     @Override
@@ -113,11 +113,9 @@ public class VideoUploadActivity extends AppCompatActivity {
 
                     try {
 
-                        JSONArray temp = new JSONArray();
-                        temp.put(videoUpload.toString());
 
 
-                        Constants.questionData.put("video_data", temp);
+                        Constants.questionData.put("video_data", videoArray.toString());
 
                         CommonCall.PrintLog("video data",Constants.questionData.toString());
 
@@ -551,7 +549,7 @@ try {
                     videoUpload.put("video_url",obj.getString("Url"));
                     videoUpload.put("subCat_name",currentSubCat.getString("subCat_name"));
                     videoUpload.put("subCat_id",currentSubCat.getString("subCat_id"));
-
+                    videoArray.put(videoUpload);
                 } else if (obj.getInt(Constants.status) == 2) {
                     Toast.makeText(VideoUploadActivity.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
                 } else {

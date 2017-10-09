@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -58,7 +59,7 @@ import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
 public class RegisterScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    TextView next;
+    TextView next,check_terms_text;
     String semail, sfname, slname, sgender = "", scountrycode, smobilenumber, validnumber, spassword, sfacebookId = "", sgoogleplusId = "", sage, sweight, sheight;
     String register_type = "normal";
     ImageView Google, facebook;
@@ -74,6 +75,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
     LinearLayout ageLayout, weightLayout, heightLayout;
     RadioGroup rg;
     RadioButton rbmale, rbfemale;
+    CheckBox check_termsconditions;
     EditText firstName, lastName, eMail, password, mobile, age, height, weight;
 
     @Override
@@ -81,7 +83,31 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_screen);
 
+        check_terms_text = (TextView) findViewById(R.id.check_terms_text);
+        check_termsconditions = (CheckBox) findViewById(R.id.check_termsconditions);
 
+
+        check_terms_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (check_termsconditions.isChecked()){
+                    check_termsconditions.setChecked(false);
+
+                }else{
+                    Intent terms = new Intent(getApplicationContext(),WebActivity.class);
+                    terms.putExtra("url","http://www.gmail.com/");
+                    startActivity(terms);
+                    check_termsconditions.setChecked(true);
+                }
+            }
+        });
+
+        check_termsconditions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         firstName = (EditText) findViewById(R.id.first_name);
         lastName = (EditText) findViewById(R.id.last_name);
         eMail = (EditText) findViewById(R.id.email);
@@ -295,7 +321,16 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
             focusView = weight;
             focusView.requestFocus();
             return false;
-        } else {
+        } else if (!check_termsconditions.isChecked()) {
+            Toast.makeText(getApplicationContext(), "Please accept the terms and conditions.", Toast.LENGTH_SHORT).show();
+
+            focusView = check_termsconditions;
+        focusView.requestFocus();
+        return false;
+    }
+
+
+        else {
 
             sfname = firstName.getText().toString();
             slname = lastName.getText().toString();
