@@ -2,6 +2,7 @@ package buddyapp.com.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,7 +99,8 @@ public class TrainerCategoryAdapter extends BaseAdapter {
                 holder.catName.setTextColor(context.getResources().getColor(R.color.white));
 
             }else{
-                holder.catName.setText(catItem.getString("category_name")+ ("\n ( Pending )"));
+                String text = catItem.getString("category_name")+"<font color=#FF0000>"+ ("\n ( Pending )")+"</font>";
+                holder.catName.setText(Html.fromHtml(text));
                 ( holder.cat_card ) .setCardBackgroundColor(context.getResources().getColor(R.color.white));
                 holder.catName.setTextColor(context.getResources().getColor(R.color.black));
             }
