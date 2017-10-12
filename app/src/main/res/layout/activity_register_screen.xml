@@ -375,10 +375,10 @@ android:gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:text="I agree to the Terms and Conditions"
+                        android:text="@string/please_accept_terms"
                         android:id="@+id/check_terms_text"
                         android:layout_gravity="center"
-                        android:textAllCaps="true" />
+                         />
 
 
                 </LinearLayout>

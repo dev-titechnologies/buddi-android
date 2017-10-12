@@ -41,6 +41,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
+
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
@@ -196,6 +198,15 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                                             }
                                         }
                                         sfacebookId = object.getString("id");
+
+                                        try {
+                                            URL image_url = new URL("https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
+
+                                            PreferencesUtils.saveData(Constants.user_image, image_url.toString(), getApplicationContext());
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
                                         if (CommonCall.isNetworkAvailable())
                                             new login().execute();
                                         else {
@@ -254,6 +265,10 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 }
                 sgoogleplusId = acct.getId();
                 login_type = "google";
+                if (acct.getPhotoUrl() != null) {
+
+                    PreferencesUtils.saveData(Constants.user_image, acct.getPhotoUrl().toString(), getApplicationContext());
+                }
                 if (acct.getEmail() != null)
                     semail=acct.getEmail();
                 if (CommonCall.isNetworkAvailable())

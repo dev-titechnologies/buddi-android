@@ -75,6 +75,7 @@ Button done;
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setTitle("Payments");
         applyPromo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -95,8 +95,8 @@ public class ChooseSpecification extends AppCompatActivity {
                             latitude = location.getLatitude();
                             PreferencesUtils.saveData(Constants.latitude, String.valueOf(latitude), getApplicationContext());
                             PreferencesUtils.saveData(Constants.longitude, String.valueOf(longitude),getApplicationContext());
-                            BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
-                                    new LatLng(latitude, longitude), new LatLng(longitude, longitude));
+//                            BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+//                                    new LatLng(latitude, longitude), new LatLng(longitude, longitude));
 
                         }
                     }

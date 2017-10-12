@@ -28,6 +28,9 @@ import buddyapp.com.activity.questions.DoneActivity;
 import buddyapp.com.timmer.Timer_Service;
 import buddyapp.com.utils.CommonCall;
 
+import static buddyapp.com.Settings.Constants.start_session;
+import static buddyapp.com.Settings.Constants.trainer_Data;
+
 public class Splash extends AppCompatActivity {
 
     @Override
@@ -43,7 +46,34 @@ Log.e("launcher activity",getIntent().getStringExtra("type")+"");
             startActivity(new Intent(getApplicationContext(), SessionReady.class).putExtra("push_session","4"));
 
             finish();
-        }else
+        }else if (getIntent().getStringExtra("type")!=null && getIntent().getStringExtra("type").equals("1")){
+
+
+            JSONObject data = null;
+            try {
+                data = new JSONObject(getIntent().getStringExtra("data"));
+
+
+            PreferencesUtils.saveData(Constants.trainer_id,data.getJSONObject("trainer_details").getString("trainer_id"),getApplicationContext());
+            PreferencesUtils.saveData(trainer_Data,data.toString(),getApplicationContext());
+
+            PreferencesUtils.saveData(start_session,"true",getApplicationContext());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
+            resultIntent.putExtra("message", data.toString());
+
+
+
+            resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(resultIntent);
+
+        }
+
+        else
         if (getIntent().getStringExtra("type")!=null && getIntent().getStringExtra("type").equals("3")){
 
             startActivity(new Intent(getApplicationContext(), SessionReady.class).putExtra("push_session","3"));

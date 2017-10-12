@@ -711,8 +711,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
         Location locationB = new Location("point B");
 
-        locationB.setLatitude(gps.getLatitude());
-        locationB.setLongitude(gps.getLongitude());
+        locationB.setLatitude(origin.latitude);
+        locationB.setLongitude(origin.longitude);
 
         float distance = locationA.distanceTo(locationB);
 
@@ -766,7 +766,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         nManager.cancelAll();
 
 
-        new CommonCall.timerUpdate(SessionReady.this, "complete", book_id, "").execute();
+        new CommonCall.timerUpdate(SessionReady.this, "stop", book_id, "").execute();
 
     }
 
@@ -1115,6 +1115,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(location.getLatitude(), location.getLongitude()), 16));
             origin = new LatLng(location.getLatitude(), location.getLongitude());
+
+
         }
         if (origin.latitude != 0)
             LoadmapTask();

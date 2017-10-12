@@ -16,7 +16,7 @@ WebView webView;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
         ActionBar actionBar = getSupportActionBar();
-
+//1 photo salar slip , online state, pan,aadhar,
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         webView=(WebView)findViewById(R.id.web);

@@ -135,8 +135,10 @@ NotificationUtils.clearNotifications(getApplicationContext());
                         PreferencesUtils.saveData(start_session, "true", getApplicationContext());
 
                         Intent intent = new Intent(getApplicationContext(), SessionReady.class);
+
                         intent.putExtra("TrainerData", jsonObject.toString());
                         startActivity(intent);
+                        finish();
                     }else{
 
                         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);

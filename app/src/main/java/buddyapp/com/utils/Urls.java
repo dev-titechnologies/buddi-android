@@ -13,6 +13,11 @@ public class Urls {
 //
 //  public static String BASEURL= "http://192.168.1.20:9002";
 
+
+
+    public static String terms= "http://design.titechnologies.in/1015_buddy/html/termsofuse.html";
+
+
     public static String LOGIN= "/login/login";
 
     public static String REGISTER= "/register/Register";
@@ -60,6 +65,8 @@ public class Urls {
     public static String declineSelection= "/search/declineSelection";
 
     public static String extendBooking= "/booking/extendBooking";
+
+
 
     public static String getextendBookingURL(){
 

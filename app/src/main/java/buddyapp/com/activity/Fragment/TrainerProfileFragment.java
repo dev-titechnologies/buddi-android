@@ -331,7 +331,7 @@ public class TrainerProfileFragment extends Fragment {
                     if(jsonObject.getString("weight").toString().equals("null")){
                         weight.setVisibility(View.GONE);
                     }else
-                    { height.setVisibility(View.VISIBLE);
+                    { weight.setVisibility(View.VISIBLE);
                         weight.setText(jsonObject.getString("weight"));}
                     loadProfile();
 

@@ -95,7 +95,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
 
                 }else{
                     Intent terms = new Intent(getApplicationContext(),WebActivity.class);
-                    terms.putExtra("url","http://www.gmail.com/");
+                    terms.putExtra("url",Urls.terms);
                     startActivity(terms);
                     check_termsconditions.setChecked(true);
                 }
@@ -464,7 +464,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                     user_image = acct.getPhotoUrl().toString();
                     PreferencesUtils.saveData(Constants.user_image, user_image, getApplicationContext());
                 }
-                else if (acct.getEmail() != null)
+                 if (acct.getEmail() != null)
                     eMail.setText(acct.getEmail());
                 new login().execute();
 //                Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();
@@ -542,7 +542,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                     PreferencesUtils.saveData(Constants.email, semail, getApplicationContext());
                     PreferencesUtils.saveData(Constants.fname, sfname, getApplicationContext());
                     PreferencesUtils.saveData(Constants.lname, slname, getApplicationContext());
-                    PreferencesUtils.saveData(Constants.user_image, user_image, getApplicationContext());
+//                    PreferencesUtils.saveData(Constants.user_image, user_image, getApplicationContext());
 
 
                     if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals(Constants.trainer)) {

@@ -471,7 +471,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
 
-//                    timeOut(obj.getInt("length"));
+                    timeOut(obj.getInt("length"));
                     PreferencesUtils.saveData(Constants.promo_code, "", getApplicationContext());
 
 //                    CommonCall.hideLoader();
@@ -531,7 +531,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                 avi.setVisibility(View.GONE);
                 select.setClickable(true);
 
-                Toast.makeText(MapTrainee.this, "Timeout for finding Trainer.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapTrainee.this, "All Trainers are busy, Please try again!", Toast.LENGTH_SHORT).show();
                 finish();
 
 
