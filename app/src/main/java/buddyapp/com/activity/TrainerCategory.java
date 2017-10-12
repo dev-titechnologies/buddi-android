@@ -95,7 +95,7 @@ public class TrainerCategory extends AppCompatActivity {
         @Override
         protected void onPostExecute(String res) {
             super.onPostExecute(res);
-            CommonCall.hideLoader();
+
 
             try {
                 JSONObject obj= new JSONObject(res);
@@ -107,6 +107,7 @@ public class TrainerCategory extends AppCompatActivity {
                     new getCategoryList().execute();
 
                 }else if(obj.getInt("status")==2){
+                    CommonCall.hideLoader();
                     errorImage.setVisibility(View.VISIBLE);
                     Snackbar snackbar = Snackbar
                             .make(root, obj.getString(Constants.message), Snackbar.LENGTH_INDEFINITE)
@@ -127,11 +128,13 @@ public class TrainerCategory extends AppCompatActivity {
 
                     snackbar.show();
                 }else if(obj.getInt("status")==3){
+                    CommonCall.hideLoader();
                     CommonCall.sessionout(TrainerCategory.this);
                     finish();
                 }
 
             } catch (JSONException e) {
+                CommonCall.hideLoader();
                 e.printStackTrace();
             }
 
@@ -144,7 +147,7 @@ public class TrainerCategory extends AppCompatActivity {
 
     @Override
     protected void onPreExecute() {
-        CommonCall.showLoader(TrainerCategory.this);
+//        CommonCall.showLoader(TrainerCategory.this);
 
 
     }
