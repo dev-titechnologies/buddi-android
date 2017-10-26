@@ -1,9 +1,8 @@
 package buddyapp.com;
 
 import android.content.Intent;
-import android.provider.Settings;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -15,18 +14,12 @@ import java.util.TimerTask;
 
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
-
 import buddyapp.com.activity.ChooseCategory;
 import buddyapp.com.activity.HomeActivity;
-import buddyapp.com.activity.IntroScreen;
 import buddyapp.com.activity.RequestActivity;
-import buddyapp.com.activity.Session;
 import buddyapp.com.activity.SessionReady;
 import buddyapp.com.activity.WelcomeActivity;
-import buddyapp.com.activity.chat.ChatScreen;
 import buddyapp.com.activity.questions.DoneActivity;
-import buddyapp.com.timmer.Timer_Service;
-import buddyapp.com.utils.CommonCall;
 
 import static buddyapp.com.Settings.Constants.start_session;
 import static buddyapp.com.Settings.Constants.trainer_Data;
@@ -40,13 +33,13 @@ public class Splash extends AppCompatActivity {
         getSupportActionBar().hide();
 
 
-Log.e("launcher activity",getIntent().getStringExtra("type")+"");
-        if (getIntent().getStringExtra("type")!=null && getIntent().getStringExtra("type").equals("4")){
+        Log.e("launcher activity", getIntent().getStringExtra("type") + "");
+        if (getIntent().getStringExtra("type") != null && getIntent().getStringExtra("type").equals("4")) {
 
-            startActivity(new Intent(getApplicationContext(), SessionReady.class).putExtra("push_session","4"));
+            startActivity(new Intent(getApplicationContext(), SessionReady.class).putExtra("push_session", "4"));
 
             finish();
-        }else if (getIntent().getStringExtra("type")!=null && getIntent().getStringExtra("type").equals("1")){
+        } else if (getIntent().getStringExtra("type") != null && getIntent().getStringExtra("type").equals("1")) {
 
 
             JSONObject data = null;
@@ -54,10 +47,10 @@ Log.e("launcher activity",getIntent().getStringExtra("type")+"");
                 data = new JSONObject(getIntent().getStringExtra("data"));
 
 
-            PreferencesUtils.saveData(Constants.trainer_id,data.getJSONObject("trainer_details").getString("trainer_id"),getApplicationContext());
-            PreferencesUtils.saveData(trainer_Data,data.toString(),getApplicationContext());
+                PreferencesUtils.saveData(Constants.trainer_id, data.getJSONObject("trainer_details").getString("trainer_id"), getApplicationContext());
+                PreferencesUtils.saveData(trainer_Data, data.toString(), getApplicationContext());
 
-            PreferencesUtils.saveData(start_session,"true",getApplicationContext());
+                PreferencesUtils.saveData(start_session, "true", getApplicationContext());
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -67,27 +60,20 @@ Log.e("launcher activity",getIntent().getStringExtra("type")+"");
             resultIntent.putExtra("message", data.toString());
 
 
-
-            resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(resultIntent);
 
-        }
+        } else if (getIntent().getStringExtra("type") != null && getIntent().getStringExtra("type").equals("3")) {
 
-        else
-        if (getIntent().getStringExtra("type")!=null && getIntent().getStringExtra("type").equals("3")){
-
-            startActivity(new Intent(getApplicationContext(), SessionReady.class).putExtra("push_session","3"));
+            startActivity(new Intent(getApplicationContext(), SessionReady.class).putExtra("push_session", "3"));
 
             finish();
-        }else
-        if (getIntent().getStringExtra("type")!=null && getIntent().getStringExtra("type").equals("2")){
+        } else if (getIntent().getStringExtra("type") != null && getIntent().getStringExtra("type").equals("2")) {
 
-            startActivity(new Intent(getApplicationContext(), SessionReady.class).putExtra("push_session","2"));
+            startActivity(new Intent(getApplicationContext(), SessionReady.class).putExtra("push_session", "2"));
 
             finish();
-        }
-        else
-        if (getIntent().getStringExtra("type")!=null && getIntent().getStringExtra("type").equals("6")){
+        } else if (getIntent().getStringExtra("type") != null && getIntent().getStringExtra("type").equals("6")) {
 
 
             JSONObject data = null;
@@ -95,18 +81,15 @@ Log.e("launcher activity",getIntent().getStringExtra("type")+"");
                 data = new JSONObject(getIntent().getStringExtra("data"));
 
 
-
                 startActivity(new Intent(getApplicationContext(), SessionReady.class)
-                        .putExtra("push_session","6").putExtra("extend_time",data.getString("extend_time")));
+                        .putExtra("push_session", "6").putExtra("extend_time", data.getString("extend_time")));
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             finish();
-        }
-        else
-        if (getIntent().getStringExtra("type")!=null && getIntent().getStringExtra("type").equals("5")){
+        } else if (getIntent().getStringExtra("type") != null && getIntent().getStringExtra("type").equals("5")) {
 
             JSONObject data = null;
             try {
@@ -117,59 +100,58 @@ Log.e("launcher activity",getIntent().getStringExtra("type")+"");
 
 
             Intent resultIntent = new Intent(getApplicationContext(), RequestActivity.class);
-            resultIntent.putExtra("message",data.toString());
+            resultIntent.putExtra("message", data.toString());
             try {
-                resultIntent.putExtra("title",data.getString("noti_title"));
+                resultIntent.putExtra("title", data.getString("noti_title"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
 
-            resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+            resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             startActivity(resultIntent);
-        }
-else
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-             if (PreferencesUtils.getData(Constants.token, getApplicationContext(), "").length() > 1) {
+        } else
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (PreferencesUtils.getData(Constants.token, getApplicationContext(), "").length() > 1) {
 
-                    if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals(Constants.trainer)) {
-                        try {
+                        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals(Constants.trainer)) {
+                            try {
 
-                            if (new JSONArray(PreferencesUtils.getData(Constants.approved, getApplicationContext(), "[]")).length() == 0) {
-                                if (new JSONArray(PreferencesUtils.getData(Constants.pending, getApplicationContext(), "[]")).length() == 0) {
-                                    startActivity(new Intent(getApplicationContext(), ChooseCategory.class));
-                                    finish();
+                                if (new JSONArray(PreferencesUtils.getData(Constants.approved, getApplicationContext(), "[]")).length() == 0) {
+                                    if (new JSONArray(PreferencesUtils.getData(Constants.pending, getApplicationContext(), "[]")).length() == 0) {
+                                        startActivity(new Intent(getApplicationContext(), ChooseCategory.class));
+                                        finish();
+                                    } else {
+                                        startActivity(new Intent(getApplicationContext(), DoneActivity.class));
+                                        finish();
+
+                                    }
                                 } else {
-                                    startActivity(new Intent(getApplicationContext(), DoneActivity.class));
-                                    finish();
-
-                                }
-                            } else {
 
 
-                                if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
+                                    if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
 
 //                                    startService(new Intent(getApplicationContext(), Timer_Service.class));
 
-                                    startActivity(new Intent(getApplicationContext(), SessionReady.class));
-                                    finish();
-                                } else
+                                        startActivity(new Intent(getApplicationContext(), SessionReady.class));
+                                        finish();
+                                    } else
 
                                     {
-                                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                                    finish();
+                                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                                        finish();
+
+                                    }
 
                                 }
-
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
 
-                    } else {
+                        } else {
 
 /*
 *
@@ -177,27 +159,27 @@ else
 * trainee =>
 *
 * */
-                        if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
+                            if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
 
 //                            startService(new Intent(getApplicationContext(), Timer_Service.class));
 
-                            startActivity(new Intent(getApplicationContext(), SessionReady.class));
-                            finish();
-                        } else {
-                            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                            finish();
+                                startActivity(new Intent(getApplicationContext(), SessionReady.class));
+                                finish();
+                            } else {
+                                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                                finish();
+
+                            }
+
 
                         }
 
+                    } else
+                        startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+                    finish();
 
-                    }
-
-                } else
-                    startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
-                finish();
-
-            }
-        }, 3000);
+                }
+            }, 3000);
 
     }
 }

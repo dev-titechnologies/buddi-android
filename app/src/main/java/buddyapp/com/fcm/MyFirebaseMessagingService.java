@@ -5,13 +5,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -19,8 +14,6 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Random;
 
 import buddyapp.com.Controller;
 import buddyapp.com.R;
@@ -30,11 +23,9 @@ import buddyapp.com.activity.Fragment.HomeCategory;
 import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.RequestActivity;
 import buddyapp.com.activity.SessionReady;
-import buddyapp.com.timmer.Timer_Service;
 import buddyapp.com.utils.CommonCall;
 
 import static buddyapp.com.Settings.Constants.start_session;
-import static buddyapp.com.Settings.Constants.trainee_Data;
 import static buddyapp.com.Settings.Constants.trainer_Data;
 import static buddyapp.com.activity.MapTrainee.CountTimeout;
 
@@ -64,7 +55,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             try {
                 JSONObject json = new JSONObject(remoteMessage.getData().toString());
-                handleDataMessage(json,remoteMessage.getNotification().getBody());
+                handleDataMessage(json, remoteMessage.getNotification().getBody());
             } catch (Exception e) {
                 Log.e(TAG, "Exception: " + e.getMessage());
             }
@@ -93,20 +84,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //        }
     }
 
-    private void handleDataMessage(JSONObject json,String title) {
+    private void handleDataMessage(JSONObject json, String title) {
         Log.e(TAG, "push json: " + json.toString());
 
         try {
 
-            if (json.getInt("type")==1) {
-                if (CountTimeout!=null)
-                CountTimeout.cancel();//to cancel the timmer for timeout in maptrainee
+            if (json.getInt("type") == 1) {
+                if (CountTimeout != null)
+                    CountTimeout.cancel();//to cancel the timmer for timeout in maptrainee
                 CommonCall.hideLoader();
                 JSONObject data = json.getJSONObject("data");
-                PreferencesUtils.saveData(Constants.trainer_id,data.getJSONObject("trainer_details").getString("trainer_id"),getApplicationContext());
-                PreferencesUtils.saveData(trainer_Data,data.toString(),getApplicationContext());
+                PreferencesUtils.saveData(Constants.trainer_id, data.getJSONObject("trainer_details").getString("trainer_id"), getApplicationContext());
+                PreferencesUtils.saveData(trainer_Data, data.toString(), getApplicationContext());
 
-                PreferencesUtils.saveData(start_session,"true",getApplicationContext());
+                PreferencesUtils.saveData(start_session, "true", getApplicationContext());
 
 //            if (!NotificationUtils.isAppIsInBackground(getApplicationContext()))
 //            {
@@ -124,44 +115,41 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //                {
 //
 //                    // app is in background, show the notification in notification tray
-                    Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
-                    resultIntent.putExtra("message", data.toString());
+                Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
+                resultIntent.putExtra("message", data.toString());
 
-                        showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
+                showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
 
-                resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-startActivity(resultIntent);
+                resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(resultIntent);
 
 
-            }else if(json.getInt("type")==2){
+            } else if (json.getInt("type") == 2) {
 
 /** Complete session **/
                 Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
-                resultIntent.putExtra("message","");
-                resultIntent.putExtra("push_session","2");
+                resultIntent.putExtra("message", "");
+                resultIntent.putExtra("push_session", "2");
                 resultIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
 
 
-                PreferencesUtils.saveData(Constants.startSessionPush,"true",getApplicationContext());
+                PreferencesUtils.saveData(Constants.startSessionPush, "true", getApplicationContext());
 
 
                 Intent intent = new Intent("BUDDI_TRAINER_START");
-intent.putExtra("push_session","2");
+                intent.putExtra("push_session", "2");
 
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
-            }else if(json.getInt("type")==3){
+            } else if (json.getInt("type") == 3) {
 
 
-
-                PreferencesUtils.saveData(start_session,"false", Controller.getAppContext());
-
-
+                PreferencesUtils.saveData(start_session, "false", Controller.getAppContext());
 
 
                 Intent resultIntent = new Intent(getApplicationContext(), HomeCategory.class);
-                resultIntent.putExtra("message","");
+                resultIntent.putExtra("message", "");
 
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
 
@@ -171,18 +159,17 @@ intent.putExtra("push_session","2");
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
 
-            }else if(json.getInt("type")==4){
+            } else if (json.getInt("type") == 4) {
 
 
                 PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
 
-                PreferencesUtils.saveData(start_session,"false", Controller.getAppContext());
-
+                PreferencesUtils.saveData(start_session, "false", Controller.getAppContext());
 
 
                 Intent resultIntent = new Intent(getApplicationContext(), HomeCategory.class);
-                resultIntent.putExtra("message","");
-                showNotificationMessage(getApplicationContext(), "Buddi", title, "",resultIntent);
+                resultIntent.putExtra("message", "");
+                showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
 
 
                 Intent intent = new Intent("BUDDI_TRAINER_STOP");
@@ -190,14 +177,14 @@ intent.putExtra("push_session","2");
                 sendBroadcast(intent);
 
 
-            }else if(json.getInt("type")==5){
+            } else if (json.getInt("type") == 5) {
 
                 JSONObject data = json.getJSONObject("data");
                 Intent resultIntent = new Intent(getApplicationContext(), RequestActivity.class);
-                resultIntent.putExtra("message",data.toString());
-                resultIntent.putExtra("title",title);
+                resultIntent.putExtra("message", data.toString());
+                resultIntent.putExtra("title", title);
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
-                resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 startActivity(resultIntent);
                 /*
@@ -216,11 +203,10 @@ intent.putExtra("push_session","2");
 //                }, delayInMilliseconds);
 
 
-            }
-            else if(json.getInt("type")==6){
+            } else if (json.getInt("type") == 6) {
 
 
-                if (PreferencesUtils.getData(Constants.user_type,Controller.getAppContext(),"").equals("trainer")) {
+                if (PreferencesUtils.getData(Constants.user_type, Controller.getAppContext(), "").equals("trainer")) {
                     JSONObject data = json.getJSONObject("data");
                     Intent resultIntent = new Intent(getApplicationContext(), RequestActivity.class);
                     resultIntent.putExtra("message", data.toString());
@@ -228,18 +214,29 @@ intent.putExtra("push_session","2");
                     showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
 
                     Intent intent = new Intent("BUDDI_SESSION_EXTEND");
-                    intent.putExtra("extend_time",data.getString("extend_time"));
+                    intent.putExtra("extend_time", data.getString("extend_time"));
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                }
+
+            } else if (json.getInt("type") == 7) {
+
+
+                if (PreferencesUtils.getData(Constants.user_type, Controller.getAppContext(), "").equals("trainer")) {
+
+                    Intent resultIntent = new Intent(getApplicationContext(), HomeActivity.class);
+
+                    showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
+
+
                 }
 
             }
 
 
-
         } catch (JSONException e) {
             Log.e(TAG, "Json Exception: " + e.getMessage());
         } catch (Exception e) {
-        e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -250,6 +247,7 @@ intent.putExtra("push_session","2");
         boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
         return useWhiteIcon ? R.mipmap.ic_launcher : R.mipmap.ic_launcher;
     }
+
     private void showNotificationMessage(Context context, String title, String message, String timeStamp) {
 
         //AppController.getSharedPreferences().edit().putString(Constants.CALL_CASE_ID, notifObject.getCaseDetails().getCaseID()).commit();
@@ -260,12 +258,12 @@ intent.putExtra("push_session","2");
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1001, intent, 0);
 
-        NotificationManager     mNotificationManager =
+        NotificationManager mNotificationManager =
 
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         //First time
 
-        NotificationCompat.Builder    builder = new NotificationCompat.Builder(getApplicationContext())
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
                 .setContentText(getApplicationContext().getString(R.string.app_name))
                 .setContentTitle("Session123")
                 .setSmallIcon(getNotificationIcon())
@@ -281,6 +279,7 @@ intent.putExtra("push_session","2");
         mNotificationManager.notify(1001, builder.build());
 
     }
+
     private void showNotificationMessage(Context context, String title, String message, String timeStamp, Intent intent) {
         notificationUtils = new NotificationUtils(context);
 

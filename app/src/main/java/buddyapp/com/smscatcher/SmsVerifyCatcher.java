@@ -4,16 +4,10 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-
-import org.json.JSONObject;
-
-import buddyapp.com.activity.RegisterScreen;
-import buddyapp.com.utils.CommonCall;
 
 /**
  * Created by Ajay on 8/15/16.

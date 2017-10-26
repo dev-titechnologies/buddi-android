@@ -248,7 +248,7 @@ try {
 ////        intent.putExtra("EXTRA_VIDEO_QUALITY", 1);
 //        intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
 //        startActivityForResult(intent, 1337);
-        File saveFolder = new File(Environment.getExternalStorageDirectory(), "Buddy App");
+        File saveFolder = new File(Environment.getExternalStorageDirectory(), "Buddi App");
         saveFolder.mkdirs();
 
 
@@ -582,6 +582,7 @@ try {
 
         @Override
         protected String doInBackground(String... strings) {
+            Constants.questionData.remove("cat_ids");
             String response = NetworkCalls.POST(Urls.getADDTRAINECATEGORYURL(), Constants.questionData.toString());
 
             return response;

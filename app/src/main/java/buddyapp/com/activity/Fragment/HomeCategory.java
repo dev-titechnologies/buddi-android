@@ -26,11 +26,8 @@ import java.util.ArrayList;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
-import buddyapp.com.activity.ChooseCategory;
 import buddyapp.com.activity.ChooseSpecification;
 import buddyapp.com.activity.MapTrainee;
-import buddyapp.com.activity.questions.Question1;
-import buddyapp.com.adapter.CategoryAdapter;
 import buddyapp.com.adapter.HomeCategoryAdapter;
 import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.utils.AlertDialoge.RatingDialog;
@@ -72,22 +69,22 @@ public class HomeCategory extends Fragment {
         instantBooking = (LinearLayout) view.findViewById(R.id.instant_booking);
         errorImage = (ImageView) view.findViewById(R.id.errorImage);
 
-            if (db.getAllCATForTrainee().length() > 0) {
-                loadData(db.getAllCATForTrainee());
+        if (db.getAllCATForTrainee().length() > 0) {
+            loadData(db.getAllCATForTrainee());
 
-            } else {
-                new getCategoryList().execute();
-            }
-             if(PreferencesUtils.getData(Constants.flag_rating,getActivity(),"").equals("true")){
-                 PreferencesUtils.saveData(Constants.flag_rating,"false",getActivity());
-                 ratingDialog = new RatingDialog(getActivity());
-                 ratingDialog.show();
-             }
+        } else {
+            new getCategoryList().execute();
+        }
+        if (PreferencesUtils.getData(Constants.flag_rating, getActivity(), "").equals("true")) {
+            PreferencesUtils.saveData(Constants.flag_rating, "false", getActivity());
+            ratingDialog = new RatingDialog(getActivity());
+            ratingDialog.show();
+        }
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (cat_selectedID.size()>0) {
+                if (cat_selectedID.size() > 0) {
                     Intent intent = new Intent(getActivity(), ChooseSpecification.class);
                     startActivity(intent);
                 }
@@ -96,39 +93,39 @@ public class HomeCategory extends Fragment {
         instantBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-if(CommonCall.isNetworkAvailable()) {
+                if (CommonCall.isNetworkAvailable()) {
 
-    if (PreferencesUtils.getData(Constants.settings_cat_id, getActivity(), "").length() == 0) {
+                    if (PreferencesUtils.getData(Constants.settings_cat_id, getActivity(), "").length() == 0) {
 
-        Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
-    } else if (PreferencesUtils.getData(Constants.settings_address, getActivity(), "").length() == 0) {
+                        Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
+                    } else if (PreferencesUtils.getData(Constants.settings_address, getActivity(), "").length() == 0) {
 
-        Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
 
-    } else if (PreferencesUtils.getData(Constants.trainer_gender, getActivity(), "").length() == 0) {
-        Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
+                    } else if (PreferencesUtils.getData(Constants.trainer_gender, getActivity(), "").length() == 0) {
+                        Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
 
 
-    } else if (PreferencesUtils.getData(Constants.training_duration, getActivity(), "").length() == 0) {
+                    } else if (PreferencesUtils.getData(Constants.training_duration, getActivity(), "").length() == 0) {
 
-        Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
 
-    } else {
-        new SearchTrainer().execute();
-    }
+                    } else {
+                        new SearchTrainer().execute();
+                    }
 
-}else{
-    Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_SHORT).show();
-}
+                } else {
+                    Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
         return view;
     }
 
-    void loadData(JSONArray data){
+    void loadData(JSONArray data) {
 
-        categoryAdapter = new HomeCategoryAdapter(getActivity(),data);
+        categoryAdapter = new HomeCategoryAdapter(getActivity(), data);
         grid.setAdapter(categoryAdapter);
 
     }
@@ -169,7 +166,6 @@ if(CommonCall.isNetworkAvailable()) {
                     CommonCall.PrintLog("cat", db.getAllCATForTrainee().toString());
 
 
-
                     loadData(db.getAllCATForTrainee());
 
                 } else if (response.getInt(Constants.status) == 2) {
@@ -206,7 +202,7 @@ if(CommonCall.isNetworkAvailable()) {
         }
     }
 
-    class SearchTrainer extends AsyncTask<String,String,String> {
+    class SearchTrainer extends AsyncTask<String, String, String> {
         String response = "";
         JSONObject reqData = new JSONObject();
 
@@ -240,24 +236,23 @@ if(CommonCall.isNetworkAvailable()) {
                 if (obj.getInt("status") == 1) {
                     JSONArray jsonArray = obj.getJSONArray("data");
                     if (jsonArray.length() != 0) {
-                        PreferencesUtils.saveData("searchArray",obj.getJSONArray("data").toString(),getActivity());
-                        PreferencesUtils.saveData(Constants.instant_booking,"true",getActivity());
+                        PreferencesUtils.saveData("searchArray", obj.getJSONArray("data").toString(), getActivity());
+                        PreferencesUtils.saveData(Constants.instant_booking, "true", getActivity());
                         Intent intent = new Intent(getActivity(), MapTrainee.class);
-                        intent.putExtra(Constants.gender,PreferencesUtils.getData(Constants.trainer_gender, getActivity(), ""));
+                        intent.putExtra(Constants.gender, PreferencesUtils.getData(Constants.trainer_gender, getActivity(), ""));
                         intent.putExtra("category", PreferencesUtils.getData(Constants.settings_cat_id, getActivity(), ""));
                         intent.putExtra(Constants.latitude, (PreferencesUtils.getData(Constants.settings_latitude, getActivity(), "")));
                         intent.putExtra(Constants.longitude, PreferencesUtils.getData(Constants.longitude, getActivity(), ""));
                         intent.putExtra(Constants.duration, (PreferencesUtils.getData(Constants.training_duration, getActivity(), "")));
                         startActivity(intent);
 
-                    }else
-                    {
+                    } else {
                         // No match found..........
                         Toast.makeText(getActivity(), "No trainer found", Toast.LENGTH_SHORT).show();
                     }
-                }else if (obj.getInt("status") == 2) {
-                    Toast.makeText(getActivity(),obj.getString("message"),Toast.LENGTH_SHORT).show();
-                }else if (obj.getInt("status") == 3) {
+                } else if (obj.getInt("status") == 2) {
+                    Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                } else if (obj.getInt("status") == 3) {
                     CommonCall.sessionout(getActivity());
                 }
             } catch (JSONException e) {

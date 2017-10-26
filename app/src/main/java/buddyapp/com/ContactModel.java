@@ -20,5 +20,5 @@ public class ContactModel {
     public String getNumber() {
         return this.number;
     }
-    
+
 }

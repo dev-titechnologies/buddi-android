@@ -8,17 +8,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashSet;
 
 import buddyapp.com.R;
-import buddyapp.com.activity.ChooseCategory;
 import buddyapp.com.activity.questions.Question4;
 import buddyapp.com.database.DatabaseHandler;
-import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 
 /**

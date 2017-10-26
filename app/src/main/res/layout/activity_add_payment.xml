@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:stripe="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:id="@+id/root"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/medium"
+
+    tools:context="buddyapp.com.activity.Payments.AddPayment">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:src="@drawable/ic_credit_card"
+        android:alpha=".2"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/card_input_widget"
+        android:layout_height="100dp" />
+
+
+
+    <com.stripe.android.view.CardMultilineWidget
+        android:id="@+id/card_input_widget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:shouldShowPostalCode="true"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/sub_view_ssn"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:id="@+id/ssn"
+            android:inputType="number"
+
+            android:singleLine="true"
+            android:layout_weight="1"
+            android:hint="SSN Number"
+            android:layout_height="wrap_content" />
+              <EditText
+
+        android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:hint="Date Of Birth"
+                  android:editable="false"
+android:id="@+id/dob"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:id="@+id/city"
+            android:layout_weight="1"
+            android:hint="city                     "
+            android:inputType="text"
+            android:singleLine="true"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:id="@+id/address_line1"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:singleLine="true"
+            android:hint="address line1"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:id="@+id/address_line2"
+            android:inputType="text"
+            android:singleLine="true"
+            android:layout_weight="1"
+            android:hint="address line 2"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:id="@+id/postalcode"
+            android:layout_weight="1"
+            android:inputType="text"
+            android:singleLine="true"
+            android:hint="Postal Code"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/state"
+        android:inputType="text"
+        android:singleLine="true"
+        android:hint="State"
+        android:layout_height="wrap_content" />
+    </LinearLayout>
+<Button
+    android:layout_width="match_parent"
+    android:id="@+id/save"
+    android:text="save"
+    android:textColor="@color/white"
+    android:background="@color/button_bgcolor"
+    android:layout_below="@id/card_input_widget"
+    android:layout_height="wrap_content" />
+</LinearLayout>

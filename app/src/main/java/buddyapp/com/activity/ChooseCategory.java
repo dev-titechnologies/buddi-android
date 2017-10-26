@@ -2,11 +2,10 @@ package buddyapp.com.activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
@@ -23,9 +22,7 @@ import java.util.ArrayList;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
-import buddyapp.com.activity.questions.BeforeVideoActivity;
 import buddyapp.com.activity.questions.Question1;
-import buddyapp.com.activity.questions.Question2;
 import buddyapp.com.activity.questions.Question4;
 import buddyapp.com.adapter.CategoryAdapter;
 import buddyapp.com.database.DatabaseHandler;
@@ -41,9 +38,10 @@ public class ChooseCategory extends AppCompatActivity {
     GridView grid;
     CategoryAdapter categoryAdapter;
     TextView notext;
- public static   ArrayList<String> cat_selectedID = new ArrayList<>();
+    public static ArrayList<String> cat_selectedID = new ArrayList<>();
 
     ImageView errorImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,18 +62,19 @@ public class ChooseCategory extends AppCompatActivity {
         new getCategoryList().execute();
     }
 
-void loadData(JSONArray data){
+    void loadData(JSONArray data) {
 
-    categoryAdapter = new CategoryAdapter(getApplicationContext(),data);
-    grid.setAdapter(categoryAdapter);
+        categoryAdapter = new CategoryAdapter(getApplicationContext(), data);
+        grid.setAdapter(categoryAdapter);
 
-    if (categoryAdapter.getCount()==0){
+        if (categoryAdapter.getCount() == 0) {
 
-        notext.setVisibility(View.VISIBLE);
+            notext.setVisibility(View.VISIBLE);
+
+        }
 
     }
 
-}
     class getCategoryList extends AsyncTask<String, String, String> {
 
         JSONObject reqData = new JSONObject();
@@ -108,7 +107,6 @@ void loadData(JSONArray data){
                     errorImage.setVisibility(View.GONE);
                     db.insertCategory(response.getJSONArray("data"));
                     CommonCall.PrintLog("cat", db.getAllCAT().toString());
-
 
 
                     loadData(db.getAllCAT());
@@ -155,6 +153,7 @@ void loadData(JSONArray data){
         getMenuInflater().inflate(R.menu.choose_category, menu);
         return true;
     }
+
     /**
      * react to the user tapping/selecting an options menu item
      */
@@ -165,8 +164,7 @@ void loadData(JSONArray data){
                 // TODO put your code here to respond to the button tap
 
 
-
-                if (cat_selectedID.size()>0){
+                if (cat_selectedID.size() > 0) {
 
                     /*
                     *
@@ -174,15 +172,14 @@ void loadData(JSONArray data){
                     * check if this trainer has already completd the querstions by uploading the videos
                     *
                     * */
-                    if (db.getcountSELECTEDCAT()>0){
+                    if (db.getcountSELECTEDCAT() > 0) {
 
                         startActivity(new Intent(getApplicationContext(), Question4.class));
-                    }else
-                    startActivity(new Intent(getApplicationContext(), Question1.class));
+                    } else
+                        startActivity(new Intent(getApplicationContext(), Question1.class));
 
 
-
-                }else{
+                } else {
 
                     Toast.makeText(this, "Please choose a category to continue.", Toast.LENGTH_SHORT).show();
                 }

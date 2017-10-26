@@ -1,14 +1,12 @@
 package buddyapp.com.activity;
 
 import android.content.Intent;
-
 import android.os.AsyncTask;
-
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -39,7 +37,6 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.hbb20.CountryCodePicker;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,17 +46,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import buddyapp.com.R;
-
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.questions.DoneActivity;
 import buddyapp.com.utils.CommonCall;
-
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
 public class RegisterScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    TextView next,check_terms_text;
+    TextView next, check_terms_text;
     String semail, sfname, slname, sgender = "", scountrycode, smobilenumber, validnumber, spassword, sfacebookId = "", sgoogleplusId = "", sage, sweight, sheight;
     String register_type = "normal";
     ImageView Google, facebook;
@@ -90,12 +85,12 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         check_terms_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (check_termsconditions.isChecked()){
+                if (check_termsconditions.isChecked()) {
                     check_termsconditions.setChecked(false);
 
-                }else{
-                    Intent terms = new Intent(getApplicationContext(),WebActivity.class);
-                    terms.putExtra("url",Urls.terms);
+                } else {
+                    Intent terms = new Intent(getApplicationContext(), WebActivity.class);
+                    terms.putExtra("url", Urls.terms);
                     startActivity(terms);
                     check_termsconditions.setChecked(true);
                 }
@@ -325,12 +320,9 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
             Toast.makeText(getApplicationContext(), "Please accept the terms and conditions.", Toast.LENGTH_SHORT).show();
 
             focusView = check_termsconditions;
-        focusView.requestFocus();
-        return false;
-    }
-
-
-        else {
+            focusView.requestFocus();
+            return false;
+        } else {
 
             sfname = firstName.getText().toString();
             slname = lastName.getText().toString();
@@ -464,7 +456,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                     user_image = acct.getPhotoUrl().toString();
                     PreferencesUtils.saveData(Constants.user_image, user_image, getApplicationContext());
                 }
-                 if (acct.getEmail() != null)
+                if (acct.getEmail() != null)
                     eMail.setText(acct.getEmail());
                 new login().execute();
 //                Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();

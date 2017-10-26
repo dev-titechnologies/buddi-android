@@ -1,4 +1,5 @@
 package buddyapp.com.utils;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -6,28 +7,22 @@ import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
-import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import buddyapp.com.Controller;
-import buddyapp.com.R;
-
 import static buddyapp.com.activity.questions.Question2.gymtext;
 
 
 public class MultiSelectionSpinner extends Spinner implements
-        DialogInterface.OnMultiChoiceClickListener
-{
+        DialogInterface.OnMultiChoiceClickListener {
     String[] _items = null;
     boolean[] mSelection = null;
 
     ArrayAdapter<String> simple_adapter;
 
-    public MultiSelectionSpinner(Context context)
-    {
+    public MultiSelectionSpinner(Context context) {
         super(context);
 
         simple_adapter = new ArrayAdapter<String>(context,
@@ -63,9 +58,8 @@ public class MultiSelectionSpinner extends Spinner implements
 
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface arg0, int arg1)
-            {
-                if(getSelectedStrings().size()<1){
+            public void onClick(DialogInterface arg0, int arg1) {
+                if (getSelectedStrings().size() < 1) {
                     gymtext.setVisibility(VISIBLE);
                 }
             }
@@ -190,12 +184,12 @@ public class MultiSelectionSpinner extends Spinner implements
             }
         }
 
-        if (sb.toString().trim().length()==0)
-        {
-return sb.toString();
+        if (sb.toString().trim().length() == 0) {
+            return sb.toString();
 //            return getResources().getString(R.string.please_select_gym) ;
-        }else {
-        return sb.toString();}
+        } else {
+            return sb.toString();
+        }
 
 
     }

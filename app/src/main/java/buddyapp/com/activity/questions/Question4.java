@@ -210,7 +210,7 @@ public class Question4 extends Activity {
 
 //                        List<String> myList = new ArrayList<String>(Arrays.asList(PreferencesUtils.getData(Constants.gym_subscriptions, getApplicationContext(), "").split(",")));
 
-                        question.put("gym_subscriptions", (PreferencesUtils.getData(Constants.gym_subscriptions, getApplicationContext(), "")));
+                        question.put("gym_subscriptions",new JSONArray( (PreferencesUtils.getData(Constants.gym_subscriptions, getApplicationContext(), ""))).toString());
 
                         question.put("training_exp", PreferencesUtils.getData(Constants.training_exp, getApplicationContext(), ""));
 

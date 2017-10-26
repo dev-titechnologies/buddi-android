@@ -4,17 +4,17 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ListView;
 
-public class FullHeightListView  extends ListView {
+public class FullHeightListView extends ListView {
 
-    public FullHeightListView  (Context context, AttributeSet attrs) {
+    public FullHeightListView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FullHeightListView  (Context context) {
+    public FullHeightListView(Context context) {
         super(context);
     }
 
-    public FullHeightListView  (Context context, AttributeSet attrs, int defStyle) {
+    public FullHeightListView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 

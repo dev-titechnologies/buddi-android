@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -139,10 +140,10 @@ public class Question2 extends Activity {
 
                 }  else{
 
-                    List<String> temp = new ArrayList<String>();
+                    JSONArray temp = new JSONArray();
                     for (int i=0;i<gym_sub.getSelectedStrings().size();i++){
 
-                        temp.add(gymlistid.get(gymlist.indexOf(gym_sub.getSelectedStrings().get(i))));
+                        temp.put(gymlistid.get(gymlist.indexOf(gym_sub.getSelectedStrings().get(i))).toString());
                     }
 
 

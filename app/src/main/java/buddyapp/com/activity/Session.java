@@ -1,9 +1,9 @@
 package buddyapp.com.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 
 import buddyapp.com.R;
@@ -23,7 +23,7 @@ public class Session extends AppCompatActivity {
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-                Intent intent = new Intent(getApplicationContext(),ChatScreen.class);
+                Intent intent = new Intent(getApplicationContext(), ChatScreen.class);
                 startActivity(intent);
 
             }

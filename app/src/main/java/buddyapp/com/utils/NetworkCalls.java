@@ -3,8 +3,6 @@ package buddyapp.com.utils;
 import android.content.Context;
 import android.telephony.TelephonyManager;
 
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,6 +46,8 @@ public class NetworkCalls {
                     .header("device_imei", getdevice())
                     .header("token", PreferencesUtils.getData(Constants.token, Controller.getAppContext(), "0"))
                     .header("device_type", "android")
+                    .header("user_type", PreferencesUtils.getData(Constants.user_type, Controller.getAppContext(), "0"))
+
                     .header("device_id", PreferencesUtils.getData(Constants.device_id, Controller.getAppContext(), "0"))
                     .url(url)
                     .post(requestBody)
@@ -81,7 +81,7 @@ public class NetworkCalls {
     }
 
 
-    public static String UPLOADVideo(JSONObject  file, String url) {
+    public static String UPLOADVideo(JSONObject file, String url) {
         CommonCall.PrintLog("REQUEST", file.toString());
         CommonCall.PrintLog("URL", url);
 
@@ -104,7 +104,6 @@ public class NetworkCalls {
                     .addFormDataPart("upload_type", "other")
 
 
-
                     .addFormDataPart("file_name", "comment_image" + file.getString("file").substring(file.getString("file").lastIndexOf(".")),
                             RequestBody.create(MEDIA_TYPE_PNG, (new File(file.getString("file")))))
 
@@ -116,6 +115,8 @@ public class NetworkCalls {
                     .header("device_imei", getdevice())
                     .header("token", PreferencesUtils.getData(Constants.token, Controller.getAppContext(), "0"))
                     .header("device_type", "android")
+                    .header("user_type", PreferencesUtils.getData(Constants.user_type, Controller.getAppContext(), "0"))
+
                     .header("device_id", PreferencesUtils.getData(Constants.device_id, Controller.getAppContext(), "0"))
                     .url(url)
                     .post(requestBody)
@@ -145,7 +146,8 @@ public class NetworkCalls {
         }
         return createResponse().toString();
     }
-    public static String UPLOAD(String  file, String url) {
+
+    public static String UPLOAD(String file, String url) {
         CommonCall.PrintLog("REQUEST", file.toString());
         CommonCall.PrintLog("URL", url);
 
@@ -177,6 +179,8 @@ public class NetworkCalls {
                     .header("device_imei", getdevice())
                     .header("token", PreferencesUtils.getData(Constants.token, Controller.getAppContext(), "0"))
                     .header("device_type", "android")
+                    .header("user_type", PreferencesUtils.getData(Constants.user_type, Controller.getAppContext(), "0"))
+
                     .header("device_id", PreferencesUtils.getData(Constants.device_id, Controller.getAppContext(), "0"))
                     .url(url)
                     .post(requestBody)
@@ -229,6 +233,7 @@ public class NetworkCalls {
                     .url(url)
                     .header("device_imei", getdevice())
                     .header("token", token)
+                    .header("user_type", PreferencesUtils.getData(Constants.user_type, Controller.getAppContext(), "0"))
 
                     .header("device_type", "android")
                     .header("device_id", PreferencesUtils.getData(Constants.device_id, Controller.getAppContext(), "0"))
@@ -282,6 +287,7 @@ public class NetworkCalls {
                     .header("Content-Type", "application/json; charset=utf-8")
                     .header("device_type", "android")
                     .header("device_imei", getdevice())
+                    .header("user_type", PreferencesUtils.getData(Constants.user_type, Controller.getAppContext(), "0"))
 
                     .header("token", PreferencesUtils.getData(Constants.token, Controller.getAppContext(), "0"))
                     .header("device_id", PreferencesUtils.getData(Constants.device_id, Controller.getAppContext(), "0"))
@@ -312,7 +318,7 @@ public class NetworkCalls {
     public static String POST(String url, String params) {
         CommonCall.PrintLog("REQ url", url);
         CommonCall.PrintLog("REQ PARAMS", params);
-        CommonCall.PrintLog("deviceID POST",PreferencesUtils.getData(Constants.device_id, Controller.getAppContext(), "0"));
+        CommonCall.PrintLog("deviceID POST", PreferencesUtils.getData(Constants.device_id, Controller.getAppContext(), "0"));
         CommonCall.PrintLog("REQ Token", PreferencesUtils.getData(Constants.token, Controller.getAppContext(), "0"));
         try {
 
@@ -340,6 +346,7 @@ public class NetworkCalls {
                     .header("Content-Type", "application/json; charset=utf-8")
                     .header("device_type", "android")
                     .header("device_imei", getdevice())
+                    .header("user_type", PreferencesUtils.getData(Constants.user_type, Controller.getAppContext(), "0"))
 
                     .header("token", PreferencesUtils.getData(Constants.token, Controller.getAppContext(), "0"))
                     .header("device_id", PreferencesUtils.getData(Constants.device_id, Controller.getAppContext(), "0"))
@@ -380,7 +387,6 @@ public class NetworkCalls {
     }
 
 
-
     public static Call call;
 
     public static String POSTwithParams(String url, RequestBody params) {
@@ -414,6 +420,7 @@ public class NetworkCalls {
 
                     .header("device_type", "android")
                     .header("device_imei", getdevice())
+                    .header("user_type", PreferencesUtils.getData(Constants.user_type, Controller.getAppContext(), "0"))
 
                     .header("token", PreferencesUtils.getData(Constants.token, Controller.getAppContext(), "0"))
                     .header("device_id", PreferencesUtils.getData(Constants.device_id, Controller.getAppContext(), "0"))

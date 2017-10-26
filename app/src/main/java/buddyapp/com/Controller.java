@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 
-
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
@@ -19,8 +18,6 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.net.URISyntaxException;
 
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
@@ -43,12 +40,14 @@ public class Controller extends Application {
 
     /**
      * Gets the default {@link Tracker} for this {@link Application}.
+     *
      * @return tracker
      */
     public synchronized Tracker getGoogleAnalyticsTracker() {
         AnalyticsTrackers analyticsTrackers = AnalyticsTrackers.getInstance();
         return analyticsTrackers.get(AnalyticsTrackers.Target.APP);
     }
+
     /***
      * Tracking screen view
      *
@@ -98,6 +97,7 @@ public class Controller extends Application {
         // Build and send an Event.
         t.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel(label).build());
     }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -109,10 +109,10 @@ public class Controller extends Application {
         Controller.context = getApplicationContext();
         mInstance = this;
 
-        if(mSocket==null || !mSocket.connected()){
+        if (mSocket == null || !mSocket.connected()) {
             {
 //                mSocket= null;
-                    socket();
+                socket();
 
 //                listenEvent();
 
@@ -127,7 +127,8 @@ public class Controller extends Application {
 
 
     }
-    public  static void chatConnect(){
+
+    public static void chatConnect() {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -136,7 +137,7 @@ public class Controller extends Application {
                 JSONObject jsonObject = new JSONObject();
                 try {
 
-                    jsonObject.put("url", Urls.BASEURL+String.format("/connectSocket/connectSocket/"));
+                    jsonObject.put("url", Urls.BASEURL + String.format("/connectSocket/connectSocket/"));
 //
 //                    JSONObject object = new JSONObject();
 //
@@ -151,16 +152,17 @@ public class Controller extends Application {
             }
         });
     }
-    void socket(){
+
+    void socket() {
 
         try {
             IO.Options options = new IO.Options();
             options.forceNew = true;
 
             options.reconnection = true;
-            options.query = "__sails_io_sdk_version=0.12.13&token=" + PreferencesUtils.getData(Constants.token,getAppContext(),""); // Added this line
+            options.query = "__sails_io_sdk_version=0.12.13&token=" + PreferencesUtils.getData(Constants.token, getAppContext(), "") + "&user_type=" + PreferencesUtils.getData(Constants.user_type, getAppContext(), ""); // Added this line
 
-            mSocket = IO.socket(BASEURL,options);
+            mSocket = IO.socket(BASEURL, options);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -169,53 +171,54 @@ public class Controller extends Application {
             @Override
             public void call(Object... args) {
 
-                CommonCall.PrintLog("Socket","Connected");
+                CommonCall.PrintLog("Socket", "Connected");
             }
         });
 
         mSocket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                CommonCall.PrintLog("Socket","Disconnected");
+                CommonCall.PrintLog("Socket", "Disconnected");
             }
         });
         listenEvent();
     }
 
 
-    public static boolean listenFlag=true;
+    public static boolean listenFlag = true;
+
     public static void listenEvent() {
 
 //        if (listenFlag)
-    mSocket.on("message",  new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            listenFlag=false;
-            final JSONObject jsonObject = (JSONObject)args[0];
-            CommonCall.PrintLog("received socket", jsonObject.toString());
-            try {
-                if(jsonObject.getString("type").equals("location")) {
+        mSocket.on("message", new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                listenFlag = false;
+                final JSONObject jsonObject = (JSONObject) args[0];
+                CommonCall.PrintLog("received socket", jsonObject.toString());
+                try {
+                    if (jsonObject.getString("type").equals("location")) {
 
-                    JSONObject object = jsonObject.getJSONObject("message");
+                        JSONObject object = jsonObject.getJSONObject("message");
 
-                    sendBroadcastTrainerLocation(object.getString("latitude"), object.getString("longitude"));
+                        sendBroadcastTrainerLocation(object.getString("latitude"), object.getString("longitude"));
 //                    CommonCall.PrintLog("lat", object.getString("latitude"));
 //                    CommonCall.PrintLog("lng", object.getString("longitude"));
 //                    CommonCall.PrintLog("availabilityStatus", object.getString("availabilityStatus"));
-                }else if(jsonObject.getString("type").equals("chat")){
-                    JSONObject object = jsonObject.getJSONObject("message");
-                    sendBroadcastChatMessage(object.getString("text"),object.getString("from_id"),
-                            object.getString("from_name"),object.getString("from_img"));
+                    } else if (jsonObject.getString("type").equals("chat")) {
+                        JSONObject object = jsonObject.getJSONObject("message");
+                        sendBroadcastChatMessage(object.getString("text"), object.getString("from_id"),
+                                object.getString("from_name"), object.getString("from_img"));
 
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-        }
-    });
+        });
     }
 
-        public static ImageLoader initImageLoader(Context context) {
+    public static ImageLoader initImageLoader(Context context) {
         // This configuration tuning is custom. You can tune every option, you may tune some of them,
         // or you can create default configuration by
         //  ImageLoaderConfiguration.createDefault(this);
@@ -245,36 +248,36 @@ public class Controller extends Application {
         return mInstance;
     }
 
-    public static void updateSocket(){
+    public static void updateSocket() {
 
         try {
             IO.Options options = new IO.Options();
             options.forceNew = true;
 
             options.reconnection = true;
-            options.query = "__sails_io_sdk_version=0.12.13&token=" + PreferencesUtils.getData(Constants.token,getAppContext(),""); // Added this line
+            options.query = "__sails_io_sdk_version=0.12.13&token=" + PreferencesUtils.getData(Constants.token, getAppContext(), "") + "&user_type=" + PreferencesUtils.getData(Constants.user_type, getAppContext(), ""); // Added this line
 
 
-            if (mSocket!=null && mSocket.connected()){
+            if (mSocket != null && mSocket.connected()) {
                 mSocket.disconnect();
-                mSocket=null;
+                mSocket = null;
 
             }
 
-            mSocket = IO.socket(BASEURL,options);
+            mSocket = IO.socket(BASEURL, options);
 
             mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
 
-                    CommonCall.PrintLog("Socket","Connected");
+                    CommonCall.PrintLog("Socket", "Connected");
                 }
             });
 
             mSocket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    CommonCall.PrintLog("Socket","Disconnected");
+                    CommonCall.PrintLog("Socket", "Disconnected");
                 }
             });
             listenEvent();
@@ -287,21 +290,21 @@ public class Controller extends Application {
 
     }
 
-    public static void sendBroadcastTrainerLocation(String lat,String lng) {
+    public static void sendBroadcastTrainerLocation(String lat, String lng) {
         {
             Intent intent = new Intent("SOCKET_BUDDI_TRAINER_LOCATION");
             intent.putExtra("trainer_latitude", lat);
-            intent.putExtra("trainer_longitude",lng);
+            intent.putExtra("trainer_longitude", lng);
             LocalBroadcastManager.getInstance(getAppContext()).sendBroadcast(intent);
         }
     }
 
-    public static void sendBroadcastChatMessage( String msg, String fromId,String fromName,String image) {
+    public static void sendBroadcastChatMessage(String msg, String fromId, String fromName, String image) {
         Intent intent = new Intent("SOCKET_BUDDI_CHAT");
         intent.putExtra("CHAT_FROMID", fromId);
-        intent.putExtra("CHAT_MESSAGE",msg);
-        intent.putExtra("CHAT_NAME",fromName);
-        intent.putExtra("CHAT_IMAGE",image);
+        intent.putExtra("CHAT_MESSAGE", msg);
+        intent.putExtra("CHAT_NAME", fromName);
+        intent.putExtra("CHAT_IMAGE", image);
         LocalBroadcastManager.getInstance(getAppContext()).sendBroadcast(intent);
     }
 

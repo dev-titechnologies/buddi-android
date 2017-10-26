@@ -24,17 +24,15 @@ public class PreferencesUtils {
     }
 
 
-        public static final String PREFS_NAME = "UMPREFS";
+    public static final String PREFS_NAME = "UMPREFS";
 
 
-        /**
-         * @return the prefsName
-         */
-        public static String getPrefsName() {
-            return PREFS_NAME;
-        }
-
-
+    /**
+     * @return the prefsName
+     */
+    public static String getPrefsName() {
+        return PREFS_NAME;
+    }
 
 
     public static String getData(String name, Context context, String defaultvalue) {
@@ -45,13 +43,14 @@ public class PreferencesUtils {
             SharedPreferences settings = context
                     .getSharedPreferences(getPrefsName(), 0);
 
-            	return settings.getString(name, defaultvalue);
+            return settings.getString(name, defaultvalue);
         } catch (NullPointerException ignored) {
             return "";
         }
 
     }
-    public static  void cleardata(Context context){
+
+    public static void cleardata(Context context) {
         SharedPreferences settings = context
                 .getSharedPreferences(getPrefsName(), 0);
         SharedPreferences.Editor editor = settings.edit();

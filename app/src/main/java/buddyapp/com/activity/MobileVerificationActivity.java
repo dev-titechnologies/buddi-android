@@ -2,18 +2,17 @@ package buddyapp.com.activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -40,7 +39,7 @@ public class MobileVerificationActivity extends AppCompatActivity {
     String mobile;
     LinearLayout root, secondLayer;
 
-Button retry;
+    Button retry;
     private static final String FORMAT = "%02d:%02d";
 
 
@@ -70,9 +69,9 @@ Button retry;
 
             @Override
             public void afterTextChanged(Editable editable) {
-if (otp.getText().toString().trim().length()>3){
-    new verifyOtp().execute();
-}
+                if (otp.getText().toString().trim().length() > 3) {
+                    new verifyOtp().execute();
+                }
             }
         });
         retry.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +97,7 @@ if (otp.getText().toString().trim().length()>3){
 
     }
 
-    void startCountDown(){
+    void startCountDown() {
 
         new CountDownTimer(120000, 1000) {
 
@@ -106,7 +105,7 @@ if (otp.getText().toString().trim().length()>3){
 //                timmer.setText("seconds remaining: " + millisUntilFinished / 1000);
 
 
-                timmer.setText(""+String.format(FORMAT,
+                timmer.setText("" + String.format(FORMAT,
 
 
                         TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(

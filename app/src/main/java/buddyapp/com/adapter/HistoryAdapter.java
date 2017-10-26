@@ -2,15 +2,12 @@ package buddyapp.com.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -20,9 +17,6 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
@@ -149,7 +143,16 @@ public class HistoryAdapter extends BaseAdapter {
                     intent.putExtra("traineeName",jsonObject.getString("trainee_name"));
                     intent.putExtra("trainerName",jsonObject.getString("trainer_name"));
                     intent.putExtra("category",category);
-                    intent.putExtra("trainingStatus",jsonObject.getString("training_status"));
+
+
+                        if(jsonObject.getString("training_status").equals("stopped"))
+                            intent.putExtra("trainingStatus","Completed(cancelled during session)");
+
+                        else
+                        intent.putExtra("trainingStatus",jsonObject.getString("training_status"));
+
+
+
                     intent.putExtra("paymentStatus",jsonObject.getString("payment_status"));
                     intent.putExtra("location",jsonObject.getString("location"));
                     intent.putExtra("trained_date",jsonObject.getString("trained_date"));

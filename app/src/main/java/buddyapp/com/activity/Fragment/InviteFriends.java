@@ -235,7 +235,8 @@ public class InviteFriends extends Fragment {
 
     public static class ContactAdapter extends BaseAdapter implements Filterable {
         ArrayList<ContactModel> contactArray;
-        ArrayList<ContactModel> selectedList;
+        ArrayList<ContactModel> contactArray2;
+        ArrayList<String> selectedList = new ArrayList<>();
         Context context;
         private ItemFilter mFilter = new ItemFilter();
 
@@ -243,7 +244,7 @@ public class InviteFriends extends Fragment {
 
         public ContactAdapter(ArrayList<ContactModel> contactArray, Context context) {
             this.contactArray = contactArray;
-            this.selectedList = contactArray;
+            this.contactArray2 = contactArray;
             this.context = context;
         }
 
@@ -263,7 +264,7 @@ public class InviteFriends extends Fragment {
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public View getView(final int i, View view, ViewGroup viewGroup) {
 
             view = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.contact_list_item, viewGroup, false);
@@ -277,6 +278,17 @@ public class InviteFriends extends Fragment {
             view.setTag(R.string.name, contactArray.get(i).getName());
 //            holder.number.setText(contactArray.get(i).getNumber());
             view.setTag(R.string.number, contactArray.get(i).getNumber());
+
+            if (selectedList.contains(contactArray.get(i).getNumber())) {
+
+//                        holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_tick, 0);
+                ((TextView)view).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_tick, 0);
+            } else {
+
+                ((TextView)view).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_circle_outline, 0);
+
+            }
+
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -294,10 +306,12 @@ public class InviteFriends extends Fragment {
                         map.add(validateNumber(temp).toString());
 //                        holder.name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_tick, 0);
                         ((TextView)view).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_tick, 0);
+                        selectedList.add(temp);
+
                     } else {
                         map.remove(temp);
                         ((TextView)view).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_circle_outline, 0);
-
+                        selectedList.remove(temp);
                     }
                     CommonCall.PrintLog("map---", map.toString());
                     if(map.size()>0){
@@ -327,7 +341,7 @@ public class InviteFriends extends Fragment {
                 FilterResults results = new FilterResults();
                 ArrayList<ContactModel> modellist = new ArrayList<ContactModel>();
 
-                final List<ContactModel> list = selectedList;
+                final List<ContactModel> list = contactArray2;
 
                 int count = list.size();
                 final ArrayList<String> nlist = new ArrayList<String>(count);

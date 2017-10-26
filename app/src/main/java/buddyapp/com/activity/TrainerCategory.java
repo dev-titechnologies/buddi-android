@@ -1,16 +1,15 @@
 package buddyapp.com.activity;
 
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,8 +20,6 @@ import java.util.ArrayList;
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
-import buddyapp.com.activity.questions.DoneActivity;
-import buddyapp.com.adapter.SettingsCategoryAdapter;
 import buddyapp.com.adapter.TrainerCategoryAdapter;
 import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.utils.CommonCall;
@@ -37,6 +34,7 @@ public class TrainerCategory extends AppCompatActivity {
     public static ArrayList<String> settings_cat_selectedID = new ArrayList<>();
     public static Button done;
     ImageView errorImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,18 +52,18 @@ public class TrainerCategory extends AppCompatActivity {
         errorImage = (ImageView) findViewById(R.id.errorImage);
 
 
-            new checkStatus().execute();
+        new checkStatus().execute();
 
     }
 
-    void loadData(JSONArray data){
+    void loadData(JSONArray data) {
 
-        trainerCategoryAdapter = new TrainerCategoryAdapter(getApplicationContext(),data);
+        trainerCategoryAdapter = new TrainerCategoryAdapter(getApplicationContext(), data);
         grid.setAdapter(trainerCategoryAdapter);
 
     }
 
-    class checkStatus extends AsyncTask<String,String,String> {
+    class checkStatus extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             CommonCall.showLoader(TrainerCategory.this);
@@ -98,15 +96,15 @@ public class TrainerCategory extends AppCompatActivity {
 
 
             try {
-                JSONObject obj= new JSONObject(res);
-                CommonCall.PrintLog("result",obj.toString());
-                if(obj.getInt("status")==1){
+                JSONObject obj = new JSONObject(res);
+                CommonCall.PrintLog("result", obj.toString());
+                if (obj.getInt("status") == 1) {
                     errorImage.setVisibility(View.GONE);
                     PreferencesUtils.saveData(Constants.approved, obj.getJSONObject("data").getJSONArray(Constants.approved).toString(), getApplicationContext());
                     PreferencesUtils.saveData(Constants.pending, obj.getJSONObject("data").getJSONArray(Constants.pending).toString(), getApplicationContext());
                     new getCategoryList().execute();
 
-                }else if(obj.getInt("status")==2){
+                } else if (obj.getInt("status") == 2) {
                     CommonCall.hideLoader();
                     errorImage.setVisibility(View.VISIBLE);
                     Snackbar snackbar = Snackbar
@@ -127,7 +125,7 @@ public class TrainerCategory extends AppCompatActivity {
                             });
 
                     snackbar.show();
-                }else if(obj.getInt("status")==3){
+                } else if (obj.getInt("status") == 3) {
                     CommonCall.hideLoader();
                     CommonCall.sessionout(TrainerCategory.this);
                     finish();
@@ -140,73 +138,74 @@ public class TrainerCategory extends AppCompatActivity {
 
         }
     }
+
     class getCategoryList extends AsyncTask<String, String, String> {
 
-    JSONObject reqData = new JSONObject();
+        JSONObject reqData = new JSONObject();
 
 
-    @Override
-    protected void onPreExecute() {
+        @Override
+        protected void onPreExecute() {
 //        CommonCall.showLoader(TrainerCategory.this);
 
 
-    }
+        }
 
-    @Override
-    protected String doInBackground(String... strings) {
-
-
-        return NetworkCalls.POST(Urls.getCATEGORYURL(), reqData.toString());
-    }
+        @Override
+        protected String doInBackground(String... strings) {
 
 
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-        CommonCall.hideLoader();
-
-        try {
-            final JSONObject response = new JSONObject(s);
-
-            if (response.getInt(Constants.status) == 1) {
-                errorImage.setVisibility(View.GONE);
-                db.insertCategory(response.getJSONArray("data"));
-                CommonCall.PrintLog("cat",db.getCATForTrainer().toString());
-                loadData(db.getCATForTrainer());
-
-            } else if (response.getInt(Constants.status) == 2) {
-                errorImage.setVisibility(View.VISIBLE);
-                Snackbar snackbar = Snackbar
-                        .make(root, response.getString(Constants.message), Snackbar.LENGTH_INDEFINITE)
-                        .setAction("RETRY", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-
-                                Snackbar snackbar1 = null;
-
-                                snackbar1 = Snackbar.make(root, "Loading", Snackbar.LENGTH_SHORT);
-
-                                snackbar1.show();
-                                new getCategoryList().execute();
-
-                            }
-                        });
-
-                snackbar.show();
-            } else if (response.getInt(Constants.status) == 3) {
-
-
-            }
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return NetworkCalls.POST(Urls.getCATEGORYURL(), reqData.toString());
         }
 
 
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            CommonCall.hideLoader();
+
+            try {
+                final JSONObject response = new JSONObject(s);
+
+                if (response.getInt(Constants.status) == 1) {
+                    errorImage.setVisibility(View.GONE);
+                    db.insertCategory(response.getJSONArray("data"));
+                    CommonCall.PrintLog("cat", db.getCATForTrainer().toString());
+                    loadData(db.getCATForTrainer());
+
+                } else if (response.getInt(Constants.status) == 2) {
+                    errorImage.setVisibility(View.VISIBLE);
+                    Snackbar snackbar = Snackbar
+                            .make(root, response.getString(Constants.message), Snackbar.LENGTH_INDEFINITE)
+                            .setAction("RETRY", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+
+                                    Snackbar snackbar1 = null;
+
+                                    snackbar1 = Snackbar.make(root, "Loading", Snackbar.LENGTH_SHORT);
+
+                                    snackbar1.show();
+                                    new getCategoryList().execute();
+
+                                }
+                            });
+
+                    snackbar.show();
+                } else if (response.getInt(Constants.status) == 3) {
+
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
     }
-}
 
 
     /**

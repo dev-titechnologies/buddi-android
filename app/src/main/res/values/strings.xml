@@ -12,6 +12,9 @@
        AIzaSyB44SEXp2dClRqPnSp4EcPw0Yl5Fji4HkA
     </string>
 
+    <string name="stripe_key">pk_test_66bTUhQFTPY6wY5x2hftqF6l</string>
+
+
     /** facebook **/
     <string name="facebook_app_id">1934978090076246</string>
     <string name="fb_login_protocol_scheme">fb1934978090076246</string>
@@ -20,8 +23,7 @@
         we will send you the password reset instructions.
     </string>
     <string name="pref_key_transition_time" translatable="false">pref_key_transition_time</string>
-    <string name="mobile_verification">We are unable to auto verify your mobile number.\n
-    please enter the code</string>
+    <string name="mobile_verification">We haveve sent you a verification code to the number you provided! Enter it below.</string>
     <string name="next">Next</string>
 
     <string name="upload">Upload</string>
@@ -46,17 +48,16 @@
 
     <string name="please_select_gym"> Choose any gym subscriptions you have on this list.</string>
     <string name="more_information">Just a little more information:</string>
-    <string name="list_1rep_movement">List your 1 rep max for each movement that applies to the category you wish to coach:</string>
+    <string name="list_1rep_movement">Choose all that apply to the category you wish to coach:</string>
     <string name="current_weight_text">What is your current weight?</string>
     <string name="pounds_text">Have you ever lost or gained 12+ pounds within a 6 months period?</string>
     <string name="knowledge_text">How knowledgeable are you about exercise nutrition?</string>
     <string name="before_video_titile">Sweet! Now its time for you to show us what you have got!</string>
 
     <string name="before_video_desc">This is the most important part of this process. You will now record or upload (a recent video) of you doing each movement that you listed a 1 rep max for. Be sure to follow the rules for each video (listed on each respective screen). Standards will be uniform for males and uniform for females. These videos will be used to screen you for your qualification to coach others in these movements. Good luck!
--The Buddy team </string>
+-The Buddi team </string>
     <string name="video_desc">*Videos should be anywhere between 30-90 seconds long. Try to keep them as short and to the point as possible.It would be beneficial to have someone record the videos for you.
 </string>
-
 
 
     <string name="please_accept_terms">Please accept <u>Terms of Use, Privacy Policy and Disclaimer</u></string>
@@ -65,7 +66,7 @@
 -Video 2: Record yourself doing 1 rep with your body weight on the bar from 2 different angles.
 </string>
     <string name="female_squat_desc"><b>Females:</b>
--Video 1: Record yourself doing 1 rep with 95lb on the bar from 2 different angles.
+-Video 1: Record yourself doing 1 rep with 95 lb on the bar from 2 different angles.
 -Video 2: Record yourself doing 1 rep with your body weight on the bar form 2 different angles.</string>
 
 
@@ -76,17 +77,17 @@
 
     <string name="male_bench_press_desc">Males:-\n Video 1: Record yourself doing 1 rep with 135lb on the bar from 2 different angles.\n Video 2: Record yourself doing 1 rep with your body weight on the bar from 2 different angles.
 </string>
-    <string name="female_bench_press_desc">Females:-\n Video 1: Record yourself doing 1 rep with 65lb on the bar from 2 different angles.\n Video 2: Record yourself doing 1 rep with 95lb on the bar from 2 different angles. </string>
+    <string name="female_bench_press_desc">Females:-\n Video 1: Record yourself doing 1 rep with 65lb on the bar from 2 different angles.\n Video 2: Record yourself doing 1 rep with 95 lb on the bar from 2 different angles. </string>
 
 
     <string name="male_snatch_desc">Males:-\n Video 1: Record yourself doing 1 rep with 135lb on the bar from 2 different angles.\n Video 2: Record yourself doing 1 rep with your body weight on the bar from 2 different angles.
 </string>
-    <string name="female_snatch_desc">Females:-\n Video 1: Record yourself doing 1 rep with 95lb on the bar from 2 different angles.\n Video 2: Record yourself doing 1 rep with your body weight on the bar from 2 different angles. </string>
+    <string name="female_snatch_desc">Females:-\n Video 1: Record yourself doing 1 rep with 95 lb on the bar from 2 different angles.\n Video 2: Record yourself doing 1 rep with your body weight on the bar from 2 different angles. </string>
 
 
     <string name="male_cleanandjerk_desc">Males:-\n Video 1: Record yourself doing 1 rep with your body weight on the bar from 2 different angles.\n Video 2: Record yourself doing 1 rep with 1.5 your body weight on the bar from 2 different angles.
 </string>
-    <string name="female_cleanandjerk_desc">Females:-\n Video 1: Record yourself doing 1 rep with 95lb on the bar from 2 different angles.\n Video 2: Record yourself doing 1 rep with your body weight on the bar from 2 different angles. </string>
+    <string name="female_cleanandjerk_desc">Females:-\n Video 1: Record yourself doing 1 rep with 95 lb on the bar from 2 different angles.\n Video 2: Record yourself doing 1 rep with your body weight on the bar from 2 different angles. </string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

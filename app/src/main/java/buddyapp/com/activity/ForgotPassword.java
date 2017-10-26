@@ -1,9 +1,9 @@
 package buddyapp.com.activity;
 
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -25,13 +25,14 @@ import buddyapp.com.utils.Urls;
 public class ForgotPassword extends AppCompatActivity {
     Button reset;
     EditText email;
-    String semail="";
+    String semail = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
-        email= (EditText) findViewById(R.id.email);
-        reset= (Button) findViewById(R.id.reset);
+        email = (EditText) findViewById(R.id.email);
+        reset = (Button) findViewById(R.id.reset);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
@@ -48,15 +49,15 @@ public class ForgotPassword extends AppCompatActivity {
                     email.setError("Invalid email");
                     focusView = email;
                     focusView.requestFocus();
-                }
-                else{
-                    semail=email.getText().toString();
+                } else {
+                    semail = email.getText().toString();
                     new resetPassword().execute();
                 }
 
             }
         });
     }
+
     private boolean isEmailValid(String email) {
 
         String EMAIL_PATTERN = "^[A-Za-z0-9]+([A-Z0-9a-z\\._]+[A-Za-z0-9])*@"
@@ -69,10 +70,11 @@ public class ForgotPassword extends AppCompatActivity {
 
     }
 
-    class resetPassword extends AsyncTask<String,String,String>{
+    class resetPassword extends AsyncTask<String, String, String> {
 
         JSONObject reqData = new JSONObject();
         String resetResponse;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -82,9 +84,9 @@ public class ForgotPassword extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             try {
-                reqData.put(Constants.email,semail);
+                reqData.put(Constants.email, semail);
 
-                resetResponse = NetworkCalls.POST(Urls.getResetURL(),reqData.toString());
+                resetResponse = NetworkCalls.POST(Urls.getResetURL(), reqData.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -108,8 +110,7 @@ public class ForgotPassword extends AppCompatActivity {
                 } else {
 
                 }
-            }
-            catch (JSONException e){
+            } catch (JSONException e) {
 
             }
         }
@@ -127,7 +128,8 @@ public class ForgotPassword extends AppCompatActivity {
                 finish();
                 break;
 
-            default: return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
         return true;
     }

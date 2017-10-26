@@ -1,23 +1,19 @@
 package buddyapp.com.activity;
 
-import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,9 +21,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
 import com.hbb20.CountryCodePicker;
 
 import org.json.JSONException;
@@ -44,7 +37,6 @@ import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
-import buddyapp.com.utils.Utility;
 
 public class TraineeProfileView extends AppCompatActivity {
     CountryCodePicker ccp;
@@ -67,42 +59,43 @@ public class TraineeProfileView extends AppCompatActivity {
     int REQUEST_CROP_PICTURE = 222;
     String imageurl = "";
     Menu menu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trainee_profile_view);
 
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setTitle("Profile");
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Profile");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
 
-            ccp = (CountryCodePicker) findViewById(R.id.ccp);
-            firstName = (EditText) findViewById(R.id.first_name);
-            lastName = (EditText) findViewById(R.id.last_name);
-            eMail = (EditText) findViewById(R.id.email);
-            mobile = (EditText) findViewById(R.id.mobile);
+        ccp = (CountryCodePicker) findViewById(R.id.ccp);
+        firstName = (EditText) findViewById(R.id.first_name);
+        lastName = (EditText) findViewById(R.id.last_name);
+        eMail = (EditText) findViewById(R.id.email);
+        mobile = (EditText) findViewById(R.id.mobile);
 
-            rbmale = (EditText) findViewById(R.id.male);
+        rbmale = (EditText) findViewById(R.id.male);
 
-            userImageView = (CircleImageView) findViewById(R.id.userimageView);
-            placeLayout = (LinearLayout) findViewById(R.id.place_layout);
-            imageTrainer = (LinearLayout) findViewById(R.id.image_trainer); // Trainer profile image View layout
-            imageUser = (LinearLayout) findViewById(R.id.image_user); // user profile image View layout
-            //****
-            // *****check for trainer or trainee
+        userImageView = (CircleImageView) findViewById(R.id.userimageView);
+        placeLayout = (LinearLayout) findViewById(R.id.place_layout);
+        imageTrainer = (LinearLayout) findViewById(R.id.image_trainer); // Trainer profile image View layout
+        imageUser = (LinearLayout) findViewById(R.id.image_user); // user profile image View layout
+        //****
+        // *****check for trainer or trainee
 
-                imageUser.setVisibility(View.VISIBLE);
-                CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView,R.drawable.ic_account, R.drawable.ic_account);
+        imageUser.setVisibility(View.VISIBLE);
+        CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView, R.drawable.ic_account, R.drawable.ic_account);
 
-                placeLayout.setVisibility(View.VISIBLE);
+        placeLayout.setVisibility(View.VISIBLE);
 
-            // load profile --->
+        // load profile --->
 //            loadProfile();
 
-            new getProfile().execute();
+        new getProfile().execute();
 
-        }
+    }
 
     /*Create a file Uri for saving an image or video */
     private Uri getOutputMediaFileUri(int type) {
@@ -120,7 +113,7 @@ public class TraineeProfileView extends AppCompatActivity {
         File mediaStorageDir = new File(
                 Environment
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                "BuddyApp.com/Profile");
+                "BuddiApp.com/Profile");
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
@@ -207,7 +200,7 @@ public class TraineeProfileView extends AppCompatActivity {
 //                public void run() {
             //Do something after 100ms
 
-                CommonCall.LoadImage(getApplicationContext(), imageurl, userImageView, R.drawable.ic_account, R.drawable.ic_account);
+            CommonCall.LoadImage(getApplicationContext(), imageurl, userImageView, R.drawable.ic_account, R.drawable.ic_account);
 
             CommonCall.hideLoader();
 //                }
@@ -332,6 +325,7 @@ public class TraineeProfileView extends AppCompatActivity {
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
+
     public String getPathFromUri(final Uri uri) {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
@@ -398,6 +392,7 @@ public class TraineeProfileView extends AppCompatActivity {
 
         return null;
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub

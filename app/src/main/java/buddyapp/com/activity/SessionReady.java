@@ -2,7 +2,6 @@ package buddyapp.com.activity;
 
 
 import android.animation.ObjectAnimator;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.NotificationManager;
@@ -11,19 +10,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -63,9 +60,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import java.util.HashMap;
-import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 
 import buddyapp.com.Controller;
@@ -81,9 +76,7 @@ import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
-
 import static buddyapp.com.Controller.chatConnect;
-import static buddyapp.com.Controller.getAppContext;
 import static buddyapp.com.Controller.mSocket;
 import static buddyapp.com.Controller.updateSocket;
 import static buddyapp.com.R.id.map;
@@ -216,7 +209,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                 CommonCall.socketGetTrainerLocation();
             }
-            sessionTimmer.setText("00:" + training_time);
+
+            sessionTimmer.setText(training_time + ":00");
 
 
 //        SupportMapFragment mapFragment = (SupportMapFragment) this.getSupportFragmentManager()
@@ -245,14 +239,15 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         dest = camera;
 
 
-/****
- * get Trainer location
- ****/
-
         if (PreferencesUtils.getData(Constants.timerstarted, getApplicationContext(), "false").equals("true")) {
+
+
             cancel.setEnabled(false);
             startactionIcon.setImageResource(R.mipmap.stop_blue);
             startService(new Intent(getApplicationContext(), LocationService.class));
+            startService(new Intent(SessionReady.this, Timer_Service.class));
+
+
         }
 //        LoadmapTask();
 
@@ -332,6 +327,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                                 switch (which) {
                                     case DialogInterface.BUTTON_POSITIVE:
                                         //Yes button clicked
+                                        PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
                                         stopAction();
 
                                         break;
@@ -388,6 +384,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                         if (reason.getText().toString().length() > 1) {
                             dialog.dismiss();
                             cancelFlag = true;
+                            PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+
                             new CommonCall.timerUpdate(SessionReady.this, "cancel", book_id, reason.getText().toString()).execute();
 
 
@@ -597,8 +595,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
+                        PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
 
-                        PreferencesUtils.saveData(Constants.flag_rating, "false", getApplicationContext());
                         stopSession();
 
 
@@ -751,7 +749,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     void stopAction() {
         Timer_Service.stopFlag = true;
         PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
-//        PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
+        PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
 
         startactionTitle.setText("Start");
         startactionIcon.setImageResource(R.mipmap.play);
@@ -775,6 +773,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
         Timer_Service.stopFlag = true;
         PreferencesUtils.saveData(Constants.timerstarted, "false", getApplicationContext());
+
 
         PreferencesUtils.saveData(start_session, "false", Controller.getAppContext());
 
@@ -804,6 +803,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     BroadcastReceiver stopAutobr = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
 
             Timer_Service.stopFlag = true;
             stopService(new Intent(getApplicationContext(), Timer_Service.class));
@@ -827,6 +827,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                             CommonCall.hideLoader();
                             CommonCall.PrintLog("timmer ", "tick onFinish");
 
+                            PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
 
 //                        PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
                             stopSession();
@@ -841,7 +842,6 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                     CommonCall.PrintLog("NO TIMMER  ", "NO TIMMER ");
 
-                    PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
                     stopSession();
                 }
             } else {
@@ -855,8 +855,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 CommonCall.hideLoader();
                 CommonCall.PrintLog("timmer ", "tick onFinish");
 
+                PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
 
-//            PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
                 stopSession();
             }
         }
@@ -1438,11 +1438,11 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
                     PreferencesUtils.saveData("data", date_time, getApplicationContext());
-                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
-//                    if(training_time==40)
-//                    PreferencesUtils.saveData("hours", "2", getApplicationContext());
-//                    else
-//                    PreferencesUtils.saveData("hours", "4", getApplicationContext());
+//                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
+                    if (training_time == 40)
+                        PreferencesUtils.saveData("hours", "2", getApplicationContext());
+                    else
+                        PreferencesUtils.saveData("hours", "4", getApplicationContext());
 
 
                     startService(new Intent(SessionReady.this, Timer_Service.class));

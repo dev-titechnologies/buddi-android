@@ -1,22 +1,16 @@
 package buddyapp.com.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +28,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.hbb20.CountryCodePicker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +42,8 @@ import buddyapp.com.activity.questions.DoneActivity;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
+
+import static buddyapp.com.Settings.Constants.source_become_trainer;
 
 public class LoginScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     TextView login, forgotpassword;
@@ -75,6 +69,10 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
         Google = (ImageView) findViewById(R.id.googleplus);
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+
+
+        source_become_trainer = false;//making it default
+
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Login");
@@ -133,7 +131,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                         }
                     }
                     try {
-                        InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                     } catch (Exception e) {
                         // TODO: handle exception
@@ -152,6 +150,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
             }
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -255,12 +254,11 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                 // Get account information
 //                mFullName = acct.getDisplayName();
 //                mEmail = acct.getEmail();
-                try{
+                try {
                     String split[] = acct.getDisplayName().split("\\s+");
-                sfname = split[0];
-                slname = split[1];
-                }
-                catch (Exception e){
+                    sfname = split[0];
+                    slname = split[1];
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 sgoogleplusId = acct.getId();
@@ -270,7 +268,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                     PreferencesUtils.saveData(Constants.user_image, acct.getPhotoUrl().toString(), getApplicationContext());
                 }
                 if (acct.getEmail() != null)
-                    semail=acct.getEmail();
+                    semail = acct.getEmail();
                 if (CommonCall.isNetworkAvailable())
                     new login().execute();
                 else {
@@ -344,7 +342,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                         PreferencesUtils.saveData(Constants.pending, jsonObject.getString(Constants.pending), getApplicationContext());
 
 
-                        if (new JSONArray( PreferencesUtils.getData(Constants.approved, getApplicationContext(), "[]")).length() == 0) {
+                        if (new JSONArray(PreferencesUtils.getData(Constants.approved, getApplicationContext(), "[]")).length() == 0) {
 
 
                             if (new JSONArray(PreferencesUtils.getData(Constants.pending, getApplicationContext(), "[]")).length() == 0) {
@@ -355,7 +353,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                                 startActivity(intent);
                                 finish();
 
-                            }else {
+                            } else {
 
 
                                 Intent intent = new Intent(getApplicationContext(), DoneActivity.class);
@@ -388,12 +386,12 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                         }
 
 
-                    }else{
+                    } else {
 
                         JSONArray payment = jsonObject.getJSONArray("transaction_details");
-//                        if (payment.length()>0)
+                        if (payment.length() > 0)
 
-                            {
+                        {
 
 
                             for (int i = 0; i < payment.length(); i++) {
@@ -425,7 +423,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
 
                 } else if (obj.getInt("status") == 2) {
                     Toast.makeText(LoginScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
-                    if(obj.getString("status_type").equals("UserNotRegistered")) {
+                    if (obj.getString("status_type").equals("UserNotRegistered")) {
                         Intent intent = new Intent(getApplicationContext(), RegisterScreen.class);
                         intent.putExtra("login_type", login_type);
                         intent.putExtra("email", semail);

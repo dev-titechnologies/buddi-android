@@ -4,10 +4,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,9 +22,10 @@ import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 
 public class IntroScreen extends AppCompatActivity {
-TextView trainer, trainee;
+    TextView trainer, trainee;
     boolean flag;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,12 +34,12 @@ TextView trainer, trainee;
 
         trainee = (TextView) findViewById(R.id.trainee);
         trainer = (TextView) findViewById(R.id.trainer);
-        String login_type= getIntent().getStringExtra("login_type");
-        if(login_type.equals("login")){
+        String login_type = getIntent().getStringExtra("login_type");
+        if (login_type.equals("login")) {
             flag = true;
             trainee.setText("LOGIN AS A TRAINEE");
             trainer.setText("LOGIN AS A TRAINER");
-        }else{
+        } else {
             flag = false;
             trainee.setText("REGISTER AS A TRAINEE");
             trainer.setText("REGISTER AS A TRAINER");
@@ -49,11 +50,11 @@ TextView trainer, trainee;
         trainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PreferencesUtils.saveData(Constants.user_type,"trainer",getApplicationContext());
+                PreferencesUtils.saveData(Constants.user_type, "trainer", getApplicationContext());
                 Intent intent;
-                if(flag) {
+                if (flag) {
                     intent = new Intent(getApplicationContext(), LoginScreen.class);
-                }else{
+                } else {
                     intent = new Intent(getApplicationContext(), RegisterScreen.class);
                 }
                 startActivity(intent);
@@ -62,11 +63,11 @@ TextView trainer, trainee;
         trainee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PreferencesUtils.saveData(Constants.user_type,"trainee",getApplicationContext());
+                PreferencesUtils.saveData(Constants.user_type, "trainee", getApplicationContext());
                 Intent intent;
-                if(flag) {
+                if (flag) {
                     intent = new Intent(getApplicationContext(), LoginScreen.class);
-                }else{
+                } else {
                     intent = new Intent(getApplicationContext(), RegisterScreen.class);
                 }
                 startActivity(intent);
@@ -76,7 +77,7 @@ TextView trainer, trainee;
 
     public static final int MULTIPLE_PERMISSIONS = 10; // code you want.
 
-    String[] permissions = new String[] {
+    String[] permissions = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA,
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -89,19 +90,19 @@ TextView trainer, trainee;
     protected void onStart() {
         super.onStart();
 
-            if (checkPermissions()){
-                // permissions granted.
-            } else {
-                // show dialog informing them that we lack certain permissions
-            }
+        if (checkPermissions()) {
+            // permissions granted.
+        } else {
+            // show dialog informing them that we lack certain permissions
+        }
 
     }
 
     private boolean checkPermissions() {
         int result;
         List<String> listPermissionsNeeded = new ArrayList<>();
-        for (String p:permissions) {
-            result = ContextCompat.checkSelfPermission(getApplicationContext(),p);
+        for (String p : permissions) {
+            result = ContextCompat.checkSelfPermission(getApplicationContext(), p);
             if (result != PackageManager.PERMISSION_GRANTED) {
                 listPermissionsNeeded.add(p);
             }
@@ -137,7 +138,6 @@ TextView trainer, trainee;
     }
 
 
-
     private boolean addPermission(List<String> permissionsList, String permission) {
         if (Build.VERSION.SDK_INT >= 23)
 
@@ -150,6 +150,7 @@ TextView trainer, trainee;
             }
         return true;
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 
@@ -173,7 +174,7 @@ TextView trainer, trainee;
                     if (Build.VERSION.SDK_INT >= 23) {
                         Toast.makeText(
                                 getApplicationContext(),
-                                "BuddyApp cannot run without Location and Storage " +
+                                "Buddi App cannot run without Location and Storage " +
                                         "Permissions.\nRelaunch My App or allow permissions" +
                                         " in Applications Settings",
                                 Toast.LENGTH_LONG).show();

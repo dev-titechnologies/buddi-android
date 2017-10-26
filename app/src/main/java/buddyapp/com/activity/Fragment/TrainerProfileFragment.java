@@ -339,8 +339,8 @@ public class TrainerProfileFragment extends Fragment {
                     Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                 } else {
                     //session out
-                    CommonCall.sessionout(getActivity());
-                    getActivity().finish();
+//                    CommonCall.sessionout(getActivity());
+//                    getActivity().finish();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -460,8 +460,8 @@ public class TrainerProfileFragment extends Fragment {
 //                    Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                     new updateStatus().execute();
                 }else if (obj.getInt("status") == 3) {
-                    Toast.makeText(getActivity(), "Session out", Toast.LENGTH_SHORT).show();
-                    CommonCall.sessionout(getActivity());
+//                    Toast.makeText(getActivity(), "Session out", Toast.LENGTH_SHORT).show();
+//                    CommonCall.sessionout(getActivity());
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

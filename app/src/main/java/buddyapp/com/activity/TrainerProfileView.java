@@ -1,24 +1,17 @@
 package buddyapp.com.activity;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-;
+
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
@@ -28,13 +21,16 @@ import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
+;
+
 public class TrainerProfileView extends Activity {
     CircleImageView trainerImageView;
-    TextView fullname, typeAge, height , weight, gymSubscription, trainingCategory, trainingHistory, coachingHistory, certifications, webUrl;
-    ImageView faceBook, instagram, linkedIn, snapChat, twitter, youTube,back;
-    String imageurl = "", distance="", latitude="", longitude="",status="",userId, name, trainerId;
+    TextView fullname, typeAge, height, weight, gymSubscription, trainingCategory, trainingHistory, coachingHistory, certifications, webUrl;
+    ImageView faceBook, instagram, linkedIn, snapChat, twitter, youTube, back;
+    String imageurl = "", distance = "", latitude = "", longitude = "", status = "", userId, name, trainerId;
     Alertdialoge pd;
     TextView desc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,12 +75,12 @@ public class TrainerProfileView extends Activity {
     private void loadTrainerProfile() {
         try {
 
-            JSONObject trainer_Data= new JSONObject(PreferencesUtils.getData(Constants.trainee_Profile_Data,getApplicationContext(),""));
+            JSONObject trainer_Data = new JSONObject(PreferencesUtils.getData(Constants.trainee_Profile_Data, getApplicationContext(), ""));
             JSONObject obj = trainer_Data.getJSONObject("trainer_details");
 
-            name = obj.getString("trainer_first_name") + " "+obj.getString("trainer_last_name");
-            fullname.setText(obj.getString("trainer_first_name") + " "+obj.getString("trainer_last_name"));
-            typeAge.setText("Trainer("+obj.getString("trainer_age")+")");
+            name = obj.getString("trainer_first_name") + " " + obj.getString("trainer_last_name");
+            fullname.setText(obj.getString("trainer_first_name") + " " + obj.getString("trainer_last_name"));
+            typeAge.setText("Trainer(" + obj.getString("trainer_age") + ")");
             height.setText(obj.getString("trainer_height"));
             weight.setText(obj.getString("trainer_weight"));
             latitude = obj.getString("trainer_latitude");
@@ -96,6 +92,7 @@ public class TrainerProfileView extends Activity {
             e.printStackTrace();
         }
     }
+
     @Override
     public void onBackPressed() {
         finish();
@@ -108,7 +105,8 @@ public class TrainerProfileView extends Activity {
                 finish();
                 break;
 
-            default: return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
         return true;
     }
@@ -146,21 +144,21 @@ public class TrainerProfileView extends Activity {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt(Constants.status) == 1) {
                     JSONObject jsonObject = obj.getJSONObject("data");
-                    PreferencesUtils.saveData(Constants.trainer_Profile_Data,obj.getJSONObject("data").toString(),getApplicationContext());
+                    PreferencesUtils.saveData(Constants.trainer_Profile_Data, obj.getJSONObject("data").toString(), getApplicationContext());
 
-                    fullname.setText(jsonObject.getString(Constants.fname) + " "+jsonObject.getString(Constants.lname));
-                    if(jsonObject.getString("age").equals("null")){
+                    fullname.setText(jsonObject.getString(Constants.fname) + " " + jsonObject.getString(Constants.lname));
+                    if (jsonObject.getString("age").equals("null")) {
                         typeAge.setText("Trainer");
-                    }else
-                    typeAge.setText("Trainer("+jsonObject.getString("age")+")");
-                    if(jsonObject.getString("height").equals("null")){
+                    } else
+                        typeAge.setText("Trainer(" + jsonObject.getString("age") + ")");
+                    if (jsonObject.getString("height").equals("null")) {
                         height.setVisibility(View.GONE);
-                    }else
-                    height.setText(jsonObject.getString("height"));
-                    if(jsonObject.getString("weight").equals("null")){
+                    } else
+                        height.setText(jsonObject.getString("height"));
+                    if (jsonObject.getString("weight").equals("null")) {
                         weight.setVisibility(View.GONE);
-                    }else
-                    weight.setText(jsonObject.getString("weight"));
+                    } else
+                        weight.setText(jsonObject.getString("weight"));
 
                     imageurl = jsonObject.getString("user_image");
 

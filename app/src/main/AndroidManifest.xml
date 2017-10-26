@@ -251,7 +251,8 @@
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
         <activity android:name=".activity.TrainerCategory" />
-        <activity android:name=".activity.WebActivity"></activity>
+        <activity android:name=".activity.WebActivity" />
+        <activity android:name=".activity.Payments.AddPayment"></activity>
     </application>
 
 </manifest>

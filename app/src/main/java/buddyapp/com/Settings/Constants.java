@@ -11,12 +11,12 @@ import org.json.JSONObject;
 public class Constants {
 
 
-    public static String startSessionPush="startSessionPush";
+    public static String startSessionPush = "startSessionPush";
 
 
-    public static String clientToken="clientToken";
-    public static String fname="first_name";
-    public static String lname= "last_name";
+    public static String clientToken = "clientToken";
+    public static String fname = "first_name";
+    public static String lname = "last_name";
     public static String email = "email";
     public static String gender = "gender";
     public static String token = "token";
@@ -52,7 +52,7 @@ public class Constants {
 
     public static String pending = "category_pending";
 
-    public static boolean stop=false;//for timmer
+    public static boolean stop = false;//for timmer
 
     public static String trainee = "trainee";
 
@@ -76,7 +76,7 @@ public class Constants {
 
     public static JSONArray searchArray = new JSONArray();
     public static String latitude = "latitude";
-    public static  String longitude = "longitude";
+    public static String longitude = "longitude";
     public static String duration = "duration";
     public static String availStatus = "avail_status";
 
@@ -85,11 +85,9 @@ public class Constants {
     public static String transactionId60 = "transactionId60";
 
 
-
-
     public static String transactionId = "transactionId";
-    public static String amount40 ="amount40";
-    public static String amount60 ="amount60";
+    public static String amount40 = "amount40";
+    public static String amount60 = "amount60";
 
 
     public static String transaction_status40 = "transaction_status40";
@@ -100,7 +98,7 @@ public class Constants {
     public static String trainer_gender = "trainer_gender";
     public static String training_duration = "training_duration";
 
-    public static String settings_address ="settings_address";
+    public static String settings_address = "settings_address";
     public static String settings_latitude = "settings_latitude";
     public static String settings_longitude = "setting_longitude";
 

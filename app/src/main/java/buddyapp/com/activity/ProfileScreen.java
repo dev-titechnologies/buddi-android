@@ -1,7 +1,6 @@
 package buddyapp.com.activity;
 
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,13 +9,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.text.InputType;
 import android.util.Log;
@@ -40,7 +39,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.prefs.PreferenceChangeEvent;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
@@ -59,13 +57,13 @@ public class ProfileScreen extends AppCompatActivity {
     private String userChoosenTask;
     boolean isValid = false;
     Uri image_uri;
-    ImageView facebook, instagram,linkedin,snapchat,twitter,youtube;
+    ImageView facebook, instagram, linkedin, snapchat, twitter, youtube;
     EditText rbmale;
     EditText firstName, lastName, eMail, password, mobile;
     CircleImageView userImageView, trainerImageView;
-    LinearLayout trainerCategory,placeLayout, imageTrainer, imageUser;
+    LinearLayout trainerCategory, placeLayout, imageTrainer, imageUser;
     String semail, sfname, slname, sgender = "", scountrycode, spassword, sfacebookId = "", sgoogleplusId = "";
-    String register_type = "normal", facebookUrl,snapchatUrl,instagramUrl,linkedinUrl,twitterUrl,youtubeUrl;
+    String register_type = "normal", facebookUrl, snapchatUrl, instagramUrl, linkedinUrl, twitterUrl, youtubeUrl;
     private PopupMenu popupMenu;
     String user_image;
     private static final int CAMERA_REQUEST = 1888;
@@ -73,10 +71,11 @@ public class ProfileScreen extends AppCompatActivity {
     int REQUEST_CROP_PICTURE = 222;
     String imageurl = "";
     Menu menu;
-    TextView fullname, typeAge, height , weight, category;
-    String fbusername,snapchatusername,twitterusername,linkedinusername,instagramusername,youtubeusername;
+    TextView fullname, typeAge, height, weight, category;
+    String fbusername, snapchatusername, twitterusername, linkedinusername, instagramusername, youtubeusername;
     SocialMediaURLAlertDialog dialog;
     String m_Text;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,10 +120,10 @@ public class ProfileScreen extends AppCompatActivity {
             CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), trainerImageView, R.drawable.ic_account, R.drawable.ic_account);
             placeLayout.setVisibility(View.GONE);
             imageTrainer.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             imageUser.setVisibility(View.VISIBLE);
             trainerCategory.setVisibility(View.GONE);
-            CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView,R.drawable.ic_account, R.drawable.ic_account);
+            CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView, R.drawable.ic_account, R.drawable.ic_account);
             trainerCategory.setVisibility(View.GONE);
             placeLayout.setVisibility(View.VISIBLE);
         }
@@ -224,34 +223,34 @@ public class ProfileScreen extends AppCompatActivity {
     }
 
     private void youtubetask() {
-        new SocialMediaURLAlertDialog(ProfileScreen.this,"youtube");
+        new SocialMediaURLAlertDialog(ProfileScreen.this, "youtube");
     }
 
     private void twittertask() {
-        new SocialMediaURLAlertDialog(ProfileScreen.this,"twitter");
+        new SocialMediaURLAlertDialog(ProfileScreen.this, "twitter");
 
     }
 
     private void snapchattask() {
-        new SocialMediaURLAlertDialog(ProfileScreen.this,"snapchat");
+        new SocialMediaURLAlertDialog(ProfileScreen.this, "snapchat");
     }
 
     private void linkedintask() {
-        new SocialMediaURLAlertDialog(ProfileScreen.this,"linkedin");
+        new SocialMediaURLAlertDialog(ProfileScreen.this, "linkedin");
     }
 
     private void instagramtask() {
-        new SocialMediaURLAlertDialog(ProfileScreen.this,"instagram");
-        instagramUrl = "https://www.instagram.com/"+instagramusername;
+        new SocialMediaURLAlertDialog(ProfileScreen.this, "instagram");
+        instagramUrl = "https://www.instagram.com/" + instagramusername;
     }
 
     private void facebooktask() {
-        new SocialMediaURLAlertDialog(ProfileScreen.this,"facebook");
-        facebookUrl = "https://www.facebook.com/"+fbusername;
+        new SocialMediaURLAlertDialog(ProfileScreen.this, "facebook");
+        facebookUrl = "https://www.facebook.com/" + fbusername;
     }
 
     private void galleryIntent() {
-				/*Intent i = new Intent(
+                /*Intent i = new Intent(
                         Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);*/
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -270,7 +269,6 @@ public class ProfileScreen extends AppCompatActivity {
     }
 
 
-
     /*Create a file Uri for saving an image or video */
     private Uri getOutputMediaFileUri(int type) {
 
@@ -287,7 +285,7 @@ public class ProfileScreen extends AppCompatActivity {
         File mediaStorageDir = new File(
                 Environment
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                "BuddyApp.com/Profile");
+                "BuddiApp.com/Profile");
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
@@ -346,11 +344,11 @@ public class ProfileScreen extends AppCompatActivity {
                     if (validateFeelds()) {
                         item.setIcon(R.drawable.ic_edit_white);
                         editflag = false;
-                        if(CommonCall.isNetworkAvailable())
-                        {
+                        if (CommonCall.isNetworkAvailable()) {
                             Toast.makeText(this, "Saving Please wait...", Toast.LENGTH_SHORT).show();
-    //                        userImageView.setClickable(false);
-                            new updateProfile().execute();}
+                            //                        userImageView.setClickable(false);
+                            new updateProfile().execute();
+                        }
                     }
                 }
                 break;
@@ -417,13 +415,13 @@ public class ProfileScreen extends AppCompatActivity {
 //            handler.postDelayed(new Runnable() {
 //                @Override
 //                public void run() {
-                    //Do something after 100ms
-                    if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")){
-                        CommonCall.LoadImage(getApplicationContext(), imageurl, trainerImageView, R.drawable.ic_account, R.drawable.ic_account);
+            //Do something after 100ms
+            if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
+                CommonCall.LoadImage(getApplicationContext(), imageurl, trainerImageView, R.drawable.ic_account, R.drawable.ic_account);
 
-                    }else {
-                        CommonCall.LoadImage(getApplicationContext(), imageurl, userImageView, R.drawable.ic_account, R.drawable.ic_account);
-                    }
+            } else {
+                CommonCall.LoadImage(getApplicationContext(), imageurl, userImageView, R.drawable.ic_account, R.drawable.ic_account);
+            }
 
             CommonCall.hideLoader();
 //                }
@@ -476,52 +474,61 @@ public class ProfileScreen extends AppCompatActivity {
                     PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
 //                    PreferencesUtils.saveData(Constants.user_type, jsonObject.getString(Constants.user_type), getApplicationContext());
                     PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
-                   if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
-                    fullname.setText(jsonObject.getString("first_name") + " "+jsonObject.getString("last_name"));
+                    if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals(Constants.trainer)) {
+                        fullname.setText(jsonObject.getString("first_name") + " " + jsonObject.getString("last_name"));
 
-                       if(jsonObject.getString("age").toString().equals("null")){
-                           typeAge.setText("Trainer");
-                       }else{
-                           typeAge.setText("Trainer("+jsonObject.getString("age")+")");}
-                       if(jsonObject.getString("height").toString().equals("null")){
-                           height.setVisibility(View.GONE);
-                       }else
-                       { height.setText(jsonObject.getString("height"));}
-                       if(jsonObject.getString("weight").toString().equals("null")){
-                           weight.setVisibility(View.GONE);
-                       }else
-                       { weight.setText(jsonObject.getString("weight"));}
-                       if(jsonObject.getString("facebook_url").equals("null")){
-                           facebookUrl = "";
-                       }else
-                       {facebookUrl = jsonObject.getString("facebook_url");}
-                       if(jsonObject.getString("instagram_url").equals("null")){
-                           instagramUrl = "";
-                       }else
-                       {instagramUrl = jsonObject.getString("instagram_url");}
-                       if(jsonObject.getString("linkedin_url").equals("null")){
-                           linkedinUrl = "";
-                       }else
-                       {linkedinUrl = jsonObject.getString("linkedin_url");}
+                        if (jsonObject.getString("age").toString().equals("null")) {
+                            typeAge.setText("Trainer");
+                        } else {
+                            typeAge.setText("Trainer(" + jsonObject.getString("age") + ")");
+                        }
+                        if (jsonObject.getString("height").toString().equals("null")) {
+                            height.setVisibility(View.GONE);
+                        } else {
+                            height.setText(jsonObject.getString("height"));
+                        }
+                        if (jsonObject.getString("weight").toString().equals("null")) {
+                            weight.setVisibility(View.GONE);
+                        } else {
+                            weight.setText(jsonObject.getString("weight"));
+                        }
+                        if (jsonObject.getString("facebook_url").equals("null")) {
+                            facebookUrl = "";
+                        } else {
+                            facebookUrl = jsonObject.getString("facebook_url");
+                        }
+                        if (jsonObject.getString("instagram_url").equals("null")) {
+                            instagramUrl = "";
+                        } else {
+                            instagramUrl = jsonObject.getString("instagram_url");
+                        }
+                        if (jsonObject.getString("linkedin_url").equals("null")) {
+                            linkedinUrl = "";
+                        } else {
+                            linkedinUrl = jsonObject.getString("linkedin_url");
+                        }
 
-                       if(jsonObject.getString("snapchat_url").equals("null")){
-                           snapchatUrl = "";
-                       }else
-                       {snapchatUrl = jsonObject.getString("snapchat_url");}
+                        if (jsonObject.getString("snapchat_url").equals("null")) {
+                            snapchatUrl = "";
+                        } else {
+                            snapchatUrl = jsonObject.getString("snapchat_url");
+                        }
 
-                       if(jsonObject.getString("twitter_url").equals("null")){
-                           twitterUrl = "";
-                       }else
-                       {twitterUrl = jsonObject.getString("twitter_url");}
-                       if(jsonObject.getString("youtube_url").equals("null")){
-                           youtubeUrl = "";
-                       }else
-                       {youtubeUrl = jsonObject.getString("youtube_url");}
+                        if (jsonObject.getString("twitter_url").equals("null")) {
+                            twitterUrl = "";
+                        } else {
+                            twitterUrl = jsonObject.getString("twitter_url");
+                        }
+                        if (jsonObject.getString("youtube_url").equals("null")) {
+                            youtubeUrl = "";
+                        } else {
+                            youtubeUrl = jsonObject.getString("youtube_url");
+                        }
 
-                    PreferencesUtils.saveData(Constants.category_submitted,obj.getJSONArray("category_submitted").toString(),getApplicationContext());
-                    PreferencesUtils.saveData(Constants.category_approved,obj.getJSONArray("category_approved").toString(),getApplicationContext());
+                        PreferencesUtils.saveData(Constants.category_submitted, obj.getJSONArray("category_submitted").toString(), getApplicationContext());
+                        PreferencesUtils.saveData(Constants.category_approved, obj.getJSONArray("category_approved").toString(), getApplicationContext());
 
-                   }
+                    }
                     loadProfile();
 
                 } else if (obj.getInt(Constants.status) == 2) {
@@ -604,10 +611,8 @@ public class ProfileScreen extends AppCompatActivity {
             }
 
 
-
         }
     }
-
 
 
     /********************** Field validation *******************/
@@ -653,7 +658,7 @@ public class ProfileScreen extends AppCompatActivity {
             focusView = mobile;
             focusView.requestFocus();
             return false;
-       }
+        }
 // else if (sgender.length() == 0) {
 ////            Toast.makeText(getApplicationContext(), "Please select gender", Toast.LENGTH_SHORT).show();
 ////            focusView.requestFocus();
@@ -683,6 +688,7 @@ public class ProfileScreen extends AppCompatActivity {
             return true;
         }
     }
+
     public static String getDataColumn(Context context, Uri uri, String selection,
                                        String[] selectionArgs) {
 
@@ -738,6 +744,7 @@ public class ProfileScreen extends AppCompatActivity {
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
+
     public String getPathFromUri(final Uri uri) {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
@@ -804,6 +811,7 @@ public class ProfileScreen extends AppCompatActivity {
 
         return null;
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
@@ -868,7 +876,7 @@ public class ProfileScreen extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            response = NetworkCalls.UPLOAD(imageurl,Urls.getUPLOADURL());
+            response = NetworkCalls.UPLOAD(imageurl, Urls.getUPLOADURL());
             return response;
         }
 
@@ -879,25 +887,25 @@ public class ProfileScreen extends AppCompatActivity {
             try {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
-                imageurl = obj.getString("Url");
-                   if(validateFeelds())
-                    new updateProfile().execute();
+                    imageurl = obj.getString("Url");
+                    if (validateFeelds())
+                        new updateProfile().execute();
 
 
-                }else if (obj.getInt("status") == 2) {
+                } else if (obj.getInt("status") == 2) {
                     Toast.makeText(ProfileScreen.this, obj.getString("message"), Toast.LENGTH_SHORT).show();
-                }  else {
+                } else {
                     CommonCall.sessionout(ProfileScreen.this);
                     finish();
                 }
 
-            }catch (JSONException e){
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void showDialogpop(String dialog_title, final String from){
+    public void showDialogpop(String dialog_title, final String from) {
         String title = dialog_title;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
@@ -905,7 +913,7 @@ public class ProfileScreen extends AppCompatActivity {
 // Set up the input
         final EditText input = new EditText(this);
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT );
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
 
 // Set up the buttons
@@ -913,8 +921,8 @@ public class ProfileScreen extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 m_Text = input.getText().toString();
-                if(m_Text.length()>0)
-                    savedata(m_Text,from);
+                if (m_Text.length() > 0)
+                    savedata(m_Text, from);
 
             }
         });
@@ -928,28 +936,28 @@ public class ProfileScreen extends AppCompatActivity {
         builder.show();
     }
 
-/********************* saving social media url  **********/
-    public void savedata(String text, String from){
-        switch (from){
-            case "facebook" :
+    /********************* saving social media url  **********/
+    public void savedata(String text, String from) {
+        switch (from) {
+            case "facebook":
                 fbusername = text;
-                Log.e("youtube url",text);
+                Log.e("youtube url", text);
                 break;
-            case "instagram" :
+            case "instagram":
                 instagramusername = text;
                 break;
-            case "snapchat" :
+            case "snapchat":
                 snapchatusername = text;
                 break;
-            case "linkedin" :
+            case "linkedin":
                 linkedinusername = text;
                 break;
-            case "twitter" :
+            case "twitter":
                 twitterusername = text;
                 break;
-            case "youtube" :
+            case "youtube":
                 youtubeusername = text;
-                Log.e("youtube url",text);
+                Log.e("youtube url", text);
                 break;
             default:
                 break;

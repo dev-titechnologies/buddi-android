@@ -3,20 +3,17 @@ package buddyapp.com.activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import buddyapp.com.R;
 
@@ -27,6 +24,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private int[] layouts;
     private MyViewPagerAdapter myViewPagerAdapter;
     Button login, register;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +82,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), IntroScreen.class);
-                i.putExtra("login_type","login");
+                i.putExtra("login_type", "login");
                 startActivity(i);
             }
         });
@@ -92,7 +90,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), IntroScreen.class);
-                i.putExtra("login_type","register");
+                i.putExtra("login_type", "register");
                 startActivity(i);
             }
         });
@@ -110,7 +108,7 @@ public class WelcomeActivity extends AppCompatActivity {
             dots[i] = new TextView(this);
             dots[i].setText(Html.fromHtml("&#8226;"));
             dots[i].setTextSize(40);
-            dots[i].setPadding(5,5,5,5);
+            dots[i].setPadding(5, 5, 5, 5);
             dots[i].setTextColor(colorsInactive[currentPage]);
             dotsLayout.addView(dots[i]);
         }
@@ -118,6 +116,7 @@ public class WelcomeActivity extends AppCompatActivity {
         if (dots.length > 0)
             dots[currentPage].setTextColor(colorsActive[currentPage]);
     }
+
     /**
      * View pager adapter
      */

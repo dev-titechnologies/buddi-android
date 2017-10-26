@@ -7,23 +7,19 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Build;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.braintreepayments.api.Json;
-import com.braintreepayments.api.dropin.DropInResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -157,127 +153,112 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 * */
 //        CommonCall.showLoader(MapTrainee.this);
 
-        DropInResult.fetchDropInResult(MapTrainee.this, PreferencesUtils.getData(Constants.clientToken, getApplicationContext(), ""), new DropInResult.DropInResultListener() {
-            @Override
-            public void onError(Exception exception) {
-                exception.printStackTrace();
-            }
 
-            @Override
-            public void onResult(DropInResult result) {
+        {
 
 
-                if (result.getPaymentMethodNonce() == null) {
+            if (PreferencesUtils.getData(Constants.clientToken, getApplicationContext(), "").length() == 0) {
 
-                    Intent payment = new Intent(getApplicationContext(), PaymentType.class);
-                    payment.putExtra("result", true);
-                    startActivityForResult(payment, resultPayment);
-
-
-                } else {
-                    final String nounce = result.getPaymentMethodNonce().getNonce();
+                Intent payment = new Intent(getApplicationContext(), PaymentType.class);
+                payment.putExtra("result", true);
+                startActivityForResult(payment, resultPayment);
 
 
-                   if (duration.equals("40"))
-                    if (PreferencesUtils.getData(Constants.transactionId40, getApplicationContext(), "").length()>1){
-                        PreferencesUtils.saveData(Constants.duration,"40",getApplicationContext());
+            } else {
 
-                    }else{
 
-                        PreferencesUtils.saveData(Constants.duration,"0",getApplicationContext());
+                final String nounce = "";
+
+
+                if (duration.equals("40"))
+                    if (PreferencesUtils.getData(Constants.transactionId40, getApplicationContext(), "").length() > 1) {
+                        PreferencesUtils.saveData(Constants.duration, "40", getApplicationContext());
+
+                    } else {
+
+                        PreferencesUtils.saveData(Constants.duration, "0", getApplicationContext());
                     }
 
-                    if (duration.equals("60"))
-                    if (PreferencesUtils.getData(Constants.transactionId60, getApplicationContext(), "").length()>1)
-                    {
-                        PreferencesUtils.saveData(Constants.duration,"60",getApplicationContext());
+                if (duration.equals("60"))
+                    if (PreferencesUtils.getData(Constants.transactionId60, getApplicationContext(), "").length() > 1) {
+                        PreferencesUtils.saveData(Constants.duration, "60", getApplicationContext());
 
-                    }else{
+                    } else {
 
-                        PreferencesUtils.saveData(Constants.duration,"0",getApplicationContext());
+                        PreferencesUtils.saveData(Constants.duration, "0", getApplicationContext());
                     }
 
 
+                if (PreferencesUtils.getData(Constants.transactionId40, getApplicationContext(), "").length() > 1
+                        || PreferencesUtils.getData(Constants.transactionId60, getApplicationContext(), "").length() > 1)
 
-                        if (PreferencesUtils.getData(Constants.transactionId40, getApplicationContext(), "").length() > 1
-                            || PreferencesUtils.getData(Constants.transactionId60, getApplicationContext(), "").length() > 1)
 
-
-                    {
+                {
 
 //                        new RandomSelect().execute();
 
 
+                    if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals(duration)) {
 
 
-                        if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals(duration)) {
+                        new RandomSelect().execute();
 
-
-                            new RandomSelect().execute();
-
-
-
-
-                        }
-
-                        else {
-
-                            avi.setVisibility(View.GONE);
-
-
-                            AlertDialog.Builder builder;
-
-
-                            builder = new AlertDialog.Builder(MapTrainee.this);
-
-                            builder.setCancelable(false);
-                            if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals("40") && duration.equals("60"))
-                                builder.setMessage("You've already been paid for a 40 minutes session. If you proceed, 1 hour session amount will be deducted. Would you like to continue with 1 hour session ?");
-                            else
-                                builder.setMessage("You've already been paid for a 1 hour session. If you proceed, 40 minutes session amount will be deducted. Would you like to continue with 40 minute session ?");
-
-
-                            builder.setTitle("Warning!")
-
-
-                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            // continue  with delete
-                                            avi.setVisibility(View.VISIBLE);
-
-
-
-                                            new checkout(MapTrainee.this, nounce).execute();
-
-
-
-
-                                        }
-                                    })
-                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            // do nothing
-                                            avi.setVisibility(View.GONE);
-                                            select.setClickable(true);
-                                        }
-                                    })
-                                    .setIcon(android.R.drawable.ic_dialog_alert)
-                                    .show();
-
-
-                        }
 
                     } else {
 
+                        avi.setVisibility(View.GONE);
 
-                        new checkout(MapTrainee.this, nounce).execute();
+
+                        AlertDialog.Builder builder;
+
+
+                        builder = new AlertDialog.Builder(MapTrainee.this);
+
+                        builder.setCancelable(false);
+                        if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals("40") && duration.equals("60"))
+                            builder.setMessage("You've already been paid for a 40 minutes session. If you proceed, 1 hour session amount will be deducted. Would you like to continue with 1 hour session ?");
+                        else
+                            builder.setMessage("You've already been paid for a 1 hour session. If you proceed, 40 minutes session amount will be deducted. Would you like to continue with 40 minute session ?");
+
+
+                        builder.setTitle("Warning!")
+
+
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue  with delete
+                                        avi.setVisibility(View.VISIBLE);
+
+
+                                        new checkout(MapTrainee.this, nounce).execute();
+
+
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                        avi.setVisibility(View.GONE);
+                                        select.setClickable(true);
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+
+
                     }
 
+                } else {
 
+
+                    new checkout(MapTrainee.this, nounce).execute();
                 }
 
+
             }
-        });
+
+        }
+
     }
 
     private void getTrainerMarker() {
@@ -432,21 +413,19 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                 reqData.put(Constants.longitude, lng);
 
 
+                if (duration.equals("40")) {
+                    reqData.put("transaction_id", PreferencesUtils.getData(Constants.transactionId40, getApplicationContext(), "0"));
+                    reqData.put("transaction_status", PreferencesUtils.getData(Constants.transaction_status40, getApplicationContext(), "0"));
+                    reqData.put("amount", PreferencesUtils.getData(Constants.amount40, getApplicationContext(), "0"));
 
 
-               if (duration.equals("40")){
-                   reqData.put("transaction_id", PreferencesUtils.getData(Constants.transactionId40, getApplicationContext(), "0"));
-                   reqData.put("transaction_status", PreferencesUtils.getData(Constants.transaction_status40, getApplicationContext(), "0"));
-                   reqData.put("amount", PreferencesUtils.getData(Constants.amount40, getApplicationContext(), "0"));
+                } else {
+                    reqData.put("transaction_status", PreferencesUtils.getData(Constants.transaction_status60, getApplicationContext(), "0"));
+                    reqData.put("amount", PreferencesUtils.getData(Constants.amount60, getApplicationContext(), "0"));
 
+                    reqData.put("transaction_id", PreferencesUtils.getData(Constants.transactionId60, getApplicationContext(), "0"));
 
-               }else{
-                   reqData.put("transaction_status", PreferencesUtils.getData(Constants.transaction_status60, getApplicationContext(), "0"));
-                   reqData.put("amount", PreferencesUtils.getData(Constants.amount60, getApplicationContext(), "0"));
-
-                   reqData.put("transaction_id", PreferencesUtils.getData(Constants.transactionId60, getApplicationContext(), "0"));
-
-               }
+                }
 
 
                 reqData.put("training_time", duration);
@@ -586,7 +565,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
             JSONObject req = new JSONObject();
             try {
-                req.put("nonce", nounce);
+//                req.put("nonce", nounce);
                 req.put("training_time", duration);
 
             } catch (JSONException e) {
@@ -607,13 +586,13 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                 if (response.getInt(Constants.status) == 1) {
 
                     JSONObject data = response.getJSONObject("data");
-                    PreferencesUtils.saveData(Constants.transactionId, data.getString("transactionId"), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.transactionId, data.getString("id"), getApplicationContext());
 
 
                     PreferencesUtils.saveData(Constants.duration, duration, getApplicationContext());
 
                     if (duration.equals("40")) {
-                        PreferencesUtils.saveData(Constants.transactionId40, data.getString("transactionId"), getApplicationContext());
+                        PreferencesUtils.saveData(Constants.transactionId40, data.getString("id"), getApplicationContext());
                         PreferencesUtils.saveData(Constants.amount40, data.getString("amount"), getApplicationContext());
 
                         PreferencesUtils.saveData(Constants.transaction_status40, data.getString("status"), getApplicationContext());
@@ -622,7 +601,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                         PreferencesUtils.saveData(Constants.transaction_status60, data.getString("status"), getApplicationContext());
                         PreferencesUtils.saveData(Constants.amount60, data.getString("amount"), getApplicationContext());
 
-                        PreferencesUtils.saveData(Constants.transactionId60, data.getString("transactionId"), getApplicationContext());
+                        PreferencesUtils.saveData(Constants.transactionId60, data.getString("id"), getApplicationContext());
 
                     }
 

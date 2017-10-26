@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -450,7 +449,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public JSONArray getAllHistory() {
         JSONArray jsonArray = new JSONArray();
-        String selectQuery = "SELECT  * FROM " + TABLE_HISTORY + " ORDER BY "+ BOOKING_ID + " DESC ";
+        String selectQuery = "SELECT  * FROM " + TABLE_HISTORY + " ORDER BY "+ KEY_ID + " ASC ";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

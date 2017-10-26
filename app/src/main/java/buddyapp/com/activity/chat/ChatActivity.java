@@ -203,9 +203,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 JSONObject jsonObject = new JSONObject();
                 try {
 
-                    jsonObject.put("url", "http://git.titechnologies.in:4001" + ("/chat/sendMessage"));
+                    jsonObject.put("url", Urls.BASEURL+ ("/chat/sendMessage"));
 
                     JSONObject object = new JSONObject();
+
+                    object.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
 
                     object.put("book_id", PreferencesUtils.getData(Constants.bookid, getApplicationContext(), ""));
                     object.put("from_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));

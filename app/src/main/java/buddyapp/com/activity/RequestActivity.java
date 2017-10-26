@@ -2,10 +2,10 @@ package buddyapp.com.activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,7 +24,6 @@ import buddyapp.com.utils.Urls;
 
 import static buddyapp.com.Settings.Constants.start_session;
 import static buddyapp.com.Settings.Constants.trainee_Data;
-import static buddyapp.com.Settings.Constants.trainer_Data;
 
 public class RequestActivity extends AppCompatActivity {
     JSONObject sessionData;
@@ -41,7 +40,7 @@ public class RequestActivity extends AppCompatActivity {
         h.postDelayed(new Runnable() {
             public void run() {
 
-              finish();
+                finish();
             }
         }, delayInMilliseconds);
     }
@@ -118,7 +117,7 @@ public class RequestActivity extends AppCompatActivity {
         protected void onPostExecute(String res) {
             super.onPostExecute(res);
 
-NotificationUtils.clearNotifications(getApplicationContext());
+            NotificationUtils.clearNotifications(getApplicationContext());
             try {
                 JSONObject obj = new JSONObject(res);
                 if (obj.getInt("status") == 1) {
@@ -139,7 +138,7 @@ NotificationUtils.clearNotifications(getApplicationContext());
                         intent.putExtra("TrainerData", jsonObject.toString());
                         startActivity(intent);
                         finish();
-                    }else{
+                    } else {
 
                         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

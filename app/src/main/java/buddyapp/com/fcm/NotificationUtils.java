@@ -18,7 +18,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Patterns;
- 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -33,28 +33,28 @@ import buddyapp.com.R;
 
 
 public class NotificationUtils {
- 
+
     private static String TAG = NotificationUtils.class.getSimpleName();
- 
+
     private Context mContext;
- 
+
     public NotificationUtils(Context mContext) {
         this.mContext = mContext;
     }
- 
+
     public void showNotificationMessage(String title, String message, String timeStamp, Intent intent) {
         showNotificationMessage(title, message, timeStamp, intent, null);
     }
- 
+
     public void showNotificationMessage(final String title, final String message, final String timeStamp, Intent intent, String imageUrl) {
         // Check for empty push message
         if (TextUtils.isEmpty(message))
             return;
- 
- 
+
+
         // notification icon
         final int icon = R.mipmap.ic_launcher;
- 
+
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         final PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
@@ -63,19 +63,19 @@ public class NotificationUtils {
                         intent,
                         PendingIntent.FLAG_CANCEL_CURRENT
                 );
- 
+
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                 mContext);
- 
+
         final Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
                 + "://" + mContext.getPackageName() + "/raw/notification");
- 
+
         if (!TextUtils.isEmpty(imageUrl)) {
- 
+
             if (imageUrl != null && imageUrl.length() > 4 && Patterns.WEB_URL.matcher(imageUrl).matches()) {
- 
+
                 Bitmap bitmap = getBitmapFromURL(imageUrl);
- 
+
                 if (bitmap != null) {
                     showBigNotification(bitmap, mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
                 } else {
@@ -87,14 +87,14 @@ public class NotificationUtils {
             playNotificationSound();
         }
     }
- 
- 
+
+
     private void showSmallNotification(NotificationCompat.Builder mBuilder, int icon, String title, String message, String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
- 
+
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
- 
+
         inboxStyle.addLine(message);
- 
+
         Notification notification;
         notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
                 .setAutoCancel(false)
@@ -107,11 +107,11 @@ public class NotificationUtils {
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
                 .setContentText(message)
                 .build();
- 
+
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(Config.NOTIFICATION_ID, notification);
     }
- 
+
     private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, int icon, String title, String message, String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
         NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle();
         bigPictureStyle.setBigContentTitle(title);
@@ -129,11 +129,11 @@ public class NotificationUtils {
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
                 .setContentText(message)
                 .build();
- 
+
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(Config.NOTIFICATION_ID_BIG_IMAGE, notification);
     }
- 
+
     /**
      * Downloading push notification image before displaying it in
      * the notification tray
@@ -152,7 +152,7 @@ public class NotificationUtils {
             return null;
         }
     }
- 
+
     // Playing notification sound
     public void playNotificationSound() {
         try {
@@ -163,7 +163,7 @@ public class NotificationUtils {
             e.printStackTrace();
         }
     }
- 
+
     /**
      * Method checks if the app is in background or not
      */
@@ -188,16 +188,16 @@ public class NotificationUtils {
                 isInBackground = true;
             }
         }
- 
+
         return isInBackground;
     }
- 
+
     // Clears notification tray messages
     public static void clearNotifications(Context context) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
     }
- 
+
     public static long getTimeMilliSec(String timeStamp) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {

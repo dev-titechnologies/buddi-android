@@ -3,15 +3,16 @@ package buddyapp.com.activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,10 +36,12 @@ public class SettingsCategory extends AppCompatActivity {
     public static ArrayList<String> settings_cat_selectedID = new ArrayList<>();
     public static Button done;
     ImageView errorImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_category); getSupportActionBar().setDisplayShowHomeEnabled(true);
+        setContentView(R.layout.activity_settings_category);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("  Choose a Category");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -50,9 +53,9 @@ public class SettingsCategory extends AppCompatActivity {
 
         errorImage = (ImageView) findViewById(R.id.errorImage);
 
-        if(db.getAllCATForTrainee().length()>0) {
+        if (db.getAllCATForTrainee().length() > 0) {
             loadData(db.getAllCATForTrainee());
-        }else {
+        } else {
             new getCategoryList().execute();
         }
         done.setOnClickListener(new View.OnClickListener() {
@@ -60,19 +63,20 @@ public class SettingsCategory extends AppCompatActivity {
             public void onClick(View view) {
 //                finish();
                 Intent intent = new Intent();
-                intent.putExtra("name", PreferencesUtils.getData(Constants.settings_cat_name,getApplicationContext(),""));
-                setResult(111,intent);
+                intent.putExtra("name", PreferencesUtils.getData(Constants.settings_cat_name, getApplicationContext(), ""));
+                setResult(111, intent);
                 finish();
             }
         });
     }
 
-    void loadData(JSONArray data){
+    void loadData(JSONArray data) {
 
-        settingsCategoryAdapter = new SettingsCategoryAdapter(getApplicationContext(),data);
+        settingsCategoryAdapter = new SettingsCategoryAdapter(getApplicationContext(), data);
         grid.setAdapter(settingsCategoryAdapter);
 
     }
+
     class getCategoryList extends AsyncTask<String, String, String> {
 
         JSONObject reqData = new JSONObject();
@@ -104,8 +108,7 @@ public class SettingsCategory extends AppCompatActivity {
                 if (response.getInt(Constants.status) == 1) {
                     errorImage.setVisibility(View.GONE);
                     db.insertCategory(response.getJSONArray("data"));
-                    CommonCall.PrintLog("cat",db.getAllCATForTrainee().toString());
-
+                    CommonCall.PrintLog("cat", db.getAllCATForTrainee().toString());
 
 
                     loadData(db.getAllCATForTrainee());

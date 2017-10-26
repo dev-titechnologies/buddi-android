@@ -99,7 +99,7 @@ public class TrainerCategoryAdapter extends BaseAdapter {
                 holder.catName.setTextColor(context.getResources().getColor(R.color.white));
 
             }else{
-                String text = catItem.getString("category_name")+"<font color=#FF0000>"+ ("\n ( Pending )")+"</font>";
+                String text = catItem.getString("category_name")+"<font color=#FF0000>"+ ("\n (Pending)")+"</font>";
                 holder.catName.setText(Html.fromHtml(text));
                 ( holder.cat_card ) .setCardBackgroundColor(context.getResources().getColor(R.color.white));
                 holder.catName.setTextColor(context.getResources().getColor(R.color.black));
