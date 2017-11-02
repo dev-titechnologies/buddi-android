@@ -53,10 +53,24 @@ public class Detail_history extends AppCompatActivity {
         durationLayer = (LinearLayout) findViewById(R.id.duration_layer);
         trainedDate.setText(CommonCall.convertTime1(String.valueOf(getIntent().getExtras().get("trained_date"))));
         description.setText(getIntent().getExtras().getString("desc"));
-        training_status.setText(getIntent().getExtras().getString("trainingStatus"));
+
+
+        if (getIntent().getExtras().getString("trainingStatus").equals("cancelled"))
+
+            training_status.setText("Cancelled");
+            else
+            training_status.setText(getIntent().getExtras().getString("trainingStatus"));
+
+
+        if (getIntent().getExtras().getString("paymentStatus").equals("completed"))
+            payment_status.setText("Completed");
+            else
         payment_status.setText(getIntent().getExtras().getString("paymentStatus"));
+
+
         amount.setText("$" + getIntent().getExtras().getString("amount"));
         textRated.setText("You rated " + getIntent().getExtras().getString("name"));
+
 
         if (getIntent().hasExtra("extended"))
             duration.setText(getIntent().getExtras().getString("duration") + " (Extended)");

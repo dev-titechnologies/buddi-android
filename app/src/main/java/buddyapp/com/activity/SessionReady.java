@@ -239,16 +239,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         dest = camera;
 
 
-        if (PreferencesUtils.getData(Constants.timerstarted, getApplicationContext(), "false").equals("true")) {
 
-
-            cancel.setEnabled(false);
-            startactionIcon.setImageResource(R.mipmap.stop_blue);
-            startService(new Intent(getApplicationContext(), LocationService.class));
-            startService(new Intent(SessionReady.this, Timer_Service.class));
-
-
-        }
 //        LoadmapTask();
 
 
@@ -500,7 +491,18 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     @Override
     protected void onStart() {
         super.onStart();
-//        CommonCall.showLoader(SessionReady.this);
+//      CommonCall.showLoader(SessionReady.this);
+
+        if (PreferencesUtils.getData(Constants.timerstarted, getApplicationContext(), "false").equals("true")) {
+
+
+            cancel.setEnabled(false);
+            startactionIcon.setImageResource(R.mipmap.stop_blue);
+            startService(new Intent(getApplicationContext(), LocationService.class));
+            startService(new Intent(SessionReady.this, Timer_Service.class));
+
+
+        }
     }
 
     @Override
@@ -518,6 +520,17 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             }
         }
 
+
+        if (PreferencesUtils.getData(Constants.timerstarted, getApplicationContext(), "false").equals("true")) {
+
+
+            cancel.setEnabled(false);
+            startactionIcon.setImageResource(R.mipmap.stop_blue);
+            startService(new Intent(getApplicationContext(), LocationService.class));
+            startService(new Intent(SessionReady.this, Timer_Service.class));
+
+
+        }
 
 /*
 *

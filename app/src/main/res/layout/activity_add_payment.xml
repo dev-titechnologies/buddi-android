@@ -42,10 +42,10 @@
             android:layout_width="wrap_content"
             android:id="@+id/ssn"
             android:inputType="number"
-
+android:maxLength="4"
             android:singleLine="true"
             android:layout_weight="1"
-            android:hint="SSN Number"
+            android:hint="Last 4 Digit SSN"
             android:layout_height="wrap_content" />
               <EditText
 
@@ -68,7 +68,7 @@ android:id="@+id/dob"
             android:layout_width="wrap_content"
             android:id="@+id/city"
             android:layout_weight="1"
-            android:hint="city                     "
+            android:hint="City                     "
             android:inputType="text"
             android:singleLine="true"
             android:layout_height="wrap_content" />
@@ -78,7 +78,7 @@ android:id="@+id/dob"
             android:layout_weight="1"
             android:inputType="text"
             android:singleLine="true"
-            android:hint="address line1"
+            android:hint="Address line 1"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -95,7 +95,7 @@ android:id="@+id/dob"
             android:inputType="text"
             android:singleLine="true"
             android:layout_weight="1"
-            android:hint="address line 2"
+            android:hint="Address line 2"
             android:layout_height="wrap_content" />
         <EditText
             android:layout_width="wrap_content"

@@ -29,7 +29,7 @@
     android:visibility="gone"
     android:layout_centerInParent="true"
 
-    android:text="No More Category to Add"
+    android:text="No More Categories to Add"
     android:layout_height="wrap_content" />
 
 </RelativeLayout>

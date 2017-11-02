@@ -415,10 +415,9 @@ credit_card.setVisibility(View.GONE);
 
 PreferencesUtils.saveData(Constants.clientToken,"cardsaved",getApplicationContext());
 //    addPayment.setVisibility(View.GONE);
-}
 
 
-                    if(getIntent().hasExtra("result")) {
+    if(getIntent().hasExtra("result")) {
 //
 ////ForResult
 //                /*
@@ -427,9 +426,13 @@ PreferencesUtils.saveData(Constants.clientToken,"cardsaved",getApplicationContex
 //*
 //* */
 //
-                        setResult(RESULT_OK, new Intent());
-                        finish();
-                    }
+        setResult(RESULT_OK, new Intent());
+        finish();
+    }
+}
+
+
+
 
                 } else if (response.getInt(Constants.status) == 2) {
 

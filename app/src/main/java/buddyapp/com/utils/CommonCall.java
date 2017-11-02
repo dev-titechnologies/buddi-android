@@ -630,12 +630,38 @@ public class CommonCall {
 
         dialog.show();
 
+        // Hide after some seconds
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+
+
+
+                    PreferencesUtils.saveData(Constants.flag_rating, "true", activity);
+
+                    String bookid = PreferencesUtils.getData(Constants.bookid, activity, "");
+
+
+                    new CommonCall.timerUpdate(activity, "complete", bookid, "").execute();
+
+                }
+            }
+        };
+
+
+
+
         TextView fourty = (TextView) dialog.findViewById(R.id.fourty);
         TextView onehour = (TextView) dialog.findViewById(R.id.onehour);
         fourty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                handler.removeCallbacks(runnable);
                 dialog.dismiss();
+
 
 
                 intPayment(activity, "40");
@@ -647,12 +673,14 @@ public class CommonCall {
         onehour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                handler.removeCallbacks(runnable);
 
                 dialog.dismiss();
                 intPayment(activity, "60");
             }
         });
+
+        handler.postDelayed(runnable, 10000);
 
     }
 
@@ -692,7 +720,7 @@ public class CommonCall {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         //Yes button clicked
-                        handler.removeCallbacks(runnable);
+//                        handler.removeCallbacks(runnable);
                         picSessionTimeDialog(activity);
                         break;
 

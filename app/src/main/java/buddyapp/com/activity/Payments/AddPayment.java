@@ -150,7 +150,11 @@ public class AddPayment extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setTitle("Payments");
+
+        if (PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer"))
+        actionBar.setTitle("Add Debit Card");
+        else
+        actionBar.setTitle("Add Credit Card");
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override

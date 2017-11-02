@@ -14,6 +14,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import buddyapp.com.R;
+import buddyapp.com.Settings.Constants;
+import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.utils.CircleImageView;
 import buddyapp.com.utils.CommonCall;
 
@@ -99,11 +101,16 @@ public class TrainerCategoryAdapter extends BaseAdapter {
                 holder.catName.setTextColor(context.getResources().getColor(R.color.white));
 
             }else{
-                String text = catItem.getString("category_name")+"<font color=#FF0000>"+ ("\n (Pending)")+"</font>";
-                holder.catName.setText(Html.fromHtml(text));
-                ( holder.cat_card ) .setCardBackgroundColor(context.getResources().getColor(R.color.white));
-                holder.catName.setTextColor(context.getResources().getColor(R.color.black));
-            }
+
+
+                if (PreferencesUtils.getData(Constants.user_type,context,"").equals("trainer")) {
+                    String text = catItem.getString("category_name") + "<font color=#FF0000>" + ("\n (Pending)") + "</font>";
+                    holder.catName.setText(Html.fromHtml(text));
+                    (holder.cat_card).setCardBackgroundColor(context.getResources().getColor(R.color.white));
+                    holder.catName.setTextColor(context.getResources().getColor(R.color.black));
+                }
+
+                }
 
             JSONObject object = new JSONObject();
             object.put("id",catItem.getString("category_id"));

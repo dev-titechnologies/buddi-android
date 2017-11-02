@@ -120,7 +120,7 @@ public class HistoryAdapter extends BaseAdapter {
 //            String postalCode = addresses.get(0).getPostalCode();
 //            String knownName = addresses.get(0).getFeatureName();
             holder.amount.setText("$"+samount);
-            holder.trainedDate.setText(CommonCall.convertTime1(trained_date));
+            holder.trainedDate.setText(CommonCall.convertTime1(trained_date).toUpperCase());
             CommonCall.PrintLog("date",trained_date);
             holder.description.setText(category+" session with "+name);
             view.setTag(jsonObject);

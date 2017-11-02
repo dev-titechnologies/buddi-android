@@ -50,6 +50,7 @@
 
             <TextView
                 android:layout_width="match_parent"
+                android:id="@+id/subcat_title"
                 android:text="@string/list_1rep_movement"
                 android:layout_height="wrap_content" />
           <LinearLayout

@@ -16,12 +16,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +50,7 @@ public class Question4 extends Activity {
     ListView sub_list;
     DatabaseHandler db;
     SubCategoryAdapter subCategoryAdapter;
-
+TextView subcat_title;
     public static ArrayList<String> sub_cat_selectedID;
     HashSet subCats;
 
@@ -76,6 +78,9 @@ public class Question4 extends Activity {
 //        no_pounds = (Button) findViewById(R.id.no_pounds);
         next = (Button) findViewById(R.id.next);
 
+
+
+        subcat_title = (TextView) findViewById(R.id.subcat_title);
         sub_list = (ListView) findViewById(R.id.sub_list);
         back = (ImageView) findViewById(R.id.back);
 
@@ -171,8 +176,10 @@ public class Question4 extends Activity {
         if (subCats.size()==0){
             outdoorFlag = true;// no sub categroy for outdoor
             sub_list.setVisibility(View.GONE);
+            subcat_title.setVisibility(View.GONE);
         }else{
             sub_list.setVisibility(View.VISIBLE);
+            subcat_title.setVisibility(View.VISIBLE);
         }
 
 
@@ -208,9 +215,8 @@ public class Question4 extends Activity {
 
                         question.put("military_installations", PreferencesUtils.getData(Constants.military_installations, getApplicationContext(), ""));
 
-//                        List<String> myList = new ArrayList<String>(Arrays.asList(PreferencesUtils.getData(Constants.gym_subscriptions, getApplicationContext(), "").split(",")));
+//                      List<String> myList = new ArrayList<String>(Arrays.asList(PreferencesUtils.getData(Constants.gym_subscriptions, getApplicationContext(), "").split(",")));
 
-                        question.put("gym_subscriptions",new JSONArray( (PreferencesUtils.getData(Constants.gym_subscriptions, getApplicationContext(), ""))).toString());
 
                         question.put("training_exp", PreferencesUtils.getData(Constants.training_exp, getApplicationContext(), ""));
 
@@ -230,6 +236,9 @@ public class Question4 extends Activity {
                         questionData.put("sub_cat",new JSONArray( sub_cat_selectedID).toString());
                         questionData.put("user_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
                         questionData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
+
+                       if (PreferencesUtils.getData(Constants.gym_subscriptions, getApplicationContext(), "").length()>1)
+                        question.put("gym_subscriptions",new JSONArray( (PreferencesUtils.getData(Constants.gym_subscriptions, getApplicationContext(), ""))).toString());
 
 
                         JSONArray temp = new JSONArray();
@@ -314,7 +323,7 @@ public class Question4 extends Activity {
 
                     //session out
 
-
+CommonCall.sessionout(getApplicationContext());
 
                 }
             } catch (JSONException e) {

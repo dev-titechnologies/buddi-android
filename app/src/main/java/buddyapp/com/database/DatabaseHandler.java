@@ -86,7 +86,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 ")";
 
         String CREATE_HISTORY_TABLE = "CREATE TABLE " + TABLE_HISTORY + " ("
-                + KEY_ID + " INTEGER PRIMARY KEY," + BOOKING_ID + " TEXT,"
+                + KEY_ID + " INTEGER PRIMARY KEY," + BOOKING_ID + " INTEGER,"
                 + TRAINEE_ID + " TEXT,"
                 + TRAINEE_NAME + " TEXT,"
                 + TRAINER_NAME + " TEXT,"
@@ -449,7 +449,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public JSONArray getAllHistory() {
         JSONArray jsonArray = new JSONArray();
-        String selectQuery = "SELECT  * FROM " + TABLE_HISTORY + " ORDER BY "+ KEY_ID + " ASC ";
+        String selectQuery = "SELECT  * FROM " + TABLE_HISTORY + " ORDER BY "+ BOOKING_ID + " DESC ";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -484,6 +484,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         return jsonArray;
+    }
+
+
+    public void deleteCategory() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_CATEGORY, null,
+                null);
+        db.close();
     }
 
     public void deleteHistory() {

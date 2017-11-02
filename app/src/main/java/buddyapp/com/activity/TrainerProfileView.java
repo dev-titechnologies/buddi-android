@@ -1,6 +1,7 @@
 package buddyapp.com.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -21,7 +22,7 @@ import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
 import buddyapp.com.utils.Urls;
 
-;
+
 
 public class TrainerProfileView extends Activity {
     CircleImageView trainerImageView;
@@ -62,7 +63,15 @@ public class TrainerProfileView extends Activity {
             }
         });
         desc = (TextView) findViewById(R.id.description);
-
+        trainingCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), TrainerCategory.class);
+                intent.putExtra("trainerId",PreferencesUtils.getData(Constants.trainer_id, getApplicationContext(), ""));
+                intent.putExtra("usertype","trainer");
+                startActivity(intent);
+            }
+        });
 //        String text = "You guys are meeting at "+PreferencesUtils.getData(Constants.pickup_location,getApplicationContext(),"")+" to train "+
 //        desc.setText();
         /*Intent intent = getIntent();

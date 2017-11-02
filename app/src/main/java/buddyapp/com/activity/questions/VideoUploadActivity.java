@@ -56,7 +56,7 @@ public class VideoUploadActivity extends AppCompatActivity {
     int currentPos = 0;
 
     JSONArray videoArray = new JSONArray();
-    JSONObject videoUpload = new JSONObject();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -545,7 +545,7 @@ try {
                     * save data
                     *
                     * */
-
+                    JSONObject videoUpload = new JSONObject();
                     videoUpload.put("video_url",obj.getString("Url"));
                     videoUpload.put("subCat_name",currentSubCat.getString("subCat_name"));
                     videoUpload.put("subCat_id",currentSubCat.getString("subCat_id"));

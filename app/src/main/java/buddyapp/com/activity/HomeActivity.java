@@ -187,9 +187,7 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee")
-                & (PreferencesUtils.getData(Constants.trainer_Data, getApplicationContext(), "").equals("")))
-            new getSessions().execute();
+
 
     }
 
@@ -427,6 +425,10 @@ public class HomeActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
+
+        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee")
+                & (PreferencesUtils.getData(Constants.trainer_Data, getApplicationContext(), "").equals("")))
+            new getSessions().execute();
     }
 
     public void clearBackstack() {

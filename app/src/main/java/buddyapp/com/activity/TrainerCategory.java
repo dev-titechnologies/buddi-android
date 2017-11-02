@@ -36,6 +36,17 @@ public class TrainerCategory extends AppCompatActivity {
     ImageView errorImage;
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+try{
+        db.deleteCategory();}
+
+        catch (Exception E){
+    E.printStackTrace();
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trainer_category);
@@ -50,6 +61,8 @@ public class TrainerCategory extends AppCompatActivity {
         done = (Button) findViewById(R.id.next);
 
         errorImage = (ImageView) findViewById(R.id.errorImage);
+
+
 
 
         new checkStatus().execute();
@@ -75,9 +88,19 @@ public class TrainerCategory extends AppCompatActivity {
 
             JSONObject req = new JSONObject();
             try {
-                req.put("user_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
-                req.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
 
+                if (getIntent().hasExtra("trainerId")){
+
+                    req.put("user_id", getIntent().getStringExtra("trainerId"));
+                    req.put("user_type", getIntent().getStringExtra("usertype"));
+
+
+
+                }else {
+
+                    req.put("user_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
+                    req.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
