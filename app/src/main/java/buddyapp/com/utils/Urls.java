@@ -7,7 +7,11 @@ package buddyapp.com.utils;
 
 public class Urls {
 
-    public static String BASEURL = "http://git.titechnologies.in:4001";
+//    public static String BASEURL = "http://git.titechnologies.in:4001";
+
+    public static String BASEURL = "http://104.236.235.46:1337";
+
+
 //  public static String BASEURL = "http://192.168.1.66:9002";
 
 //  public static String BASEURL= "http://192.168.1.20:9002";

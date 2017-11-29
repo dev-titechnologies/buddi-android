@@ -238,7 +238,14 @@ public class HomeCategory extends Fragment {
                     if (jsonArray.length() != 0) {
                         PreferencesUtils.saveData("searchArray", obj.getJSONArray("data").toString(), getActivity());
                         PreferencesUtils.saveData(Constants.instant_booking, "true", getActivity());
+
+                        PreferencesUtils.saveData(Constants.latitude,obj.getJSONArray("data").getJSONObject(0).getString("latitude"), getActivity());
+
+                        PreferencesUtils.saveData(Constants.longitude, obj.getJSONArray("data").getJSONObject(0).getString("longitude"), getActivity());
+
+
                         Intent intent = new Intent(getActivity(), MapTrainee.class);
+
                         intent.putExtra(Constants.gender, PreferencesUtils.getData(Constants.trainer_gender, getActivity(), ""));
                         intent.putExtra("category", PreferencesUtils.getData(Constants.settings_cat_id, getActivity(), ""));
                         intent.putExtra(Constants.latitude, (PreferencesUtils.getData(Constants.settings_latitude, getActivity(), "")));

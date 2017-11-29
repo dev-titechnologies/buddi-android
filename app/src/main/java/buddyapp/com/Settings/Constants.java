@@ -44,6 +44,8 @@ public class Constants {
     public static String promo_code = "promo_code";
 
     public static String trainer_Data = "trainer_Data";
+
+
     public static String trainee_Data = "trainee_Data";
 
     public static String start_session = "start_session";

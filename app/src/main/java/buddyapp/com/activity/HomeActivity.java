@@ -54,7 +54,10 @@ import buddyapp.com.utils.Urls;
 
 import static buddyapp.com.Settings.Constants.source_become_trainer;
 import static buddyapp.com.Settings.Constants.start_session;
+import static buddyapp.com.Settings.Constants.trainee_Data;
 import static buddyapp.com.Settings.Constants.trainer_Data;
+import static buddyapp.com.Settings.Constants.user_id;
+import static buddyapp.com.Settings.Constants.user_type;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -106,7 +109,7 @@ public class HomeActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Buddi");
 
-        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals(Constants.trainer)) {
+        if (PreferencesUtils.getData(user_type, getApplicationContext(), "").equals(Constants.trainer)) {
             Fragment fragment = new TrainerProfileFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
@@ -137,11 +140,11 @@ public class HomeActivity extends AppCompatActivity
 
         menu = navigationView.getMenu();
 
-        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer"))
+        if (PreferencesUtils.getData(user_type, getApplicationContext(), "").equals("trainer"))
             menu.findItem(R.id.nav_trainer).setTitle("Add Category");
 
         if (PreferencesUtils.getData(Constants.trainer_type, getApplicationContext(), "").equals("true")) {
-            if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
+            if (PreferencesUtils.getData(user_type, getApplicationContext(), "").equals("trainer")) {
                 menu.findItem(R.id.nav_trainer).setVisible(true);
 
 
@@ -153,7 +156,7 @@ public class HomeActivity extends AppCompatActivity
         }
 
 
-        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
+        if (PreferencesUtils.getData(user_type, getApplicationContext(), "").equals("trainer")) {
 
 
             menu.findItem(R.id.nav_settings).setVisible(false);
@@ -262,7 +265,7 @@ public class HomeActivity extends AppCompatActivity
             } else {
                 getSupportActionBar().setTitle("Buddi");
 
-                if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals(Constants.trainer)) {
+                if (PreferencesUtils.getData(user_type, getApplicationContext(), "").equals(Constants.trainer)) {
                     Fragment fragment = new TrainerProfileFragment();
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
@@ -426,7 +429,7 @@ public class HomeActivity extends AppCompatActivity
         }
 
 
-        if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee")
+        if (PreferencesUtils.getData(user_type, getApplicationContext(), "").equals("trainee")
                 & (PreferencesUtils.getData(Constants.trainer_Data, getApplicationContext(), "").equals("")))
             new getSessions().execute();
     }
@@ -461,7 +464,7 @@ public class HomeActivity extends AppCompatActivity
             try {
 
                 reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
-                reqData.put(Constants.user_type, PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
+                reqData.put(user_type, PreferencesUtils.getData(user_type, getApplicationContext(), ""));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -484,20 +487,48 @@ public class HomeActivity extends AppCompatActivity
                     CommonCall.PrintLog("response123", response.toString());
 
                     if (response.getJSONArray("data").length() > 0) {
-                        JSONObject sessions = response.getJSONArray("data").getJSONObject(0);
 
 
-                        PreferencesUtils.saveData(Constants.trainer_id, sessions.getJSONObject("trainer_details").getString("trainer_id"), getApplicationContext());
-                        PreferencesUtils.saveData(trainer_Data, sessions.toString(), getApplicationContext());
+                        if (PreferencesUtils.getData(user_type,getApplicationContext(),"").equals("trainee"))
 
-                        PreferencesUtils.saveData(start_session, "true", getApplicationContext());
-
-                        Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
-                        resultIntent.putExtra("message", sessions.toString());
+                        {
+                            JSONObject sessions = response.getJSONArray("data").getJSONObject(0);
 
 
-                        resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(resultIntent);
+                            PreferencesUtils.saveData(Constants.trainer_id, sessions.getJSONObject("trainer_details").getString("trainer_id"), getApplicationContext());
+
+
+                            PreferencesUtils.saveData(trainer_Data, sessions.toString(), getApplicationContext());
+
+
+                            PreferencesUtils.saveData(start_session, "true", getApplicationContext());
+
+                            Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
+                            resultIntent.putExtra("message", sessions.toString());
+
+
+                            resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(resultIntent);
+                        }else{
+                            // IF Trainer ==> then store trainee data
+                            JSONObject sessions = response.getJSONArray("data").getJSONObject(0);
+
+
+                            PreferencesUtils.saveData(Constants.trainee_id, sessions.getJSONObject("trainee_details").getString("trainee_id"), getApplicationContext());
+
+
+                            PreferencesUtils.saveData(trainee_Data, sessions.toString(), getApplicationContext());
+
+
+                            PreferencesUtils.saveData(start_session, "true", getApplicationContext());
+
+                            Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
+                            resultIntent.putExtra("message", sessions.toString());
+
+
+                            resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(resultIntent);
+                        }
 
 
                     }

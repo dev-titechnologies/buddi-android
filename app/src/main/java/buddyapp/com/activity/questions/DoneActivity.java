@@ -81,6 +81,8 @@ Button exit;
         protected void onPostExecute(String res) {
             super.onPostExecute(res);
 
+            JSONObject fds = new JSONObject();
+
 
             try {
                 JSONObject obj= new JSONObject(res);

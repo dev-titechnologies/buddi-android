@@ -302,7 +302,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                                 message.setEnabled(false);
                             } else {
 
-                                showAlert("It seems like trainer has not reached to the location. Please wait until your trainer arrives at the location.");
+                                showAlert("It seems your trainer hasn't reached the designated location yet. Give it just a few more minutes, and we're sure he/she will be there!");
                             }
                         } else {
 
@@ -1451,11 +1451,11 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
                     PreferencesUtils.saveData("data", date_time, getApplicationContext());
-//                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
-                    if (training_time == 40)
-                        PreferencesUtils.saveData("hours", "2", getApplicationContext());
-                    else
-                        PreferencesUtils.saveData("hours", "4", getApplicationContext());
+                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
+//                    if (training_time == 40)
+//                        PreferencesUtils.saveData("hours", "2", getApplicationContext());
+//                    else
+//                        PreferencesUtils.saveData("hours", "4", getApplicationContext());
 
 
                     startService(new Intent(SessionReady.this, Timer_Service.class));
