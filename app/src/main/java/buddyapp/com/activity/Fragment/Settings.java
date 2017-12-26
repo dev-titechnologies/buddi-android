@@ -121,6 +121,7 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
 
             facebook_switch.setChecked(true);
             CommonCall.postFacebook("test happy xhristmaz");
+            PreferencesUtils.saveData(Constants.facebookShare,"true",getActivity());
         }
 
 
@@ -148,20 +149,21 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
                     public void onSuccess(LoginResult loginResult) {
                         // App code
                         Log.e("result fb","successs fb");
-
+                        PreferencesUtils.saveData(Constants.facebookShare,"true",getActivity());
                     }
 
                     @Override
                     public void onCancel() {
                         // App code
                         Log.e("result fb","onCancel");
-
+                        PreferencesUtils.saveData(Constants.facebookShare,"false",getActivity());
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
                         // App code
                         Log.e("result fb","onError");
+                        PreferencesUtils.saveData(Constants.facebookShare,"false",getActivity());
                     }
                 });
 
