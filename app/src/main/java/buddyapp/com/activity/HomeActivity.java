@@ -139,7 +139,7 @@ public class HomeActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-// ********************* navigation view *****************8
+// ********************* navigation view *****************
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View hView = navigationView.getHeaderView(0);
@@ -162,7 +162,7 @@ public class HomeActivity extends AppCompatActivity
         }
 
 
-        if (PreferencesUtils.getData(user_type, getApplicationContext(), "").equals("trainer")) {
+       /* if (PreferencesUtils.getData(user_type, getApplicationContext(), "").equals("trainer")) {
 
 
             menu.findItem(R.id.nav_settings).setVisible(false);
@@ -171,7 +171,7 @@ public class HomeActivity extends AppCompatActivity
 
             menu.findItem(R.id.nav_settings).setVisible(true);
 
-        }
+        }*/
 
 
         userImageView = (CircleImageView) hView.findViewById(R.id.userImageView);

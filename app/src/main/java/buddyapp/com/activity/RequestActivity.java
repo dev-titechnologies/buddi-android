@@ -11,12 +11,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.common.Common;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
+import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.fcm.NotificationUtils;
 import buddyapp.com.utils.CommonCall;
 import buddyapp.com.utils.NetworkCalls;
@@ -126,12 +129,29 @@ public class RequestActivity extends AppCompatActivity {
                     CommonCall.hideLoader();
 //
                     if (type.equals("accept")) {
+                        DatabaseHandler db;
+                        db = new DatabaseHandler(getApplicationContext());
 
                         JSONObject jsonObject = obj.getJSONObject("data");
                         PreferencesUtils.saveData(Constants.trainee_id, jsonObject.getString("trainee_id"), getApplicationContext());
                         PreferencesUtils.saveData(trainee_Data, jsonObject.toString(), getApplicationContext());
 
                         PreferencesUtils.saveData(start_session, "true", getApplicationContext());
+
+                        if(PreferencesUtils.getData(Constants.twitterShare, getApplicationContext(),"").equals("true")){
+                            CommonCall.postTwitter("I have booked a "+jsonObject.getString("training_time")+" Minutes "
+                                    + db.getCatName(jsonObject.getString("cat_id")) +" training session with "+jsonObject.getJSONObject("trainee_details").getString("trainee_first_name")+
+                                    " "+jsonObject.getJSONObject("trainee_details").getString("trainee_last_name")+" at "+
+                                    jsonObject.getString("pick_location"));
+                            CommonCall.PrintLog("tweet","Success");
+                        }
+                        if(PreferencesUtils.getData(Constants.facebookShare, getApplicationContext(),"").equals("true")){
+                            CommonCall.postFacebook("I have booked a "+jsonObject.getString("training_time")+" Minutes "
+                                    + db.getCatName(jsonObject.getString("cat_id")) +" training session with "+jsonObject.getJSONObject("trainee_details").getString("trainee_first_name")+
+                                    " "+jsonObject.getJSONObject("trainee_details").getString("trainee_last_name")+" at "+
+                                    jsonObject.getString("pick_location"));
+                            CommonCall.PrintLog("fbshare","Success");
+                        }
 
                         Intent intent = new Intent(getApplicationContext(), SessionReady.class);
 

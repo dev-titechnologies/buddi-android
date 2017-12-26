@@ -57,11 +57,11 @@ import buddyapp.com.utils.CommonCall;
 public class Settings extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
     int sessionDuration = 0;
     String sgender="";
-    LinearLayout duration, gender, location, category;
+    LinearLayout duration, gender, location, category,social_root;
     TextView  fourty, hour, male, female, noPreference,maddress;
-    TextView locationPref, categoryPref, genderPref, sessionPref,catname;
-    int id =0, ids=0, id1=0,id2=0;
-    Animation a,b,c,d;
+    TextView locationPref, categoryPref, genderPref, sessionPref,catname, socialMediaShare;
+    int id =0, ids=0, id1=0,id2=0,id3=0;
+    Animation a,b,c,d,e;
     Button next;
     Boolean check1=false, check2=false;
     private static final int PLACE_PICKER_REQUEST = 1;
@@ -89,6 +89,8 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
 
         loginButtonfb = (LoginButton)view.findViewById(R.id.facebook_button);
         loginButtonfb.setPublishPermissions("publish_actions");
+        socialMediaShare = view.findViewById(R.id.socialMedia_preference);
+        social_root = view.findViewById(R.id.social_root);
 //        loginButtonfb.setReadPermissions("email");
 
         // If using in a fragment
@@ -232,7 +234,15 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
         b = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
         c = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
         d = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
+        e = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
 
+        if(PreferencesUtils.getData(Constants.user_type,getActivity(),"").equals("trainer")){
+            locationPref.setVisibility(View.GONE);
+            categoryPref.setVisibility(View.GONE);
+            genderPref.setVisibility(View.GONE);
+            sessionPref.setVisibility(View.GONE);
+            catname.setVisibility(View.GONE);
+        }
         locationPref.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -341,6 +351,27 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
                     a.reset();
                     genderPref.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
                     gender.setVisibility(View.GONE);
+                }
+            }
+        });
+        socialMediaShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (id3 == 0) {
+                    id3 = 1;
+
+                    e.reset();
+                    socialMediaShare.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_sign_to_navigate, 0);
+                    social_root.setVisibility(View.VISIBLE);
+                    social_root.startAnimation(e);
+
+                } else
+
+                {
+                    id3 =0;
+                    e.reset();
+                    socialMediaShare.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
+                    social_root.setVisibility(View.GONE);
                 }
             }
         });

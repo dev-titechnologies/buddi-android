@@ -23,6 +23,7 @@ import buddyapp.com.activity.Fragment.HomeCategory;
 import buddyapp.com.activity.HomeActivity;
 import buddyapp.com.activity.RequestActivity;
 import buddyapp.com.activity.SessionReady;
+import buddyapp.com.database.DatabaseHandler;
 import buddyapp.com.utils.CommonCall;
 
 import static buddyapp.com.Settings.Constants.start_session;
@@ -115,6 +116,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //                {
 //
 //                    // app is in background, show the notification in notification tray
+
+                DatabaseHandler db;
+                db = new DatabaseHandler(getApplicationContext());
+
+                if(PreferencesUtils.getData(Constants.twitterShare, getApplicationContext(),"").equals("true")){
+                    CommonCall.postTwitter("I have booked a "+data.getString("training_time")+" Minutes "
+                            + db.getCatName(data.getString("cat_id")) +" training session with "+data.getJSONObject("trainer_details").getString("trainer_first_name")+
+                    " "+data.getJSONObject("trainer_details").getString("trainer_last_name")+" at "+
+                            data.getJSONObject("trainer_details").getString("pick_location"));
+                    CommonCall.PrintLog("tweet","Success");
+                }
+                if(PreferencesUtils.getData(Constants.facebookShare, getApplicationContext(),"").equals("true")){
+                    CommonCall.postFacebook("I have booked a "+data.getString("training_time")+" Minutes "
+                            + db.getCatName(data.getString("cat_id")) +" training session with "+data.getJSONObject("trainer_details").getString("trainer_first_name")+
+                            " "+data.getJSONObject("trainer_details").getString("trainer_last_name")+" at "+
+                            data.getString("pick_location"));
+                    CommonCall.PrintLog("fbshare","Success");
+                }
+
                 Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
                 resultIntent.putExtra("message", data.toString());
 

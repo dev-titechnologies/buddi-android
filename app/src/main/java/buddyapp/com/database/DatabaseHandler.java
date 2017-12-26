@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.concurrent.ExecutionException;
 
 import buddyapp.com.Controller;
 import buddyapp.com.Settings.Constants;
@@ -254,6 +255,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // return contact list
         return cursor.getCount();
     }
+    public String getCatName(String id) {
+
+        String sub = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT "+ CAT_NAME +" FROM " + TABLE_CATEGORY + " WHERE " + CAT_ID + " = "+id;
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        try {
+//            sub.put("Cat_id", cursor.getString(1));
+
+            sub= cursor.getString(0).toString();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // return contact
+        return sub;
+    }
+
     public JSONArray getAllCAT() {
         JSONArray categoryList = new JSONArray();
         // Select All Query
