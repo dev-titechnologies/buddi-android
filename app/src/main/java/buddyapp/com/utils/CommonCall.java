@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -21,8 +22,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.facebook.share.ShareApi;
 import com.facebook.share.Sharer;
@@ -33,6 +38,7 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.ShareOpenGraphAction;
 import com.facebook.share.model.ShareOpenGraphContent;
 import com.facebook.share.model.ShareOpenGraphObject;
+import com.facebook.share.widget.ShareDialog;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -42,6 +48,7 @@ import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.StatusesService;
 
@@ -792,71 +799,49 @@ public class CommonCall {
 
     public static void postFacebook(String msg){
 
-        ShareOpenGraphObject object = new ShareOpenGraphObject.Builder()
-                .putString("fb:app_id", "test")
-                .putString("og:url", "http://buddimedia.com/")
 
-                .putString("og:title", "title buddy")
-                .putString("og:description", "Buddy share test")
-                .putString("og:image", "http://buddimedia.com/")
-                .build();
-        ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                .setContentTitle("Hello Facebook")
+        if (AccessToken.getCurrentAccessToken()!=null) {
 
+            Bundle parameters = new Bundle();
+            parameters.putString("message", msg);
+            new GraphRequest(
+                    AccessToken.getCurrentAccessToken(), "/me/feed", parameters, HttpMethod.POST,
+                    new GraphRequest.Callback() {
+                        public void onCompleted(GraphResponse response) {
+                            Log.e("resr", response.toString());
+                        }
+                    }
+            ).executeAsync();
 
-                .setContentDescription(
-                        "The 'Hello Facebook' sample  showcases simple Facebook integration")
-
-                .setContentUrl(Uri.parse("http://buddimedia.com/"))
-                .build();
-
-//        ShareLinkContent linkContent = new ShareLinkContent.Builder()
-//                .setQuote("This may be used to replace setTitle and setDescription.")
-//                .setContentUrl(Uri.parse("www.website.com"))
-//                .build();
-// Builds the object
+        }
 
 
-
-
-                ShareApi.share(linkContent, new FacebookCallback<Sharer.Result>() {
-            @Override
-            public void onSuccess(Sharer.Result result) {
-                Log.e("Result ","onSuccess fb");
-            }
-
-            @Override
-            public void onCancel() {
-                Log.e("Result ","Done");
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Log.e("Result ",""+error.getMessage());
-            }
-        });
 
     }
 
 
 public static void postTwitter(String msg){
+    TwitterSession twitterSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
 
-    TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
-    StatusesService statusesService = twitterApiClient.getStatusesService();
-    Call<Tweet> call = statusesService.update(msg, null, null, null,null,null,null,null,null);
-    call.enqueue(new Callback<Tweet>() {
-        @Override
-        public void success(Result<Tweet> result) {
-            //Do something with result
-            Log.e("Result ","Done");
-        }
 
-        public void failure(TwitterException exception) {
-            //Do something on failure
+    if(twitterSession!=null) {
+        TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
+        StatusesService statusesService = twitterApiClient.getStatusesService();
+        Call<Tweet> call = statusesService.update(msg, null, null, null, null, null, null, null, null);
+        call.enqueue(new Callback<Tweet>() {
+            @Override
+            public void success(Result<Tweet> result) {
+                //Do something with result
+                Log.e("Result ", "Done");
+            }
 
-            Log.e("test ","exception"+exception.getMessage());
-        }
-    });
+            public void failure(TwitterException exception) {
+                //Do something on failure
+
+                Log.e("test ", "exception" + exception.getMessage());
+            }
+        });
+    }
 }
     public static class extendSession extends AsyncTask<String, String, String> {
 
