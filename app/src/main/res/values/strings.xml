@@ -96,4 +96,11 @@
     <string name="name">name</string>
     <string name="number">number</string>
 
+
+
+    <string name="com.twitter.sdk.android.CONSUMER_KEY">caJSdofGAha6GijAVY20TdhVy</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET">dPeLY2CiFEct3mpBwl53eUqqla2fExnLYi558GymRLPdcjiEek</string>
+
+
+
 </resources>

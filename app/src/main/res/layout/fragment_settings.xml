@@ -247,6 +247,64 @@
         android:layout_height="1dp"
         android:background="@color/ash"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:id="@+id/socialMedia_preference"
+        android:drawableRight="@drawable/ic_right_arrow"
+        android:text="Session Length Preference"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:id="@+id/social_root"
+        android:background="@color/ash">
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium"
+            android:layout_marginBottom="@dimen/small"
+            android:layout_marginRight="@dimen/medium"
+            android:layout_marginLeft="@dimen/medium"
+            android:elevation="10dp">
+
+
+            <Switch
+                android:layout_width="match_parent"
+                android:id="@+id/twitter_switch"
+                android:text=" Twitter"
+                android:layout_height="match_parent" />
+
+
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small"
+            android:layout_marginBottom="@dimen/medium"
+            android:layout_marginRight="@dimen/medium"
+            android:layout_marginLeft="@dimen/medium"
+            android:elevation="10dp">
+
+            <Switch
+                android:layout_width="match_parent"
+android:id="@+id/facebook_switch"
+                android:text=" Facebook"
+                android:layout_height="match_parent" />
+<com.facebook.login.widget.LoginButton
+    android:layout_width="wrap_content"
+    android:id="@+id/facebook_button"
+    android:visibility="gone"
+
+
+    android:layout_height="match_parent" />
+            
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+
 </LinearLayout>
     </ScrollView>
 </FrameLayout>

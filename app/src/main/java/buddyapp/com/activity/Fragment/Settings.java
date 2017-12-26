@@ -9,15 +9,26 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -26,11 +37,19 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import buddyapp.com.R;
 import buddyapp.com.Settings.Constants;
 import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.SettingsCategory;
+import buddyapp.com.utils.CommonCall;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,15 +67,147 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
     private static final int PLACE_PICKER_REQUEST = 1;
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
+    TwitterLoginButton loginButton;
+
     public Settings() {
         // Required empty public constructor
+
     }
 
+    Switch twitter_switch,facebook_switch;
 
+
+    LoginButton loginButtonfb;
+   public static  CallbackManager callbackManager;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        callbackManager = CallbackManager.Factory.create();
+        loginButton = new TwitterLoginButton(getActivity());
+//               loginButton = view.findViewById(R.id.twiter_button);
+
+        loginButtonfb = (LoginButton)view.findViewById(R.id.facebook_button);
+        loginButtonfb.setPublishPermissions("publish_actions");
+//        loginButtonfb.setReadPermissions("email");
+
+        // If using in a fragment
+//        loginButtonfb.setFragment(this);
+
+
+                twitter_switch =(Switch)view.findViewById(R.id.twitter_switch);
+        facebook_switch =(Switch)view.findViewById(R.id.facebook_switch);
+        TwitterSession twitterSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
+
+
+        if(twitterSession!=null)
+        {
+
+            Toast.makeText(getActivity(), "Welcome Back", Toast.LENGTH_LONG).show();
+            PreferencesUtils.saveData(Constants.twitterShare,"true",getActivity());
+            twitter_switch.setChecked(true);
+            CommonCall.postTwitter("test happy xhristmaz");
+        }else{
+
+            PreferencesUtils.saveData(Constants.twitterShare,"false",getActivity());
+            twitter_switch.setChecked(false);
+
+
+
+        }
+
+
+        if (AccessToken.getCurrentAccessToken()!=null){
+
+            facebook_switch.setChecked(true);
+            CommonCall.postFacebook("test happy xhristmaz");
+        }
+
+
+
+        twitter_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+
+                if (twitter_switch.isChecked()){
+                    loginButton.performClick();
+
+                }else{
+
+                }
+
+            }
+        });
+
+
+
+        loginButtonfb.registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // App code
+                        Log.e("result fb","successs fb");
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                        Log.e("result fb","onCancel");
+
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                        Log.e("result fb","onError");
+                    }
+                });
+
+        loginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                Log.e("result","successs");
+
+
+                PreferencesUtils.saveData(Constants.twitterShare,"true",getActivity());
+                TwitterSession twitterSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
+                if(twitterSession!=null)
+                {
+
+                    Toast.makeText(getActivity(), "Welcome Back", Toast.LENGTH_LONG).show();
+                }
+
+
+
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
+                PreferencesUtils.saveData(Constants.twitterShare,"false",getActivity());
+                Log.e("error","errr");
+            }
+        });
+
+        facebook_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (facebook_switch.isChecked()){
+                    loginButtonfb.performClick();
+
+                }else{
+
+                }
+
+
+            }
+        });
+
+
+
         locationPref = (TextView) view.findViewById(R.id.locaton_preference);
         categoryPref = (TextView) view.findViewById(R.id.category_preference);
         genderPref = (TextView) view.findViewById(R.id.gender_preference);
@@ -310,6 +461,12 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
         male.setBackgroundColor(getResources().getColor(R.color.white));
         female.setBackgroundColor(getResources().getColor(R.color.white));
     }
+
+    public  void twitterCallback(int requestCode,int resultCode, Intent data){
+
+        loginButton.onActivityResult(requestCode, resultCode, data);
+
+    }
     @Override
     public void onActivityResult(int requestCode,
                                  int resultCode, Intent data) {
@@ -334,7 +491,10 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
 
         }
         else {
+//            loginButton.onActivityResult(requestCode, resultCode, data);
             super.onActivityResult(requestCode, resultCode, data);
+
+
         }
     }catch (Exception e){
         e.printStackTrace();

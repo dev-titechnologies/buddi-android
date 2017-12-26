@@ -13,7 +13,7 @@ public class Constants {
 
     public static String startSessionPush = "startSessionPush";
 
-
+    public static String twitterShare = "twitterShare";
     public static String clientToken = "clientToken";
     public static String fname = "first_name";
     public static String lname = "last_name";

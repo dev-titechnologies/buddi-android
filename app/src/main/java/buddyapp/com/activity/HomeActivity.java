@@ -27,7 +27,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.internal.CallbackManagerImpl;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,6 +73,7 @@ public class HomeActivity extends AppCompatActivity
     JSONObject data;
     Menu menu;
     DatabaseHandler db;
+    Settings settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,7 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
 
 
+         settings = new Settings();
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         NotificationUtils.clearNotifications(getApplicationContext());
@@ -282,9 +288,9 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
 
             getSupportActionBar().setTitle("Settings");
-            Fragment fragment = new Settings();
+
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_frame, fragment, fragment.getClass().getSimpleName()).addToBackStack(null).commit();
+                    .replace(R.id.fragment_frame, settings, settings.getClass().getSimpleName()).addToBackStack(null).commit();
 
         } else if (id == R.id.nav_payment) {
 //            getSupportActionBar().setTitle("Payment");
@@ -568,5 +574,19 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+//  public   TwitterLoginButton   loginButton = new TwitterLoginButton(HomeActivity.this);
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+
+//        if (requestCode == CallbackManagerImpl.RequestCodeOffset.Login.toRequestCode()){
+            Settings.callbackManager.onActivityResult(requestCode, resultCode, data);
+//        }else
+            {
+            settings.twitterCallback(requestCode, resultCode, data);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+//        loginButton.onActivityResult(requestCode, resultCode, data);
+    }
 }
