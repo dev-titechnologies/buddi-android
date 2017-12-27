@@ -33,6 +33,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.hbb20.CountryCodePicker;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -461,25 +462,28 @@ public class ProfileScreen extends AppCompatActivity {
                         } else {
                             weight.setText(jsonObject.getString("weight"));
                         }
-                        if (jsonObject.getJSONObject(Constants.social_media_links).getString("facebook").equals("null")) {
+                        JSONArray jsonArray = new JSONArray(jsonObject.getString("social_media_links"));
+                        JSONObject jsonObject1 = new JSONObject(String.valueOf(jsonArray.getJSONObject(0)));
+
+                        if (jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook").equals("null") || jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook").length()==0) {
                             facebookUrl = "";
-                        } else {
-                            facebookUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("facebook");
+                        } else{
+                            facebookUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook");
                         }
-                        if (jsonObject.getJSONObject(Constants.social_media_links).getString("instagram").equals("null")) {
+                        if (jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram").equals("null")|| jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram").length()==0) {
                             instagramUrl = "";
                         } else {
-                            instagramUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("instagram");
+                            instagramUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram");
                         }
-                        if (jsonObject.getJSONObject(Constants.social_media_links).getString("twitter").equals("null")) {
+                        if (jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter").equals("null")|| jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter").length()==0) {
                             twitterUrl = "";
                         } else {
-                            twitterUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("twitter");
+                            twitterUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter");
                         }
-                        if (jsonObject.getJSONObject(Constants.social_media_links).getString("youtube").equals("null")) {
+                        if (jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube").equals("null")|| jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube").length()==0)  {
                             youtubeUrl = "";
                         } else {
-                            youtubeUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("youtube");
+                            youtubeUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube");
                         }
 
                         PreferencesUtils.saveData(Constants.category_submitted, obj.getJSONArray("category_submitted").toString(), getApplicationContext());
@@ -521,13 +525,18 @@ public class ProfileScreen extends AppCompatActivity {
                 socialMediaLinks.put("instagram", instagramUrl);
                 socialMediaLinks.put("youtube", youtubeUrl);
                 socialMediaLinks.put("twitter", twitterUrl);
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put(Constants.social_media_links,socialMediaLinks);
+
+                JSONArray jsonArray = new JSONArray();
+                jsonArray.put(0,jsonObject);
 
                 reqData.put("first_name", sfname);
                 reqData.put("last_name", slname);
                 reqData.put("mobile", smobile);
                 reqData.put("gender", sgender);
                 reqData.put("user_image", user_image);
-                reqData.put("social_media_links", socialMediaLinks);
+                reqData.put("social_media_links", jsonArray.toString());
                 reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
                 reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
                 reqData.put("profile_desc", "Description");

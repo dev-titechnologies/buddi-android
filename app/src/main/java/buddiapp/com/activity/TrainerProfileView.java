@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -217,25 +218,29 @@ public class TrainerProfileView extends Activity {
                     } else
                     {weight.setText(jsonObject.getString("weight"));}
 
-                    if (jsonObject.getJSONObject(Constants.social_media_links).getString("facebook").equals("null")) {
+                    JSONArray jsonArray = new JSONArray(jsonObject.getString("social_media_links"));
+                    JSONObject jsonObject1 = new JSONObject(String.valueOf(jsonArray.getJSONObject(0)));
+
+
+                    if (jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook").equals("null")||jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook").length()==0) {
                         facebookUrl = "";
                     } else {
-                        facebookUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("facebook");
+                        facebookUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook");
                     }
-                    if (jsonObject.getJSONObject(Constants.social_media_links).getString("instagram").equals("null")) {
+                    if (jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram").equals("null")||jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram").length()==0) {
                         instagramUrl = "";
                     } else {
-                        instagramUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("instagram");
+                        instagramUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram");
                     }
-                    if (jsonObject.getJSONObject(Constants.social_media_links).getString("twitter").equals("null")) {
+                    if (jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter").equals("null")||jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter").length()==0) {
                         twitterUrl = "";
                     } else {
-                        twitterUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("twitter");
+                        twitterUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter");
                     }
-                    if (jsonObject.getJSONObject(Constants.social_media_links).getString("youtube").equals("null")) {
+                    if (jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube").equals("null")||jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube").length()==0) {
                         youtubeUrl = "";
                     } else {
-                        youtubeUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("youtube");
+                        youtubeUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube");
                     }
 
                     imageurl = jsonObject.getString("user_image");
