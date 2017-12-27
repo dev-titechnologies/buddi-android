@@ -120,10 +120,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 DatabaseHandler db;
                 db = new DatabaseHandler(getApplicationContext());
 
+
+
+                Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
+                resultIntent.putExtra("message", data.toString());
+
+                showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
+
+                resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(resultIntent);
+
+
                 if(PreferencesUtils.getData(Constants.twitterShare, getApplicationContext(),"").equals("true")){
                     CommonCall.postTwitter("I have booked a "+data.getString("training_time")+" Minutes "
                             + db.getCatName(data.getString("cat_id")) +" training session with "+data.getJSONObject("trainer_details").getString("trainer_first_name")+
-                    " "+data.getJSONObject("trainer_details").getString("trainer_last_name")+" at "+
+                            " "+data.getJSONObject("trainer_details").getString("trainer_last_name")+" at "+
                             data.getJSONObject("trainer_details").getString("pick_location"));
                     CommonCall.PrintLog("tweet","Success");
                 }
@@ -134,15 +145,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                             data.getString("pick_location"));
                     CommonCall.PrintLog("fbshare","Success");
                 }
-
-                Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
-                resultIntent.putExtra("message", data.toString());
-
-                showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
-
-                resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(resultIntent);
-
 
             } else if (json.getInt("type") == 2) {
 

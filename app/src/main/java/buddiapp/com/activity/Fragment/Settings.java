@@ -203,6 +203,7 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (facebook_switch.isChecked()){
+                    LoginManager.getInstance().logOut();
                     loginButtonfb.performClick();
 
                 }else{
