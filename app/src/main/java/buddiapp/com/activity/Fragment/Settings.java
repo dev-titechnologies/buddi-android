@@ -108,7 +108,7 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
             Toast.makeText(getActivity(), "Welcome Back", Toast.LENGTH_LONG).show();
             PreferencesUtils.saveData(Constants.twitterShare,"true",getActivity());
             twitter_switch.setChecked(true);
-            CommonCall.postTwitter("test happy xhristmaz");
+//            CommonCall.postTwitter("test happy xhristmaz");
         }else{
 
             PreferencesUtils.saveData(Constants.twitterShare,"false",getActivity());
@@ -119,10 +119,10 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
         }
 
 
-        if (AccessToken.getCurrentAccessToken()!=null){
+        if (PreferencesUtils.getData(Constants.facebookShare,getActivity(),"false").equals("true")){
 
             facebook_switch.setChecked(true);
-            CommonCall.postFacebook("test happy xhristmaz");
+//            CommonCall.postFacebook("test happy xhristmaz");
             PreferencesUtils.saveData(Constants.facebookShare,"true",getActivity());
         }
 
@@ -158,6 +158,7 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
                     public void onCancel() {
                         // App code
                         Log.e("result fb","onCancel");
+                        facebook_switch.setChecked(false);
                         PreferencesUtils.saveData(Constants.facebookShare,"false",getActivity());
                     }
 
@@ -165,6 +166,7 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
                     public void onError(FacebookException exception) {
                         // App code
                         Log.e("result fb","onError");
+                        facebook_switch.setChecked(false);
                         PreferencesUtils.saveData(Constants.facebookShare,"false",getActivity());
                     }
                 });
@@ -192,6 +194,7 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
                 // Do something on failure
                 PreferencesUtils.saveData(Constants.twitterShare,"false",getActivity());
                 Log.e("error","errr");
+                twitter_switch.setChecked(false);
             }
         });
 

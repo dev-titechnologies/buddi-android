@@ -166,7 +166,7 @@ public class CommonCall {
 
     public static void PrintLog(String s1, String s2) {
 
-        Log.e(s1, s2);
+//        Log.e(s1, s2);
 
     }
 

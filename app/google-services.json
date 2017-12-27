@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:635834235607:android:bac58fd015fc748c",
         "android_client_info": {
-          "package_name": "buddiapp.com"
+          "package_name": "buddyapp.com"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "635834235607-ivk7mbfjvn08pe3c60sam9t33ogmbgli.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "buddiapp.com",
+            "package_name": "buddyapp.com",
             "certificate_hash": "0e042c9bd24cee5966df1a28b544e2a7019fdcb6"
           }
         },
@@ -26,7 +26,7 @@
           "client_id": "635834235607-15486u2vf8r6s990fmfa51s6tppu963n.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "buddiapp.com",
+            "package_name": "buddyapp.com",
             "certificate_hash": "0832c41df8847278ffaba7d3614910f1e28b823d"
           }
         },
@@ -38,7 +38,7 @@
           "client_id": "635834235607-acv5deufr27c4p1c39r78snc3hbas5qg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "buddiapp.com",
+            "package_name": "buddyapp.com",
             "certificate_hash": "cd2967ca67ca05d1d518556d20296191a3e0cc77"
           }
         },
@@ -46,7 +46,7 @@
           "client_id": "635834235607-venkh3q0rj6brcsvkgm77efen3l6gkbt.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "buddiapp.com",
+            "package_name": "buddyapp.com",
             "certificate_hash": "cd2967ca67ca05d1d518556d20296191a3e0cc76"
           }
         },
