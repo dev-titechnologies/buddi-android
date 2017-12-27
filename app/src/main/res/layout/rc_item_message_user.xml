@@ -6,7 +6,7 @@
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp">
 
-    <buddyapp.com.utils.CircleImageView
+    <buddiapp.com.utils.CircleImageView
         android:id="@+id/imageView"
         android:layout_width="30dp"
         android:layout_height="30dp"

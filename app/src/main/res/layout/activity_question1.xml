@@ -7,7 +7,7 @@
     android:background="#f9f9f9"
     android:layout_height="match_parent"
 
-    tools:context="buddyapp.com.activity.questions.Question1">
+    tools:context="buddiapp.com.activity.questions.Question1">
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:id="@+id/toolbar"

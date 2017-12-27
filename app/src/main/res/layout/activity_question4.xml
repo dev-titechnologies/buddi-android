@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:background="#f9f9f9"
     android:layout_height="match_parent"
-    tools:context="buddyapp.com.activity.questions.Question3">
+    tools:context="buddiapp.com.activity.questions.Question3">
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:id="@+id/toolbar"
@@ -58,7 +58,7 @@
               android:layout_height="match_parent"
               android:layout_margin="20dp"
               android:gravity="center">
-             <buddyapp.com.utils.FullHeightListView
+             <buddiapp.com.utils.FullHeightListView
                  android:layout_width="wrap_content"
                  android:id="@+id/sub_list"
                  android:padding="5dp"

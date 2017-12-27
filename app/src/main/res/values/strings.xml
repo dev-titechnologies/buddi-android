@@ -13,6 +13,7 @@
     </string>
 
     <string name="stripe_key">pk_test_66bTUhQFTPY6wY5x2hftqF6l</string>
+    <!--<string name="stripe_key">pk_live_t4T7KNeJHKkLjk2cAUFHWlrb</string>-->
 
 
     /** facebook **/

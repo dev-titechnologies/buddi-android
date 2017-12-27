@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "635834235607-ivk7mbfjvn08pe3c60sam9t33ogmbgli.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "buddyapp.com",
+            "certificate_hash": "0e042c9bd24cee5966df1a28b544e2a7019fdcb6"
+          }
+        },
+        {
+          "client_id": "635834235607-15486u2vf8r6s990fmfa51s6tppu963n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "buddyapp.com",
+            "certificate_hash": "0832c41df8847278ffaba7d3614910f1e28b823d"
+          }
+        },
+        {
           "client_id": "635834235607-474dpuf3po2b46f0rmtibhelm3vqmk7e.apps.googleusercontent.com",
           "client_type": 3
         },
@@ -37,14 +53,6 @@
         {
           "client_id": "635834235607-g4964sbqk8kufbmk5mn3h5otu6oksvc4.apps.googleusercontent.com",
           "client_type": 3
-        },
-        {
-          "client_id": "635834235607-15486u2vf8r6s990fmfa51s6tppu963n.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "buddyapp.com",
-            "certificate_hash": "0832c41df8847278ffaba7d3614910f1e28b823d"
-          }
         }
       ],
       "api_key": [
@@ -59,6 +67,92 @@
         "appinvite_service": {
           "status": 2,
           "other_platform_oauth_client": [
+            {
+              "client_id": "635834235607-ivdilruclgouot5nlodhcvfkbmgpmjop.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.titechnologies.BuddiApp"
+              }
+            },
+            {
+              "client_id": "635834235607-474dpuf3po2b46f0rmtibhelm3vqmk7e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635834235607:android:da482748c6f0f606",
+        "android_client_info": {
+          "package_name": "buddiapp.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "635834235607-th6jqb2vpbi0bv9v1ge0rdu30c1bvued.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "buddiapp.com",
+            "certificate_hash": "cd2967ca67ca05d1d518556d20296191a3e0cc76"
+          }
+        },
+        {
+          "client_id": "635834235607-3th199e75vq43f8836miv6kn2reu2vi9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "buddiapp.com",
+            "certificate_hash": "cd2967ca67ca05d1d518556d20296191a3e0cc77"
+          }
+        },
+        {
+          "client_id": "635834235607-i5bdjsgso3bg4gj8ppndceva36d53g5h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "buddiapp.com",
+            "certificate_hash": "0832c41df8847278ffaba7d3614910f1e28b823d"
+          }
+        },
+        {
+          "client_id": "635834235607-hom73pkccu4rjqg9lod6i87ig0cue9g7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "buddiapp.com",
+            "certificate_hash": "0e042c9bd24cee5966df1a28b544e2a7019fdcb6"
+          }
+        },
+        {
+          "client_id": "635834235607-474dpuf3po2b46f0rmtibhelm3vqmk7e.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "635834235607-g4964sbqk8kufbmk5mn3h5otu6oksvc4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhkDKyuGbbBfGYMtX9OMxSYL4w7WSUV0o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "635834235607-ivdilruclgouot5nlodhcvfkbmgpmjop.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.titechnologies.BuddiApp"
+              }
+            },
             {
               "client_id": "635834235607-474dpuf3po2b46f0rmtibhelm3vqmk7e.apps.googleusercontent.com",
               "client_type": 3
