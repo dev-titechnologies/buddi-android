@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="buddyapp.com.activity.MapTrainee">
+    tools:context="buddiapp.com.activity.MapTrainee">
 
     <fragment
         android:id="@+id/map"
@@ -144,7 +144,7 @@
                     android:orientation="vertical"
                     android:paddingTop="15dp">
 
-                    <buddyapp.com.utils.CircleImageView
+                    <buddiapp.com.utils.CircleImageView
                         android:id="@+id/profileactionIcon"
                         android:layout_width="40dp"
                         android:layout_height="40dp"

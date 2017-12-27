@@ -10,7 +10,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="buddyapp.com.activity.Detail_history">
+    tools:context="buddiapp.com.activity.Detail_history">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -127,7 +127,7 @@
         android:padding="10dp"
         android:background="#d6fbff"
         android:orientation="horizontal">
-        <buddyapp.com.utils.CircleImageView
+        <buddiapp.com.utils.CircleImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginTop="10dp"

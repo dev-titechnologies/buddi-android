@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:layout_margin="@dimen/medium"
 
-    tools:context="buddyapp.com.activity.Payments.AddPayment">
+    tools:context="buddiapp.com.activity.Payments.AddPayment">
 
     <ImageView
         android:layout_width="100dp"

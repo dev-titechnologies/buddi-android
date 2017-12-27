@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/root"
     android:paddingTop="2dp"
-    tools:context="buddyapp.com.activity.ChooseCategory">
+    tools:context="buddiapp.com.activity.ChooseCategory">
 
 <ImageView
     android:layout_width="100dp"

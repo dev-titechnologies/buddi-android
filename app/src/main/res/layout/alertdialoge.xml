@@ -9,7 +9,7 @@
      android:padding="@dimen/medium"
      android:background="@color/white"
      android:orientation="horizontal">
-     <buddyapp.com.utils.CircleImageView
+     <buddiapp.com.utils.CircleImageView
          android:id="@+id/trainerimageView"
          android:layout_width="50dp"
          android:layout_height="50dp"

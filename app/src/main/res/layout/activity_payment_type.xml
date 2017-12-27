@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:id="@+id/root"
     android:background="#f9f9f9"
-    tools:context="buddyapp.com.activity.Payments.PaymentType">
+    tools:context="buddiapp.com.activity.Payments.PaymentType">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

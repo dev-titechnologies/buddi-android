@@ -21,7 +21,7 @@ android:layout_gravity="center"
             android:layout_gravity="center"
             android:paddingTop="25dp"
             android:layout_height="wrap_content">
-        <buddyapp.com.utils.CircleImageView
+        <buddiapp.com.utils.CircleImageView
             android:layout_width="75dp"
             android:layout_margin="@dimen/small"
             android:id="@+id/cat_image"
