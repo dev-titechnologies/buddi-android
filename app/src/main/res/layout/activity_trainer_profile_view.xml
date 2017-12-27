@@ -258,6 +258,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:gravity="center"
                             android:padding="10dp"
                             android:weightSum="6">
 
@@ -275,19 +276,6 @@
                                 android:id="@+id/nav_instagram"
                                 android:src="@mipmap/instagram" />
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:id="@+id/nav_linkedin"
-                                android:src="@mipmap/linkedin" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/nav_snapchat"
-                                android:layout_weight="1"
-                                android:src="@mipmap/sanapchat" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -312,9 +300,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:padding="10dp"
-                                android:id="@+id/web_url"
+                                android:gravity="center"
+                                android:text="buddihelp@buddiapp.tv"
                                 android:background="@color/transparent"
-                                android:hint="Blog or Web URL" />
+                                />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

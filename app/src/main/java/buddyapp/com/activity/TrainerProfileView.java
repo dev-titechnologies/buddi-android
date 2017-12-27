@@ -2,6 +2,7 @@ package buddyapp.com.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -27,11 +28,11 @@ import buddyapp.com.utils.Urls;
 public class TrainerProfileView extends Activity {
     CircleImageView trainerImageView;
     TextView fullname, typeAge, height, weight, gymSubscription, trainingCategory, trainingHistory, coachingHistory, certifications, webUrl;
-    ImageView faceBook, instagram, linkedIn, snapChat, twitter, youTube, back;
+    ImageView faceBook, instagram, twitter, youTube, back;
     String imageurl = "", distance = "", latitude = "", longitude = "", status = "", userId, name, trainerId;
     Alertdialoge pd;
     TextView desc;
-
+    String facebookUrl="", instagramUrl="", twitterUrl="", youtubeUrl="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,11 +47,8 @@ public class TrainerProfileView extends Activity {
         trainingHistory = (TextView) findViewById(R.id.training_history);
         coachingHistory = (TextView) findViewById(R.id.coaching_history);
         certifications = (TextView) findViewById(R.id.certifications);
-        webUrl = (TextView) findViewById(R.id.web_url);
         faceBook = (ImageView) findViewById(R.id.nav_facebook);
         instagram = (ImageView) findViewById(R.id.nav_instagram);
-        linkedIn = (ImageView) findViewById(R.id.nav_linkedin);
-        snapChat = (ImageView) findViewById(R.id.nav_snapchat);
         twitter = (ImageView) findViewById(R.id.nav_twitter);
         youTube = (ImageView) findViewById(R.id.nav_youtube);
         back = (ImageView) findViewById(R.id.back);
@@ -78,6 +76,56 @@ public class TrainerProfileView extends Activity {
         data = intent.getStringExtra("TrainerData");
         if(data.length()>0)*/
         new getProfile().execute();
+
+        faceBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(facebookUrl.length()>5){
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(facebookUrl));
+                startActivity(i);
+                }else{
+                    Toast.makeText(TrainerProfileView.this, "No facebook profile linked", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        instagram.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(instagramUrl.length()>5){
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(instagramUrl));
+                startActivity(i);
+            }else{
+                Toast.makeText(TrainerProfileView.this, "No instagram profile linked", Toast.LENGTH_SHORT).show();
+            }
+            }
+        });
+
+        twitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(twitterUrl.length()>5){
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(twitterUrl));
+                startActivity(i);
+                }else{
+                    Toast.makeText(TrainerProfileView.this, "No twitter profile linked", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        youTube.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(youtubeUrl.length()>5){
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(youtubeUrl));
+                startActivity(i);
+                }else{
+                    Toast.makeText(TrainerProfileView.this, "No youtube profile linked", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 
@@ -167,7 +215,28 @@ public class TrainerProfileView extends Activity {
                     if (jsonObject.getString("weight").equals("null")) {
                         weight.setVisibility(View.GONE);
                     } else
-                        weight.setText(jsonObject.getString("weight"));
+                    {weight.setText(jsonObject.getString("weight"));}
+
+                    if (jsonObject.getJSONObject(Constants.social_media_links).getString("facebook").equals("null")) {
+                        facebookUrl = "";
+                    } else {
+                        facebookUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("facebook");
+                    }
+                    if (jsonObject.getJSONObject(Constants.social_media_links).getString("instagram").equals("null")) {
+                        instagramUrl = "";
+                    } else {
+                        instagramUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("instagram");
+                    }
+                    if (jsonObject.getJSONObject(Constants.social_media_links).getString("twitter").equals("null")) {
+                        twitterUrl = "";
+                    } else {
+                        twitterUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("twitter");
+                    }
+                    if (jsonObject.getJSONObject(Constants.social_media_links).getString("youtube").equals("null")) {
+                        youtubeUrl = "";
+                    } else {
+                        youtubeUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("youtube");
+                    }
 
                     imageurl = jsonObject.getString("user_image");
 

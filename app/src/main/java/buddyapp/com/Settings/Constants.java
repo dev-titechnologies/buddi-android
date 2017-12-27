@@ -64,7 +64,7 @@ public class Constants {
     public static String gym_subscriptions = "gym_subscriptions";
 
     public static String military_installations = "military_installations";
-
+    public static String social_media_links = "social_media_links";
 
     public static String training_exp = "training_exp";
     public static String competed_category = "competed_category";

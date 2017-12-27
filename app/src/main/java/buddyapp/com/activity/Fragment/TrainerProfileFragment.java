@@ -50,6 +50,7 @@ import buddyapp.com.Settings.PreferencesUtils;
 import buddyapp.com.activity.ChooseSpecification;
 import buddyapp.com.activity.ProfileScreen;
 import buddyapp.com.activity.TrainerCategory;
+import buddyapp.com.activity.TrainerProfileView;
 import buddyapp.com.services.LocationService;
 import buddyapp.com.utils.AlertDialoge.RatingDialog;
 import buddyapp.com.utils.CircleImageView;
@@ -67,9 +68,10 @@ import static buddyapp.com.Controller.updateSocket;
  * A simple {@link Fragment} subclass.
  */
 public class TrainerProfileFragment extends Fragment {
-    ImageView facebook, instagram,linkedin,snapchat,twitter,youtube;
+    ImageView facebook, instagram,twitter,youtube;
     CountryCodePicker ccp;
     String smobile;
+    String facebookUrl="", instagramUrl="", twitterUrl="", youtubeUrl="";
     boolean editflag = false;
     private String userChoosenTask;
     boolean isValid = false;
@@ -118,8 +120,6 @@ public class TrainerProfileFragment extends Fragment {
 
         facebook = (ImageView) view.findViewById(R.id.nav_facebook);
         instagram = (ImageView) view.findViewById(R.id.nav_instagram);
-        linkedin = (ImageView) view.findViewById(R.id.nav_linkedin);
-        snapchat = (ImageView) view.findViewById(R.id.nav_snapchat);
         twitter = (ImageView) view.findViewById(R.id.nav_twitter);
         youtube = (ImageView) view.findViewById(R.id.nav_youtube);
 
@@ -186,6 +186,56 @@ public class TrainerProfileFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), TrainerCategory.class);
                 startActivity(intent);
+            }
+        });
+
+        facebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(facebookUrl.length()>5){
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(facebookUrl));
+                    startActivity(i);
+                }else{
+                    Toast.makeText(getActivity(), "No facebook profile linked", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        instagram.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(instagramUrl.length()>5){
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(instagramUrl));
+                    startActivity(i);
+                }else{
+                    Toast.makeText(getActivity(), "No instagram profile linked", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        twitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(twitterUrl.length()>5){
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(twitterUrl));
+                    startActivity(i);
+                }else{
+                    Toast.makeText(getActivity(), "No twitter profile linked", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        youtube.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(youtubeUrl.length()>5){
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(youtubeUrl));
+                    startActivity(i);
+                }else{
+                    Toast.makeText(getActivity(), "No youtube profile linked", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -332,7 +382,28 @@ public class TrainerProfileFragment extends Fragment {
                         weight.setVisibility(View.GONE);
                     }else
                     { weight.setVisibility(View.VISIBLE);
-                        weight.setText(jsonObject.getString("weight"));}
+                        weight.setText(jsonObject.getString("weight"));
+                    }if (jsonObject.getJSONObject(Constants.social_media_links).getString("facebook").equals("null")) {
+                        facebookUrl = "";
+                    } else {
+                        facebookUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("facebook");
+                    }
+                    if (jsonObject.getJSONObject(Constants.social_media_links).getString("instagram").equals("null")) {
+                        instagramUrl = "";
+                    } else {
+                        instagramUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("instagram");
+                    }
+                    if (jsonObject.getJSONObject(Constants.social_media_links).getString("twitter").equals("null")) {
+                        twitterUrl = "";
+                    } else {
+                        twitterUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("twitter");
+                    }
+                    if (jsonObject.getJSONObject(Constants.social_media_links).getString("youtube").equals("null")) {
+                        youtubeUrl = "";
+                    } else {
+                        youtubeUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("youtube");
+                    }
+
                     loadProfile();
 
                 } else if (obj.getInt(Constants.status) == 2) {

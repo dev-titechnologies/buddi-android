@@ -52,18 +52,19 @@ import buddyapp.com.utils.Utility;
 
 public class ProfileScreen extends AppCompatActivity {
     CountryCodePicker ccp;
+    JSONObject socialMediaLinks = new JSONObject();
     String smobile;
     boolean editflag = false;
     private String userChoosenTask;
     boolean isValid = false;
     Uri image_uri;
-    ImageView facebook, instagram, linkedin, snapchat, twitter, youtube;
+    ImageView facebook, instagram, twitter, youtube;
     EditText rbmale;
     EditText firstName, lastName, eMail, password, mobile;
     CircleImageView userImageView, trainerImageView;
     LinearLayout trainerCategory, placeLayout, imageTrainer, imageUser;
     String semail, sfname, slname, sgender = "", scountrycode, spassword, sfacebookId = "", sgoogleplusId = "";
-    String register_type = "normal", facebookUrl, snapchatUrl, instagramUrl, linkedinUrl, twitterUrl, youtubeUrl;
+    String register_type = "normal", facebookUrl="", instagramUrl="", twitterUrl="", youtubeUrl="";
     private PopupMenu popupMenu;
     String user_image;
     private static final int CAMERA_REQUEST = 1888;
@@ -107,8 +108,6 @@ public class ProfileScreen extends AppCompatActivity {
 
         facebook = (ImageView) findViewById(R.id.nav_facebook);
         instagram = (ImageView) findViewById(R.id.nav_instagram);
-        linkedin = (ImageView) findViewById(R.id.nav_linkedin);
-        snapchat = (ImageView) findViewById(R.id.nav_snapchat);
         twitter = (ImageView) findViewById(R.id.nav_twitter);
         youtube = (ImageView) findViewById(R.id.nav_youtube);
 
@@ -131,6 +130,7 @@ public class ProfileScreen extends AppCompatActivity {
         loadProfile();
 
         new getProfile().execute();
+
 
         category.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,73 +181,31 @@ public class ProfileScreen extends AppCompatActivity {
         facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialogpop("Enter or paste your facebook link", "facebook");
-                facebooktask();
+                    showDialogpop("Enter or paste your facebook link", "facebook", facebookUrl);
+
             }
         });
         instagram.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialogpop("Enter or paste your instagram link", "instagram");
-                instagramtask();
+                showDialogpop("Enter or paste your instagram link", "instagram", instagramUrl);
             }
         });
-        linkedin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialogpop("Enter or paste your linkedin link", "linkedin");
-                linkedintask();
-            }
-        });
-        snapchat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialogpop("Enter or paste your snapchat link", "snapchat");
-                snapchattask();
-            }
-        });
+
         twitter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialogpop("Enter or paste your twitter link", "twitter");
-                twittertask();
+                showDialogpop("Enter or paste your twitter link", "twitter", twitterUrl);
             }
         });
         youtube.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialogpop("Enter or paste your youtube link", "youtube");
-
+                showDialogpop("Enter or paste your youtube link", "youtube", youtubeUrl);
             }
         });
     }
 
-    private void youtubetask() {
-        new SocialMediaURLAlertDialog(ProfileScreen.this, "youtube");
-    }
-
-    private void twittertask() {
-        new SocialMediaURLAlertDialog(ProfileScreen.this, "twitter");
-
-    }
-
-    private void snapchattask() {
-        new SocialMediaURLAlertDialog(ProfileScreen.this, "snapchat");
-    }
-
-    private void linkedintask() {
-        new SocialMediaURLAlertDialog(ProfileScreen.this, "linkedin");
-    }
-
-    private void instagramtask() {
-        new SocialMediaURLAlertDialog(ProfileScreen.this, "instagram");
-        instagramUrl = "https://www.instagram.com/" + instagramusername;
-    }
-
-    private void facebooktask() {
-        new SocialMediaURLAlertDialog(ProfileScreen.this, "facebook");
-        facebookUrl = "https://www.facebook.com/" + fbusername;
-    }
 
     private void galleryIntent() {
                 /*Intent i = new Intent(
@@ -364,7 +322,13 @@ public class ProfileScreen extends AppCompatActivity {
         firstName.setEnabled(true);
         ccp.setCcpClickable(true);
         lastName.setEnabled(true);
+        facebook.setEnabled(true);
+        twitter.setEnabled(true);
+        instagram.setEnabled(true);
+        youtube.setEnabled(true);
         eMail.setEnabled(false);
+
+
 //        password.setEnabled(false);
 
 //        mobile.setEnabled(true);
@@ -377,6 +341,11 @@ public class ProfileScreen extends AppCompatActivity {
 
     // loading profile from db
     private void loadProfile() {
+
+        facebook.setEnabled(false);
+        twitter.setEnabled(false);
+        instagram.setEnabled(false);
+        youtube.setEnabled(false);
 
         firstName.setEnabled(false);
         ccp.setCcpClickable(false);
@@ -492,37 +461,25 @@ public class ProfileScreen extends AppCompatActivity {
                         } else {
                             weight.setText(jsonObject.getString("weight"));
                         }
-                        if (jsonObject.getString("facebook_url").equals("null")) {
+                        if (jsonObject.getJSONObject(Constants.social_media_links).getString("facebook").equals("null")) {
                             facebookUrl = "";
                         } else {
-                            facebookUrl = jsonObject.getString("facebook_url");
+                            facebookUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("facebook");
                         }
-                        if (jsonObject.getString("instagram_url").equals("null")) {
+                        if (jsonObject.getJSONObject(Constants.social_media_links).getString("instagram").equals("null")) {
                             instagramUrl = "";
                         } else {
-                            instagramUrl = jsonObject.getString("instagram_url");
+                            instagramUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("instagram");
                         }
-                        if (jsonObject.getString("linkedin_url").equals("null")) {
-                            linkedinUrl = "";
-                        } else {
-                            linkedinUrl = jsonObject.getString("linkedin_url");
-                        }
-
-                        if (jsonObject.getString("snapchat_url").equals("null")) {
-                            snapchatUrl = "";
-                        } else {
-                            snapchatUrl = jsonObject.getString("snapchat_url");
-                        }
-
-                        if (jsonObject.getString("twitter_url").equals("null")) {
+                        if (jsonObject.getJSONObject(Constants.social_media_links).getString("twitter").equals("null")) {
                             twitterUrl = "";
                         } else {
-                            twitterUrl = jsonObject.getString("twitter_url");
+                            twitterUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("twitter");
                         }
-                        if (jsonObject.getString("youtube_url").equals("null")) {
+                        if (jsonObject.getJSONObject(Constants.social_media_links).getString("youtube").equals("null")) {
                             youtubeUrl = "";
                         } else {
-                            youtubeUrl = jsonObject.getString("youtube_url");
+                            youtubeUrl = jsonObject.getJSONObject(Constants.social_media_links).getString("youtube");
                         }
 
                         PreferencesUtils.saveData(Constants.category_submitted, obj.getJSONArray("category_submitted").toString(), getApplicationContext());
@@ -559,11 +516,18 @@ public class ProfileScreen extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             try {
+
+                socialMediaLinks.put("facebook", facebookUrl);
+                socialMediaLinks.put("instagram", instagramUrl);
+                socialMediaLinks.put("youtube", youtubeUrl);
+                socialMediaLinks.put("twitter", twitterUrl);
+
                 reqData.put("first_name", sfname);
                 reqData.put("last_name", slname);
                 reqData.put("mobile", smobile);
                 reqData.put("gender", sgender);
                 reqData.put("user_image", user_image);
+                reqData.put("social_media_links", socialMediaLinks);
                 reqData.put("user_type", PreferencesUtils.getData(Constants.user_type, getApplicationContext(), ""));
                 reqData.put(Constants.user_id, PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
                 reqData.put("profile_desc", "Description");
@@ -580,6 +544,7 @@ public class ProfileScreen extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            CommonCall.hideLoader();
             try {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
@@ -590,6 +555,7 @@ public class ProfileScreen extends AppCompatActivity {
                     PreferencesUtils.saveData(Constants.user_image, jsonObject.getString(Constants.user_image), getApplicationContext());
                     PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
                     PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.social_media_links, jsonObject.getString(Constants.social_media_links),getApplicationContext());
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -905,8 +871,9 @@ public class ProfileScreen extends AppCompatActivity {
         }
     }
 
-    public void showDialogpop(String dialog_title, final String from) {
+    public void showDialogpop(String dialog_title, final String from, String surl) {
         String title = dialog_title;
+        String sUrl = surl;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
 
@@ -915,7 +882,25 @@ public class ProfileScreen extends AppCompatActivity {
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
+        if(sUrl.length()>5){
+            input.setText(sUrl);
+            input.setEnabled(false);
+            builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    input.setEnabled(true);
+                }
+            });
+        }else{
+            input.setEnabled(true);
 
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+        }
 // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -926,37 +911,25 @@ public class ProfileScreen extends AppCompatActivity {
 
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
         builder.show();
     }
+
 
     /********************* saving social media url  **********/
     public void savedata(String text, String from) {
         switch (from) {
             case "facebook":
-                fbusername = text;
+                facebookUrl = text;
                 Log.e("youtube url", text);
                 break;
             case "instagram":
-                instagramusername = text;
-                break;
-            case "snapchat":
-                snapchatusername = text;
-                break;
-            case "linkedin":
-                linkedinusername = text;
+                instagramUrl = text;
                 break;
             case "twitter":
-                twitterusername = text;
+                twitterUrl = text;
                 break;
             case "youtube":
-                youtubeusername = text;
+                youtubeUrl = text;
                 Log.e("youtube url", text);
                 break;
             default:
