@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.multidex.MultiDexApplication;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -36,7 +37,7 @@ import io.socket.emitter.Emitter;
 import static buddiapp.com.utils.Urls.BASEURL;
 
 
-public class Controller extends Application {
+public class Controller extends MultiDexApplication {
     private static Context context;
     private static Controller mInstance;
     public static Socket mSocket;
