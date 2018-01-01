@@ -135,7 +135,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     CommonCall.postTwitter("I have booked a "+data.getString("training_time")+" Minutes "
                             + db.getCatName(data.getString("cat_id")) +" training session with "+data.getJSONObject("trainer_details").getString("trainer_first_name")+
                             " "+data.getJSONObject("trainer_details").getString("trainer_last_name")+" at "+
-                            data.getJSONObject("trainer_details").getString("pick_location"));
+                            data.getString("pick_location"));
                     CommonCall.PrintLog("tweet","Success");
                 }
                 if(PreferencesUtils.getData(Constants.facebookShare, getApplicationContext(),"").equals("true")){
