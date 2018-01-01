@@ -2,14 +2,14 @@ package buddiapp.com.utils;
 
 
 /**
- * Created by root on 19/7/17.
+ * Created by ajay on 19/7/17.
  */
 
 public class Urls {
 
-  public static String BASEURL = "http://git.titechnologies.in:4001";
+//  public static String BASEURL = "http://git.titechnologies.in:4001";
 
-//  public static String BASEURL = "http://buddiapi.buddiadmin.com";
+  public static String BASEURL = "http://buddiapi.buddiadmin.com";
 
 
 //  public static String BASEURL = "http://192.168.1.66:9002";
@@ -17,7 +17,7 @@ public class Urls {
 //  public static String BASEURL= "http://192.168.1.20:9002";
 
 
-    public static String terms = "http://design.titechnologies.in/1015_buddy/html/termsofuse.html";
+    public static String terms = "http://buddimedia.com/termsofuse.html";
 
 
     public static String listCardinStripe = "/payment/listCardinStripe";
