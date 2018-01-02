@@ -427,7 +427,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
                 }
 
-
+                reqData.put("signature", PreferencesUtils.getData(Constants.signature,getApplicationContext(),""));
                 reqData.put("training_time", duration);
                 reqData.put("pick_latitude", pick_latitude);
                 reqData.put("pick_longitude", pick_longitude);

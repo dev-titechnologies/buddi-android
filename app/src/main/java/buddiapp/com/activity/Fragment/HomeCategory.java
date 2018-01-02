@@ -257,6 +257,11 @@ public class HomeCategory extends Fragment {
                         signature.setError("Please provide signature");
                     }
                 } else {
+
+                    PreferencesUtils.saveData(Constants.signature,PreferencesUtils.getData(Constants.fname,getApplicationContext(),"")
+
+                                    +" "+PreferencesUtils.getData(Constants.lname,getActivity(),"")
+                            ,getActivity());
                     dialog.dismiss();
                     releaseForm = true;
                     instantBooking.performClick();

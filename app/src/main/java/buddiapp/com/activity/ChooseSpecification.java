@@ -677,6 +677,13 @@ public class ChooseSpecification extends AppCompatActivity {
                    signature.setError("Please provide signature");
                    }
                 } else {
+
+                    PreferencesUtils.saveData(Constants.signature,PreferencesUtils.getData(Constants.fname,getApplicationContext(),"")
+
+                            +" "+PreferencesUtils.getData(Constants.lname,getApplicationContext(),"")
+                            ,getApplicationContext());
+
+
                     dialog.dismiss();
                     releaseForm = true;
                     next.performClick();
