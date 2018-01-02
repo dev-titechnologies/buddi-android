@@ -238,6 +238,7 @@ public class HomeCategory extends Fragment {
                     signature.setVisibility(View.VISIBLE);
                     yes.setText("Accept as parent/Guardian");
                 }else{
+                    yes.setText("Accept");
                     signature.setVisibility(View.GONE);
                 }
             }
