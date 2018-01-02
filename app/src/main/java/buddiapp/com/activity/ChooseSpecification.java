@@ -1,6 +1,7 @@
 package buddiapp.com.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
@@ -11,11 +12,18 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -58,7 +66,7 @@ public class ChooseSpecification extends AppCompatActivity {
     LocationManager mLocationManager;
     double longitude, latitude, mlongitude, mlatitude;
 
-
+    Boolean releaseForm = false;
     FrameLayout root;
 
     @Override
@@ -293,8 +301,11 @@ public class ChooseSpecification extends AppCompatActivity {
 
                                         if (sessionDuration > 0) {
                                             if (latitude > 0.0) {
-
+                                            if(releaseForm){
                                                 new getPendingPayments().execute();
+                                            }else{
+                                            showReleseFormAlert();      
+                                            }
 
                                             } else {
                                                 Toast.makeText(getApplicationContext(), "Please check your GPS connection", Toast.LENGTH_SHORT).show();
@@ -621,5 +632,68 @@ public class ChooseSpecification extends AppCompatActivity {
         return true;
     }
 
+    public void showReleseFormAlert() {
+        final Dialog dialog = new Dialog(ChooseSpecification.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // Include dialog.xml file
+        dialog.setContentView(R.layout.custom_dialog_releaseform);
+        // Set dialog title
+        dialog.setTitle("Custom Dialog");
 
+        // set values for custom dialog components - text, image and button
+        final EditText signature = (EditText) dialog.findViewById(R.id.signature);
+
+
+        dialog.show();
+
+        Button declineButton = (Button) dialog.findViewById(R.id.deny);
+        Button yes = (Button) dialog.findViewById(R.id.accept);
+        final CheckBox checkBox = dialog.findViewById(R.id.check_box);
+        // if decline button is clicked, close the custom dialog
+
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    signature.setVisibility(View.VISIBLE);
+                }else{
+                    signature.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (checkBox.isChecked()) {
+                   if(signature.getText().length()>0) {
+                       dialog.dismiss();
+                       releaseForm = true;
+                       PreferencesUtils.saveData(Constants.signature,signature.getText().toString(),getApplicationContext());
+                       next.performClick();
+                   }else{
+                   signature.setError("Please provide signature");
+                   }
+                } else {
+                    dialog.dismiss();
+                    releaseForm = true;
+                    next.performClick();
+                }
+
+
+            }
+        });
+        declineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                Toast.makeText(ChooseSpecification.this, "You must accept the Waiver Release Form to book a session!", Toast.LENGTH_SHORT).show();
+                releaseForm = false;
+                dialog.dismiss();
+
+            }
+        });
+    }
 }

@@ -70,7 +70,7 @@ public class Constants {
     public static String competed_category = "competed_category";
     public static String coached_anybody = "coached_anybody";
     public static String certified_trainer = "certified_trainer";
-
+    public static String signature = "signature";
 
     public static JSONObject questionData = new JSONObject();
 
