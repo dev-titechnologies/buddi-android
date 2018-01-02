@@ -251,6 +251,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"
+        android:visibility="gone"
         android:id="@+id/socialMedia_preference"
         android:drawableRight="@drawable/ic_right_arrow"
         android:text="Social Media Auto Share"/>

@@ -800,20 +800,20 @@ public class CommonCall {
     public static void postFacebook(String msg){
 
 
-        if (AccessToken.getCurrentAccessToken()!=null) {
-
-            Bundle parameters = new Bundle();
-            parameters.putString("message", msg);
-            new GraphRequest(
-                    AccessToken.getCurrentAccessToken(), "/me/feed", parameters, HttpMethod.POST,
-                    new GraphRequest.Callback() {
-                        public void onCompleted(GraphResponse response) {
-                            Log.e("resr", response.toString());
-                        }
-                    }
-            ).executeAsync();
-
-        }
+//        if (AccessToken.getCurrentAccessToken()!=null) {
+//
+//            Bundle parameters = new Bundle();
+//            parameters.putString("message", msg);
+//            new GraphRequest(
+//                    AccessToken.getCurrentAccessToken(), "/me/feed", parameters, HttpMethod.POST,
+//                    new GraphRequest.Callback() {
+//                        public void onCompleted(GraphResponse response) {
+//                            Log.e("resr", response.toString());
+//                        }
+//                    }
+//            ).executeAsync();
+//
+//        }
 
 
 
@@ -821,27 +821,27 @@ public class CommonCall {
 
 
 public static void postTwitter(String msg){
-    TwitterSession twitterSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
-
-
-    if(twitterSession!=null) {
-        TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
-        StatusesService statusesService = twitterApiClient.getStatusesService();
-        Call<Tweet> call = statusesService.update(msg, null, null, null, null, null, null, null, null);
-        call.enqueue(new Callback<Tweet>() {
-            @Override
-            public void success(Result<Tweet> result) {
-                //Do something with result
-                Log.e("Result ", "Done");
-            }
-
-            public void failure(TwitterException exception) {
-                //Do something on failure
-
-                Log.e("test ", "exception" + exception.getMessage());
-            }
-        });
-    }
+//    TwitterSession twitterSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
+//
+//
+//    if(twitterSession!=null) {
+//        TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
+//        StatusesService statusesService = twitterApiClient.getStatusesService();
+//        Call<Tweet> call = statusesService.update(msg, null, null, null, null, null, null, null, null);
+//        call.enqueue(new Callback<Tweet>() {
+//            @Override
+//            public void success(Result<Tweet> result) {
+//                //Do something with result
+//                Log.e("Result ", "Done");
+//            }
+//
+//            public void failure(TwitterException exception) {
+//                //Do something on failure
+//
+//                Log.e("test ", "exception" + exception.getMessage());
+//            }
+//        });
+//    }
 }
     public static class extendSession extends AsyncTask<String, String, String> {
 

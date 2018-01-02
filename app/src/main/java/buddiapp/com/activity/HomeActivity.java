@@ -162,7 +162,7 @@ public class HomeActivity extends AppCompatActivity
         }
 
 
-       /* if (PreferencesUtils.getData(user_type, getApplicationContext(), "").equals("trainer")) {
+     if (PreferencesUtils.getData(user_type, getApplicationContext(), "").equals("trainer")) {
 
 
             menu.findItem(R.id.nav_settings).setVisible(false);
@@ -171,7 +171,7 @@ public class HomeActivity extends AppCompatActivity
 
             menu.findItem(R.id.nav_settings).setVisible(true);
 
-        }*/
+        }
 
 
         userImageView = (CircleImageView) hView.findViewById(R.id.userImageView);
