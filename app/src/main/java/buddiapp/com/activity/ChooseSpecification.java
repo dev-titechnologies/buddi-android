@@ -647,7 +647,7 @@ public class ChooseSpecification extends AppCompatActivity {
         dialog.show();
 
         Button declineButton = (Button) dialog.findViewById(R.id.deny);
-        Button yes = (Button) dialog.findViewById(R.id.accept);
+        final Button yes = (Button) dialog.findViewById(R.id.accept);
         final CheckBox checkBox = dialog.findViewById(R.id.check_box);
         // if decline button is clicked, close the custom dialog
 
@@ -657,6 +657,7 @@ public class ChooseSpecification extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
                     signature.setVisibility(View.VISIBLE);
+                    yes.setText("Accept as parent/Guardian");
                 }else{
                     signature.setVisibility(View.GONE);
                 }
