@@ -102,6 +102,6 @@
     <string name="com.twitter.sdk.android.CONSUMER_KEY">caJSdofGAha6GijAVY20TdhVy</string>
     <string name="com.twitter.sdk.android.CONSUMER_SECRET">dPeLY2CiFEct3mpBwl53eUqqla2fExnLYi558GymRLPdcjiEek</string>
 
-
+    <string name="release_form_text">I HAVE READ THIS RELEASE OF LIABILITY AND ASSUMPTION OF <a href="http://google.com/">RISK AGREEMENT</a></string>
 
 </resources>

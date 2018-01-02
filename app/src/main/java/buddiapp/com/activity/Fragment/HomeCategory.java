@@ -1,6 +1,7 @@
 package buddiapp.com.activity.Fragment;
 
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,7 +11,11 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,7 +54,7 @@ public class HomeCategory extends Fragment {
     public static ArrayList<String> cat_selectedID = new ArrayList<>();
     RatingDialog ratingDialog;
     ImageView errorImage;
-
+    Boolean releaseForm=false;
     public HomeCategory() {
         // Required empty public constructor
     }
@@ -111,7 +116,11 @@ public class HomeCategory extends Fragment {
                         Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
 
                     } else {
+                        if(releaseForm){
                         new SearchTrainer().execute();
+                        }else{
+                            showReleseFormAlert();
+                        }
                     }
 
                 } else {
@@ -200,6 +209,72 @@ public class HomeCategory extends Fragment {
 
 
         }
+    }
+
+    public void showReleseFormAlert() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // Include dialog.xml file
+        dialog.setContentView(R.layout.custom_dialog_releaseform);
+        // Set dialog title
+        dialog.setTitle("Custom Dialog");
+
+        // set values for custom dialog components - text, image and button
+        final EditText signature = (EditText) dialog.findViewById(R.id.signature);
+
+
+        dialog.show();
+
+        Button declineButton = (Button) dialog.findViewById(R.id.deny);
+        Button yes = (Button) dialog.findViewById(R.id.accept);
+        final CheckBox checkBox = dialog.findViewById(R.id.check_box);
+        // if decline button is clicked, close the custom dialog
+
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    signature.setVisibility(View.VISIBLE);
+                }else{
+                    signature.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (checkBox.isChecked()) {
+                    if(signature.getText().length()>0) {
+                        dialog.dismiss();
+                        releaseForm = true;
+                        PreferencesUtils.saveData(Constants.signature,signature.getText().toString(),getActivity());
+                        instantBooking.performClick();
+
+                    }else{
+                        signature.setError("Please provide signature");
+                    }
+                } else {
+                    dialog.dismiss();
+                    releaseForm = true;
+                    instantBooking.performClick();
+                }
+
+
+            }
+        });
+        declineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                Toast.makeText(getActivity(), "You must accept the Waiver Release Form to book a session!", Toast.LENGTH_SHORT).show();
+                releaseForm = false;
+                dialog.dismiss();
+
+            }
+        });
     }
 
     class SearchTrainer extends AsyncTask<String, String, String> {
