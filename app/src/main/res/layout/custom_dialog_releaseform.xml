@@ -1,68 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_weight="1"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="match_parent" >
 
-
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/textDialog"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/medium"
-        android:text="Waiver/Release"
         android:gravity="center"
         android:padding="@dimen/medium"
-        android:layout_height="wrap_content"
+        android:text="Waiver/Release"
 
         />
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/medium"
-    android:layout_marginRight="@dimen/medium"
-    android:text="@string/release_form_text"/>
-<CheckBox
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/check_box"
-    android:layout_marginTop="@dimen/small"
-    android:layout_marginBottom="@dimen/medium"
-    android:layout_marginLeft="@dimen/small"
-    android:text="Under 18 age"/>
-    <EditText
+
+    <TextView
+        android:id="@+id/content_text"
         android:layout_width="match_parent"
-        android:id="@+id/signature"
-        android:visibility="gone"
-        android:hint="Parent/Guardian Signature"
-        android:layout_margin="@dimen/medium"
-        android:maxLines="2"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/medium"
+        android:layout_marginRight="@dimen/medium"
+        android:text="@string/release_form_text" />
+    <TextView
+        android:id="@+id/content_text1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+
+        android:layout_marginLeft="@dimen/medium"
+        android:layout_marginRight="@dimen/medium"
+        android:text="@string/release_form_text1" />
+    <TextView
+        android:id="@+id/content_text2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+android:textStyle="bold"
+
+        android:layout_marginLeft="@dimen/medium"
+        android:layout_marginRight="@dimen/medium"
+        android:text="@string/release_form_text2" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_height="wrap_content">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/participant_signature"
+            android:singleLine="true"
+            android:hint="Participant’s Signature"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Date"
+            android:id="@+id/date1"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/root_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/content_text3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:textStyle="bold"
+android:gravity="center"
+        android:layout_marginLeft="@dimen/medium"
+        android:layout_marginRight="@dimen/medium"
+        android:text="@string/release_form_text3" />
+    <TextView
+        android:id="@+id/content_text4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+
+        android:layout_marginLeft="@dimen/medium"
+        android:layout_marginRight="@dimen/medium"
+        android:text="@string/release_form_text4" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/parents_signature"
+            android:singleLine="true"
+            android:hint="Parent/Guardian Signature"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="Date"
+            android:id="@+id/date2"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    </LinearLayout>
+    <CheckBox
+        android:id="@+id/check_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/medium"
+        android:layout_marginLeft="@dimen/small"
+        android:layout_marginTop="@dimen/small"
+        android:text="Under 18 age" />
+
+    <EditText
+        android:id="@+id/signature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium"
+        android:hint="Parent/Guardian Signature"
+        android:maxLines="2"
+        android:visibility="gone" />
+</LinearLayout>
+</ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
         <Button
             android:id="@+id/accept"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:textColor="@color/white"
-            android:layout_height="wrap_content"
             android:text="Accept"
+            android:textColor="@color/white"
 
 
             />
 
         <Button
             android:id="@+id/deny"
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="1dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1"
             android:background="@color/grey"
             android:text="Deny"
-            android:textColor="@color/white"
-            android:layout_weight="1"
-            />
+            android:textColor="@color/white" />
     </LinearLayout>
+
 </LinearLayout>
