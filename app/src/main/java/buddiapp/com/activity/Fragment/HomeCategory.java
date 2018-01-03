@@ -236,7 +236,7 @@ public class HomeCategory extends Fragment {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
                     signature.setVisibility(View.VISIBLE);
-                    yes.setText("Accept as parent/Guardian");
+                    yes.setText("Accept as Parent/Guardian");
                 }else{
                     yes.setText("Accept");
                     signature.setVisibility(View.GONE);
@@ -260,7 +260,7 @@ public class HomeCategory extends Fragment {
                     }
                 } else {
 
-                    PreferencesUtils.saveData(Constants.signature,PreferencesUtils.getData(Constants.fname,getApplicationContext(),"")
+                    PreferencesUtils.saveData(Constants.signature,PreferencesUtils.getData(Constants.fname,getActivity(),"")
 
                                     +" "+PreferencesUtils.getData(Constants.lname,getActivity(),"")
                             ,getActivity());

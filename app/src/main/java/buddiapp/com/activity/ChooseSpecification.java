@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -642,7 +644,13 @@ public class ChooseSpecification extends AppCompatActivity {
 
         // set values for custom dialog components - text, image and button
         final EditText signature = (EditText) dialog.findViewById(R.id.signature);
+              TextView contentText = dialog.findViewById(R.id.content_text);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            contentText.setText(Html.fromHtml(getApplicationContext().getString(R.string.release_form_text), Html.FROM_HTML_MODE_COMPACT));
+        }else{
+            contentText.setText(Html.fromHtml(getApplicationContext().getString(R.string.release_form_text)));
+        }
 
         dialog.show();
 
@@ -657,7 +665,7 @@ public class ChooseSpecification extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
                     signature.setVisibility(View.VISIBLE);
-                    yes.setText("Accept as parent/Guardian");
+                    yes.setText("Accept as Parent/Guardian");
                 }else{
                     yes.setText("Accept");
                     signature.setVisibility(View.GONE);
