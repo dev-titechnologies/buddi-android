@@ -61,6 +61,8 @@ public class Constants {
 
     public static String zipcode = "zipcode";
 
+    public static String age = "age";
+
     public static String gym_subscriptions = "gym_subscriptions";
 
     public static String military_installations = "military_installations";
@@ -71,6 +73,8 @@ public class Constants {
     public static String coached_anybody = "coached_anybody";
     public static String certified_trainer = "certified_trainer";
     public static String signature = "signature";
+    public static String participant_signature = "participant_signature";
+    public static String parent_signature = "parent_signature";
 
     public static JSONObject questionData = new JSONObject();
 

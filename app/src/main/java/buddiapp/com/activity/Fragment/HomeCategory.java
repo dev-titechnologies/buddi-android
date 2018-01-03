@@ -20,13 +20,16 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import buddiapp.com.R;
 import buddiapp.com.Settings.Constants;
@@ -220,56 +223,51 @@ public class HomeCategory extends Fragment {
         dialog.setTitle("Custom Dialog");
 
         // set values for custom dialog components - text, image and button
-        final EditText signature = (EditText) dialog.findViewById(R.id.signature);
-
-
         dialog.show();
 
         Button declineButton = (Button) dialog.findViewById(R.id.deny);
         final Button yes = (Button) dialog.findViewById(R.id.accept);
-        final CheckBox checkBox = dialog.findViewById(R.id.check_box);
+        final EditText participantSignature = dialog.findViewById(R.id.participant_signature);
+        final EditText parentSignature = dialog.findViewById(R.id.parents_signature);
+        final LinearLayout rootParent = dialog.findViewById(R.id.root_parent);
+        TextView date1 = dialog.findViewById(R.id.date1);
+        TextView date2 = dialog.findViewById(R.id.date2);
+
+        date1.setText(DateFormat.getDateTimeInstance().format(new Date()));
+        date2.setText(DateFormat.getDateTimeInstance().format(new Date()));
         // if decline button is clicked, close the custom dialog
 
+        if(Integer.parseInt(PreferencesUtils.getData(Constants.age, getActivity(),""))<18){
+            rootParent.setVisibility(View.VISIBLE);
+        }
 
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                    signature.setVisibility(View.VISIBLE);
-                    yes.setText("Accept as Parent/Guardian");
-                }else{
-                    yes.setText("Accept");
-                    signature.setVisibility(View.GONE);
-                }
-            }
-        });
 
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (checkBox.isChecked()) {
-                    if(signature.getText().length()>0) {
+                if (Integer.parseInt(PreferencesUtils.getData(Constants.age,getActivity(),""))<18) {
+                    if(participantSignature.getText().length()>0 && parentSignature.getText().length()>0) {
                         dialog.dismiss();
                         releaseForm = true;
-                        PreferencesUtils.saveData(Constants.signature,signature.getText().toString(),getActivity());
-                        instantBooking.performClick();
-
+                        PreferencesUtils.saveData(Constants.participant_signature,participantSignature.getText().toString(),getActivity());
+                        PreferencesUtils.saveData(Constants.parent_signature,parentSignature.getText().toString(),getActivity());
+                        next.performClick();
                     }else{
-                        signature.setError("Please provide signature");
+                        if(participantSignature.getText().length()>0)
+                            parentSignature.setError("Please provide Parent signature");
+                        else
+                            participantSignature.setError("Please provide Participant signature");
                     }
                 } else {
 
-                    PreferencesUtils.saveData(Constants.signature,PreferencesUtils.getData(Constants.fname,getActivity(),"")
-
-                                    +" "+PreferencesUtils.getData(Constants.lname,getActivity(),"")
-                            ,getActivity());
+                    PreferencesUtils.saveData(Constants.participant_signature,participantSignature.getText().toString(),getActivity());
                     dialog.dismiss();
                     releaseForm = true;
-                    instantBooking.performClick();
+                    next.performClick();
                 }
 
-.
+
             }
         });
         declineButton.setOnClickListener(new View.OnClickListener() {

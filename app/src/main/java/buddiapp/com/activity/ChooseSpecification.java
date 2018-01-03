@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.common.Common;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -43,6 +44,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import buddiapp.com.R;
 import buddiapp.com.Settings.Constants;
@@ -643,57 +648,45 @@ public class ChooseSpecification extends AppCompatActivity {
         dialog.setTitle("Custom Dialog");
 
         // set values for custom dialog components - text, image and button
-        final EditText signature = (EditText) dialog.findViewById(R.id.signature);
-              TextView contentText = dialog.findViewById(R.id.content_text);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            contentText.setText(Html.fromHtml(getApplicationContext().getString(R.string.release_form_text), Html.FROM_HTML_MODE_COMPACT));
-        }else{
-            contentText.setText(Html.fromHtml(getApplicationContext().getString(R.string.release_form_text)));
-        }
-
         dialog.show();
 
         Button declineButton = (Button) dialog.findViewById(R.id.deny);
         final Button yes = (Button) dialog.findViewById(R.id.accept);
-        final CheckBox checkBox = dialog.findViewById(R.id.check_box);
+        final EditText participantSignature = dialog.findViewById(R.id.participant_signature);
+        final EditText parentSignature = dialog.findViewById(R.id.parents_signature);
+        final LinearLayout rootParent = dialog.findViewById(R.id.root_parent);
+        TextView date1 = dialog.findViewById(R.id.date1);
+        TextView date2 = dialog.findViewById(R.id.date2);
+
+        date1.setText(DateFormat.getDateTimeInstance().format(new Date()));
+        date2.setText(DateFormat.getDateTimeInstance().format(new Date()));
         // if decline button is clicked, close the custom dialog
 
+        if(Integer.parseInt(PreferencesUtils.getData(Constants.age, getApplicationContext(),""))<18){
+            rootParent.setVisibility(View.VISIBLE);
+        }
 
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                    signature.setVisibility(View.VISIBLE);
-                    yes.setText("Accept as Parent/Guardian");
-                }else{
-                    yes.setText("Accept");
-                    signature.setVisibility(View.GONE);
-                }
-            }
-        });
 
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (checkBox.isChecked()) {
-                   if(signature.getText().length()>0) {
+                if (Integer.parseInt(PreferencesUtils.getData(Constants.age,getApplicationContext(),""))<18) {
+                   if(participantSignature.getText().length()>0 && parentSignature.getText().length()>0) {
                        dialog.dismiss();
                        releaseForm = true;
-                       PreferencesUtils.saveData(Constants.signature,signature.getText().toString(),getApplicationContext());
+                       PreferencesUtils.saveData(Constants.participant_signature,participantSignature.getText().toString(),getApplicationContext());
+                       PreferencesUtils.saveData(Constants.parent_signature,parentSignature.getText().toString(),getApplicationContext());
                        next.performClick();
                    }else{
-                   signature.setError("Please provide signature");
+                       if(participantSignature.getText().length()>0)
+                           parentSignature.setError("Please provide Parent signature");
+                       else
+                           participantSignature.setError("Please provide Participant signature");
                    }
                 } else {
 
-                    PreferencesUtils.saveData(Constants.signature,PreferencesUtils.getData(Constants.fname,getApplicationContext(),"")
-
-                            +" "+PreferencesUtils.getData(Constants.lname,getApplicationContext(),"")
-                            ,getApplicationContext());
-
-
+                    PreferencesUtils.saveData(Constants.participant_signature,participantSignature.getText().toString(),getApplicationContext());
                     dialog.dismiss();
                     releaseForm = true;
                     next.performClick();
