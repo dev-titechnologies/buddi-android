@@ -226,6 +226,9 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                     System.err.println("NumberParseException was thrown: " + e.toString());
                 }
                 if (validateFeelds()) {
+                    PreferencesUtils.saveData(Constants.age, age.getText().toString(), getApplicationContext());
+
+
                     if (CommonCall.isNetworkAvailable())
                         new sendOtp().execute();
                     else {

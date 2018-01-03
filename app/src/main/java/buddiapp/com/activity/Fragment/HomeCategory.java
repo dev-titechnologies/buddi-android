@@ -237,7 +237,7 @@ public class HomeCategory extends Fragment {
         date2.setText(DateFormat.getDateTimeInstance().format(new Date()));
         // if decline button is clicked, close the custom dialog
 
-        if(Integer.parseInt(PreferencesUtils.getData(Constants.age, getActivity(),""))<18){
+        if(Integer.parseInt(PreferencesUtils.getData(Constants.age, getActivity(),"0"))<18){
             rootParent.setVisibility(View.VISIBLE);
         }
 
