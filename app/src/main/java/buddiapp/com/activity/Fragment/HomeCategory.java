@@ -260,7 +260,7 @@ public class HomeCategory extends Fragment {
                     }
                 } else {
 
-                    PreferencesUtils.saveData(Constants.signature,PreferencesUtils.getData(Constants.fname,getApplicationContext(),"")
+                    PreferencesUtils.saveData(Constants.signature,PreferencesUtils.getData(Constants.fname,getActivity(),"")
 
                                     +" "+PreferencesUtils.getData(Constants.lname,getActivity(),"")
                             ,getActivity());
@@ -269,7 +269,7 @@ public class HomeCategory extends Fragment {
                     instantBooking.performClick();
                 }
 
-
+.
             }
         });
         declineButton.setOnClickListener(new View.OnClickListener() {
