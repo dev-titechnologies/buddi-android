@@ -7,12 +7,12 @@ package buddiapp.com.utils;
 
 public class Urls {
 
-//  public static String BASEURL = "http://git.titechnologies.in:4001";
+  public static String BASEURL = "http://git.titechnologies.in:4001";
 
-  public static String BASEURL = "http://buddiapi.buddiadmin.com";
+//  public static String BASEURL = "http://buddiapi.buddiadmin.com";
 
 
-//  public static String BASEURL = "http://192.168.1.66:9002";
+//  public static String BASEURL = "http://192.168.1.60:9002";
 
 //  public static String BASEURL= "http://192.168.1.20:9002";
 

@@ -663,6 +663,10 @@ public class ChooseSpecification extends AppCompatActivity {
         // if decline button is clicked, close the custom dialog
 
 
+        if(Integer.parseInt(PreferencesUtils.getData(Constants.age, getApplicationContext(),"0"))<18){
+            rootParent.setVisibility(View.VISIBLE);
+        }
+//
 
         yes.setOnClickListener(new View.OnClickListener() {
             @Override

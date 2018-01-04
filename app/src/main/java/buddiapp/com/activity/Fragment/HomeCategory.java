@@ -237,7 +237,7 @@ public class HomeCategory extends Fragment {
         date2.setText(DateFormat.getDateTimeInstance().format(new Date()));
         // if decline button is clicked, close the custom dialog
 
-        if(Integer.parseInt(PreferencesUtils.getData(Constants.age, getActivity(),""))<18){
+        if(Integer.parseInt(PreferencesUtils.getData(Constants.age, getActivity(),"0"))<18){
             rootParent.setVisibility(View.VISIBLE);
         }
 
@@ -266,8 +266,6 @@ public class HomeCategory extends Fragment {
                     releaseForm = true;
                     next.performClick();
                 }
-
-
             }
         });
         declineButton.setOnClickListener(new View.OnClickListener() {
@@ -315,7 +313,7 @@ public class HomeCategory extends Fragment {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
                     JSONArray jsonArray = obj.getJSONArray("data");
-                    if (jsonArray.length() != 0) {
+                     if (jsonArray.length() != 0) {
                         PreferencesUtils.saveData("searchArray", obj.getJSONArray("data").toString(), getActivity());
                         PreferencesUtils.saveData(Constants.instant_booking, "true", getActivity());
 

@@ -334,6 +334,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                     PreferencesUtils.saveData(Constants.gender, jsonObject.getString(Constants.gender), getApplicationContext());
                     PreferencesUtils.saveData(Constants.mobile, jsonObject.getString(Constants.mobile), getApplicationContext());
                     PreferencesUtils.saveData(Constants.trainer_type, jsonObject.getString(Constants.trainer_type), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.age, jsonObject.getString(Constants.age), getApplicationContext());
 
 
                     if (!PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee")) {
