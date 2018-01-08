@@ -386,6 +386,8 @@ public class TrainerProfileFragment extends Fragment {
                         weight.setText(jsonObject.getString("weight"));
                     }
 
+
+                    loadProfile();
                     JSONArray jsonArray = new JSONArray(jsonObject.getString("social_media_links"));
                     JSONObject jsonObject1 = new JSONObject(String.valueOf(jsonArray.getJSONObject(0)));
 
@@ -411,7 +413,7 @@ public class TrainerProfileFragment extends Fragment {
                         youtubeUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube");
                     }
 
-                    loadProfile();
+
 
                 } else if (obj.getInt(Constants.status) == 2) {
                     Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
@@ -474,7 +476,7 @@ public class TrainerProfileFragment extends Fragment {
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
-                        public void run() {
+                        public void run         () {
 
                             loadProfile();
 
