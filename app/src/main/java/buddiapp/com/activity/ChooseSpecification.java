@@ -693,7 +693,6 @@ public class ChooseSpecification extends AppCompatActivity {
                     next.performClick();
                 }
 
-
             }
         });
         declineButton.setOnClickListener(new View.OnClickListener() {
