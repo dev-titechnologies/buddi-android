@@ -112,7 +112,9 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                         if (PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "").length() == 0) {
 
                             intPayment();
-                        } else {
+                        } else
+
+                            {
 
                             new RandomSelect().execute();
                         }
@@ -157,7 +159,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
         {
 
 
-            if (PreferencesUtils.getData(Constants.clientToken, getApplicationContext(), "").length() == 0) {
+            if (PreferencesUtils.getData(Constants.clientToken, getApplicationContext(), "").length() == 0 && PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "").length() == 0) {
 
                 Intent payment = new Intent(getApplicationContext(), PaymentType.class);
                 payment.putExtra("result", true);
@@ -216,9 +218,9 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
                         builder.setCancelable(false);
                         if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals("40") && duration.equals("60"))
-                            builder.setMessage("You've already been paid for a 40 minutes session. If you proceed, 1 hour session amount will be deducted. Would you like to continue with 1 hour session ?");
+                            builder.setMessage("Hey! You've already been paid for a 40 minutes session. We know you want to change your session duration, but before you do, please complete the original session you booked. Don’t worry, we’re working on this issue as you’re reading this now, and you’ll soon be able to change session durations at will!");
                         else
-                            builder.setMessage("You've already been paid for a 1 hour session. If you proceed, 40 minutes session amount will be deducted. Would you like to continue with 40 minute session ?");
+                            builder.setMessage("Hey! You've already been paid for a 1 hour session. We know you want to change your session duration, but before you do, please complete the original session you booked. Don’t worry, we’re working on this issue as you’re reading this now, and you’ll soon be able to change session durations at will!");
 
 
                         builder.setTitle("Warning!")
@@ -227,11 +229,12 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         // continue  with delete
-                                        avi.setVisibility(View.VISIBLE);
+                                      /*  avi.setVisibility(View.VISIBLE);
 
 
-                                        new checkout(MapTrainee.this, nounce).execute();
-
+                                        new checkout(MapTrainee.this, nounce).execute();*/
+                                        avi.setVisibility(View.GONE);
+                                        onBackPressed();
 
                                     }
                                 })
@@ -250,8 +253,12 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
                 } else {
 
-
+            if (PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "").length() != 0)
+                new RandomSelect().execute();
+                else
                     new checkout(MapTrainee.this, nounce).execute();
+
+
                 }
 
 
@@ -355,7 +362,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
         mapRipple.withStrokeColor(Color.BLACK);
         mapRipple.withStrokewidth(1);      // 10dp
         mapRipple.withDistance(300);      // 2000 metres radius
-        mapRipple.withRippleDuration(5000);    //12000ms
+//        mapRipple.withRippleDuration(5000);    //12000ms
         mapRipple.withTransparency(0.9f);
         mapRipple.startRippleMapAnimation();
 

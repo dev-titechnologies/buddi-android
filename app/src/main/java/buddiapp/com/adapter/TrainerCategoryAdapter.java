@@ -103,7 +103,8 @@ public class TrainerCategoryAdapter extends BaseAdapter {
             }else{
 
 
-                if (PreferencesUtils.getData(Constants.user_type,context,"").equals("trainer")) {
+//                if (PreferencesUtils.getData(Constants.user_type,context,"").equals("trainer"))
+                {
                     String text = catItem.getString("category_name") + "<font color=#FF0000>" + ("\n (Pending)") + "</font>";
                     holder.catName.setText(Html.fromHtml(text));
                     (holder.cat_card).setCardBackgroundColor(context.getResources().getColor(R.color.white));

@@ -169,6 +169,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 PreferencesUtils.saveData(start_session, "false", Controller.getAppContext());
 
+                PreferencesUtils.saveData("cancel_dialog","true", Controller.getAppContext());
 
                 Intent resultIntent = new Intent(getApplicationContext(), HomeCategory.class);
                 resultIntent.putExtra("message", "");

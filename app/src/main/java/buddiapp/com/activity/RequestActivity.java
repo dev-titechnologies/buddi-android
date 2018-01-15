@@ -31,7 +31,7 @@ import static buddiapp.com.Settings.Constants.trainee_Data;
 public class RequestActivity extends AppCompatActivity {
     JSONObject sessionData;
     TextView title;
-
+    String category_name = "";
     Button accept, reject;
 
     @Override
@@ -42,7 +42,7 @@ public class RequestActivity extends AppCompatActivity {
         long delayInMilliseconds = 30000;
         h.postDelayed(new Runnable() {
             public void run() {
-
+                NotificationUtils.clearNotifications(getApplicationContext());
                 finish();
             }
         }, delayInMilliseconds);
@@ -62,6 +62,8 @@ public class RequestActivity extends AppCompatActivity {
 
         try {
             sessionData = new JSONObject(getIntent().getStringExtra("message"));
+            if(sessionData.has("category_name")){
+            category_name = sessionData.getString("category_name");}
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -140,14 +142,14 @@ public class RequestActivity extends AppCompatActivity {
 
                         if(PreferencesUtils.getData(Constants.twitterShare, getApplicationContext(),"").equals("true")){
                             CommonCall.postTwitter("I have booked a "+jsonObject.getString("training_time")+" Minutes "
-                                    + db.getCatName(jsonObject.getString("cat_id")) +" training session with "+jsonObject.getJSONObject("trainee_details").getString("trainee_first_name")+
+                                    + category_name +" training session with "+jsonObject.getJSONObject("trainee_details").getString("trainee_first_name")+
                                     " "+jsonObject.getJSONObject("trainee_details").getString("trainee_last_name")+" at "+
                                     jsonObject.getString("pick_location"));
                             CommonCall.PrintLog("tweet","Success");
                         }
                         if(PreferencesUtils.getData(Constants.facebookShare, getApplicationContext(),"").equals("true")){
                             CommonCall.postFacebook("I have booked a "+jsonObject.getString("training_time")+" Minutes "
-                                    + db.getCatName(jsonObject.getString("cat_id")) +" training session with "+jsonObject.getJSONObject("trainee_details").getString("trainee_first_name")+
+                                    + category_name +" training session with "+jsonObject.getJSONObject("trainee_details").getString("trainee_first_name")+
                                     " "+jsonObject.getJSONObject("trainee_details").getString("trainee_last_name")+" at "+
                                     jsonObject.getString("pick_location"));
                             CommonCall.PrintLog("fbshare","Success");

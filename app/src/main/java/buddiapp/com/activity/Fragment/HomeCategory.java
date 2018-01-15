@@ -2,11 +2,13 @@ package buddiapp.com.activity.Fragment;
 
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,10 +85,34 @@ public class HomeCategory extends Fragment {
         } else {
             new getCategoryList().execute();
         }
-        if (PreferencesUtils.getData(Constants.flag_rating, getActivity(), "").equals("true")) {
-            PreferencesUtils.saveData(Constants.flag_rating, "false", getActivity());
-            ratingDialog = new RatingDialog(getActivity());
-            ratingDialog.show();
+
+        if(PreferencesUtils.getData("cancel_dialog",getActivity(),"false").equals("true")){
+            PreferencesUtils.saveData("cancel_dialog","false",getActivity());
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setMessage("We apologize, but it seems that your Trainer is no longer connected to " +
+                    "the session! He/she may have been abducted by an alien or just simply lost " +
+                    "connection (hopefully the latter), so please try to book your session again!");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+//                            alert.dismiss();
+                            if (PreferencesUtils.getData(Constants.flag_rating, getActivity(), "").equals("true")) {
+                                PreferencesUtils.saveData(Constants.flag_rating, "false", getActivity());
+                                ratingDialog = new RatingDialog(getActivity());
+                                ratingDialog.show();
+                            }
+                        }
+                    });
+            final AlertDialog alert = builder.create();
+            alert.show();
+        }else {
+            if (PreferencesUtils.getData(Constants.flag_rating, getActivity(), "").equals("true")) {
+                PreferencesUtils.saveData(Constants.flag_rating, "false", getActivity());
+                ratingDialog = new RatingDialog(getActivity());
+                ratingDialog.show();
+            }
         }
 
         next.setOnClickListener(new View.OnClickListener() {
@@ -237,7 +263,7 @@ public class HomeCategory extends Fragment {
         date2.setText(DateFormat.getDateTimeInstance().format(new Date()));
         // if decline button is clicked, close the custom dialog
 
-        if(Integer.parseInt(PreferencesUtils.getData(Constants.age, getActivity(),"0"))<18){
+        if(!PreferencesUtils.getData(Constants.age, getActivity(),"0").equals("null") &&Integer.parseInt(PreferencesUtils.getData(Constants.age, getActivity(),"0"))<18){
             rootParent.setVisibility(View.VISIBLE);
         }
 
@@ -246,13 +272,13 @@ public class HomeCategory extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if (Integer.parseInt(PreferencesUtils.getData(Constants.age,getActivity(),""))<18) {
+                if (!PreferencesUtils.getData(Constants.age, getActivity(),"0").equals("null") &&Integer.parseInt(PreferencesUtils.getData(Constants.age,getActivity(),""))<18) {
                     if(participantSignature.getText().length()>0 && parentSignature.getText().length()>0) {
                         dialog.dismiss();
                         releaseForm = true;
                         PreferencesUtils.saveData(Constants.participant_signature,participantSignature.getText().toString(),getActivity());
                         PreferencesUtils.saveData(Constants.parent_signature,parentSignature.getText().toString(),getActivity());
-                        next.performClick();
+                        instantBooking.performClick();
                     }else{
                         if(participantSignature.getText().length()>0)
                             parentSignature.setError("Please provide Parent signature");
@@ -261,10 +287,14 @@ public class HomeCategory extends Fragment {
                     }
                 } else {
 
+                    if(participantSignature.getText().length()>0){
                     PreferencesUtils.saveData(Constants.participant_signature,participantSignature.getText().toString(),getActivity());
                     dialog.dismiss();
                     releaseForm = true;
-                    next.performClick();
+                    instantBooking.performClick();
+                    }else{
+                        Toast.makeText(getActivity(), "Please provide participant signature", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

@@ -111,6 +111,7 @@ public class Splash extends AppCompatActivity {
             resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             startActivity(resultIntent);
+            finish();
         } else
             new Timer().schedule(new TimerTask() {
                 @Override
