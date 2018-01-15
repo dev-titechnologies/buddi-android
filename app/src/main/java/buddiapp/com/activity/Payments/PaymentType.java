@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import org.json.JSONObject;
 import buddiapp.com.R;
 import buddiapp.com.Settings.Constants;
 import buddiapp.com.Settings.PreferencesUtils;
+import buddiapp.com.adapter.CardListAdapter;
 import buddiapp.com.utils.CommonCall;
 import buddiapp.com.utils.NetworkCalls;
 import buddiapp.com.utils.Urls;
@@ -33,12 +35,15 @@ import buddiapp.com.utils.Urls;
 
 public class PaymentType extends AppCompatActivity {
     LinearLayout root;
-    CardView addPayment, credit_card, promocodeView;
+    CardView addPayment, promocodeView; //credit_card
+String defaultCard_id = "";
     final int REQUEST_CODE = 1;
     TextView credit_card_text, applyPromo, promoText;
     EditText promocode;
-    ImageView payment_image;
+//    ImageView payment_image;
     Button done;
+    ListView cardList;
+    CardListAdapter cardListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +54,15 @@ public class PaymentType extends AppCompatActivity {
         applyPromo = (TextView) findViewById(R.id.applyPromo);
         promocode = (EditText) findViewById(R.id.promocode);
         addPayment = (CardView) findViewById(R.id.addPayment);
-        credit_card = (CardView) findViewById(R.id.credit_card);
+//        credit_card = (CardView) findViewById(R.id.credit_card);
 
         promocodeView = (CardView) findViewById(R.id.promocode_view);
-        payment_image = (ImageView) findViewById(R.id.payment_image);
+//        payment_image = (ImageView) findViewById(R.id.payment_image);
         done = (Button) findViewById(R.id.done);
-        credit_card_text = (TextView) findViewById(R.id.credit_card_text);
+//        credit_card_text = (TextView) findViewById(R.id.credit_card_text);
 
         promoText = (TextView) findViewById(R.id.promocode_text);
-
+        cardList = findViewById(R.id.card_list_view);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -104,6 +109,20 @@ public class PaymentType extends AppCompatActivity {
         if (PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "").length() > 0) {
             promoText.setText("Applied Promocode : " + PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), ""));
             promocodeView.setVisibility(View.VISIBLE);
+
+            if(getIntent().hasExtra("result")) {
+//
+////ForResult
+//                /*
+//*
+//* going back to map screen
+//*
+//* */
+//
+                setResult(RESULT_OK, new Intent());
+                finish();
+            }
+
 
         } else {
 
@@ -156,6 +175,20 @@ public class PaymentType extends AppCompatActivity {
                     PreferencesUtils.saveData(Constants.promo_code, response.getJSONObject("data").getString("code"), getApplicationContext());
 
                     showPromocode();
+
+                    if(getIntent().hasExtra("result")) {
+//
+////ForResult
+//                /*
+//*
+//* going back to map screen
+//*
+//* */
+//
+                        setResult(RESULT_OK, new Intent());
+                        finish();
+                    }
+
                 } else if (response.getInt(Constants.status) == 2) {
 
                     Snackbar snackbar = Snackbar
@@ -400,18 +433,20 @@ public class PaymentType extends AppCompatActivity {
 
                     JSONArray cards = response.getJSONArray("data");
 
-
-
-
-if (cards.length()==0){
-credit_card.setVisibility(View.GONE);
-
-}else{
-    credit_card_text.setText(
+        if (cards.length()==0){
+//            if(credit_card.isShown()){
+//                credit_card.setVisibility(View.GONE);
+//            }
+            PreferencesUtils.saveData(Constants.clientToken,"",getApplicationContext());
+        }else{
+            /*credit_card_text.setText(
             cards.getJSONObject(0).getString("brand")+" Ending with "+
 
-                    cards.getJSONObject(0).getString("last4"));
+                    cards.getJSONObject(0).getString("last4"));*/
 
+            cardListAdapter = new CardListAdapter(cards, PaymentType.this);
+            cardList.setAdapter(cardListAdapter);
+            cardList.setScrollContainer(false);
 
 PreferencesUtils.saveData(Constants.clientToken,"cardsaved",getApplicationContext());
 //    addPayment.setVisibility(View.GONE);
@@ -463,6 +498,45 @@ PreferencesUtils.saveData(Constants.clientToken,"cardsaved",getApplicationContex
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public class findDefaultCard extends AsyncTask<String, String, String> {
+        String response1;
+        JSONObject jsonObject = new JSONObject();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            CommonCall.showLoader(PaymentType.this);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            response1 = NetworkCalls.POST(Urls.getFindDefaultCardURL(),"");
+            return response1;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            CommonCall.hideLoader();
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                if(jsonObject.getInt("status")==1){
+                    defaultCard_id = jsonObject.getString("default_source");
+                }else if(jsonObject.getInt("status")==2){
+                    Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                }else if(jsonObject.getInt("status")==3){
+                    Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    CommonCall.sessionout(getApplicationContext());
+                }else{
+                    Toast.makeText(getApplicationContext(), "Something went wrong!", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                CommonCall.hideLoader();
+                e.printStackTrace();
+            }
+
         }
     }
 }

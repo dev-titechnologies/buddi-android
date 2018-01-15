@@ -662,7 +662,8 @@ public class ChooseSpecification extends AppCompatActivity {
         date2.setText(DateFormat.getDateTimeInstance().format(new Date()));
         // if decline button is clicked, close the custom dialog
 
-        if(Integer.parseInt(PreferencesUtils.getData(Constants.age, getApplicationContext(),"0"))<18){
+
+        if(!PreferencesUtils.getData(Constants.age, getApplicationContext(),"0").equals("null") && Integer.parseInt(PreferencesUtils.getData(Constants.age, getApplicationContext(),"0"))<18){
             rootParent.setVisibility(View.VISIBLE);
         }
 //
@@ -671,7 +672,7 @@ public class ChooseSpecification extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (Integer.parseInt(PreferencesUtils.getData(Constants.age,getApplicationContext(),""))<18) {
+                if (!PreferencesUtils.getData(Constants.age, getApplicationContext(),"0").equals("null") && Integer.parseInt(PreferencesUtils.getData(Constants.age,getApplicationContext(),""))<18) {
                    if(participantSignature.getText().length()>0 && parentSignature.getText().length()>0) {
                        dialog.dismiss();
                        releaseForm = true;
@@ -685,14 +686,15 @@ public class ChooseSpecification extends AppCompatActivity {
                            participantSignature.setError("Please provide Participant signature");
                    }
                 } else {
-
+                    if(participantSignature.getText().length()>0){
                     PreferencesUtils.saveData(Constants.participant_signature,participantSignature.getText().toString(),getApplicationContext());
                     dialog.dismiss();
                     releaseForm = true;
                     next.performClick();
+                    }else{
+                        Toast.makeText(getApplicationContext(), "Please provide participant signature", Toast.LENGTH_SHORT).show();
+                    }
                 }
-
-
             }
         });
         declineButton.setOnClickListener(new View.OnClickListener() {

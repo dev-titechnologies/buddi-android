@@ -117,24 +117,49 @@ public class TrainerProfileFragment extends Fragment {
         fullname = (TextView) view.findViewById(R.id.fullname);
         typeAge = (TextView) view.findViewById(R.id.type_age);
         height = (TextView) view.findViewById(R.id.height);
-        weight = (TextView) view.findViewById(R.id.weight);
+        weight = view.findViewById(R.id.weight);
 
-        facebook = (ImageView) view.findViewById(R.id.nav_facebook);
-        instagram = (ImageView) view.findViewById(R.id.nav_instagram);
-        twitter = (ImageView) view.findViewById(R.id.nav_twitter);
-        youtube = (ImageView) view.findViewById(R.id.nav_youtube);
+        facebook = view.findViewById(R.id.nav_facebook);
+        instagram = view.findViewById(R.id.nav_instagram);
+        twitter = view.findViewById(R.id.nav_twitter);
+        youtube = view.findViewById(R.id.nav_youtube);
 
         category = (TextView) view.findViewById(R.id.category);
 
 
-        trainerCategory = (LinearLayout) view.findViewById(R.id.trainer_category);
-        placeLayout = (LinearLayout) view.findViewById(R.id.place_layout);
-        trainerImageView = (CircleImageView) view.findViewById(R.id.trainerimageView);
-        imageTrainer = (LinearLayout) view.findViewById(R.id.image_trainer); // Trainer profile image View layout
+        trainerCategory = view.findViewById(R.id.trainer_category);
+        placeLayout = view.findViewById(R.id.place_layout);
+        trainerImageView = view.findViewById(R.id.trainerimageView);
+        imageTrainer = view.findViewById(R.id.image_trainer); // Trainer profile image View layout
+
+
+        if(PreferencesUtils.getData("cancel_dialog",getActivity(),"false").equals("true")){
+            PreferencesUtils.saveData("cancel_dialog","false",getActivity());
+
+            final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+
+            builder.setMessage("We apologize, but it seems that your Trainee is no longer connected to " +
+                    "the session! He/she may have been abducted by an alien or just simply lost " +
+                    "connection (hopefully the latter), so please try to book your session again!");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+//                            alert.dismiss();
+                    if(PreferencesUtils.getData(Constants.flag_rating,getActivity(),"false").equals("true")){
+                        PreferencesUtils.saveData(Constants.flag_rating, "false", getActivity());
+                        ratingDialog = new RatingDialog(getActivity());
+                        ratingDialog.show();
+                    }
+                }
+            });
+            final android.support.v7.app.AlertDialog alert = builder.create();
+            alert.show();
+        }else {
         if(PreferencesUtils.getData(Constants.flag_rating,getActivity(),"false").equals("true")){
             PreferencesUtils.saveData(Constants.flag_rating,"false",getActivity());
             ratingDialog = new RatingDialog(getActivity());
             ratingDialog.show();
+        }
         }
 
   if (  PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {

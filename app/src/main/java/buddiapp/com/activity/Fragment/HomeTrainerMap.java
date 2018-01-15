@@ -287,7 +287,7 @@ public class HomeTrainerMap extends Fragment implements OnMapReadyCallback, Goog
         mapRipple.withStrokeColor(Color.BLACK);
         mapRipple.withStrokewidth(1);      // 10dp
         mapRipple.withDistance(1000);      // 2000 metres radius
-        mapRipple.withRippleDuration(5000);    //12000ms
+//        mapRipple.withRippleDuration(5000);    //12000ms
         mapRipple.withTransparency(0.5f);
         mapRipple.startRippleMapAnimation();
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usercamera, 12));

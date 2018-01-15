@@ -27,11 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.CallbackManager;
-import com.facebook.FacebookSdk;
-import com.facebook.internal.CallbackManagerImpl;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,7 +56,6 @@ import static buddiapp.com.Settings.Constants.source_become_trainer;
 import static buddiapp.com.Settings.Constants.start_session;
 import static buddiapp.com.Settings.Constants.trainee_Data;
 import static buddiapp.com.Settings.Constants.trainer_Data;
-import static buddiapp.com.Settings.Constants.user_id;
 import static buddiapp.com.Settings.Constants.user_type;
 
 public class HomeActivity extends AppCompatActivity

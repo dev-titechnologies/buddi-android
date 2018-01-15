@@ -8,6 +8,15 @@
     android:id="@+id/root"
     android:background="#f9f9f9"
     tools:context="buddiapp.com.activity.Payments.PaymentType">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:nestedScrollingEnabled="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -94,50 +103,17 @@
             android:text="SELECT PAYMENT MODE"
             android:layout_margin="@dimen/large"
             android:textAllCaps="true"/>
-
-        <android.support.v7.widget.CardView
+        <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="@dimen/medium"
-            android:id="@+id/credit_card"
-            android:layout_marginLeft="@dimen/large"
-            android:layout_marginRight="@dimen/large"
-            android:layout_marginBottom="@dimen/large">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/medium"
+            android:visibility="visible"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/medium"
+            android:layout_marginRight="@dimen/medium"
+            android:nestedScrollingEnabled="true"
+            android:id="@+id/card_list_view">
 
-                 android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_credit_card"
-android:visibility="visible"
-
-                    android:id="@+id/payment_image" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:drawablePadding="@dimen/medium"
-                    android:id="@+id/credit_card_text"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/small"
-                    android:layout_weight="1"
-                    android:text="Loading..."
-                    android:layout_toLeftOf="@+id/imageView"
-                    android:layout_toRightOf="@+id/payment_image"
-                    android:layout_toEndOf="@+id/payment_image" />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_tick"
-                    android:visibility="visible"
-                    android:layout_alignParentRight="true"
-                    android:id="@+id/imageView" />
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
+        </ListView>
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -145,6 +121,7 @@ android:visibility="visible"
             android:elevation="@dimen/medium"
             android:onClick="addPayment"
             android:id="@+id/addPayment"
+            android:layout_marginTop="@dimen/medium"
             android:layout_marginLeft="@dimen/large"
             android:layout_marginRight="@dimen/large"
             android:layout_marginBottom="@dimen/large">
@@ -180,4 +157,6 @@ android:visibility="visible"
             android:background="@drawable/round_corner_button"/>
 
     </RelativeLayout>
+    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

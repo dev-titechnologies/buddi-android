@@ -55,7 +55,7 @@ import buddiapp.com.utils.Urls;
 
 public class RegisterScreen extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     TextView next, check_terms_text;
-    String semail, sfname, slname, sgender = "", scountrycode, smobilenumber, validnumber, spassword, sfacebookId = "", sgoogleplusId = "", sage, sweight, sheight;
+    String semail, sfname, slname, sgender = "", scountrycode, smobilenumber, validnumber, spassword, sfacebookId = "", sgoogleplusId = "", sage, sweight="", sheight="";
     String register_type = "normal";
     ImageView Google, facebook;
     String user_image = "";
@@ -71,7 +71,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
     RadioGroup rg;
     RadioButton rbmale, rbfemale;
     CheckBox check_termsconditions;
-    EditText firstName, lastName, eMail, password, mobile, age, height, weight;
+    EditText firstName, lastName, eMail, password, mobile, age, height_feet, height_inch, weight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +127,8 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         heightLayout = (LinearLayout) findViewById(R.id.height_layout);
 
         age = (EditText) findViewById(R.id.age);
-        height = (EditText) findViewById(R.id.height);
+        height_feet = (EditText) findViewById(R.id.height_feet);
+        height_inch = (EditText) findViewById(R.id.height_inch);
         weight = (EditText) findViewById(R.id.weight);
 
         Intent intent = getIntent();
@@ -309,9 +310,14 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
             focusView = age;
             focusView.requestFocus();
             return false;
-        } else if (height.getText().length() == 0) {
-            height.setError("Please enter your height");
-            focusView = height;
+        } else if (height_feet.getText().length() == 0) {
+            height_feet.setError("Please enter your height in feet");
+            focusView = height_feet;
+            focusView.requestFocus();
+            return false;
+        } else if (height_inch.getText().length() == 0) {
+            height_inch.setError("Please enter your height in inches");
+            focusView = height_inch;
             focusView.requestFocus();
             return false;
         } else if (weight.getText().length() == 0) {
@@ -333,7 +339,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
             spassword = password.getText().toString();
             sage = age.getText().toString();
             sweight = weight.getText().toString();
-            sheight = height.getText().toString();
+            sheight = height_feet.getText().toString() +"'"+height_inch.getText().toString()+"''";
 
             return true;
         }

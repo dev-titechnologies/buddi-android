@@ -7,9 +7,9 @@ package buddiapp.com.utils;
 
 public class Urls {
 
-//  public static String BASEURL = "http://git.titechnologies.in:4001";
+  public static String BASEURL = "http://git.titechnologies.in:4001";
 
-  public static String BASEURL = "http://buddiapi.buddiadmin.com";
+//  public static String BASEURL = "http://buddiapi.buddiadmin.com";
 
 
 //  public static String BASEURL = "http://192.168.1.60:9002";
@@ -74,12 +74,31 @@ public class Urls {
 
     public static String pendingBooking = "/booking/pendingBooking";
 
-
     public static String updateStripeAcc = "/payment/updateStripeAcc";
+
+    public static String removeStripeCard = "/payment/removeCardtoStripe";
+
+    public static String defaultStripeCard = "/payment/updateCardtoStripe";
+
+    public static String findDefaultCard ="/payment/findDefaultCard";
+
+    public static String getFindDefaultCardURL() {
+         return BASEURL + defaultStripeCard;
+    }
+
+    public static String getDefaultStripeCardURL() {
+
+        return BASEURL + defaultStripeCard;
+    }
+
+    public static String getRemoveStripeCardURL() {
+
+        return BASEURL + removeStripeCard;
+    }
 
     public static String getupdateStripeAccURL() {
 
-        return BASEURL + updateStripeAcc;
+        return BASEURL + removeStripeCard;
     }
 
 
