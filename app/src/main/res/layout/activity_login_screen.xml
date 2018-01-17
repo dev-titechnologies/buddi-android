@@ -102,7 +102,7 @@
                     android:id="@+id/email"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"
-                    android:maxLength="30"
+                    android:maxLength="40"
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <LinearLayout

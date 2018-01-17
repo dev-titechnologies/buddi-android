@@ -68,6 +68,7 @@ import buddiapp.com.R;
 import buddiapp.com.Settings.Constants;
 import buddiapp.com.Settings.PreferencesUtils;
 import buddiapp.com.activity.chat.ChatActivity;
+import buddiapp.com.fcm.NotificationUtils;
 import buddiapp.com.services.GPSTracker;
 import buddiapp.com.services.LocationService;
 import buddiapp.com.timmer.Timer_Service;
@@ -126,7 +127,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         actionBar.setTitle("Training Session");
 
         intstartStop();
-
+        NotificationUtils.clearNotifications(getApplicationContext());
 
 // check if GPS enabled
 
@@ -200,6 +201,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 PreferencesUtils.saveData(Constants.trainer_name, name, getApplicationContext());
                 if (trainerDetail.getString("trainer_user_image").length() > 1) {
                     PreferencesUtils.saveData(Constants.trainer_image, trainerDetail.getString("trainer_user_image"), getApplicationContext());
+                }else{
+                    PreferencesUtils.saveData(Constants.trainer_image, "", getApplicationContext());
                 }
 
                 updateSocket();
@@ -226,19 +229,22 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             e.printStackTrace();
         }
 
-        camera = new LatLng(latitude, longitude);
+        if(latitude == null || longitude == null){
+            Toast.makeText(getApplicationContext(), "Please check your device Gps connection", Toast.LENGTH_SHORT).show();
+        }else {
+            camera = new LatLng(latitude, longitude);
 
-        mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+            mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
 //        if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 //
 //            buildAlertMessageNoGps();
 //
 //        }
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 100, this);
-        origin = usercamera;
-        dest = camera;
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 100, this);
+            origin = usercamera;
+            dest = camera;
 
-
+        }
 
 //        LoadmapTask();
 
@@ -318,6 +324,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                                 switch (which) {
                                     case DialogInterface.BUTTON_POSITIVE:
                                         //Yes button clicked
+                                        PreferencesUtils.saveData("stopped_s","true",getApplicationContext());
                                         PreferencesUtils.saveData(Constants.flag_rating, "true", getApplicationContext());
                                         stopAction();
 
@@ -339,7 +346,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
                 } else {
-                    Toast.makeText(gps, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -417,8 +424,13 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (PreferencesUtils.getData(Constants.timerstarted, getApplicationContext(), "false").equals("true")) {
+
+                }else{
                 Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                 startActivity(intent);
+                }
+
             }
         });
     }
@@ -1427,6 +1439,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
 
+                    PreferencesUtils.saveData("stopped_s","true",getApplicationContext());
 
                     if (training_time == 40) {
 

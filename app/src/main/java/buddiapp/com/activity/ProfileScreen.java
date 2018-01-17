@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -37,7 +39,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -102,7 +107,6 @@ public class ProfileScreen extends AppCompatActivity {
         category = (TextView) findViewById(R.id.category);
         userImageView = (CircleImageView) findViewById(R.id.userimageView);
         trainerCategory = (LinearLayout) findViewById(R.id.trainer_category);
-        placeLayout = (LinearLayout) findViewById(R.id.place_layout);
         trainerImageView = (CircleImageView) findViewById(R.id.trainerimageView);
         imageTrainer = (LinearLayout) findViewById(R.id.image_trainer); // Trainer profile image View layout
         imageUser = (LinearLayout) findViewById(R.id.image_user); // user profile image View layout
@@ -118,14 +122,14 @@ public class ProfileScreen extends AppCompatActivity {
             trainerCategory.setVisibility(View.VISIBLE);
             imageUser.setVisibility(View.GONE);
             CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), trainerImageView, R.drawable.ic_account, R.drawable.ic_account);
-            placeLayout.setVisibility(View.GONE);
+
             imageTrainer.setVisibility(View.VISIBLE);
         } else {
             imageUser.setVisibility(View.VISIBLE);
             trainerCategory.setVisibility(View.GONE);
             CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView, R.drawable.ic_account, R.drawable.ic_account);
             trainerCategory.setVisibility(View.GONE);
-            placeLayout.setVisibility(View.VISIBLE);
+
         }
         // load profile --->
         loadProfile();
@@ -462,32 +466,35 @@ public class ProfileScreen extends AppCompatActivity {
                         } else {
                             weight.setText(jsonObject.getString("weight"));
                         }
-                        JSONArray jsonArray = new JSONArray(jsonObject.getString("social_media_links"));
-                        JSONObject jsonObject1 = new JSONObject(String.valueOf(jsonArray.getJSONObject(0)));
-
-                        if (jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook").equals("null") || jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook").length()==0) {
-                            facebookUrl = "";
-                        } else{
-                            facebookUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook");
-                        }
-                        if (jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram").equals("null")|| jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram").length()==0) {
-                            instagramUrl = "";
-                        } else {
-                            instagramUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram");
-                        }
-                        if (jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter").equals("null")|| jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter").length()==0) {
-                            twitterUrl = "";
-                        } else {
-                            twitterUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter");
-                        }
-                        if (jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube").equals("null")|| jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube").length()==0)  {
-                            youtubeUrl = "";
-                        } else {
-                            youtubeUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube");
-                        }
 
                         PreferencesUtils.saveData(Constants.category_submitted, obj.getJSONArray("category_submitted").toString(), getApplicationContext());
                         PreferencesUtils.saveData(Constants.category_approved, obj.getJSONArray("category_approved").toString(), getApplicationContext());
+
+                        if(!jsonObject.getString("social_media_links").equals("null") && jsonObject.getString("social_media_links").length()>0) {
+                            JSONArray jsonArray = new JSONArray(jsonObject.getString("social_media_links"));
+                            JSONObject jsonObject1 = new JSONObject(String.valueOf(jsonArray.getJSONObject(0)));
+
+                            if (jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook").equals("null") || jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook").length() == 0) {
+                                facebookUrl = "";
+                            } else {
+                                facebookUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook");
+                            }
+                            if (jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram").equals("null") || jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram").length() == 0) {
+                                instagramUrl = "";
+                            } else {
+                                instagramUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram");
+                            }
+                            if (jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter").equals("null") || jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter").length() == 0) {
+                                twitterUrl = "";
+                            } else {
+                                twitterUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter");
+                            }
+                            if (jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube").equals("null") || jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube").length() == 0) {
+                                youtubeUrl = "";
+                            } else {
+                                youtubeUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube");
+                            }
+                        }
 
                     }
                     loadProfile();
@@ -811,6 +818,7 @@ public class ProfileScreen extends AppCompatActivity {
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
 
             Uri selectedImage = data.getData();
+            String uristring = data.getData().toString();
 //            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 //
 //            Cursor cursor = getContentResolver().query(selectedImage,
@@ -828,7 +836,27 @@ public class ProfileScreen extends AppCompatActivity {
             //Returns null, sizes are in the options variable
 //            Bitmap bitmap = BitmapFactory.decodeFile(picturePath, options);
 //            System.out.println("wistdh" + options.outWidth);
-            imageurl = getPathFromUri(selectedImage);
+
+            if (uristring.startsWith("content://com.google.android.apps")){
+                try {
+                    InputStream is = getApplicationContext().getContentResolver().openInputStream(selectedImage);
+                    if (is != null) {
+                        Bitmap pictureBitmap = BitmapFactory.decodeStream(is);
+                        //You can use this bitmap according to your purpose or Set bitmap to imageview
+                        Uri tempUri = getImageUri(getApplicationContext(), pictureBitmap);
+
+//                        // CALL THIS METHOD TO GET THE ACTUAL PATH
+                        imageurl  = getRealPathFromURI(tempUri);
+                    }
+                } catch (FileNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                imageurl = getPathFromUri(selectedImage);
+            }
 
             Log.e("CUrent source", "gallery");
 
@@ -946,4 +974,18 @@ public class ProfileScreen extends AppCompatActivity {
         }
     }
 
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
 }

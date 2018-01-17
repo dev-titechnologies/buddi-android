@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +90,7 @@ public class HomeCategory extends Fragment {
         if(PreferencesUtils.getData("cancel_dialog",getActivity(),"false").equals("true")){
             PreferencesUtils.saveData("cancel_dialog","false",getActivity());
 
-            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.cancelDialog));
 
             builder.setMessage("We apologize, but it seems that your Trainer is no longer connected to " +
                     "the session! He/she may have been abducted by an alien or just simply lost " +

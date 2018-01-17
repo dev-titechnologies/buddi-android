@@ -218,8 +218,9 @@ public class TrainerProfileView extends Activity {
                     } else
                     {weight.setText(jsonObject.getString("weight"));}
 
-                    JSONArray jsonArray = new JSONArray(jsonObject.getString("social_media_links"));
-                    JSONObject jsonObject1 = new JSONObject(String.valueOf(jsonArray.getJSONObject(0)));
+                    if(!jsonObject.getString("social_media_links").equals("null") && jsonObject.getString("social_media_links").length()>0 )
+                    { JSONArray jsonArray = new JSONArray(jsonObject.getString("social_media_links"));
+                      JSONObject jsonObject1 = new JSONObject(String.valueOf(jsonArray.getJSONObject(0)));
 
 
                     if (jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook").equals("null")||jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook").length()==0) {
@@ -241,6 +242,7 @@ public class TrainerProfileView extends Activity {
                         youtubeUrl = "";
                     } else {
                         youtubeUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube");
+                    }
                     }
 
                     imageurl = jsonObject.getString("user_image");

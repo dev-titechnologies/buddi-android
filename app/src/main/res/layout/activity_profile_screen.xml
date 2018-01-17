@@ -68,8 +68,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:textSize="20dp"
-                            android:id="@+id/fullname"
-                            android:text="Aneesh P V"/>
+                            android:id="@+id/fullname"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -257,25 +256,6 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:id="@+id/place_layout"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="PLACES" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/colorPrimary" />
-
-                    </LinearLayout>
 
                 </LinearLayout>
 

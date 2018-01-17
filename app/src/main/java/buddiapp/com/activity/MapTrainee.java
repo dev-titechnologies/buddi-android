@@ -459,9 +459,11 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
             try {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
-
-                    timeOut(obj.getInt("length"));
-                    PreferencesUtils.saveData(Constants.promo_code, "", getApplicationContext());
+                    if (obj.getString("status_type").equals("NoTrainersFound")) {
+                        Toast.makeText(getApplicationContext(),"No trainers found",Toast.LENGTH_SHORT);
+                    }else {
+                        timeOut(obj.getInt("length"));
+                        PreferencesUtils.saveData(Constants.promo_code, "", getApplicationContext());
 
 //                    CommonCall.hideLoader();
 //
@@ -475,7 +477,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 //                    intent.putExtra("TrainerData",jsonObject.toString());
 //                    startActivity(intent);
 
-
+                    }
                 } else if (obj.getInt("status") == 2) {
                     avi.setVisibility(View.GONE);
                     select.setClickable(true);

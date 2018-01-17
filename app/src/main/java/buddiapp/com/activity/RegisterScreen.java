@@ -130,7 +130,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         height_feet = (EditText) findViewById(R.id.height_feet);
         height_inch = (EditText) findViewById(R.id.height_inch);
         weight = (EditText) findViewById(R.id.weight);
-
+        eMail.setEnabled(true);
         Intent intent = getIntent();
         try {
             if (intent.hasExtra("email")) {
@@ -321,7 +321,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
             focusView.requestFocus();
             return false;
         } else if (weight.getText().length() == 0) {
-            weight.setError("Please enter your height");
+            weight.setError("Please enter your weight");
             focusView = weight;
             focusView.requestFocus();
             return false;
@@ -339,7 +339,13 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
             spassword = password.getText().toString();
             sage = age.getText().toString();
             sweight = weight.getText().toString();
-            sheight = height_feet.getText().toString() +"'"+height_inch.getText().toString()+"''";
+            String inch= "0";
+            if(height_inch.getText().length()== 0){
+                inch="0\"";
+            }else{
+                inch = height_inch.getText().toString()+"\"";
+            }
+            sheight = height_feet.getText().toString() +"'"+inch;
 
             return true;
         }
@@ -395,6 +401,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                                             if ((object.getString("email")).trim().length() > 0) {
                                                 semail = object.getString("email");
                                                 eMail.setText(semail);
+                                                eMail.setEnabled(false);
                                             }
                                         }
                                         sfacebookId = object.getString("id");
@@ -465,8 +472,10 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
                     user_image = acct.getPhotoUrl().toString();
                     PreferencesUtils.saveData(Constants.user_image, user_image, getApplicationContext());
                 }
-                if (acct.getEmail() != null)
+                if (acct.getEmail() != null){
                     eMail.setText(acct.getEmail());
+                    eMail.setEnabled(false);
+                }
                 new login().execute();
 //                Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show();
             } else {

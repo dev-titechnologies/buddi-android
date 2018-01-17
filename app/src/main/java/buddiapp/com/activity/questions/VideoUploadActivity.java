@@ -268,10 +268,10 @@ try {
                 .continueTimerInPlayback(false)                    // If true, the countdown timer will continue to go down during playback, rather than pausing.
                 .videoEncodingBitRate(1024000)                     // Sets a custom bit rate for video recording.
                 .audioEncodingBitRate(50000)                       // Sets a custom bit rate for audio recording.
-                .videoFrameRate(24)                                // Sets a custom frame rate (FPS) for video recording.
+                .videoFrameRate(30)                                // Sets a custom frame rate (FPS) for video recording.
                 .qualityProfile(MaterialCamera.QUALITY_HIGH)       // Sets a quality profile, manually setting bit rates or frame rates with other settings will overwrite individual quality profile settings
                 .videoPreferredHeight(720)                         // Sets a preferred height for the recorded video output.
-                .videoPreferredAspect(4f / 3f)                     // Sets a preferred aspect ratio for the recorded video output.
+                .videoPreferredAspect(16f / 9f)                     // Sets a preferred aspect ratio for the recorded video output.
                 .maxAllowedFileSize(1024 * 1024 * 25)               // Sets a max file size of 5MB, recording will stop if file reaches this limit. Keep in mind, the FAT file system has a file size limit of 4GB.
                 .iconRecord(R.drawable.mcam_action_capture)        // Sets a custom icon for the button used to start recording
                 .iconStop(R.drawable.mcam_action_stop)             // Sets a custom icon for the button used to stop recording

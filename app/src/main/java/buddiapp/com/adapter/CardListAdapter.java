@@ -34,15 +34,44 @@ import buddiapp.com.utils.Urls;
  */
 
 public class CardListAdapter extends BaseAdapter {
+    JSONObject jsonData = new JSONObject();
+    JSONObject sources = new JSONObject();
     JSONArray listArray = new JSONArray();
     Activity context;
+    JSONArray cards = new JSONArray();
+    String default_card = "";
     String sId = "", selected_card_id = "";
     ArrayList<String> selected_id = new ArrayList<>();
     String id = "";
-    int index = 0;
-    public CardListAdapter(JSONArray cards, Activity applicationContext) {
-        listArray = cards;
-        context = applicationContext;
+
+    public CardListAdapter(JSONObject data, Activity applicationContext) {
+        try{
+            context = applicationContext;
+
+            jsonData = data;
+            if(PreferencesUtils.getData(Constants.user_type,context,"").equals(Constants.trainee)){
+                sources = data.getJSONObject("sources");
+                listArray = sources.getJSONArray("data");
+//                if(!default_card.equals("null"))
+                    default_card = jsonData.getString("default_source");
+
+                if(default_card.length()>0 && !default_card.equals("null")){
+                    selected_id.add(default_card);
+                }
+            }else{
+                listArray = jsonData.getJSONArray("data");
+                for (int i=0; i<listArray.length();i++){
+                    if(listArray.getJSONObject(i).getBoolean("default_for_currency")){
+                        default_card = listArray.getJSONObject(i).getString("id");
+                        selected_id.add(default_card);
+                    }
+                }
+            }
+
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -115,10 +144,8 @@ public class CardListAdapter extends BaseAdapter {
             @Override
             public boolean onLongClick(final View view) {
                 try {
-                    JSONObject jsonObject1 = listArray.getJSONObject((Integer) view.getTag());
-                    sId =jsonObject1.getString("id");
-                    Log.e("tagggg", view.getTag()+"");
-                    index = (Integer) view.getTag();
+//                    JSONObject jsonObject1 = listArray.getJSONObject((Integer) view.getTag());
+                    sId = String.valueOf(view.getTag());
                 AlertDialog.Builder builder;
 
                 builder = new AlertDialog.Builder(context);
@@ -143,7 +170,7 @@ public class CardListAdapter extends BaseAdapter {
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return false;
@@ -278,7 +305,7 @@ public class CardListAdapter extends BaseAdapter {
         protected String doInBackground(String... strings) {
 
 
-            String res = NetworkCalls.POST(Urls.getlistcardURL(), "");
+            String res = NetworkCalls.POST(Urls.getFindDefaultCardURL(), "");
 
 
             return res;
@@ -294,7 +321,34 @@ public class CardListAdapter extends BaseAdapter {
 
                 if (response.getInt(Constants.status) == 1) {
 
-                    JSONArray cards = response.getJSONArray("data");
+                    if(PreferencesUtils.getData(Constants.user_type,context,"").equals(Constants.trainer)){
+                        jsonData = response;
+                        cards = response.getJSONArray("data");
+
+                        for (int i=0; i<cards.length();i++){
+                            if(cards.getJSONObject(i).getBoolean("default_for_currency")){
+                                default_card = cards.getJSONObject(i).getString("id");
+                                selected_id.add(default_card);
+                            }
+                        }
+
+
+                    }else if(PreferencesUtils.getData(Constants.user_type,context,"").equals(Constants.trainee))
+                    {
+                        jsonData = response.getJSONObject("data");
+                        sources = jsonData.getJSONObject("sources");
+                        cards = sources.getJSONArray("data");
+
+                        default_card = jsonData.getString("default_source");
+
+                        if(default_card.length()>0 && !default_card.equals("null")){
+                            selected_id.add(default_card);
+                        }
+                    }
+
+                    /*JSONObject jsonData = response.getJSONObject("data");
+                    JSONObject sources = jsonData.getJSONObject("sources");
+                    JSONArray cards = sources.getJSONArray("data");*/
                     listArray = cards;
                     notifyDataSetChanged();
 
@@ -304,7 +358,9 @@ public class CardListAdapter extends BaseAdapter {
 
                         PreferencesUtils.saveData(Constants.clientToken,"cardsaved",context);
 
-    }}}
+                    }
+                }
+            }
     catch (JSONException e){
             e.printStackTrace();
             }

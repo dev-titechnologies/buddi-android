@@ -1,5 +1,6 @@
 package buddiapp.com.fcm;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -23,6 +24,7 @@ import buddiapp.com.activity.Fragment.HomeCategory;
 import buddiapp.com.activity.HomeActivity;
 import buddiapp.com.activity.RequestActivity;
 import buddiapp.com.activity.SessionReady;
+import buddiapp.com.activity.chat.ChatActivity;
 import buddiapp.com.database.DatabaseHandler;
 import buddiapp.com.utils.CommonCall;
 
@@ -131,7 +133,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 startActivity(resultIntent);
 
 
-                if(PreferencesUtils.getData(Constants.twitterShare, getApplicationContext(),"").equals("true")){
+                /*if(PreferencesUtils.getData(Constants.twitterShare, getApplicationContext(),"").equals("true")){
                     CommonCall.postTwitter("I have booked a "+data.getString("training_time")+" Minutes "
                             + db.getCatName(data.getString("cat_id")) +" training session with "+data.getJSONObject("trainer_details").getString("trainer_first_name")+
                             " "+data.getJSONObject("trainer_details").getString("trainer_last_name")+" at "+
@@ -144,10 +146,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                             " "+data.getJSONObject("trainer_details").getString("trainer_last_name")+" at "+
                             data.getString("pick_location"));
                     CommonCall.PrintLog("fbshare","Success");
-                }
+                }*/
 
             } else if (json.getInt("type") == 2) {
-
+/** Session started **/
 /** Complete session **/
                 Intent resultIntent = new Intent(getApplicationContext(), SessionReady.class);
                 resultIntent.putExtra("message", "");
@@ -158,7 +160,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 PreferencesUtils.saveData(Constants.startSessionPush, "true", getApplicationContext());
 
-
+// if trainee stop the session
+                PreferencesUtils.saveData("stopped_s","true",getApplicationContext());
                 Intent intent = new Intent("BUDDI_TRAINER_START");
                 intent.putExtra("push_session", "2");
 
@@ -166,10 +169,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             } else if (json.getInt("type") == 3) {
 
-
                 PreferencesUtils.saveData(start_session, "false", Controller.getAppContext());
 
-                PreferencesUtils.saveData("cancel_dialog","true", Controller.getAppContext());
+                if(PreferencesUtils.getData("stopped_s", getApplicationContext(),"false").equals("true")){
+                    PreferencesUtils.saveData("cancel_dialog","false", Controller.getAppContext());
+                    PreferencesUtils.saveData("stopped_s","false",getApplicationContext());
+                }else{
+                    PreferencesUtils.saveData("cancel_dialog","true", Controller.getAppContext());
+                }
 
                 Intent resultIntent = new Intent(getApplicationContext(), HomeCategory.class);
                 resultIntent.putExtra("message", "");
@@ -201,7 +208,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
             } else if (json.getInt("type") == 5) {
-
+/******* Session Request *******/
                 JSONObject data = json.getJSONObject("data");
                 Intent resultIntent = new Intent(getApplicationContext(), RequestActivity.class);
                 resultIntent.putExtra("message", data.toString());
@@ -253,6 +260,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 }
 
+            } else if (json.getInt("type") == 8) {
+
+//                JSONObject data = json.getJSONObject("data");
+//                Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
+//                resultIntent.putExtra("message", data.toString());
+//                resultIntent.putExtra("title", title);
+//                showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
+//                resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//                startActivity(resultIntent);
             }
 
 
@@ -292,6 +309,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setSmallIcon(getNotificationIcon())
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                 .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
                 .setContentIntent(

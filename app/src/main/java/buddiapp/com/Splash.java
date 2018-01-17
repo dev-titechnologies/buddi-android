@@ -20,6 +20,7 @@ import buddiapp.com.activity.RequestActivity;
 import buddiapp.com.activity.SessionReady;
 import buddiapp.com.activity.WelcomeActivity;
 import buddiapp.com.activity.questions.DoneActivity;
+import buddiapp.com.fcm.NotificationUtils;
 
 import static buddiapp.com.Settings.Constants.start_session;
 import static buddiapp.com.Settings.Constants.trainer_Data;
@@ -32,7 +33,7 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         getSupportActionBar().hide();
 
-
+        NotificationUtils.clearNotifications(getApplicationContext());
         Log.e("launcher activity", getIntent().getStringExtra("type") + "");
         if (getIntent().getStringExtra("type") != null && getIntent().getStringExtra("type").equals("4")) {
 

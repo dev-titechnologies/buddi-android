@@ -140,7 +140,7 @@ public class RequestActivity extends AppCompatActivity {
 
                         PreferencesUtils.saveData(start_session, "true", getApplicationContext());
 
-                        if(PreferencesUtils.getData(Constants.twitterShare, getApplicationContext(),"").equals("true")){
+                        /*if(PreferencesUtils.getData(Constants.twitterShare, getApplicationContext(),"").equals("true")){
                             CommonCall.postTwitter("I have booked a "+jsonObject.getString("training_time")+" Minutes "
                                     + category_name +" training session with "+jsonObject.getJSONObject("trainee_details").getString("trainee_first_name")+
                                     " "+jsonObject.getJSONObject("trainee_details").getString("trainee_last_name")+" at "+
@@ -153,7 +153,7 @@ public class RequestActivity extends AppCompatActivity {
                                     " "+jsonObject.getJSONObject("trainee_details").getString("trainee_last_name")+" at "+
                                     jsonObject.getString("pick_location"));
                             CommonCall.PrintLog("fbshare","Success");
-                        }
+                        }*/
 
                         Intent intent = new Intent(getApplicationContext(), SessionReady.class);
 

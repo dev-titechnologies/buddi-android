@@ -19,6 +19,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -136,7 +137,7 @@ public class TrainerProfileFragment extends Fragment {
         if(PreferencesUtils.getData("cancel_dialog",getActivity(),"false").equals("true")){
             PreferencesUtils.saveData("cancel_dialog","false",getActivity());
 
-            final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+            final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.cancelDialog));
 
             builder.setMessage("We apologize, but it seems that your Trainee is no longer connected to " +
                     "the session! He/she may have been abducted by an alien or just simply lost " +
@@ -197,7 +198,7 @@ public class TrainerProfileFragment extends Fragment {
                     mSocket.disconnect();
                     getActivity().stopService(new Intent(getActivity(), LocationService.class));
                     new updateStatus().execute();
-                    Toast.makeText(getActivity(), "You are now Offline", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "You are now Offline", Toast.LENGTH_SHORT).show();
                     // The toggle is disabled
                 }
             }
@@ -413,32 +414,32 @@ public class TrainerProfileFragment extends Fragment {
 
 
                     loadProfile();
-                    JSONArray jsonArray = new JSONArray(jsonObject.getString("social_media_links"));
-                    JSONObject jsonObject1 = new JSONObject(String.valueOf(jsonArray.getJSONObject(0)));
 
+                    if(!jsonObject.getString("social_media_links").equals("null") && jsonObject.getString("social_media_links").length()>0) {
+                        JSONArray jsonArray = new JSONArray(jsonObject.getString("social_media_links"));
+                        JSONObject jsonObject1 = new JSONObject(String.valueOf(jsonArray.getJSONObject(0)));
 
-                    if (jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook").equals("null")||jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook").length()==0) {
-                        facebookUrl = "";
-                    } else {
-                        facebookUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook");
+                        if (jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook").equals("null") || jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook").length() == 0) {
+                            facebookUrl = "";
+                        } else {
+                            facebookUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("facebook");
+                        }
+                        if (jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram").equals("null") || jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram").length() == 0) {
+                            instagramUrl = "";
+                        } else {
+                            instagramUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram");
+                        }
+                        if (jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter").equals("null") || jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter").length() == 0) {
+                            twitterUrl = "";
+                        } else {
+                            twitterUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter");
+                        }
+                        if (jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube").equals("null") || jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube").length() == 0) {
+                            youtubeUrl = "";
+                        } else {
+                            youtubeUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube");
+                        }
                     }
-                    if (jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram").equals("null")||jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram").length()==0) {
-                        instagramUrl = "";
-                    } else {
-                        instagramUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("instagram");
-                    }
-                    if (jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter").equals("null")||jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter").length()==0) {
-                        twitterUrl = "";
-                    } else {
-                        twitterUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("twitter");
-                    }
-                    if (jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube").equals("null")||jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube").length()==0) {
-                        youtubeUrl = "";
-                    } else {
-                        youtubeUrl = jsonObject1.getJSONObject(Constants.social_media_links).getString("youtube");
-                    }
-
-
 
                 } else if (obj.getInt(Constants.status) == 2) {
                     Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
@@ -560,12 +561,12 @@ public class TrainerProfileFragment extends Fragment {
                 if (obj.getInt("status") == 1) {
                     JSONObject data = obj.getJSONObject("data");
 
-                    Toast.makeText(getActivity(), "You are now Online", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "You are now "+data.getString("availabilityStatus"), Toast.LENGTH_SHORT).show();
                 } else if (obj.getInt("status") == 2) {
 //                    Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                     new updateStatus().execute();
                 }else if (obj.getInt("status") == 3) {
-//                    Toast.makeText(getActivity(), "Session out", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), obj.getString("message"), Toast.LENGTH_SHORT).show();
 //                    CommonCall.sessionout(getActivity());
                 }
             } catch (JSONException e) {

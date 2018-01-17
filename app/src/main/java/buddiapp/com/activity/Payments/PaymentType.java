@@ -414,7 +414,7 @@ String defaultCard_id = "";
         protected String doInBackground(String... strings) {
 
 
-            String res = NetworkCalls.POST(Urls.getlistcardURL(), "");
+            String res = NetworkCalls.POST(Urls.getFindDefaultCardURL(), "");
 
 
             return res;
@@ -425,13 +425,26 @@ String defaultCard_id = "";
             super.onPostExecute(s);
             CommonCall.hideLoader();
 
-
             try {
                 final JSONObject response = new JSONObject(s);
+                JSONObject sources = new JSONObject();
+                JSONArray cards = new JSONArray();
+                JSONObject jsonData = new JSONObject();
 
                 if (response.getInt(Constants.status) == 1) {
 
-                    JSONArray cards = response.getJSONArray("data");
+                    if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainer)){
+                        jsonData = response;
+                        cards = response.getJSONArray("data");
+
+                    }else if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals(Constants.trainee))
+                    {
+                        jsonData = response.getJSONObject("data");
+                        sources = jsonData.getJSONObject("sources");
+                        cards = sources.getJSONArray("data");
+                    }
+
+
 
         if (cards.length()==0){
 //            if(credit_card.isShown()){
@@ -444,7 +457,7 @@ String defaultCard_id = "";
 
                     cards.getJSONObject(0).getString("last4"));*/
 
-            cardListAdapter = new CardListAdapter(cards, PaymentType.this);
+            cardListAdapter = new CardListAdapter(jsonData, PaymentType.this);
             cardList.setAdapter(cardListAdapter);
             cardList.setScrollContainer(false);
 
