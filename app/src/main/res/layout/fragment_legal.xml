@@ -9,19 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Copyright"
-            android:padding="20dp"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/ash"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Terms and Conditions"
+            android:id="@+id/termsof_use"
+            android:text="Terms of use"
             android:padding="20dp"/>
         <View
             android:layout_width="match_parent"
@@ -31,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Privacy Policy"
+            android:id="@+id/privacy_policy"
             android:padding="20dp"/>
         <View
             android:layout_width="match_parent"
@@ -39,7 +33,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Using your Location"
+            android:id="@+id/disclaimer"
+            android:text="Disclaimer"
             android:padding="20dp"/>
         <View
             android:layout_width="match_parent"
