@@ -22,6 +22,9 @@ public class Urls {
 
     public static String terms = "http://buddimedia.com/termsofuse.html";
 
+    public static String TERMS_OF_USE_URL = "http://buddimedia.com/termsofuse.html";
+    public static String PRIVACY_POLICY_URL = "http://buddimedia.com/privacypolicy.html";
+    public static String DISCLAIMER_URL = "http://buddimedia.com/disclaimer.html";
 
     public static String listCardinStripe = "/payment/listCardinStripe";
 
