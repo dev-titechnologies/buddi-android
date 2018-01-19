@@ -43,6 +43,8 @@ public class Constants {
 
 
     public static String promo_code = "promo_code";
+    public static String promo_code_limit = "promo_code_limit";
+    public static String promo_code_code = "promo_code_code";
 
     public static String trainer_Data = "trainer_Data";
 

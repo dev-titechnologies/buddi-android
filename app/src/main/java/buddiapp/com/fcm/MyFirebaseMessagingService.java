@@ -262,14 +262,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             } else if (json.getInt("type") == 8) {
 
-//                JSONObject data = json.getJSONObject("data");
-//                Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
-//                resultIntent.putExtra("message", data.toString());
-//                resultIntent.putExtra("title", title);
-//                showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
-//                resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//                startActivity(resultIntent);
+                JSONObject data = json.getJSONObject("data");
+                Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
+                resultIntent.putExtra("message", data.toString());
+                resultIntent.putExtra("title", title);
+                showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
+                resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                startActivity(resultIntent);
             }
 
 

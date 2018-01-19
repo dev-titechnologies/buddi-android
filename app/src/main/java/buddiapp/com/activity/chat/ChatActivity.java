@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -13,7 +11,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -84,6 +81,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         recyclerChat = (RecyclerView) findViewById(R.id.recyclerChat);
         recyclerChat.setLayoutManager(linearLayoutManager);
 
+        adapter = new ListMessageAdapter(this, consersation);
+        recyclerChat.setAdapter(adapter);
+
         String content = "";
         String id = "";
 
@@ -92,25 +92,29 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+
+    BroadcastReceiver chatReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Controller.firstConnect){
+                Controller.firstConnect =false;
+                fromId = intent.getStringExtra("CHAT_FROMID");
+                receiveMsg = intent.getStringExtra("CHAT_MESSAGE");
+                chatName = intent.getStringExtra("CHAT_NAME");
+                chatImage = intent.getStringExtra("CHAT_IMAGE");
+
+                if (!fromId.equals(PreferencesUtils.getData(Constants.user_id, getApplicationContext(), "")))
+                    loadMessageFromSocket(receiveMsg, fromId, chatImage);
+
+            }
+        }
+    };
+
     @Override
     protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(
-                new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-
-                       fromId = intent.getStringExtra("CHAT_FROMID");
-                       receiveMsg = intent.getStringExtra("CHAT_MESSAGE");
-                       chatName = intent.getStringExtra("CHAT_NAME");
-                       chatImage = intent.getStringExtra("CHAT_IMAGE");
-        if(!fromId.equals(PreferencesUtils.getData(Constants.user_id,getApplicationContext(),"")))
-                        loadMessageFromSocket(receiveMsg,fromId,chatImage);
-
-                    }
-                }, new IntentFilter("SOCKET_BUDDI_CHAT")
-
-
+               chatReceiver , new IntentFilter("SOCKET_BUDDI_CHAT")
         );
     }
 
@@ -133,7 +137,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         recyclerChat.setAdapter(adapter);
     }
     public void loadMessageFromSocket(String receiveMsg, String fromId, String img){
-        adapter = new ListMessageAdapter(this, consersation);
+
+        if(adapter == null){
+            adapter = new ListMessageAdapter(getApplicationContext(),consersation);
+            recyclerChat.setAdapter(adapter);
+        }
         Message newMessage = new Message();
         newMessage.idSender = fromId;
 
@@ -146,15 +154,18 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         newMessage.image = img;
 //        newMessage.timestamp = (long) mapMessage.get("timestamp");
         consersation.getListMessageData().add(newMessage);
-        adapter.notifyDataSetChanged();
+//        adapter.notifyDataSetChanged();
         linearLayoutManager.scrollToPosition(consersation.getListMessageData().size() - 1);
-        recyclerChat.setAdapter(adapter);
+        recyclerChat.setLayoutManager(linearLayoutManager);
+        adapter.notifyDataSetChanged();
+//        recyclerChat.setAdapter(adapter);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(
+                    chatReceiver );
             this.finish();
         }
         return true;
@@ -162,6 +173,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(
+                chatReceiver );
         this.finish();
     }
 
@@ -203,7 +216,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 JSONObject jsonObject = new JSONObject();
                 try {
 
-                    jsonObject.put("url", Urls.BASEURL+ ("/chat/sendMessage"));
+                    jsonObject.put("url", Urls.BASEURL+ ("/chat/testChat"));
 
                     JSONObject object = new JSONObject();
 
@@ -331,6 +344,7 @@ class ListMessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
+        Log.e("converstation_count",consersation.getListMessageData().size()+"");
         return consersation.getListMessageData().size();
     }
 }

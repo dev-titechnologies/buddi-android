@@ -44,7 +44,7 @@ String defaultCard_id = "";
     Button done;
     ListView cardList;
     CardListAdapter cardListAdapter;
-
+    ImageView validImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +63,7 @@ String defaultCard_id = "";
 
         promoText = (TextView) findViewById(R.id.promocode_text);
         cardList = findViewById(R.id.card_list_view);
-
+        validImage = findViewById(R.id.valid_image);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
@@ -73,8 +73,12 @@ String defaultCard_id = "";
             public void onClick(View view) {
 
                 if (promocode.getText().toString().trim().length() > 1) {
-
+                    if(CommonCall.isNetworkAvailable()){
+                        applyPromo.setEnabled(false);
                     new applyPromo().execute();
+                    }else{
+                        Toast.makeText(PaymentType.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
 
@@ -104,31 +108,26 @@ String defaultCard_id = "";
     }
 
     void showPromocode() {
+    if(Integer.parseInt(PreferencesUtils.getData(Constants.promo_code_limit, getApplicationContext(), "0")) > 0){
+        if(CommonCall.isNetworkAvailable()){
+            new applyPromo().execute();
 
+        }else{
+            Toast.makeText(this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+        }
+    }else {
 
-        if (PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "").length() > 0) {
-            promoText.setText("Applied Promocode : " + PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), ""));
-            promocodeView.setVisibility(View.VISIBLE);
+        promocodeView.setVisibility(View.GONE);
 
-            if(getIntent().hasExtra("result")) {
-//
-////ForResult
-//                /*
-//*
-//* going back to map screen
-//*
-//* */
-//
-                setResult(RESULT_OK, new Intent());
-                finish();
-            }
+    }
+    /*if (PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "").length() > 0) {
 
 
         } else {
 
             promocodeView.setVisibility(View.GONE);
 
-        }
+        }*/
     }
 
     class applyPromo extends AsyncTask<String, String, String> {
@@ -137,12 +136,15 @@ String defaultCard_id = "";
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            CommonCall.showLoader(PaymentType.this);
+//            CommonCall.showLoader(PaymentType.this);
 
             try {
                 req.put("user_id", PreferencesUtils.getData(Constants.user_id, getApplicationContext(), ""));
-                req.put("promocode", promocode.getText().toString());
-
+                if(promocode.getText().toString().length()>0) {
+                    req.put("promocode", promocode.getText().toString());
+                }else{
+                    req.put("promocode", PreferencesUtils.getData(Constants.promo_code_code, getApplicationContext(), ""));
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -160,8 +162,8 @@ String defaultCard_id = "";
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            CommonCall.hideLoader();
-
+//            CommonCall.hideLoader();
+            applyPromo.setEnabled(true);
 
             try {
                 final JSONObject response = new JSONObject(s);
@@ -169,12 +171,15 @@ String defaultCard_id = "";
                 if (response.getInt(Constants.status) == 1) {
 
                     promocode.setText("");
-                    Toast.makeText(PaymentType.this, "Promocode Applied Succesfully!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(PaymentType.this, "Promocode Applied Succesfully!", Toast.LENGTH_SHORT).show();
 
 
                     PreferencesUtils.saveData(Constants.promo_code, response.getJSONObject("data").getString("code"), getApplicationContext());
+                    JSONObject jsonObject = response.getJSONObject("data");
+                    PreferencesUtils.saveData(Constants.promo_code_limit, jsonObject.getString("limitOfUse"), getApplicationContext());
+                    PreferencesUtils.saveData(Constants.promo_code_code, jsonObject.getString("code"), getApplicationContext());
 
-                    showPromocode();
+                    showCode(jsonObject.getString("codeStatus"));
 
                     if(getIntent().hasExtra("result")) {
 //
@@ -382,6 +387,41 @@ String defaultCard_id = "";
 //
 //    }
 
+    public void showCode(String codeStatus){
+        if(codeStatus.equals("valid")){
+            validImage.setVisibility(View.VISIBLE);
+        if(Integer.parseInt(PreferencesUtils.getData(Constants.promo_code_limit, getApplicationContext(), ""))>0 && Integer.parseInt(PreferencesUtils.getData(Constants.promo_code_limit, getApplicationContext(), "")) == 1){
+            promoText.setText("Applied Promocode : " + PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "")+"\n" +
+                    " You have "+PreferencesUtils.getData(Constants.promo_code_limit, getApplicationContext(), "") +" use left");
+            promocodeView.setVisibility(View.VISIBLE);
+        }else if(Integer.parseInt(PreferencesUtils.getData(Constants.promo_code_limit, getApplicationContext(), ""))>0 ){
+            promoText.setText("Applied Promocode : " + PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "")+"\n" +
+                    " You have "+PreferencesUtils.getData(Constants.promo_code_limit, getApplicationContext(), "") +" uses left");
+            promocodeView.setVisibility(View.VISIBLE);
+        }else {
+            promoText.setText("Applied Promocode : " + PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), ""));
+            promocodeView.setVisibility(View.VISIBLE);
+        }
+        if(getIntent().hasExtra("result")) {
+//
+////ForResult
+//
+//
+// going back to map screen
+//
+//
+//
+            setResult(RESULT_OK, new Intent());
+            finish();
+        }
+        }else if(codeStatus.equals("expired")){
+            promoText.setText("Applied Promocode : " + PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "")
+            + codeStatus);
+            validImage.setVisibility(View.GONE);
+            promocodeView.setVisibility(View.VISIBLE);
+        }
+
+    }
     @Override
     public void onBackPressed() {
         finish();

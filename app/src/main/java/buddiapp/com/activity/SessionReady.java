@@ -400,6 +400,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 declineButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        cancelactionIcon.setImageResource(R.mipmap.cross);
                         // Close dialog
                         dialog.dismiss();
                     }

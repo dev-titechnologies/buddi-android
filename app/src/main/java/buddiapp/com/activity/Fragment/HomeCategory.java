@@ -129,7 +129,7 @@ public class HomeCategory extends Fragment {
             @Override
             public void onClick(View view) {
                 if (CommonCall.isNetworkAvailable()) {
-
+                    if (PreferencesUtils.getData(Constants.start_session, getActivity(), "false").equals("false")) {
                     if (PreferencesUtils.getData(Constants.settings_cat_id, getActivity(), "").length() == 0) {
 
                         Toast.makeText(getActivity(), "Please Save your deatils in Settings Screen inorder to use instant Booking", Toast.LENGTH_SHORT).show();
@@ -151,6 +151,9 @@ public class HomeCategory extends Fragment {
                         }else{
                             showReleseFormAlert();
                         }
+                    }
+                    }else{
+                        Toast.makeText(getActivity(), "You are already in a session", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {

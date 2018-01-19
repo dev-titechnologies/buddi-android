@@ -43,7 +43,7 @@ public class Controller extends MultiDexApplication {
     public static Socket mSocket;
     private static GoogleAnalytics sAnalytics;
     private static Tracker sTracker;
-
+    public static boolean firstConnect = true;
     /**
      * Gets the default {@link Tracker} for this {@link Application}.
      *
@@ -315,6 +315,7 @@ public class Controller extends MultiDexApplication {
     }
 
     public static void sendBroadcastChatMessage(String msg, String fromId, String fromName, String image) {
+        firstConnect = true;
         Intent intent = new Intent("SOCKET_BUDDI_CHAT");
         intent.putExtra("CHAT_FROMID", fromId);
         intent.putExtra("CHAT_MESSAGE", msg);

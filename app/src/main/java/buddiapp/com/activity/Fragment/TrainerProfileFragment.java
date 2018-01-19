@@ -164,11 +164,14 @@ public class TrainerProfileFragment extends Fragment {
         }
 
   if (  PreferencesUtils.getData(Constants.availStatus, getActivity(), "").equals("online")) {
-      updateSocket();
+      if (PreferencesUtils.getData(Constants.start_session, getActivity(), "false").equals("false")) {
+        updateSocket();
         mSocket.connect();
         toggle.setChecked(true);
         getActivity().startService(new Intent(getActivity(), LocationService.class));
         new updateStatus().execute();
+      }
+
   }else{
       getActivity().stopService(new Intent(getActivity(), LocationService.class));
   }
@@ -180,24 +183,26 @@ public class TrainerProfileFragment extends Fragment {
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    if (PreferencesUtils.getData(Constants.start_session, getActivity(), "false").equals("false")) {
+                        if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                            buildAlertMessageNoGps();
+                        }
 
-                    if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        buildAlertMessageNoGps();
-                    }
-
-                    updateSocket();
+                        updateSocket();
                         mSocket.connect();
 
-                    PreferencesUtils.saveData(Constants.availStatus, "online", getActivity());
+                        PreferencesUtils.saveData(Constants.availStatus, "online", getActivity());
                         getActivity().startService(new Intent(getActivity(), LocationService.class));
                         new updateStatus().execute();
-
+                    }
                     }
                 else {
-                    PreferencesUtils.saveData(Constants.availStatus, "offline", getActivity());
-                    mSocket.disconnect();
-                    getActivity().stopService(new Intent(getActivity(), LocationService.class));
-                    new updateStatus().execute();
+                    if (PreferencesUtils.getData(Constants.start_session, getActivity(), "false").equals("false")) {
+                        PreferencesUtils.saveData(Constants.availStatus, "offline", getActivity());
+                        mSocket.disconnect();
+                        getActivity().stopService(new Intent(getActivity(), LocationService.class));
+                        new updateStatus().execute();
+                    }
 //                    Toast.makeText(getActivity(), "You are now Offline", Toast.LENGTH_SHORT).show();
                     // The toggle is disabled
                 }

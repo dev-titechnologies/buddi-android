@@ -68,7 +68,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/medium"
                 android:id="@+id/promocode_text"
                 android:gravity="center_vertical"
@@ -81,6 +81,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/valid_image"
                 android:src="@drawable/ic_tick"
                 android:visibility="visible"
                 android:layout_alignParentRight="true"

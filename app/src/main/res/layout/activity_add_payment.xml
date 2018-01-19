@@ -53,8 +53,8 @@ android:maxLength="4"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:hint="Date Of Birth"
-                  android:editable="false"
-android:id="@+id/dob"
+            android:editable="false"
+            android:id="@+id/dob"
             android:layout_height="match_parent" />
 
     </LinearLayout>
