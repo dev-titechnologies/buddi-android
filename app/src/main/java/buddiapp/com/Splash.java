@@ -19,6 +19,7 @@ import buddiapp.com.activity.HomeActivity;
 import buddiapp.com.activity.RequestActivity;
 import buddiapp.com.activity.SessionReady;
 import buddiapp.com.activity.WelcomeActivity;
+import buddiapp.com.activity.chat.ChatActivity;
 import buddiapp.com.activity.questions.DoneActivity;
 import buddiapp.com.fcm.NotificationUtils;
 
@@ -72,6 +73,11 @@ public class Splash extends AppCompatActivity {
         } else if (getIntent().getStringExtra("type") != null && getIntent().getStringExtra("type").equals("2")) {
 
             startActivity(new Intent(getApplicationContext(), SessionReady.class).putExtra("push_session", "2"));
+
+            finish();
+        } else if (getIntent().getStringExtra("type") != null && getIntent().getStringExtra("type").equals("8")) {
+            PreferencesUtils.saveData(Constants.from,"splash",getApplicationContext());
+            startActivity(new Intent(getApplicationContext(), ChatActivity.class).putExtra("push_session", "8"));
 
             finish();
         } else if (getIntent().getStringExtra("type") != null && getIntent().getStringExtra("type").equals("6")) {

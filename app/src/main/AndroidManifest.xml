@@ -254,6 +254,15 @@
         <activity android:name=".activity.TrainerCategory" />
         <activity android:name=".activity.WebActivity" />
         <activity android:name=".activity.Payments.AddPayment"></activity>
+
+        <receiver
+            android:name=".utils.ConnectivityReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

@@ -66,18 +66,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void handleNotification(String message) {
-//        if (!NotificationUtils.isAppIsInBackground(getApplicationContext()))
+        if (!NotificationUtils.isAppIsInBackground(getApplicationContext()))
 
         {
 // app is in foreground, broadcast the push message
 
-//            Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-//            pushNotification.putExtra("message", message);
-//            LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+            Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+            pushNotification.putExtra("message", message);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
             // play notification sound
-//            NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
-//            notificato viewtionUtils.playNotificationSound();
+            NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
+            notificationUtils.playNotificationSound();
 
 
         }
@@ -261,15 +261,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 }
 
             } else if (json.getInt("type") == 8) {
+                if(PreferencesUtils.getData(Constants.current_page,getApplicationContext(),"false").equals("chat")){
 
+                }else{
+                NotificationUtils.clearNotifications(getApplicationContext());
                 JSONObject data = json.getJSONObject("data");
                 Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
                 resultIntent.putExtra("message", data.toString());
                 resultIntent.putExtra("title", title);
                 showNotificationMessage(getApplicationContext(), "Buddi", title, "", resultIntent);
                 resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    if(PreferencesUtils.getData(Constants.current_page,getApplicationContext(),"false").equals("sessionready")){
+                        startActivity(resultIntent);
+                    }
 
-                startActivity(resultIntent);
+                }
             }
 
 

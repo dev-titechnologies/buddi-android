@@ -61,16 +61,22 @@ public class Detail_history extends AppCompatActivity {
             else
             training_status.setText(getIntent().getExtras().getString("trainingStatus"));
 
-
-        if (getIntent().getExtras().getString("paymentStatus").equals("completed"))
-            payment_status.setText("Completed");
+        if(getIntent().getExtras().getString("promocode").length()>1){
+            payment_status.setText("Promocode "+getIntent().getExtras().getString("promocode") +" applied");
+        }else {
+            if (getIntent().getExtras().getString("paymentStatus").equals("completed"))
+                payment_status.setText("Completed");
             else
-        payment_status.setText(getIntent().getExtras().getString("paymentStatus"));
+                payment_status.setText(getIntent().getExtras().getString("paymentStatus"));
+        }
 
+        if( getIntent().getExtras().getString("amount").equals("0")){
+            amount.setText("Free");
+        }else {
+            amount.setText("$" + getIntent().getExtras().getString("amount"));
+        }
 
-        amount.setText("$" + getIntent().getExtras().getString("amount"));
         textRated.setText("You rated " + getIntent().getExtras().getString("name"));
-
 
         if (getIntent().hasExtra("extended"))
             duration.setText(getIntent().getExtras().getString("duration") + " (Extended)");

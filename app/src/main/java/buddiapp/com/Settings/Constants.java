@@ -77,6 +77,8 @@ public class Constants {
     public static String signature = "signature";
     public static String participant_signature = "participant_signature";
     public static String parent_signature = "parent_signature";
+    public static String current_page = "current_page";
+    public static String from = "from";
 
     public static JSONObject questionData = new JSONObject();
 

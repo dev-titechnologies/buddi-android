@@ -146,7 +146,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 //            }
             // gps.showSettingsAlert();
         }
-
+        PreferencesUtils.saveData(Constants.current_page,"sessionready",getApplicationContext());
         try {
 
 
@@ -363,7 +363,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 dialog.setContentView(R.layout.custom_dialog_yesno);
                 // Set dialog title
                 dialog.setTitle("Custom Dialog");
-
+                dialog.setCancelable(false);
                 // set values for custom dialog components - text, image and button
                 TextView text = (TextView) dialog.findViewById(R.id.textDialog);
                 final EditText reason = (EditText) dialog.findViewById(R.id.reason);
@@ -428,8 +428,13 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 if (PreferencesUtils.getData(Constants.timerstarted, getApplicationContext(), "false").equals("true")) {
 
                 }else{
+                if(CommonCall.isNetworkAvailable()){
+                PreferencesUtils.saveData(Constants.from,"session ready",getApplicationContext());
                 Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                 startActivity(intent);
+                }else{
+                    Toast.makeText(getApplicationContext(), "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                }
                 }
 
             }

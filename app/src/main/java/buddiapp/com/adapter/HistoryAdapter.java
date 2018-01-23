@@ -119,7 +119,15 @@ public class HistoryAdapter extends BaseAdapter {
 //            String country = addresses.get(0).getCountryName();
 //            String postalCode = addresses.get(0).getPostalCode();
 //            String knownName = addresses.get(0).getFeatureName();
+            if(samount.equals("0")){
+                if(jsonObject.getString("promocode").length()>1){
+                    holder.amount.setText("Free");
+                }else{
+                    holder.amount.setText("$"+samount);
+                }
+            }else{
             holder.amount.setText("$"+samount);
+            }
             holder.trainedDate.setText(CommonCall.convertTime1(trained_date).toUpperCase());
             CommonCall.PrintLog("date",trained_date);
             holder.description.setText(category+" session with "+name);
@@ -159,6 +167,7 @@ public class HistoryAdapter extends BaseAdapter {
                     intent.putExtra("profileImage",jsonObject.getString("profile_img"));
                     intent.putExtra("desc",desc);
                     intent.putExtra("name",name);
+                    intent.putExtra("promocode",jsonObject.getString("promocode"));
                     intent.putExtra("amount",jsonObject.getString("amount"));
                     intent.putExtra("rating",jsonObject.getString("rating"));
                     intent.putExtra("image",array.getJSONObject(0).getString("categoryBookImage"));

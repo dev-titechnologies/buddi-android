@@ -66,7 +66,6 @@ public class NotificationUtils {
 
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                 mContext);
-
         final Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
                 + "://" + mContext.getPackageName() + "/raw/notification");
 
@@ -124,7 +123,7 @@ public class NotificationUtils {
                 .setContentTitle(title)
                 .setContentIntent(resultPendingIntent)
                 .setSound(alarmSound)
-                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setVibrate(new long[] { 1000, 1000})
                 .setStyle(bigPictureStyle)
 //                .setWhen(getTimeMilliSec(timeStamp))
                 .setSmallIcon(R.mipmap.ic_launcher)

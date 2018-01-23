@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ import buddiapp.com.fcm.Config;
 import buddiapp.com.fcm.NotificationUtils;
 import buddiapp.com.utils.CircleImageView;
 import buddiapp.com.utils.CommonCall;
+import buddiapp.com.utils.ConnectivityReceiver;
 import buddiapp.com.utils.NetworkCalls;
 import buddiapp.com.utils.Urls;
 
@@ -59,7 +61,7 @@ import static buddiapp.com.Settings.Constants.trainer_Data;
 import static buddiapp.com.Settings.Constants.user_type;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ConnectivityReceiver.ConnectivityReceiverListener {
 
     DrawerLayout drawer_layout;
     CircleImageView userImageView;
@@ -376,6 +378,11 @@ public class HomeActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+//        showSnack(isConnected);
+    }
+
     //
     //
     // ****** LOg Out *******
@@ -419,6 +426,7 @@ public class HomeActivity extends AppCompatActivity
                 new IntentFilter(Config.REGISTRATION_COMPLETE));
 
         // clear the notification area when the app is opened
+        Controller.getInstance().setConnectivityListener(HomeActivity.this);
 
         try {
 
@@ -583,5 +591,26 @@ public class HomeActivity extends AppCompatActivity
         }
         super.onActivityResult(requestCode, resultCode, data);
 //        loginButton.onActivityResult(requestCode, resultCode, data);
+    }
+
+    // Showing the status in Snackbar
+    private void showSnack(boolean isConnected) {
+        String message;
+        int color;
+        if (isConnected) {
+            message = "Good Connected to Internet";
+            color = Color.WHITE;
+        } else {
+            message = "Opps! Looks like you aren't connected to internet";
+            color = Color.RED;
+        }
+
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.fab), message, Snackbar.LENGTH_SHORT);
+
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(color);
+        snackbar.show();
     }
 }

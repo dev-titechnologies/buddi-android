@@ -29,6 +29,7 @@ import buddiapp.com.Settings.Constants;
 import buddiapp.com.Settings.PreferencesUtils;
 import buddiapp.com.utils.AnalyticsTrackers;
 import buddiapp.com.utils.CommonCall;
+import buddiapp.com.utils.ConnectivityReceiver;
 import buddiapp.com.utils.Urls;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -324,4 +325,7 @@ public class Controller extends MultiDexApplication {
         LocalBroadcastManager.getInstance(getAppContext()).sendBroadcast(intent);
     }
 
+    public void setConnectivityListener(ConnectivityReceiver.ConnectivityReceiverListener listener) {
+        ConnectivityReceiver.connectivityReceiverListener = listener;
+    }
 }

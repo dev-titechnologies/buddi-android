@@ -22,7 +22,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // Database Name
     private static final String DATABASE_NAME = "Buddy";
@@ -63,6 +63,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String STARTIME = "start_time";
     private static final String ENDTIME = "end_time";
     private static final String EXTENDED = "extended";
+    private static final String PROMOCODE = "promocode";
 
 
     public DatabaseHandler(Context context) {
@@ -102,7 +103,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + STARTIME + " TEXT,"
                 + ENDTIME + " TEXT,"
                 + EXTENDED + " TEXT,"
-                + PROFILE_IMAGE + " TEXT" + ")";
+                + PROFILE_IMAGE + " TEXT,"
+                + PROMOCODE + " TEXT" + ")";
 
 
         db.execSQL(CREATE_SUB_CAT_TABLE);
@@ -463,6 +465,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             statement.put(STARTIME,jsonObject.getString(STARTIME));
             statement.put(ENDTIME,jsonObject.getString(ENDTIME));
             statement.put(EXTENDED,jsonObject.getString(EXTENDED));
+            statement.put(PROMOCODE,jsonObject.getString(PROMOCODE));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -499,6 +502,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     obj.put(ENDTIME, cursor.getString(14));
                     obj.put(EXTENDED, cursor.getString(15));
                     obj.put(PROFILE_IMAGE, cursor.getString(16));
+                    obj.put(PROMOCODE, cursor.getString(17));
                     jsonArray.put(obj);
 
                 } catch (JSONException e) {

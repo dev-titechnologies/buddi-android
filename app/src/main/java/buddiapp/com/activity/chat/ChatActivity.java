@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,16 +33,23 @@ import buddiapp.com.Controller;
 import buddiapp.com.R;
 import buddiapp.com.Settings.Constants;
 import buddiapp.com.Settings.PreferencesUtils;
+import buddiapp.com.activity.Fragment.BookingHistory;
+import buddiapp.com.activity.SessionReady;
 import buddiapp.com.activity.chat.model.Consersation;
 import buddiapp.com.activity.chat.model.Message;
+import buddiapp.com.fcm.NotificationUtils;
 import buddiapp.com.utils.CircleImageView;
 import buddiapp.com.utils.CommonCall;
+import buddiapp.com.utils.ConnectivityReceiver;
 import buddiapp.com.utils.NetworkCalls;
 import buddiapp.com.utils.Urls;
 
+import static buddiapp.com.Controller.chatConnect;
+import static buddiapp.com.Controller.mSocket;
+import static buddiapp.com.Controller.updateSocket;
 
 
-public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
+public class ChatActivity extends AppCompatActivity implements View.OnClickListener, ConnectivityReceiver.ConnectivityReceiverListener {
     private RecyclerView recyclerChat;
     public static final int VIEW_TYPE_USER_MESSAGE = 0;
     public static final int VIEW_TYPE_FRIEND_MESSAGE = 1;
@@ -51,7 +61,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private EditText editWriteMessage;
     private LinearLayoutManager linearLayoutManager;
     public String bitmapAvataUser;
-
+    RelativeLayout root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +75,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         roomId = PreferencesUtils.getData(Constants.bookid, getApplicationContext(), "");
         CommonCall.PrintLog("socket : ", Controller.mSocket.connected() + "");
-
+        PreferencesUtils.saveData(Constants.current_page, "chat",getApplicationContext());
         consersation = new Consersation();
         btnSend = (ImageButton) findViewById(R.id.btnSend);
         btnSend.setOnClickListener(this);
@@ -83,12 +93,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         adapter = new ListMessageAdapter(this, consersation);
         recyclerChat.setAdapter(adapter);
-
+        root = findViewById(R.id.root);
         String content = "";
         String id = "";
-
+        NotificationUtils.clearNotifications(getApplicationContext());
 
         new getMessages().execute();
+
 
     }
 
@@ -116,6 +127,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         LocalBroadcastManager.getInstance(this).registerReceiver(
                chatReceiver , new IntentFilter("SOCKET_BUDDI_CHAT")
         );
+
+        Controller.getInstance().setConnectivityListener(ChatActivity.this);
+
     }
 
     private void loadMessage(String content) {
@@ -166,7 +180,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         if (item.getItemId() == android.R.id.home) {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(
                     chatReceiver );
-            this.finish();
+            PreferencesUtils.saveData(Constants.current_page,"back",getApplicationContext());
+
+            if(PreferencesUtils.getData(Constants.from,getApplicationContext(),"false").equals("splash")){
+                startActivity(new Intent(getApplicationContext(), SessionReady.class));
+                finish();
+            }else{
+                this.finish();
+            }
         }
         return true;
     }
@@ -175,7 +196,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     public void onBackPressed() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(
                 chatReceiver );
+        PreferencesUtils.saveData(Constants.current_page,"back",getApplicationContext());
+
+        if(PreferencesUtils.getData(Constants.from,getApplicationContext(),"false").equals("splash")){
+            startActivity(new Intent(getApplicationContext(), SessionReady.class));
+            finish();
+        }else{
         this.finish();
+        }
     }
 
     @Override
@@ -216,7 +244,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 JSONObject jsonObject = new JSONObject();
                 try {
 
-                    jsonObject.put("url", Urls.BASEURL+ ("/chat/testChat"));
+                    jsonObject.put("url", Urls.BASEURL+ ("/chat/sendMessage"));
 
                     JSONObject object = new JSONObject();
 
@@ -243,11 +271,55 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (isConnected) {
+            if(mSocket.connected()){
+
+            }else{
+            updateSocket();
+            mSocket.connect();
+            chatConnect();
+            }
+        } else {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(
+                    chatReceiver );
+            showSnack();
+        }
+  }
+
+    // Showing the status in Snackbar
+    private void showSnack() {
+        Snackbar snackbar = Snackbar
+                .make(root, "Connection lost", Snackbar.LENGTH_INDEFINITE)
+                .setAction("RETRY", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        if(CommonCall.isNetworkAvailable()){
+
+                            LocalBroadcastManager.getInstance(ChatActivity.this).registerReceiver(
+                                    chatReceiver , new IntentFilter("SOCKET_BUDDI_CHAT")
+                            );
+//
+
+                        new getMessages().execute();
+//                        }
+//                        else{
+//                            Toast.makeText(ChatActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+//                        }
+                    }
+                });
+
+        snackbar.show();
+
+    }
+
     class getMessages extends AsyncTask<String, String, String> {
         JSONObject reqData = new JSONObject();
 
         @Override
         protected void onPreExecute() {
+            CommonCall.showLoader(ChatActivity.this);
         }
 
         @Override
@@ -269,6 +341,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            CommonCall.hideLoader();
             String ss = s;
             CommonCall.PrintLog("AllMessages", ss);
             JSONObject obj = null;
@@ -280,7 +353,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     loadMessageFromSocket(jsonObject.getString("message"),jsonObject.getString("from_id"),jsonObject.getString("from_img"));
                 }
-             }
+             }else if(obj.getInt("status") == 2){
+                CommonCall.hideLoader();
+                showSnack();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

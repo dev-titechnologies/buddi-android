@@ -34,7 +34,7 @@ import buddiapp.com.utils.Urls;
 
 
 public class PaymentType extends AppCompatActivity {
-    LinearLayout root;
+    LinearLayout root, promocodeLayout;
     CardView addPayment, promocodeView; //credit_card
 String defaultCard_id = "";
     final int REQUEST_CODE = 1;
@@ -60,7 +60,7 @@ String defaultCard_id = "";
 //        payment_image = (ImageView) findViewById(R.id.payment_image);
         done = (Button) findViewById(R.id.done);
 //        credit_card_text = (TextView) findViewById(R.id.credit_card_text);
-
+        promocodeLayout = findViewById(R.id.promocode_layout);
         promoText = (TextView) findViewById(R.id.promocode_text);
         cardList = findViewById(R.id.card_list_view);
         validImage = findViewById(R.id.valid_image);
@@ -68,6 +68,13 @@ String defaultCard_id = "";
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle("Payments");
+
+        if(PreferencesUtils.getData(Constants.user_type,getApplicationContext(),"").equals("trainer")){
+            promocodeLayout.setVisibility(View.GONE);
+        }else{
+            promocodeLayout.setVisibility(View.VISIBLE);
+        }
+
         applyPromo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

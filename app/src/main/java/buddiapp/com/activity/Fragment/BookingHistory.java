@@ -139,6 +139,8 @@ ListView list;
                             else
                             jsonObject.put("extended","true");
 
+                            jsonObject.put("promocode",jsonObject.getString("promocode"));
+
                             jsonarray.put(jsonObject);
                             db.insertHistroy(jsonObject);
 
