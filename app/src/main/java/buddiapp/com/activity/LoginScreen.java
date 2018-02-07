@@ -296,7 +296,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            CommonCall.showLoader(LoginScreen.this);
+            CommonCall.showLoader(LoginScreen.this,"Wait...");
 
         }
 
@@ -336,6 +336,7 @@ public class LoginScreen extends AppCompatActivity implements GoogleApiClient.On
                     PreferencesUtils.saveData(Constants.trainer_type, jsonObject.getString(Constants.trainer_type), getApplicationContext());
                     PreferencesUtils.saveData(Constants.age, jsonObject.getString(Constants.age), getApplicationContext());
 
+                    PreferencesUtils.saveData(Constants.wallet,String.format("%.2f",Float.parseFloat(jsonObject.getString("wallet_balance"))),getApplicationContext());
 
                     if (!PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainee")) {
 

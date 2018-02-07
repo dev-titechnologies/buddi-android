@@ -24,6 +24,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile('io.socket:socket.io-client:0.8.3') {
         exclude group: 'org.json', module: 'json'
     }
@@ -31,7 +32,7 @@ dependencies {
         exclude group: 'com.android.support'
     }
     compile('com.hbb20:ccp:2.0.1') { exclude group: 'com.android.support' }
-  //  compile('com.braintreepayments.api:drop-in:3.0.8') { exclude group: 'com.android.support' }
+    //  compile('com.braintreepayments.api:drop-in:3.0.8') { exclude group: 'com.android.support' }
 
     compile('com.stripe:stripe-android:5.1.0') { exclude module: 'support-v4' }
 

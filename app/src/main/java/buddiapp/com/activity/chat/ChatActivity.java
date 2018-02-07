@@ -100,6 +100,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         new getMessages().execute();
 
+        if(mSocket.connected()){
+
+                }else{
+                    updateSocket();
+                    mSocket.connect();
+                    chatConnect();
+        }
 
     }
 
@@ -129,7 +136,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         );
 
         Controller.getInstance().setConnectivityListener(ChatActivity.this);
-
     }
 
     private void loadMessage(String content) {
@@ -352,6 +358,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 for(int i =0; i<jsonArray.length();i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     loadMessageFromSocket(jsonObject.getString("message"),jsonObject.getString("from_id"),jsonObject.getString("from_img"));
+                }
+                if(mSocket.connected()){
+
+                }else{
+                    updateSocket();
+                    mSocket.connect();
+                    chatConnect();
                 }
              }else if(obj.getInt("status") == 2){
                 CommonCall.hideLoader();

@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ import buddiapp.com.Settings.Constants;
 import buddiapp.com.Settings.PreferencesUtils;
 import buddiapp.com.activity.ChooseSpecification;
 import buddiapp.com.activity.MapTrainee;
+import buddiapp.com.activity.SessionReady;
 import buddiapp.com.adapter.HomeCategoryAdapter;
 import buddiapp.com.database.DatabaseHandler;
 import buddiapp.com.utils.AlertDialoge.RatingDialog;
@@ -154,6 +156,9 @@ public class HomeCategory extends Fragment {
                     }
                     }else{
                         Toast.makeText(getActivity(), "You are already in a session", Toast.LENGTH_SHORT).show();
+
+                        startActivity(new Intent(getActivity(), SessionReady.class));
+                        getActivity().finish();
                     }
 
                 } else {
@@ -312,6 +317,18 @@ public class HomeCategory extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
     }
 
     class SearchTrainer extends AsyncTask<String, String, String> {

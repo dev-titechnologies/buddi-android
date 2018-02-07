@@ -309,7 +309,11 @@ public class ChooseSpecification extends AppCompatActivity {
                                         if (sessionDuration > 0) {
                                             if (latitude > 0.0) {
                                             if(releaseForm){
-                                                new getPendingPayments().execute();
+//                                                new getPendingPayments().execute();
+
+                                                //new wallet via
+                                                new SearchTrainer().execute();
+
                                             }else{
                                             showReleseFormAlert();      
                                             }

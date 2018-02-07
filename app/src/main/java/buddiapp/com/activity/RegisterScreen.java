@@ -134,6 +134,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
         Intent intent = getIntent();
         try {
             if (intent.hasExtra("email")) {
+                eMail.setEnabled(false);
                 eMail.setText(intent.getStringExtra("email"));
                 firstName.setText(intent.getStringExtra("sfname"));
                 lastName.setText(intent.getStringExtra("slname"));
@@ -593,7 +594,7 @@ public class RegisterScreen extends AppCompatActivity implements GoogleApiClient
 
         @Override
         protected void onPreExecute() {
-            CommonCall.showLoader(RegisterScreen.this);
+            CommonCall.showLoader(RegisterScreen.this,"Sending now...");
 
             try {
                 reqData.put("mobile", validnumber);

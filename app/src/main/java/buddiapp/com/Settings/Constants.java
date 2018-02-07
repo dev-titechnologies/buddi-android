@@ -41,10 +41,11 @@ public class Constants {
 
     public static String approved = "category_approved";
 
-
+    public static String wallet = "wallet";
     public static String promo_code = "promo_code";
     public static String promo_code_limit = "promo_code_limit";
     public static String promo_code_code = "promo_code_code";
+    public static String promo_code_used_count = "promo_code_used_count";
 
     public static String trainer_Data = "trainer_Data";
 

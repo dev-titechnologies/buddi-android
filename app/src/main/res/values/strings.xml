@@ -98,7 +98,6 @@
     <string name="number">number</string>
 
 
-
     <string name="com.twitter.sdk.android.CONSUMER_KEY">caJSdofGAha6GijAVY20TdhVy</string>
     <string name="com.twitter.sdk.android.CONSUMER_SECRET">dPeLY2CiFEct3mpBwl53eUqqla2fExnLYi558GymRLPdcjiEek</string>
 
@@ -113,6 +112,8 @@ READ BEFORE SIGNING</string>
 \n\n3) I willingly agree to comply with the stated and customary terms and conditions for participation. If, however, I observe any unusual significant hazard during my presence or participation, I will remove myself from participation and bring such to the attention of a medical professional immediately; and, 
 \n\n4) I, for myself and on behalf of my heirs, assigns, personal representatives and next of kin, HEREBY RELEASE AND HOLD HARMLESS      BUDDI INC.      , their directors, officers, officials, agents, contractors, and/or employees, other participants, sponsoring agencies, sponsors, advertisers, and if applicable, owners and lessors of premises used to conduct the event (“RELEASEES”), WITH RESPECT TO ANY AND ALL INJURY, DISABILITY, DEATH, or loss or damage to person or property, WHETHER ARISING FROM THE NEGLIGENCE OF THE RELEASEES OR OTHERWISE, to the fullest extent permitted by law. </string>
 
+
+    <string name="pbs_setup_title"><font fgcolor="#FFFF0000">$</font></string>
 
     <string name="release_form_text2">I HAVE READ THIS RELEASE OF LIABILITY AND ASSUMPTION OF RISK AGREEMENT, FULLY UNDERSTAND ITS TERMS, UNDERSTAND THAT I HAVE GIVEN UP SUBSTANTIAL RIGHTS BY SIGNING IT, AND SIGN IT FREELY AND VOLUNTARILY WITHOUT ANY INDUCEMENT. </string>
 

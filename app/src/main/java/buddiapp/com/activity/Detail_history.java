@@ -1,8 +1,13 @@
 package buddiapp.com.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -149,4 +154,46 @@ public class Detail_history extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(refresh,
+                new IntentFilter("BUDDI_TRAINER_SESSION_FINISH"));
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                startAuto, new IntentFilter("BUDDI_TRAINER_START")
+        );
+    }
+
+    BroadcastReceiver startAuto = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent intentB = new Intent(getApplicationContext(), SessionReady.class);
+            startActivity(intentB);
+            finish();
+        }
+    };
+    private BroadcastReceiver refresh = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //write your activity starting code here
+            Intent intentB = new Intent(getApplicationContext(), SessionReady.class);
+            startActivity(intentB);
+            finish();
+        }
+    };
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(refresh);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(startAuto);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(refresh);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(startAuto);
+    }
 }

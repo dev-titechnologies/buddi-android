@@ -155,6 +155,7 @@ public class Timer_Service extends Service {
         fn_update("Session Completed");
         sessionCompleted("Session Completed");
         PreferencesUtils.saveData(Constants.timmer_status, "false", getApplicationContext());
+
     }
 
     private void fn_update(String str_time) {
@@ -229,6 +230,9 @@ CommonCall.PrintLog("BEFORE BROADCAST",stopFlag+"");
             CommonCall.PrintLog("AFTER BROADCAST",stopFlag+"");
 
 //            new CommonCall.timerUpdate((Activity) getApplicationContext(), "complete", bookid, "").execute();
+
+            Intent ins=new Intent("redirectToSessionReady");
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(ins);
 
 
         }

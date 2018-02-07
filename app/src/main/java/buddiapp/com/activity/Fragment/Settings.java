@@ -2,11 +2,15 @@ package buddiapp.com.activity.Fragment;
 
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.util.Log;
@@ -47,6 +51,7 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import buddiapp.com.R;
 import buddiapp.com.Settings.Constants;
 import buddiapp.com.Settings.PreferencesUtils;
+import buddiapp.com.activity.SessionReady;
 import buddiapp.com.activity.SettingsCategory;
 import buddiapp.com.utils.CommonCall;
 
@@ -546,6 +551,29 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
     public void onResume() {
         super.onResume();
         catname.setText(PreferencesUtils.getData(Constants.settings_cat_name,getActivity(),""));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(refresh,
+                new IntentFilter("BUDDI_TRAINER_SESSION_FINISH"));
+    }
 
+    private BroadcastReceiver refresh = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //write your activity starting code here
+            Intent intentB = new Intent(getActivity(), SessionReady.class);
+            getActivity().startActivity(intentB);
+        }
+    };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(refresh);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(refresh);
     }
 }

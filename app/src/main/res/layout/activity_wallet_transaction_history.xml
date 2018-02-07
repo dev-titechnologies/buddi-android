@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context="buddiapp.com.activity.WalletTransactionHistory">
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/swipe_layout">
+        <!-- TODO: Update blank fragment layout -->
+        <ListView
+            android:layout_width="match_parent"
+            android:id="@+id/transaction_list"
+            android:smoothScrollbar="true"
+            android:layout_height="match_parent">
+
+        </ListView>
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/no_transaction"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:text="No transactions yet"/>
+</LinearLayout>

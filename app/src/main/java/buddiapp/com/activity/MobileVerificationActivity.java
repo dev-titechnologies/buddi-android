@@ -164,7 +164,7 @@ public class MobileVerificationActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            CommonCall.showLoader(MobileVerificationActivity.this);
+            CommonCall.showLoader(MobileVerificationActivity.this,"Please wait...");
             retry.setVisibility(View.GONE);
             try {
                 reqData.put("mobile", mobile);
@@ -233,7 +233,7 @@ public class MobileVerificationActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            CommonCall.showLoader(MobileVerificationActivity.this);
+            CommonCall.showLoader(MobileVerificationActivity.this,"Verifying...");
             retry.setVisibility(View.GONE);
             try {
                 reqData.put("mobile", mobile);

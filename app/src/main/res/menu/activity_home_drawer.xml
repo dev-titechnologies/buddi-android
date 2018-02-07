@@ -15,6 +15,10 @@
             android:icon="@drawable/ic_payment_black"
             android:title="Payment Method" />
         <item
+            android:id="@+id/nav_wallet"
+            android:icon="@drawable/ic_wallet_black"
+            android:title="Wallet" />
+        <item
             android:id="@+id/nav_trainer"
             android:icon="@drawable/ic_check_circle_black_24dp"
             android:title="Become a Trainer" />

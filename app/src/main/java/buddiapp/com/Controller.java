@@ -328,4 +328,8 @@ public class Controller extends MultiDexApplication {
     public void setConnectivityListener(ConnectivityReceiver.ConnectivityReceiverListener listener) {
         ConnectivityReceiver.connectivityReceiverListener = listener;
     }
+
+    interface DrawerLocker{
+        public void setDrawerLocked(boolean shouldLock);
+    }
 }

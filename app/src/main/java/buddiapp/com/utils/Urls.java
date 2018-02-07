@@ -1,3 +1,4 @@
+
 package buddiapp.com.utils;
 
 
@@ -15,7 +16,7 @@ public class Urls {
 //  public static String BASEURL = "http://buddiapi.buddiadmin.com";
 
 
-//  public static String BASEURL = "http://192.168.1.60:9002";
+//    public static String BASEURL = "http://192.168.1.60:9002";
 
 //  public static String BASEURL= "http://192.168.1.20:9002";
 
@@ -88,8 +89,38 @@ public class Urls {
 
     public static String findDefaultCard ="/payment/findDefaultCard";
 
+    public static String addToWallet ="/wallet/addtoWallet";
+
+    public static String getWalletBalance ="/wallet/walletBalance";
+
+    public static String getWalletCheckout ="/wallet/checkoutWallet";
+
+    public static String getWalletHistory ="/wallet/walletHistory";
+
+    public static String getWalletWithdrawal ="/wallet/walletWithdrawal ";
+
+    public static String getWalletWithdrawalURL() {
+        return BASEURL + getWalletWithdrawal;
+    }
+
+    public static String getGetWalletHistoryURL() {
+        return BASEURL + getWalletHistory;
+    }
+
+    public static String getWalletCheckOutURL() {
+        return BASEURL + getWalletCheckout;
+    }
+
+    public static String getWalletBalanceURL() {
+        return BASEURL + getWalletBalance;
+    }
+
+    public static String getAddToWalletURL() {
+        return BASEURL + addToWallet;
+    }
+
     public static String getFindDefaultCardURL() {
-         return BASEURL + findDefaultCard;
+        return BASEURL + findDefaultCard;
     }
 
     public static String getDefaultStripeCardURL() {

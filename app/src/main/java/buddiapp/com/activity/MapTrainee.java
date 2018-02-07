@@ -1,5 +1,6 @@
 package buddiapp.com.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.os.CountDownTimer;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -55,8 +57,10 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
     private HashMap<Marker, String> hashMarker = new HashMap<Marker, String>();
 
     AVLoadingIndicatorView avi;
-
+    String amountRequired = "0", amount ="0";
     int resultPayment = 403;
+    int zeroBalanceRequestCode = 303;
+    int cardAddRequestCode = 304;
 
     @Override
     public void onBackPressed() {
@@ -107,7 +111,62 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
             public void onClick(View view) {
                 {
 
+                    /// new method walletttttttt
+                    if (PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "").length()> 0) {
+                        new RandomSelect().execute();
+                    }else if (PreferencesUtils.getData(Constants.clientToken, getApplicationContext(), "").length() > 1) {
+                        if(Float.parseFloat(PreferencesUtils.getData(Constants.wallet,getApplicationContext(),"0"))>0){
+                            new WalletCheckOut().execute();
+                        }else{
+                            @SuppressLint("RestrictedApi") final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(MapTrainee.this, R.style.cancelDialog));
+
+                            builder.setMessage("Your wallet balance is Zero. Please top up your wallet.");
+                            builder.setCancelable(false);
+                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                                    Intent intent = new Intent(getApplicationContext(),WalletActivity.class);
+                                    intent.putExtra("from", "maptrainee");
+                                    startActivityForResult(intent,zeroBalanceRequestCode);
+                                }
+                            });
+                            final AlertDialog alert = builder.create();
+                            alert.show();
+                        }
+                    }else{
+                        /*@SuppressLint("RestrictedApi") final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getApplicationContext(), R.style.cancelDialog));
+
+                        builder.setMessage("You haven't added your card details. Please add it in Payment method tab");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+*/
+                        Toast.makeText(MapTrainee.this, "You haven't added your card details. Please add it in Payment method tab", Toast.LENGTH_SHORT).show();
+                        Intent payment = new Intent(getApplicationContext(), PaymentType.class);
+//                                payment.putExtra("from", "maptrainee");
+//                                payment.putExtra("result", true);
+                                payment.putExtra("from", "addCard");
+                                startActivityForResult(payment, cardAddRequestCode);
+
+//                            }
+//                        });
+//                        final AlertDialog alert = builder.create();
+//                        alert.show();
+                    }
+
+
+                    /*if (PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "").length() == 0) {
+
+                        intPayment();
+                    } else
+
+                    {
+                        new RandomSelect().execute();
+                    }
                     if (PreferencesUtils.getData(Constants.clientToken, getApplicationContext(), "").length() > 1) {
+
+                    }*/
+
+                    /*if (PreferencesUtils.getData(Constants.clientToken, getApplicationContext(), "").length() > 1) {
 
                         if (PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "").length() == 0) {
 
@@ -115,7 +174,6 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                         } else
 
                             {
-
                             new RandomSelect().execute();
                         }
                     } else {
@@ -123,7 +181,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                         Intent payment = new Intent(getApplicationContext(), PaymentType.class);
                         payment.putExtra("result", true);
                         startActivityForResult(payment, resultPayment);
-                    }
+                    }*/
                 }
             }
         });
@@ -198,9 +256,11 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                 {
 
 //                        new RandomSelect().execute();
+    // new method ------------->>>>>>>>>>>>>>>>>>>>>>>>
+                    new WalletCheckOut().execute();
 
-
-                    if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals(duration)) {
+    // old methodddd ------------------------>>>>>>>>>>>>>>>>>>>>>
+                    /*if (PreferencesUtils.getData(Constants.duration, getApplicationContext(), "").equals(duration)) {
 
 
                         new RandomSelect().execute();
@@ -229,10 +289,10 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         // continue  with delete
-                                      /*  avi.setVisibility(View.VISIBLE);
+                                      *//*  avi.setVisibility(View.VISIBLE);
 
 
-                                        new checkout(MapTrainee.this, nounce).execute();*/
+                                        new checkout(MapTrainee.this, nounce).execute();*//*
                                         avi.setVisibility(View.GONE);
                                         onBackPressed();
 
@@ -250,13 +310,16 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 
 
                     }
-
+*/
                 } else {
 
-            if (PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "").length() != 0)
-                new RandomSelect().execute();
-                else
-                    new checkout(MapTrainee.this, nounce).execute();
+                    if (PreferencesUtils.getData(Constants.promo_code, getApplicationContext(), "").length() != 0)
+                        new RandomSelect().execute();
+                    else
+                    {
+//                new checkout(MapTrainee.this, nounce).execute();
+                        new WalletCheckOut().execute();
+                    }
 
 
                 }
@@ -419,16 +482,17 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                 reqData.put(Constants.latitude, lat);
                 reqData.put(Constants.longitude, lng);
 
+                reqData.put("amount", amount);
 
                 if (duration.equals("40")) {
                     reqData.put("transaction_id", PreferencesUtils.getData(Constants.transactionId40, getApplicationContext(), "0"));
                     reqData.put("transaction_status", PreferencesUtils.getData(Constants.transaction_status40, getApplicationContext(), "0"));
-                    reqData.put("amount", PreferencesUtils.getData(Constants.amount40, getApplicationContext(), "0"));
+//                    reqData.put("amount", PreferencesUtils.getData(Constants.amount40, getApplicationContext(), "0"));
 
 
                 } else {
                     reqData.put("transaction_status", PreferencesUtils.getData(Constants.transaction_status60, getApplicationContext(), "0"));
-                    reqData.put("amount", PreferencesUtils.getData(Constants.amount60, getApplicationContext(), "0"));
+//                    reqData.put("amount", PreferencesUtils.getData(Constants.amount60, getApplicationContext(), "0"));
 
                     reqData.put("transaction_id", PreferencesUtils.getData(Constants.transactionId60, getApplicationContext(), "0"));
 
@@ -455,12 +519,13 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
             try {
                 JSONObject obj = new JSONObject(s);
                 if (obj.getInt("status") == 1) {
                     if (obj.getString("status_type").equals("NoTrainersFound")) {
                         Toast.makeText(getApplicationContext(),"No trainers found",Toast.LENGTH_SHORT);
+                        avi.setVisibility(View.GONE);
+                        select.setClickable(true);
                     }else {
                         timeOut(obj.getInt("length"));
                         PreferencesUtils.saveData(Constants.promo_code, "", getApplicationContext());
@@ -490,6 +555,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                     select.setClickable(true);
                 }
             } catch (JSONException e) {
+
                 e.printStackTrace();
                 avi.setVisibility(View.GONE);
                 select.setClickable(true);
@@ -679,14 +745,238 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
 //                CommonCall.hideLoader();
                 Toast.makeText(this, "Payment cancelled", Toast.LENGTH_SHORT).show();
 
-            } else {
+            }else if(resultCode == cardAddRequestCode){
+                avi.setVisibility(View.VISIBLE);
+                select.setClickable(false);
+                new WalletCheckOutForAddCard().execute();
+            }
+            else if(resultCode == zeroBalanceRequestCode){
+                intPayment();
+            }
+            else {
                 avi.setVisibility(View.GONE);
                 select.setClickable(true);
 //                CommonCall.hideLoader();
                 CommonCall.PrintLog("mylog", "Error :403 ");
             }
+        }else if(resultCode == cardAddRequestCode){
+            avi.setVisibility(View.VISIBLE);
+            select.setClickable(false);
+            new WalletCheckOutForAddCard().execute();
+        }
+        else if(resultCode == zeroBalanceRequestCode){
+            intPayment();
         }
 
 
+    }
+
+
+
+
+    public class WalletCheckOut extends AsyncTask<String, String, String> {
+        JSONObject reqData = new JSONObject();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+//            CommonCall.showLoader(MapTrainee.this);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+
+                reqData.put("training_time", duration);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            String response = NetworkCalls.POST(Urls.getWalletCheckOutURL(), reqData.toString());
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+//            CommonCall.hideLoader();
+            try {
+                final JSONObject response = new JSONObject(s);
+
+                if (response.getInt(Constants.status) == 1) {
+//                    Toast.makeText(getApplicationContext(),response.getString("message"), Toast.LENGTH_LONG).show();
+                    if(response.getString("status_type").equals("InsufficientBalance")){
+                        Toast.makeText(getApplicationContext(),response.getString("message"), Toast.LENGTH_LONG).show();
+                        avi.setVisibility(View.GONE);
+                        select.setClickable(true);
+                        Intent intent = new Intent(getApplicationContext(),WalletActivity.class);
+                        intent.putExtra("from", "maptrainee");
+                        intent.putExtra("amountRequired",response.getJSONObject("data").getString("amountRequired"));
+                        startActivityForResult(intent,zeroBalanceRequestCode);
+                    }else{
+//                        wallet.setText(response.getJSONObject("data").getString("walletBalance"));
+                        PreferencesUtils.saveData(Constants.wallet,response.getJSONObject("data").getString("walletBalance"),getApplicationContext());
+                        amount = response.getJSONObject("data").getString("amountDeducted");
+                    new RandomSelect().execute();
+                        String walletString = "Wallet    $"+PreferencesUtils.getData(Constants.wallet,getApplicationContext(),"0");
+                        CommonCall.setMenuTextColor(HomeActivity.menu,R.id.nav_wallet,walletString);
+
+                    }
+                }else if (response.getInt(Constants.status) == 2) {
+                    if(response.getString("message").equals("Cannot charge a customer that has no active card")){
+                        @SuppressLint("RestrictedApi") final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(MapTrainee.this, R.style.cancelDialog));
+
+                        builder.setMessage("You are not added your card details with buddi. Please add it in Payment method tab");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+//                            alert.dismiss();
+
+                            }
+                        });
+                        final AlertDialog alert = builder.create();
+                        alert.show();
+                    }else{
+                        Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+                } else if (response.getInt(Constants.status) == 3) {
+                    Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_SHORT).show();
+                    CommonCall.sessionout(getApplicationContext());
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class WalletCheckOutForAddCard extends AsyncTask<String, String, String> {
+        JSONObject reqData = new JSONObject();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            CommonCall.showLoader(MapTrainee.this);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+
+                reqData.put("training_time", duration);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            String response = NetworkCalls.POST(Urls.getWalletCheckOutURL(), reqData.toString());
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            CommonCall.hideLoader();
+            try {
+                final JSONObject response = new JSONObject(s);
+
+                if (response.getInt(Constants.status) == 1) {
+//                    Toast.makeText(getApplicationContext(),response.getString("message"), Toast.LENGTH_SHORT).show();
+                    if(response.getString("status_type").equals("InsufficientBalance")){
+                        amountRequired = response.getJSONObject("data").getString("amountRequired");
+                        new AddToWallet().execute();
+                    }else{
+                        intPayment();
+                    }
+                }else if (response.getInt(Constants.status) == 2) {
+                    if(response.getString("message").equals("Cannot charge a customer that has no active card")){
+                        @SuppressLint("RestrictedApi") final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(MapTrainee.this, R.style.cancelDialog));
+
+                        builder.setMessage("You have not added your card details with buddi. Please add it in Payment method tab");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+//                            alert.dismiss();
+
+                            }
+                        });
+                        final AlertDialog alert = builder.create();
+                        alert.show();
+                    }else{
+                        Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+                } else if (response.getInt(Constants.status) == 3) {
+                    Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_SHORT).show();
+                    CommonCall.sessionout(getApplicationContext());
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class AddToWallet extends AsyncTask<String, String, String> {
+        JSONObject reqData = new JSONObject();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+//            CommonCall.showLoader(MapTrainee.this);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+
+                reqData.put("amount", amountRequired);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            String response = NetworkCalls.POST(Urls.getAddToWalletURL(), reqData.toString());
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            CommonCall.hideLoader();
+            try {
+                final JSONObject response = new JSONObject(s);
+
+                if (response.getInt(Constants.status) == 1) {
+                    Toast.makeText(getApplicationContext(),response.getString("message"), Toast.LENGTH_SHORT).show();
+                    PreferencesUtils.saveData(Constants.wallet,response.getJSONObject("data").getString("walletBalance"),getApplicationContext());
+                    intPayment();
+
+                    String walletString = "Wallet    $"+PreferencesUtils.getData(Constants.wallet,getApplicationContext(),"0");
+                    CommonCall.setMenuTextColor(HomeActivity.menu,R.id.nav_wallet,walletString);
+
+                }else if (response.getInt(Constants.status) == 2) {
+                    if(response.getString("message").equals("Cannot charge a customer that has no active card")){
+                        @SuppressLint("RestrictedApi") final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(MapTrainee.this, R.style.cancelDialog));
+
+                        builder.setMessage("You are not added your card details with buddi. Please add it in Payment method tab");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+//                            alert.dismiss();
+
+                            }
+                        });
+                        final AlertDialog alert = builder.create();
+                        alert.show();
+                    }else{
+                        Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+                } else if (response.getInt(Constants.status) == 3) {
+                    Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_SHORT).show();
+                    CommonCall.sessionout(getApplicationContext());
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

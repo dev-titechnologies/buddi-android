@@ -1,10 +1,12 @@
 package buddiapp.com.activity;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +18,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
@@ -273,6 +276,45 @@ public class ProfileScreen extends AppCompatActivity {
         }
 
         return mediaFile;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(refresh,
+                new IntentFilter("BUDDI_TRAINER_SESSION_FINISH"));
+    }
+    private BroadcastReceiver refresh = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //write your activity starting code here
+            Intent intentB = new Intent(getApplicationContext(), SessionReady.class);
+            startActivity(intentB);
+            finish();
+        }
+    };
+    BroadcastReceiver startAuto = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent intentB = new Intent(getApplicationContext(), SessionReady.class);
+            startActivity(intentB);
+            finish();
+        }
+    };
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(refresh);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(startAuto);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(refresh);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(startAuto);
     }
 
 

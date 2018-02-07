@@ -1,13 +1,17 @@
 package buddiapp.com.activity.Fragment;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -38,6 +42,7 @@ import buddiapp.com.ContactModel;
 import buddiapp.com.R;
 import buddiapp.com.Settings.Constants;
 import buddiapp.com.Settings.PreferencesUtils;
+import buddiapp.com.activity.SessionReady;
 import buddiapp.com.utils.CommonCall;
 import buddiapp.com.utils.NetworkCalls;
 import buddiapp.com.utils.Urls;
@@ -101,6 +106,37 @@ public class InviteFriends extends Fragment {
 
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(refresh,
+                new IntentFilter("BUDDI_TRAINER_SESSION_FINISH"));
+    }
+
+    private BroadcastReceiver refresh = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //write your activity starting code here
+            Intent intentB = new Intent(getActivity(), SessionReady.class);
+            getActivity().startActivity(intentB);
+        }
+    };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(refresh);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(refresh);
+    }
+
+
 
     class GetContactTask extends AsyncTask<String, String, JSONArray> {
         @Override
@@ -410,7 +446,7 @@ public class InviteFriends extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            CommonCall.showLoader(getActivity());
+            CommonCall.showLoader(getActivity(),"Sending your invitation...");
 
 
         }

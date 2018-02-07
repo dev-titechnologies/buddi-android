@@ -18,15 +18,22 @@
     android:id="@+id/root_profile"
     android:layout_marginTop="10dp"
     android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/medium"
+        android:layout_marginTop="@dimen/medium"
+        android:gravity="start"
+        android:orientation="horizontal">
     <buddiapp.com.utils.CircleImageView
         android:id="@+id/userImageView"
-        android:layout_gravity="left"
+        android:gravity="left"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_weight="1.5"
-        android:layout_marginTop="@dimen/large"
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
+    </LinearLayout>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

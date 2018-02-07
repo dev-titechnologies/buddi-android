@@ -215,7 +215,6 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
             sessionTimmer.setText(training_time + ":00");
 
-
 //        SupportMapFragment mapFragment = (SupportMapFragment) this.getSupportFragmentManager()
 //                .findFragmentById(map);
 //        mapFragment.getMapAsync(this);
@@ -255,24 +254,24 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
     void intstartStop() {
 
-        start = (LinearLayout) findViewById(R.id.start);
-        cancel = (LinearLayout) findViewById(R.id.cancel);
-        profile = (LinearLayout) findViewById(R.id.profile);
-        message = (LinearLayout) findViewById(R.id.message);
+        start =  findViewById(R.id.start);
+        cancel =  findViewById(R.id.cancel);
+        profile =  findViewById(R.id.profile);
+        message =  findViewById(R.id.message);
 
         horizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontalScrollView);
 
 
-        startactionIcon = (ImageView) findViewById(R.id.startactionIcon);
-        stopactionIcon = (ImageView) findViewById(R.id.stopactionIcon);
-        profileactionIcon = (CircleImageView) findViewById(R.id.profileactionIcon);
-        messageactionIcon = (ImageView) findViewById(R.id.messageactionIcon);
-        cancelactionIcon = (ImageView) findViewById(R.id.cancelactionIcon);
+        startactionIcon =  findViewById(R.id.startactionIcon);
+        stopactionIcon =  findViewById(R.id.stopactionIcon);
+        profileactionIcon =  findViewById(R.id.profileactionIcon);
+        messageactionIcon =  findViewById(R.id.messageactionIcon);
+        cancelactionIcon =  findViewById(R.id.cancelactionIcon);
 
-        startactionTitle = (TextView) findViewById(R.id.startactionTitle);
-        stopactionTitle = (TextView) findViewById(R.id.stopactionTitle);
-        profileactionTitle = (TextView) findViewById(R.id.profileactionTitle);
-        messageactionTitle = (TextView) findViewById(R.id.messagectionTitle);
+        startactionTitle =  findViewById(R.id.startactionTitle);
+        stopactionTitle =  findViewById(R.id.stopactionTitle);
+        profileactionTitle =  findViewById(R.id.profileactionTitle);
+        messageactionTitle =  findViewById(R.id.messagectionTitle);
 
 
         sessionTimmer = (TextView) findViewById(R.id.sessionTimmer);
@@ -518,7 +517,6 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
             startactionIcon.setImageResource(R.mipmap.stop_blue);
             startService(new Intent(getApplicationContext(), LocationService.class));
             startService(new Intent(SessionReady.this, Timer_Service.class));
-
 
         }
     }
@@ -1001,8 +999,6 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-
         if (mSocket != null)
             mSocket.disconnect();
     }
@@ -1413,7 +1409,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            CommonCall.showLoader(SessionReady.this);
+            CommonCall.showLoader(SessionReady.this,"Session is going to start now...");
         }
 
         @Override
@@ -1471,6 +1467,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                     PreferencesUtils.saveData("data", date_time, getApplicationContext());
                     PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
+
 //                    if (training_time == 40)
 //                        PreferencesUtils.saveData("hours", "2", getApplicationContext());
 //                    else

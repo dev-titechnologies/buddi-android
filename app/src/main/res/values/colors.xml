@@ -54,4 +54,5 @@
     <color name="text_color">#32A7D8</color>
 
     <color name="marker_color">#06A3FD</color>
+    <color name="color_proceed">#97ecf5</color>
 </resources>

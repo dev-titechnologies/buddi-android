@@ -272,7 +272,7 @@ TextView subcat_title;
         protected void onPreExecute() {
             super.onPreExecute();
 
-            CommonCall.showLoader(Question4.this);
+            CommonCall.showLoader(Question4.this,"Saving...");
         }
 
         @Override

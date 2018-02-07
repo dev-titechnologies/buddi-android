@@ -1,5 +1,6 @@
 package buddiapp.com.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -15,7 +17,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.view.ContextThemeWrapper;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -176,6 +184,22 @@ public class CommonCall {
 
         String formattedDate = null;
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyy, hh:mm aa");
+        try {
+            formattedDate = sdf.format((Iso8601.toCalendar(date).getTime()));
+
+//            formattedDate = Long.parseLong(getTimeAgo(Iso8601.toCalendar(date).getTimeInMillis()));
+//            formattedDate = Iso8601.toCalendar(date).getTimeInMillis();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formattedDate;
+    }
+
+    public static String convertTime2(String date) {
+
+        String formattedDate = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyy, hh:mm aa");
         try {
             formattedDate = sdf.format((Iso8601.toCalendar(date).getTime()));
 
@@ -723,7 +747,8 @@ public class CommonCall {
                     case DialogInterface.BUTTON_POSITIVE:
                         //Yes button clicked
 //                        handler.removeCallbacks(runnable);
-                        picSessionTimeDialog(activity);
+//                        picSessionTimeDialog(activity);
+                        extendSessionTask(activity);
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -984,5 +1009,205 @@ public static void postTwitter(String msg){
             }
         }
     }
+    public static String withSuffix(long count) {
+        if (count < 1000) return "" + count;
+        int exp = (int) (Math.log(count) / Math.log(1000));
+        return String.format("%.1f %c",
+                count / Math.pow(1000, exp),
+                "kMGTPE".charAt(exp-1));
+    }
+
+    public static void extendSessionTask(Activity activity){
+        if(Float.parseFloat(PreferencesUtils.getData(Constants.wallet,activity,"0"))>0){
+            new ExtendWalletCheckOut(activity).execute();
+        }else{
+            /*@SuppressLint("RestrictedApi") final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.cancelDialog));
+
+            builder.setMessage("Your wallet balance is Zero. Please top up your wallet.");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+
+                }
+            });
+            final AlertDialog alert = builder.create();
+            alert.show();*/
+            if (PreferencesUtils.getData(Constants.clientToken, activity, "").length() > 1) {
+                new ExtendWalletCheckOut(activity).execute();
+            }else{
+                Toast.makeText(activity, "You have no active payment method to proceed", Toast.LENGTH_SHORT).show();
+
+                String bookid = PreferencesUtils.getData(Constants.bookid, activity, "");
+
+
+                PreferencesUtils.saveData(Constants.flag_rating, "true", activity);
+
+
+                new CommonCall.timerUpdate(activity, "complete", bookid, "").execute();
+
+            }
+
+        }
+    }
+    public static class ExtendWalletCheckOut extends AsyncTask<String, String, String> {
+        JSONObject reqData = new JSONObject();
+        Activity activity;
+        public  ExtendWalletCheckOut( Activity activity){
+            this.activity = activity;
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            CommonCall.showLoader(activity);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+
+                reqData.put("training_time", "15");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            String response = NetworkCalls.POST(Urls.getWalletCheckOutURL(), reqData.toString());
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            CommonCall.hideLoader();
+            try {
+                final JSONObject response = new JSONObject(s);
+
+                if (response.getInt(Constants.status) == 1) {
+                    Toast.makeText(activity,response.getString("message"), Toast.LENGTH_LONG).show();
+                    if(response.getString("status_type").equals("InsufficientBalance")){
+
+                        new ExtendAddToWallet(activity,response.getJSONObject("data").getString("amountRequired")).execute();
+
+                    }else{
+
+                        PreferencesUtils.saveData(Constants.wallet,String.format("%.2f",Float.parseFloat(response.getJSONObject("data").getString("walletBalance"))),activity);
+
+                        String walletString = "Wallet    $"+PreferencesUtils.getData(Constants.wallet,activity,"0");
+                        CommonCall.setMenuTextColor(HomeActivity.menu,R.id.nav_wallet,walletString);
+                        new extendSession(activity, "", PreferencesUtils.getData(Constants.bookid, activity, ""), "15").execute();
+                    }
+                }else if (response.getInt(Constants.status) == 2) {
+                    if(response.getString("message").equals("Cannot charge a customer that has no active card")){
+                        @SuppressLint("RestrictedApi") final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.cancelDialog));
+
+                        builder.setMessage("You are not added your card details with buddi. Please add it in Payment method tab");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+//                            alert.dismiss();
+
+                            }
+                        });
+                        final AlertDialog alert = builder.create();
+                        alert.show();
+                    }else{
+                        Toast.makeText(activity, response.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+                } else if (response.getInt(Constants.status) == 3) {
+                    Toast.makeText(activity, response.getString("message"), Toast.LENGTH_SHORT).show();
+                    CommonCall.sessionout(activity);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static class ExtendAddToWallet extends AsyncTask<String, String, String> {
+        JSONObject reqData = new JSONObject();
+        Activity activity;
+        String amount="";
+        public ExtendAddToWallet(Activity activity, String amount){
+            this.activity = activity;
+            this.amount = amount;
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            CommonCall.showLoader(activity);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+
+                reqData.put("amount", amount);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            String response = NetworkCalls.POST(Urls.getAddToWalletURL(), reqData.toString());
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            CommonCall.hideLoader();
+            try {
+                final JSONObject response = new JSONObject(s);
+
+                if (response.getInt(Constants.status) == 1) {
+                    Toast.makeText(activity,response.getString("message"), Toast.LENGTH_SHORT).show();
+                    PreferencesUtils.saveData(Constants.wallet,String.format("%.2f",Float.parseFloat(response.getJSONObject("data").getString("walletBalance"))),activity);
+
+                    String walletString = "Wallet    $"+PreferencesUtils.getData(Constants.wallet,activity,"0");
+                    CommonCall.setMenuTextColor(HomeActivity.menu,R.id.nav_wallet,walletString);
+                    new ExtendWalletCheckOut(activity).execute();
+                }else if (response.getInt(Constants.status) == 2) {
+                    if(response.getString("message").equals("Cannot charge a customer that has no active card")){
+                        @SuppressLint("RestrictedApi") final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.cancelDialog));
+
+                        builder.setMessage("You are not added your card details with buddi. Please add it in Payment method tab");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+//                            alert.dismiss();
+
+                            }
+                        });
+                        final AlertDialog alert = builder.create();
+                        alert.show();
+                    }else{
+                        Toast.makeText(activity, response.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+                } else if (response.getInt(Constants.status) == 3) {
+                    Toast.makeText(activity, response.getString("message"), Toast.LENGTH_SHORT).show();
+                    CommonCall.sessionout(activity);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+/****************  Spannable string              **************/
+
+public static void setMenuTextColor(Menu menu, int menuResource, String menuTextResource) {
+    int flag = Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
+    MenuItem item = menu.findItem(menuResource);
+    SpannableString s = new SpannableString(menuTextResource);
+    s.setSpan(new HomeActivity.CoolBackgroundColorSpan(Controller.getAppContext().getResources().getColor(R.color.colorPrimaryDark), Color.WHITE,25,4,8,flag)
+            , 10,s.length(),0);
+//            s.setSpan(new BackgroundColorSpan(getResources().getColor(R.color.colorPrimaryDark)), 10, s.length()+1, flag);
+//            s.setSpan(new ForegroundColorSpan(Color.WHITE), 6, s.length(), 0);
+
+    SpannableStringBuilder builder = new SpannableStringBuilder();
+    builder.append(s);
+
+    item.setTitle(builder);
+}
+
 
 }

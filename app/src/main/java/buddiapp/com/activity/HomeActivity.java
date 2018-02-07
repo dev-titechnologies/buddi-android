@@ -5,11 +5,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -21,6 +25,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.SpannedString;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.ReplacementSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,10 +41,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.security.PublicKey;
 
 import buddiapp.com.Controller;
 import buddiapp.com.R;
@@ -44,16 +61,22 @@ import buddiapp.com.activity.Fragment.InviteFriends;
 import buddiapp.com.activity.Fragment.Legal;
 import buddiapp.com.activity.Fragment.Settings;
 import buddiapp.com.activity.Fragment.TrainerProfileFragment;
+import buddiapp.com.activity.Fragment.Wallet;
 import buddiapp.com.activity.Payments.PaymentType;
 import buddiapp.com.database.DatabaseHandler;
 import buddiapp.com.fcm.Config;
 import buddiapp.com.fcm.NotificationUtils;
+import buddiapp.com.services.LocationService;
+import buddiapp.com.timmer.Timer_Service;
 import buddiapp.com.utils.CircleImageView;
 import buddiapp.com.utils.CommonCall;
 import buddiapp.com.utils.ConnectivityReceiver;
+import buddiapp.com.utils.DrawerLocker;
 import buddiapp.com.utils.NetworkCalls;
 import buddiapp.com.utils.Urls;
 
+import static buddiapp.com.Controller.mSocket;
+import static buddiapp.com.Controller.updateSocket;
 import static buddiapp.com.Settings.Constants.source_become_trainer;
 import static buddiapp.com.Settings.Constants.start_session;
 import static buddiapp.com.Settings.Constants.trainee_Data;
@@ -61,17 +84,21 @@ import static buddiapp.com.Settings.Constants.trainer_Data;
 import static buddiapp.com.Settings.Constants.user_type;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ConnectivityReceiver.ConnectivityReceiverListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        ConnectivityReceiver.ConnectivityReceiverListener, DrawerLocker {
 
     DrawerLayout drawer_layout;
     CircleImageView userImageView;
     LinearLayout root_profile;
     TextView name, email, rating;
     JSONObject data;
-    Menu menu;
+    public static Menu menu;
     DatabaseHandler db;
     Settings settings;
-
+    Wallet walletFragment;
+    DrawerLayout drawer;
+    TextView title;
+    public static TextView wallet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,10 +134,10 @@ public class HomeActivity extends AppCompatActivity
             }
         };
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Buddi");
+
 
         if (PreferencesUtils.getData(user_type, getApplicationContext(), "").equals(Constants.trainer)) {
             Fragment fragment = new TrainerProfileFragment();
@@ -130,8 +157,9 @@ public class HomeActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });*/
+        walletFragment = new Wallet();
 
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -142,6 +170,10 @@ public class HomeActivity extends AppCompatActivity
         View hView = navigationView.getHeaderView(0);
 
         menu = navigationView.getMenu();
+        String walletString = "Wallet    $"+PreferencesUtils.getData(Constants.wallet,getApplicationContext(),"0");
+//        menu.findItem(R.id.nav_wallet).setTitle("Wallet "+Html.fromHtml(String.format(Html.toHtml(new SpannedString(getResources().getText(R.string.pbs_setup_title))),
+//                walletString)) );
+        CommonCall.setMenuTextColor(menu,R.id.nav_wallet,walletString);
 
         if (PreferencesUtils.getData(user_type, getApplicationContext(), "").equals("trainer"))
             menu.findItem(R.id.nav_trainer).setTitle("Add Category");
@@ -170,13 +202,11 @@ public class HomeActivity extends AppCompatActivity
 
         }
 
-
         userImageView = (CircleImageView) hView.findViewById(R.id.userImageView);
         name = (TextView) hView.findViewById(R.id.name);
         email = (TextView) hView.findViewById(R.id.email);
         rating = (TextView) hView.findViewById(R.id.rating);
         root_profile = (LinearLayout) hView.findViewById(R.id.root_profile);
-
 
         root_profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,8 +224,9 @@ public class HomeActivity extends AppCompatActivity
         });
 
 
-
     }
+
+
 
     boolean doubleBackToExitPressedOnce = false;
 
@@ -228,11 +259,18 @@ public class HomeActivity extends AppCompatActivity
             }, 2000);
         }
     }
+    public void setDrawerLocked(boolean enabled){
+        if(enabled){
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        }else{
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        }
 
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
+//        getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
 
@@ -260,7 +298,6 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
 
-//                startService(new Intent(getApplicationContext(), Timer_Service.class));
                 Toast.makeText(this, "You are already in a session", Toast.LENGTH_SHORT).show();
 
                 startActivity(new Intent(getApplicationContext(), SessionReady.class));
@@ -294,6 +331,15 @@ public class HomeActivity extends AppCompatActivity
 
             Intent payment = new Intent(getApplicationContext(), PaymentType.class);
             startActivity(payment);
+        }else if (id == R.id.nav_wallet) {
+
+//            getSupportActionBar().setTitle("Wallet");
+//
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.fragment_frame, walletFragment, walletFragment.getClass().getSimpleName()).addToBackStack(null).commit();
+            Intent intent = new Intent(getApplicationContext(), WalletActivity.class);
+            startActivity(intent);
+
         } else if (id == R.id.nav_trainer) {
 
 
@@ -383,6 +429,7 @@ public class HomeActivity extends AppCompatActivity
 //        showSnack(isConnected);
     }
 
+
     //
     //
     // ****** LOg Out *******
@@ -428,6 +475,7 @@ public class HomeActivity extends AppCompatActivity
         // clear the notification area when the app is opened
         Controller.getInstance().setConnectivityListener(HomeActivity.this);
 
+
         try {
 
             name.setText(PreferencesUtils.getData(Constants.fname, getApplicationContext(), "") + " " + PreferencesUtils.getData(Constants.lname, getApplicationContext(), ""));
@@ -441,7 +489,78 @@ public class HomeActivity extends AppCompatActivity
         if (PreferencesUtils.getData(user_type, getApplicationContext(), "").equals("trainee")
                 & (PreferencesUtils.getData(Constants.trainer_Data, getApplicationContext(), "").equals("")))
             new getSessions().execute();
+
+        if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
+            startService(new Intent(getApplicationContext(), LocationService.class));
+        }
+
+        // Receiving for session complete
+        LocalBroadcastManager.getInstance(this).registerReceiver(refresh,
+                new IntentFilter("BUDDI_TRAINER_SESSION_FINISH"));
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                startAuto, new IntentFilter("BUDDI_TRAINER_START")
+        );
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(trainerLocationbr
+                , new IntentFilter("SOCKET_BUDDI_TRAINER_LOCATION"));
     }
+
+    BroadcastReceiver startAuto = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent intentB = new Intent(getApplicationContext(), SessionReady.class);
+            startActivity(intentB);
+            finish();
+        }
+    };
+
+    BroadcastReceiver trainerLocationbr = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+//            CommonCall.PrintLog("brodcastmsg trainerLocationbr", "brodcastmsg trainerLocationbr");
+//            String slat = intent.getStringExtra("trainer_latitude");
+//            String slng = intent.getStringExtra("trainer_longitude");
+//            // trainer location
+//
+//            trainerLocation = new LatLng(Double.parseDouble(slat), Double.parseDouble(slng));
+
+            Intent intentB = new Intent(getApplicationContext(), SessionReady.class);
+            startActivity(intentB);
+            finish();
+
+        }
+    };
+
+    private BroadcastReceiver refresh = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //write your activity starting code here
+            Intent intentB = new Intent(getApplicationContext(), SessionReady.class);
+            startActivity(intentB);
+            finish();
+        }
+    };
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(refresh);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(startAuto);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(trainerLocationbr);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(refresh);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(startAuto);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(trainerLocationbr);
+    }
+
+
+
 
     public void clearBackstack() {
 
@@ -456,6 +575,14 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+
+        if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
+            updateSocket();
+            mSocket.connect();
+            startService(new Intent(getApplicationContext(), LocationService.class));
+            startService(new Intent(HomeActivity.this, Timer_Service.class));
+
+        }
 
     }
 
@@ -612,5 +739,40 @@ public class HomeActivity extends AppCompatActivity
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
         textView.setTextColor(color);
         snackbar.show();
+    }
+
+    public static class CoolBackgroundColorSpan extends ReplacementSpan {
+
+        private final int mBackgroundColor;
+        private final int mTextColor;
+        private final float mCornerRadius;
+        private final float mPaddingStart;
+        private final float mPaddingEnd;
+        private final float mMarginStart;
+
+        public CoolBackgroundColorSpan(int backgroundColor, int textColor, float cornerRadius, float paddingStart, float paddingEnd, float marginStart) {
+            super();
+            mBackgroundColor = backgroundColor;
+            mTextColor = textColor;
+            mCornerRadius = cornerRadius;
+            mPaddingStart = paddingStart;
+            mPaddingEnd = paddingEnd;
+            mMarginStart = marginStart;
+        }
+
+        @Override
+        public int getSize(@NonNull Paint paint, CharSequence text, int start, int end, Paint.FontMetricsInt fm) {
+            return (int) (mPaddingStart + paint.measureText(text.subSequence(start, end).toString()) + mPaddingEnd);
+        }
+
+        @Override
+        public void draw(@NonNull Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, @NonNull Paint paint) {
+            float width = paint.measureText(text.subSequence(start, end).toString());
+            RectF rect = new RectF(x - mPaddingStart + mMarginStart, top, x + width + mPaddingEnd + mMarginStart, bottom);
+            paint.setColor(mBackgroundColor);
+            canvas.drawRoundRect(rect, mCornerRadius, mCornerRadius, paint);
+            paint.setColor(mTextColor);
+            canvas.drawText(text, start, end, x + mMarginStart, y, paint);
+        }
     }
 }

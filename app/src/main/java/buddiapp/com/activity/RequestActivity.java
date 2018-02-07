@@ -97,7 +97,7 @@ public class RequestActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            CommonCall.showLoader(RequestActivity.this);
+            CommonCall.showLoader(RequestActivity.this,"Please wait...");
         }
 
         @Override
