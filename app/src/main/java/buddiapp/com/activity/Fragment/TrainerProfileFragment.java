@@ -42,17 +42,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import buddiapp.com.R;
 import buddiapp.com.Settings.Constants;
 import buddiapp.com.Settings.PreferencesUtils;
-import buddiapp.com.activity.ChooseSpecification;
-import buddiapp.com.activity.ProfileScreen;
 import buddiapp.com.activity.TrainerCategory;
-import buddiapp.com.activity.TrainerProfileView;
 import buddiapp.com.services.LocationService;
 import buddiapp.com.utils.AlertDialoge.RatingDialog;
 import buddiapp.com.utils.CircleImageView;
@@ -875,5 +868,10 @@ public class TrainerProfileFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

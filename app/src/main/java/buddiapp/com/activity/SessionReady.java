@@ -94,12 +94,9 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     private LatLng camera, usercamera;
     Double latitude, longitude, userlat, userlng;
     LocationManager mLocationManager;
-    Button select;
-    String sgender, lat = "0", lng = "0", traine_id, trainer_id, duration, book_id;
+    String lat = "0", lng = "0", traine_id, trainer_id, duration, book_id;
     int training_time;
-    String disatance, name;
-    private HashMap<Marker, String> hashMarker = new HashMap<Marker, String>();
-    private FusedLocationProviderClient mFusedLocationClient;
+    String name;
 
     LatLng trainerLocation;
 
@@ -515,7 +512,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
             cancel.setEnabled(false);
             startactionIcon.setImageResource(R.mipmap.stop_blue);
-            startService(new Intent(getApplicationContext(), LocationService.class));
+//            startService(new Intent(getApplicationContext(), LocationService.class));
             startService(new Intent(SessionReady.this, Timer_Service.class));
 
         }
@@ -901,15 +898,11 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
         registerReceiver(
                 stopAutobr, intentFilter
-
-
         );
 
 
         LocalBroadcastManager.getInstance(this).registerReceiver(brfinsih
                 , new IntentFilter("BUDDI_TRAINER_SESSION_FINISH")
-
-
         );
     }
 
@@ -999,8 +992,8 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mSocket != null)
-            mSocket.disconnect();
+//        if (mSocket != null)
+//            mSocket.disconnect();
     }
 
     private void LoadmapTask() {
@@ -1466,12 +1459,12 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
                     PreferencesUtils.saveData("data", date_time, getApplicationContext());
-                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
+//                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
 
-//                    if (training_time == 40)
-//                        PreferencesUtils.saveData("hours", "2", getApplicationContext());
-//                    else
-//                        PreferencesUtils.saveData("hours", "4", getApplicationContext());
+                    if (training_time == 40)
+                        PreferencesUtils.saveData("hours", "2", getApplicationContext());
+                    else
+                        PreferencesUtils.saveData("hours", "4", getApplicationContext());
 
 
                     startService(new Intent(SessionReady.this, Timer_Service.class));

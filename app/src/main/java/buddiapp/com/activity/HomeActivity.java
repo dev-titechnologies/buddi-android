@@ -40,15 +40,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.security.PublicKey;
 
 import buddiapp.com.Controller;
 import buddiapp.com.R;
@@ -67,7 +62,6 @@ import buddiapp.com.database.DatabaseHandler;
 import buddiapp.com.fcm.Config;
 import buddiapp.com.fcm.NotificationUtils;
 import buddiapp.com.services.LocationService;
-import buddiapp.com.timmer.Timer_Service;
 import buddiapp.com.utils.CircleImageView;
 import buddiapp.com.utils.CommonCall;
 import buddiapp.com.utils.ConnectivityReceiver;
@@ -75,8 +69,6 @@ import buddiapp.com.utils.DrawerLocker;
 import buddiapp.com.utils.NetworkCalls;
 import buddiapp.com.utils.Urls;
 
-import static buddiapp.com.Controller.mSocket;
-import static buddiapp.com.Controller.updateSocket;
 import static buddiapp.com.Settings.Constants.source_become_trainer;
 import static buddiapp.com.Settings.Constants.start_session;
 import static buddiapp.com.Settings.Constants.trainee_Data;
@@ -204,9 +196,9 @@ public class HomeActivity extends AppCompatActivity
 
         userImageView = (CircleImageView) hView.findViewById(R.id.userImageView);
         name = (TextView) hView.findViewById(R.id.name);
-        email = (TextView) hView.findViewById(R.id.email);
-        rating = (TextView) hView.findViewById(R.id.rating);
-        root_profile = (LinearLayout) hView.findViewById(R.id.root_profile);
+        email = hView.findViewById(R.id.email);
+        rating = hView.findViewById(R.id.rating);
+        root_profile = hView.findViewById(R.id.root_profile);
 
         root_profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -525,9 +517,9 @@ public class HomeActivity extends AppCompatActivity
 //
 //            trainerLocation = new LatLng(Double.parseDouble(slat), Double.parseDouble(slng));
 
-            Intent intentB = new Intent(getApplicationContext(), SessionReady.class);
-            startActivity(intentB);
-            finish();
+//            Intent intentB = new Intent(getApplicationContext(), SessionReady.class);
+//            startActivity(intentB);
+//            finish();
 
         }
     };
@@ -576,13 +568,7 @@ public class HomeActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
-        if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
-            updateSocket();
-            mSocket.connect();
-            startService(new Intent(getApplicationContext(), LocationService.class));
-            startService(new Intent(HomeActivity.this, Timer_Service.class));
 
-        }
 
     }
 

@@ -816,7 +816,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                     }else{
 //                        wallet.setText(response.getJSONObject("data").getString("walletBalance"));
                         PreferencesUtils.saveData(Constants.wallet,response.getJSONObject("data").getString("walletBalance"),getApplicationContext());
-                        amount = response.getJSONObject("data").getString("amountDeducted");
+                        amount = response.getJSONObject("data").getString("processAmount");
                     new RandomSelect().execute();
                         String walletString = "Wallet    $"+PreferencesUtils.getData(Constants.wallet,getApplicationContext(),"0");
                         CommonCall.setMenuTextColor(HomeActivity.menu,R.id.nav_wallet,walletString);

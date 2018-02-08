@@ -18,7 +18,13 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import buddiapp.com.Controller;
+import buddiapp.com.Settings.Constants;
+import buddiapp.com.Settings.PreferencesUtils;
 import buddiapp.com.utils.CommonCall;
+
+import static buddiapp.com.Controller.mSocket;
+import static buddiapp.com.Controller.updateSocket;
 
 /**
  * Created by root on 8/8/17.
@@ -163,6 +169,12 @@ public class LocationService extends Service implements
         Log.d(TAG, "Latitude:==" + mCurrentLocation.getLatitude() + "\n Longitude:==" + mCurrentLocation.getLongitude
                 ());
 //        CommonCall.chatConnect();
+        /*if (PreferencesUtils.getData(Constants.start_session, getApplicationContext(), "false").equals("true")) {
+        if(!Controller.mSocket.connected()){
+        updateSocket();
+        mSocket.connect();
+        }}*/
+       Log.e("scoket::", Controller.mSocket.connected()+"1");
         CommonCall.emitTrainerLocation(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
 //        LocationDBHelper.getInstance(this).insertLocationDetails(mLocationData);
     }
