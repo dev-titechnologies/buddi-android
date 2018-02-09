@@ -9,8 +9,8 @@ android {
         applicationId "buddiapp.com"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 5
-        versionName "1.4"
+        versionCode 6
+        versionName "1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

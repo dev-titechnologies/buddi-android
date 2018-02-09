@@ -149,7 +149,7 @@ public class CommonCall {
 
     public static void PrintLog(String s1, String s2) {
 
-        Log.e(s1, s2);
+//        Log.e(s1, s2);
 
     }
 
@@ -1099,7 +1099,7 @@ public static void postTwitter(String msg){
                     if(response.getString("message").equals("Cannot charge a customer that has no active card")){
                         @SuppressLint("RestrictedApi") final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.cancelDialog));
 
-                        builder.setMessage("You are not added your card details with buddi. Please add it in Payment method tab");
+                        builder.setMessage("You haven't added your card details with buddi. Please add it in Payment method tab");
                         builder.setCancelable(false);
                         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {

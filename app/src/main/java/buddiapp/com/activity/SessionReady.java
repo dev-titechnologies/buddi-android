@@ -1238,17 +1238,17 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
             try {
                 jObject = new JSONObject(jsonData[0]);
-                Log.e("ParserTask", jsonData[0].toString());
+                CommonCall.PrintLog("ParserTask", jsonData[0].toString());
                 DataParser parser = new DataParser();
-                Log.e("ParserTask", parser.toString());
+                CommonCall.PrintLog("ParserTask", parser.toString());
 
                 // Starts parsing data
                 routes = parser.parse(jObject);
-                Log.e("ParserTask", "Executing routes");
-                Log.e("ParserTask", routes.toString());
+                CommonCall.PrintLog("ParserTask", "Executing routes");
+                CommonCall.PrintLog("ParserTask", routes.toString());
 
             } catch (Exception e) {
-                Log.e("ParserTask", e.toString());
+                CommonCall.PrintLog("ParserTask", e.toString());
                 e.printStackTrace();
             }
             return routes;
@@ -1459,12 +1459,12 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
                     PreferencesUtils.saveData("data", date_time, getApplicationContext());
-//                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
+                    PreferencesUtils.saveData("hours", training_time + "", getApplicationContext());
 
-                    if (training_time == 40)
-                        PreferencesUtils.saveData("hours", "2", getApplicationContext());
-                    else
-                        PreferencesUtils.saveData("hours", "4", getApplicationContext());
+//                    if (training_time == 40)
+//                        PreferencesUtils.saveData("hours", "2", getApplicationContext());
+//                    else
+//                        PreferencesUtils.saveData("hours", "4", getApplicationContext());
 
 
                     startService(new Intent(SessionReady.this, Timer_Service.class));

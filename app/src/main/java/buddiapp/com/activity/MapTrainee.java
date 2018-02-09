@@ -140,7 +140,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
 */
-                        Toast.makeText(MapTrainee.this, "You haven't added your card details. Please add it in Payment method tab", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapTrainee.this, "Please wait while we check your card details", Toast.LENGTH_SHORT).show();
                         Intent payment = new Intent(getApplicationContext(), PaymentType.class);
 //                                payment.putExtra("from", "maptrainee");
 //                                payment.putExtra("result", true);
@@ -826,7 +826,7 @@ public class MapTrainee extends AppCompatActivity implements GoogleMap.InfoWindo
                     if(response.getString("message").equals("Cannot charge a customer that has no active card")){
                         @SuppressLint("RestrictedApi") final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(MapTrainee.this, R.style.cancelDialog));
 
-                        builder.setMessage("You are not added your card details with buddi. Please add it in Payment method tab");
+                        builder.setMessage("You haven't added your card details with buddi. Please add it in Payment method tab");
                         builder.setCancelable(false);
                         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {

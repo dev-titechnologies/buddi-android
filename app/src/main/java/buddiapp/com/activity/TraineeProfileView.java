@@ -79,7 +79,6 @@ public class TraineeProfileView extends AppCompatActivity {
         rbmale = (EditText) findViewById(R.id.male);
 
         userImageView = (CircleImageView) findViewById(R.id.userimageView);
-        placeLayout = (LinearLayout) findViewById(R.id.place_layout);
         imageTrainer = (LinearLayout) findViewById(R.id.image_trainer); // Trainer profile image View layout
         imageUser = (LinearLayout) findViewById(R.id.image_user); // user profile image View layout
         //****
@@ -88,7 +87,7 @@ public class TraineeProfileView extends AppCompatActivity {
         imageUser.setVisibility(View.VISIBLE);
         CommonCall.LoadImage(getApplicationContext(), PreferencesUtils.getData(Constants.user_image, getApplicationContext(), ""), userImageView, R.drawable.ic_account, R.drawable.ic_account);
 
-        placeLayout.setVisibility(View.VISIBLE);
+
 
         // load profile --->
 //            loadProfile();

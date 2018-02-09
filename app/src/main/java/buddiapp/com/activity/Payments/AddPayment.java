@@ -185,8 +185,18 @@ public class AddPayment extends AppCompatActivity {
                                 public void onSuccess(Token token) {
                                     // Send token to your server
 
+                                    if ((PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")))
+                                    {
+//                                        String id = response.getJSONObject("data").getString("id");
+                                        new updateStripeAcc(token.getId()).execute();
+                                    }
+                                    else {
 
-                                    new addCard(token.getId()).execute();
+//                                        CommonCall.hideLoader();
+//                                        finish();
+                                        new addCard(token.getId()).execute();
+
+                                    }
 
                                 }
 
@@ -270,17 +280,21 @@ public class AddPayment extends AppCompatActivity {
                 if (response.getInt(Constants.status) == 1) {
 
 
-//                    Toast.makeText(AddPayment.this, "Card Saved Applied Succesfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPayment.this, "Card Saved Applied Succesfully!", Toast.LENGTH_SHORT).show();
 
-
-                    if ((PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")))
-
-                        new updateStripeAcc().execute();
-                    else {
+//
+//                    if ((PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")))
+//                    {
+////                        String id = response.getJSONObject("data").getString("id");
+////                        new updateStripeAcc(id).execute();
+//                        new addCard(token.getId()).execute();
+//
+//                    }
+//                    else {
 
                         CommonCall.hideLoader();
                         finish();
-                    }
+//                    }
 
                 } else if (response.getInt(Constants.status) == 2) {
                     CommonCall.hideLoader();
@@ -319,11 +333,14 @@ public class AddPayment extends AppCompatActivity {
 
         String token;
 
+        public updateStripeAcc(String token)
+        {
+            this.token = token;
+        }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
 
         }
 
@@ -367,10 +384,13 @@ public class AddPayment extends AppCompatActivity {
                 if (response.getInt(Constants.status) == 1) {
 
 
-                    Toast.makeText(AddPayment.this, "Card Saved Applied Succesfully!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(AddPayment.this, "Card Saved Applied Succesfully!", Toast.LENGTH_SHORT).show();
+//
+//
+//                    finish();
+                    new addCard(token).execute();
 
 
-                    finish();
 
 
                 } else if (response.getInt(Constants.status) == 2) {
@@ -380,15 +400,12 @@ public class AddPayment extends AppCompatActivity {
                             .setAction("RETRY", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
-
                                     Snackbar snackbar1 = null;
 
                                     snackbar1 = Snackbar.make(root, "Loading", Snackbar.LENGTH_SHORT);
 
                                     snackbar1.show();
-                                    new addCard(token).execute();
-
+                                    new updateStripeAcc(token).execute();
                                 }
                             });
 

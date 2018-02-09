@@ -585,6 +585,10 @@ PreferencesUtils.saveData(Constants.clientToken,"cardsaved",getApplicationContex
             setResult(305, new Intent());
             finish();
         }
+        else if(getIntent().getExtras().getString("from").equals("noCadError")){
+            setResult(306, new Intent());
+            finish();
+        }
     }
 
     if(getIntent().hasExtra("result")) {

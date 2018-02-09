@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
+import buddiapp.com.utils.CommonCall;
+
 class SmsReceiver extends BroadcastReceiver {
     private OnSmsCatchListener<String> callback;
     private String phoneNumberFilter;
@@ -47,7 +49,7 @@ class SmsReceiver extends BroadcastReceiver {
             } // bundle is null
 
         } catch (Exception e) {
-            Log.e("SmsReceiver", "Exception smsReceiver" + e);
+            CommonCall.PrintLog("SmsReceiver", "Exception smsReceiver" + e);
         }
     }
 

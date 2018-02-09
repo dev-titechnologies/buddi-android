@@ -174,7 +174,7 @@ public class LocationService extends Service implements
         updateSocket();
         mSocket.connect();
         }}*/
-       Log.e("scoket::", Controller.mSocket.connected()+"1");
+        CommonCall.PrintLog("scoket::", Controller.mSocket.connected()+"1");
         CommonCall.emitTrainerLocation(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
 //        LocationDBHelper.getInstance(this).insertLocationDetails(mLocationData);
     }

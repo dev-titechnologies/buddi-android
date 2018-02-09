@@ -68,14 +68,14 @@ public class GPSTracker extends Service implements LocationListener {
                             LocationManager.NETWORK_PROVIDER,
                             MIN_TIME_BW_UPDATES,
                             MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                    Log.e("Network", "Network");
+                    CommonCall.PrintLog("Network", "Network");
                     if (locationManager != null) {
                         location = locationManager
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if (location != null) {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
-                            Log.e("location",latitude+" "+longitude);
+                            CommonCall.PrintLog("location",latitude+" "+longitude);
                         }
                     }
                 }
@@ -86,14 +86,14 @@ public class GPSTracker extends Service implements LocationListener {
                                 LocationManager.GPS_PROVIDER,
                                 MIN_TIME_BW_UPDATES,
                                 MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        Log.e("GPS Enabled", "GPS Enabled");
+                        CommonCall.PrintLog("GPS Enabled", "GPS Enabled");
                         if (locationManager != null) {
                             location = locationManager
                                     .getLastKnownLocation(LocationManager.GPS_PROVIDER);
                             if (location != null) {
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
-                                Log.e("location",latitude+" "+longitude);
+                                CommonCall.PrintLog("location",latitude+" "+longitude);
                             }
                         }
                     }

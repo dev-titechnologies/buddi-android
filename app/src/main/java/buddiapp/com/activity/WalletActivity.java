@@ -54,7 +54,7 @@ public class WalletActivity extends AppCompatActivity {
     LinearLayout walletTrainee;
     LinearLayout walletTrainer;
     int zeroBalanceResultCode = 303,
-    noActiveCardCode = 305;
+    noActiveCardCode = 305, noCadError = 306;
     SlideLayout slider;
     View arrow;
     Slidr slidr;
@@ -194,6 +194,12 @@ public class WalletActivity extends AppCompatActivity {
             }else{
                 Toast.makeText(WalletActivity.this, "No wallet balance to withdraw!", Toast.LENGTH_SHORT).show();
                 slider.reset();
+            }
+        }else if(resultCode == 306){
+            if(slidr.getCurrentValue()>0)
+            new AddToWallet().execute();
+            else {
+                Toast.makeText(this, "Now you can add money to your wallet.", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -360,7 +366,7 @@ public class WalletActivity extends AppCompatActivity {
                     }
 
                 }else if (response.getInt(Constants.status) == 2) {
-                    if(response.getString("message").equals("Cannot charge a customer that has no active card")){
+                    if(response.getString("status_type").equals("StripeCardError")){
                         @SuppressLint("RestrictedApi") final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(WalletActivity.this, R.style.cancelDialog));
 
                         builder.setMessage("You have not added your card details with buddi. Please add it in Payment method tab");
@@ -368,7 +374,9 @@ public class WalletActivity extends AppCompatActivity {
                         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
 //                            alert.dismiss();
-
+                                Intent payment = new Intent(getApplicationContext(), PaymentType.class);
+                                payment.putExtra("from", "noCadError");
+                                startActivityForResult(payment, noCadError);
                             }
                         });
                         final AlertDialog alert = builder.create();
@@ -490,7 +498,6 @@ public class WalletActivity extends AppCompatActivity {
                         Intent payment = new Intent(getApplicationContext(), PaymentType.class);
                         payment.putExtra("from", "noActiveCard");
                         startActivityForResult(payment, noActiveCardCode);
-
                     }
                 } else if (response.getInt(Constants.status) == 3) {
                     Toast.makeText(getApplicationContext(), response.getString("message"), Toast.LENGTH_SHORT).show();

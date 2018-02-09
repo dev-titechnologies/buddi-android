@@ -131,6 +131,24 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+
+        if(!Controller.mSocket.connected()){
+            Snackbar snackbar = Snackbar
+                    .make(root, "Connection lost", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("RETRY", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            LocalBroadcastManager.getInstance(ChatActivity.this).registerReceiver(
+                                    chatReceiver , new IntentFilter("SOCKET_BUDDI_CHAT")
+                            );
+//
+                            new getMessages().execute();
+
+                        }
+                    });
+
+            snackbar.show();
+        }
         LocalBroadcastManager.getInstance(this).registerReceiver(
                chatReceiver , new IntentFilter("SOCKET_BUDDI_CHAT")
         );
@@ -179,6 +197,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         recyclerChat.setLayoutManager(linearLayoutManager);
         adapter.notifyDataSetChanged();
 //        recyclerChat.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(
+                chatReceiver );
     }
 
     @Override
