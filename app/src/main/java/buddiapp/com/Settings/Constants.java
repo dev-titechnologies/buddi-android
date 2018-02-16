@@ -127,4 +127,9 @@ public class Constants {
 
     public static String trainer_Profile_Data = "trainer_Profile_Data";
     public static String trainee_Profile_Data = "trainee_Profile_Data";
+
+    public static String settings_duration = "settings_duration";
+    public static String settings_duration_name = "settings_duration_name";
+
+    public static String extendJsonArray = "extendJsonArray";
 }

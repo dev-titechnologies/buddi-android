@@ -1,1 +1,13 @@
 Buddy Android Repo
+
+/******* 16-02-2017 **********/
+
+Base url changed to local url, for testing the dynamic session duration.
+For dynamic session, we used an api to collect 2 arrays
+one is for normal session, another is for extended session duration.
+The second array (extended session array) is saved in both choose specification class and also in
+settings fragment.
+Time interval changed for both trainee and trainer for 2 minutes(120000 seconds);
+* In session ready ---- Completing session Please wait.
+* in Commoncall ------- handler.postDelayed(runnable, 120000);
+*

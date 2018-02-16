@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,6 +55,7 @@ import buddiapp.com.Settings.Constants;
 import buddiapp.com.Settings.PreferencesUtils;
 import buddiapp.com.activity.HomeActivity;
 import buddiapp.com.activity.WelcomeActivity;
+import buddiapp.com.adapter.ExtendedListAdapters;
 import buddiapp.com.services.LocationService;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -149,7 +152,7 @@ public class CommonCall {
 
     public static void PrintLog(String s1, String s2) {
 
-//        Log.e(s1, s2);
+        Log.e(s1, s2);
 
     }
 
@@ -455,7 +458,7 @@ public class CommonCall {
             }
         });
     }
-
+public static String durationTime="";
 
     public static void intPayment(final Activity activity, final String sessionTime) {
 
@@ -546,7 +549,7 @@ public class CommonCall {
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         // do nothing
-                                        picSessionTimeDialog(activity);
+//                                        picSessionTimeDialog(activity);
                                     }
                                 })
                                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -568,6 +571,7 @@ public class CommonCall {
         }
 
     }
+
 
     public static class checkoutforExtendSession extends AsyncTask<String, String, String> {
 
@@ -644,9 +648,20 @@ public class CommonCall {
         }
 
     }
+    static JSONArray extendArray;
+    public static Dialog dialog= null;
+    public static void  picSessionTimeDialog(final Activity activity) {
 
-    public static void picSessionTimeDialog(final Activity activity) {
-        final Dialog dialog = new Dialog(activity);
+        try {
+            extendArray = new JSONArray(PreferencesUtils.getData(Constants.extendJsonArray,activity,""));
+            if(extendArray.length()>0&& extendArray.length()==1){
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         // Include dialog.xml file
         dialog.setContentView(R.layout.session_time_pic_dialog);
@@ -677,10 +692,12 @@ public class CommonCall {
             }
         };
 
+        ListView extendList = dialog.findViewById(R.id.duration_list);
+        ExtendedListAdapters extendedListAdapters = new ExtendedListAdapters(extendArray,activity);
+        extendList.setAdapter(extendedListAdapters);
+        extendList.setScrollContainer(false);
 
-
-
-        TextView fourty = (TextView) dialog.findViewById(R.id.fourty);
+        /*TextView fourty = (TextView) dialog.findViewById(R.id.fourty);
         TextView onehour = (TextView) dialog.findViewById(R.id.onehour);
         fourty.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -704,9 +721,9 @@ public class CommonCall {
                 dialog.dismiss();
                 intPayment(activity, "60");
             }
-        });
+        });*/
 
-        handler.postDelayed(runnable, 10000);
+        handler.postDelayed(runnable, 120000);
 
     }
 
@@ -747,8 +764,8 @@ public class CommonCall {
                     case DialogInterface.BUTTON_POSITIVE:
                         //Yes button clicked
 //                        handler.removeCallbacks(runnable);
-//                        picSessionTimeDialog(activity);
-                        extendSessionTask(activity);
+                        picSessionTimeDialog(activity);
+//                        extendSessionTask(activity);
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -1017,9 +1034,10 @@ public static void postTwitter(String msg){
                 "kMGTPE".charAt(exp-1));
     }
 
-    public static void extendSessionTask(Activity activity){
-        if(Float.parseFloat(PreferencesUtils.getData(Constants.wallet,activity,"0"))>0){
-            new ExtendWalletCheckOut(activity).execute();
+    public static void extendSessionTask(Activity activity, int duration, int amount){
+
+            if(Float.parseFloat(PreferencesUtils.getData(Constants.wallet,activity,"0"))>0){
+            new ExtendWalletCheckOut(activity,String.valueOf(duration)).execute();
         }else{
             /*@SuppressLint("RestrictedApi") final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.cancelDialog));
 
@@ -1033,7 +1051,7 @@ public static void postTwitter(String msg){
             final AlertDialog alert = builder.create();
             alert.show();*/
             if (PreferencesUtils.getData(Constants.clientToken, activity, "").length() > 1) {
-                new ExtendWalletCheckOut(activity).execute();
+                new ExtendWalletCheckOut(activity, String.valueOf(duration)).execute();
             }else{
                 Toast.makeText(activity, "You have no active payment method to proceed", Toast.LENGTH_SHORT).show();
 
@@ -1052,8 +1070,10 @@ public static void postTwitter(String msg){
     public static class ExtendWalletCheckOut extends AsyncTask<String, String, String> {
         JSONObject reqData = new JSONObject();
         Activity activity;
-        public  ExtendWalletCheckOut( Activity activity){
+        String duration="";
+        public  ExtendWalletCheckOut( Activity activity, String duration){
             this.activity = activity;
+            this.duration = duration;
         }
         @Override
         protected void onPreExecute() {
@@ -1065,7 +1085,7 @@ public static void postTwitter(String msg){
         protected String doInBackground(String... strings) {
             try {
 
-                reqData.put("training_time", "15");
+                reqData.put("training_time", duration);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1093,7 +1113,7 @@ public static void postTwitter(String msg){
 
                         String walletString = "Wallet    $"+PreferencesUtils.getData(Constants.wallet,activity,"0");
                         CommonCall.setMenuTextColor(HomeActivity.menu,R.id.nav_wallet,walletString);
-                        new extendSession(activity, "", PreferencesUtils.getData(Constants.bookid, activity, ""), "15").execute();
+                        new extendSession(activity, "", PreferencesUtils.getData(Constants.bookid, activity, ""), durationTime).execute();
                     }
                 }else if (response.getInt(Constants.status) == 2) {
                     if(response.getString("message").equals("Cannot charge a customer that has no active card")){
@@ -1111,6 +1131,13 @@ public static void postTwitter(String msg){
                         alert.show();
                     }else{
                         Toast.makeText(activity, response.getString("message"), Toast.LENGTH_SHORT).show();
+                    // any type of card error--> complete the previous session
+                        String bookid = PreferencesUtils.getData(Constants.bookid, activity, "");
+
+                        PreferencesUtils.saveData(Constants.flag_rating, "true", activity);
+
+                        new CommonCall.timerUpdate(activity, "complete", bookid, "").execute();
+
                     }
                 } else if (response.getInt(Constants.status) == 3) {
                     Toast.makeText(activity, response.getString("message"), Toast.LENGTH_SHORT).show();
@@ -1163,7 +1190,7 @@ public static void postTwitter(String msg){
 
                     String walletString = "Wallet    $"+PreferencesUtils.getData(Constants.wallet,activity,"0");
                     CommonCall.setMenuTextColor(HomeActivity.menu,R.id.nav_wallet,walletString);
-                    new ExtendWalletCheckOut(activity).execute();
+                    new ExtendWalletCheckOut(activity, durationTime).execute();
                 }else if (response.getInt(Constants.status) == 2) {
                     if(response.getString("message").equals("Cannot charge a customer that has no active card")){
                         @SuppressLint("RestrictedApi") final AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.cancelDialog));
@@ -1192,7 +1219,7 @@ public static void postTwitter(String msg){
         }
     }
 
-/****************  Spannable string              **************/
+/****************  Spannable string      **************/
 
 public static void setMenuTextColor(Menu menu, int menuResource, String menuTextResource) {
     int flag = Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
@@ -1208,6 +1235,4 @@ public static void setMenuTextColor(Menu menu, int menuResource, String menuText
 
     item.setTitle(builder);
 }
-
-
 }

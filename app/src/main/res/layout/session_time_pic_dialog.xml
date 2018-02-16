@@ -27,42 +27,10 @@
         android:orientation="vertical"
         android:id="@+id/duration"
         android:background="@color/ash">
-        <android.support.v7.widget.CardView
+        <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small"
-            android:layout_marginBottom="@dimen/small"
-            android:layout_marginRight="@dimen/medium"
-            android:layout_marginLeft="@dimen/medium"
-            android:elevation="10dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/medium"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:id="@+id/fourty"
-                android:background="@color/white"
-                android:text="40 Minutes"/>
-        </android.support.v7.widget.CardView>
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small"
-            android:layout_marginBottom="@dimen/medium"
-            android:layout_marginRight="@dimen/medium"
-            android:layout_marginLeft="@dimen/medium"
-            android:elevation="10dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/medium"
-                android:id="@+id/onehour"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:background="@color/white"
-                android:text="1 Hour"/>
-        </android.support.v7.widget.CardView>
+            android:id="@+id/duration_list"/>
     </LinearLayout>
 
 

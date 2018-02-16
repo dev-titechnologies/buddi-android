@@ -48,7 +48,7 @@ public class RatingDialog extends Dialog {
 //        getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         setContentView(R.layout.dialog_rating);
         setCancelable(false);
-        userImage = (ImageView) findViewById(R.id.image);
+        userImage =  findViewById(R.id.image);
         name = (TextView) findViewById(R.id.name);
         userType = (TextView) findViewById(R.id.user_type);
         rating = (RatingBar) findViewById(R.id.rating);
@@ -58,7 +58,7 @@ public class RatingDialog extends Dialog {
         if(PreferencesUtils.getData(Constants.user_type,context,"").equals("trainee")){
 
         if(PreferencesUtils.getData(Constants.trainer_image,context,"").length()>1)
-            CommonCall.LoadImage(context,PreferencesUtils.getData(Constants.trainer_image,context,""),userImage,R.drawable.ic_account,R.drawable.ic_account);
+            CommonCall.LoadImage(context,PreferencesUtils.getData(Constants.trainer_image,context,""),userImage,R.drawable.default_avata,R.drawable.default_avata);
         else
             userImage.setImageResource(R.drawable.ic_account);
 
@@ -70,7 +70,7 @@ public class RatingDialog extends Dialog {
             userType.setText("Trainee");
 
             if(PreferencesUtils.getData(Constants.trainee_image,context,"").length()>1)
-             CommonCall.LoadImage(context,PreferencesUtils.getData(Constants.trainee_image,context,""),userImage,R.drawable.ic_account,R.drawable.ic_account);
+             CommonCall.LoadImage(context,PreferencesUtils.getData(Constants.trainee_image,context,""),userImage,R.drawable.default_avata,R.drawable.default_avata);
          else
              userImage.setImageResource(R.drawable.ic_account);
         }

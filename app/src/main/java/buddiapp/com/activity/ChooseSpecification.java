@@ -28,6 +28,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,17 +54,20 @@ import buddiapp.com.R;
 import buddiapp.com.Settings.Constants;
 import buddiapp.com.Settings.PreferencesUtils;
 import buddiapp.com.activity.Fragment.HomeCategory;
+import buddiapp.com.adapter.DurationAdapter;
 import buddiapp.com.utils.CommonCall;
 import buddiapp.com.utils.NetworkCalls;
 import buddiapp.com.utils.Urls;
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
-public class ChooseSpecification extends AppCompatActivity {
-    int sessionDuration = 0;
+public class ChooseSpecification extends AppCompatActivity implements DurationAdapter.onDurationSelectedListener {
+    public static int sessionDuration = 0;
     String sgender = "", prefAddress = "", pick_location;
     LinearLayout duration, gender, location;
     TextView session, trainerGender;
     TextView locationPref, fourty, hour, male, female, noPreference, maddress;
     int id = 0, ids = 0, id1 = 0;
+    boolean taskExecuted = false;
     Animation a, b, c;
     Button next;
     private static final int PLACE_PICKER_REQUEST = 1;
@@ -75,7 +79,9 @@ public class ChooseSpecification extends AppCompatActivity {
 
     Boolean releaseForm = false;
     FrameLayout root;
-
+    ListView durationList;
+    public MaterialProgressBar materialProgressBar;
+    DurationAdapter durationAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,15 +96,16 @@ public class ChooseSpecification extends AppCompatActivity {
         gender = (LinearLayout) findViewById(R.id.gender);
         session = (TextView) findViewById(R.id.session);
         trainerGender = (TextView) findViewById(R.id.trainer_gender);
-        fourty = (TextView) findViewById(R.id.thirty);
-        hour = (TextView) findViewById(R.id.hour);
         male = (TextView) findViewById(R.id.male);
         female = (TextView) findViewById(R.id.female);
         next = (Button) findViewById(R.id.next);
         noPreference = (TextView) findViewById(R.id.no_preference);
         locationPref = (TextView) findViewById(R.id.locaton_preference);
         location = (LinearLayout) findViewById(R.id.locationSettings);
-        maddress = (TextView) findViewById(R.id.address);
+        maddress = findViewById(R.id.address);
+        durationList = findViewById(R.id.duration_list);
+        materialProgressBar = findViewById(R.id.progress_bar);
+
 // ************************Get Current location*********************
         mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -126,16 +133,17 @@ public class ChooseSpecification extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (id == 0) {
-                    session.setText("Choose Session Duration" + getTextSession());
+//                    session.setText("Choose Session Duration" + getTextSession());
                     id = 1;
                     b = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadein);
                     b.reset();
                     session.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_sign_to_navigate, 0);
                     duration.setVisibility(View.VISIBLE);
                     duration.startAnimation(b);
+                    if(!taskExecuted)
+                    new getDurationTask().execute();
 
                 } else
-
                 {
                     id = 0;
                     b.reset();
@@ -199,7 +207,7 @@ public class ChooseSpecification extends AppCompatActivity {
             }
         });
 
-        fourty.setOnClickListener(new View.OnClickListener() {
+        /*fourty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 check1 = true;
@@ -230,7 +238,7 @@ public class ChooseSpecification extends AppCompatActivity {
                 duration.setVisibility(View.GONE);
 
             }
-        });
+        });*/
         male.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -457,6 +465,18 @@ public class ChooseSpecification extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onDurationChanged(String durationName, int duration) {
+        check1 = true;
+        if (check2 && check3)
+            next.setVisibility(View.VISIBLE);
+        id = 0;
+        b.reset();
+        session.setText("Choose Session Duration" + "\t\t\t\t\t"+durationName);
+
+    }
+
+
     class SearchTrainer extends AsyncTask<String, String, String> {
         String response = "";
         JSONObject reqData = new JSONObject();
@@ -624,6 +644,27 @@ public class ChooseSpecification extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        if(durationAdapter!=null)
+      /* durationAdapter.onSetDurationChanged(new DurationAdapter.onDurationSelectedListener() {
+            @Override
+            public void onDurationChanged(String durationName, int duration) {
+
+                check1 = true;
+                if (check2 && check3)
+                    next.setVisibility(View.VISIBLE);
+
+//                id = 0;
+//                b.reset();
+                session.setText("Choose Session Duration" + "\t\t\t\t\t"+durationName );
+                session.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
+
+            }
+
+        });*/
+    }
 
     @Override
     public void onBackPressed() {
@@ -711,5 +752,74 @@ public class ChooseSpecification extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    public class getDurationTask extends AsyncTask<String, String, String> implements DurationAdapter.onDurationSelectedListener {
+        String response1;
+        JSONObject jsonObject = new JSONObject();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            materialProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            response1 = NetworkCalls.POST(Urls.getSessionDurationURL(),"");
+            return response1;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            materialProgressBar.setVisibility(View.GONE);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                if(jsonObject.getInt("status")==1){
+                    taskExecuted = true;
+                    JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONArray("normalSession");
+                    if(jsonArray.length()>0){
+                    durationAdapter = new DurationAdapter(jsonArray, ChooseSpecification.this, this);
+                    durationList.setAdapter(durationAdapter);
+                    durationList.setScrollContainer(false);
+                    }
+                    else{
+
+                    }
+                    JSONArray extendjsonArray = jsonObject.getJSONObject("data").getJSONArray("extendSession");
+                    if(extendjsonArray.length()>0){
+                        PreferencesUtils.saveData(Constants.extendJsonArray,extendjsonArray.toString(),getApplicationContext());
+                    }
+
+                }else if(jsonObject.getInt("status")==2){
+                    Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                }else if(jsonObject.getInt("status")==3){
+                    Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    CommonCall.sessionout(getApplicationContext());
+                }else{
+                    Toast.makeText(getApplicationContext(), "Something went wrong!", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                CommonCall.hideLoader();
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        public void onDurationChanged(String durationName, int durationTime) {
+            check1 = true;
+            if (check2 && check3)
+                next.setVisibility(View.VISIBLE);
+
+            id = 0;
+            b.reset();
+            session.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_right_arrow, 0);
+            duration.setVisibility(View.GONE);
+
+            session.setText("Choose Session Duration" + "\t\t\t\t\t"+durationName );
+
+        }
     }
 }

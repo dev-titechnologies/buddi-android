@@ -4,15 +4,13 @@ package buddiapp.com.activity.Fragment;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +20,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -48,12 +46,20 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import buddiapp.com.R;
 import buddiapp.com.Settings.Constants;
 import buddiapp.com.Settings.PreferencesUtils;
 import buddiapp.com.activity.SessionReady;
 import buddiapp.com.activity.SettingsCategory;
+import buddiapp.com.adapter.DurationAdapter;
 import buddiapp.com.utils.CommonCall;
+import buddiapp.com.utils.NetworkCalls;
+import buddiapp.com.utils.Urls;
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 
 /**
@@ -70,6 +76,11 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
     Button next;
     Boolean check1=false, check2=false;
     private static final int PLACE_PICKER_REQUEST = 1;
+
+    boolean taskExecuted = false;
+    ListView durationList;
+    public MaterialProgressBar materialProgressBar;
+    DurationAdapter durationAdapter;
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
     TwitterLoginButton loginButton;
@@ -96,6 +107,8 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
         loginButtonfb.setPublishPermissions("publish_actions");
         socialMediaShare = view.findViewById(R.id.socialMedia_preference);
         social_root = view.findViewById(R.id.social_root);
+        durationList =  view.findViewById(R.id.duration_list);
+        materialProgressBar = view.findViewById(R.id.progress_bar);
 //        loginButtonfb.setReadPermissions("email");
 
         // If using in a fragment
@@ -228,8 +241,6 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
         maddress = (TextView) view.findViewById(R.id.address);
         duration = (LinearLayout) view.findViewById(R.id.duration);
         gender = (LinearLayout) view.findViewById(R.id.gender);
-        fourty = (TextView) view.findViewById(R.id.thirty);
-        hour = (TextView) view.findViewById(R.id.hour);
         male = (TextView) view.findViewById(R.id.male);
         female = (TextView) view.findViewById(R.id.female);
         next= (Button) view.findViewById(R.id.next);
@@ -331,6 +342,9 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
                     sessionPref.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down_sign_to_navigate, 0);
                     duration.setVisibility(View.VISIBLE);
                     duration.startAnimation(b);
+                    if(!taskExecuted)
+                        new getDurationTask().execute();
+
 
                 } else
 
@@ -385,13 +399,9 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
             }
         });
 
-        fourty.setOnClickListener(new View.OnClickListener() { @Override
-        public void onClick(View view) {check1 = true;setFourty();}});
-        hour.setOnClickListener(new View.OnClickListener() {                                           @Override
-        public void onClick(View view) {
-            check1 = true;setHour();
-        }
-        });
+//        fourty.setOnClickListener(new View.OnClickListener() { @Override
+//        public void onClick(View view) {check1 = true;setFourty();}});
+
         male.setOnClickListener(new View.OnClickListener() {                                           @Override
         public void onClick(View view) {
             check2 = true;setMale();
@@ -406,6 +416,7 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
             }
         });
 
+        PreferencesUtils.saveData("SettingS","true",getActivity());
 
         // Inflate the layout for this fragment
         return view;
@@ -423,15 +434,7 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
     }
     private void loadScreen() {
 //        if(PreferencesUtils.)
-        if(PreferencesUtils.getData(Constants.training_duration,getActivity(),"").equals("40")){
-            setFourty();
-            id = 1;
-            duration.setVisibility(View.VISIBLE);
-        }else if(PreferencesUtils.getData(Constants.training_duration,getActivity(),"").equals("60")){
-            setHour();
-            id = 1;
-            duration.setVisibility(View.VISIBLE);
-        }
+
         if(PreferencesUtils.getData(Constants.trainer_gender,getActivity(),"").equals("male")){
             setMale();
             ids = 1;
@@ -575,5 +578,66 @@ public class Settings extends Fragment implements GoogleApiClient.OnConnectionFa
     public void onStop() {
         super.onStop();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(refresh);
+    }
+
+
+    public class getDurationTask extends AsyncTask<String, String, String> implements DurationAdapter.onDurationSelectedListener {
+        String response1;
+        JSONObject jsonObject = new JSONObject();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            materialProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            response1 = NetworkCalls.POST(Urls.getSessionDurationURL(),"");
+            return response1;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            materialProgressBar.setVisibility(View.GONE);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                if(jsonObject.getInt("status")==1){
+                    taskExecuted = true;
+                    JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONArray("normalSession");
+                    if(jsonArray.length()>0){
+                        durationAdapter = new DurationAdapter(jsonArray, getActivity(), this);
+                        durationList.setAdapter(durationAdapter);
+                        durationList.setScrollContainer(false);
+                    }
+                    else{
+
+                    }
+                    JSONArray extendjsonArray = jsonObject.getJSONObject("data").getJSONArray("extendSession");
+                    if(extendjsonArray.length()>0){
+                        PreferencesUtils.saveData(Constants.extendJsonArray,extendjsonArray.toString(),getActivity());
+                    }
+
+                }else if(jsonObject.getInt("status")==2){
+                    Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                }else if(jsonObject.getInt("status")==3){
+                    Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    CommonCall.sessionout(getActivity());
+                }else{
+                    Toast.makeText(getActivity(), "Something went wrong!", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                CommonCall.hideLoader();
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        public void onDurationChanged(String durationName, int duration) {
+            PreferencesUtils.saveData(Constants.settings_duration, String.valueOf(duration),getActivity());
+            PreferencesUtils.saveData(Constants.settings_duration_name, durationName,getActivity());
+            PreferencesUtils.saveData(Constants.training_duration, String.valueOf(duration),getActivity());
+        }
     }
 }

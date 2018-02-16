@@ -13,6 +13,10 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -99,7 +103,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     String name;
 
     LatLng trainerLocation;
-
+    MediaPlayer mMediaPlayer;
 
     LinearLayout start, cancel, profile, message;
     CircleImageView profileactionIcon;
@@ -109,7 +113,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
     Double pick_latitude, pick_longitude;
     String pick_location;
 
-
+    AudioManager audioManager;
     public static boolean cancelFlag = false;
 
     @Override
@@ -244,6 +248,17 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 //        LoadmapTask();
 
+
+        Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        mMediaPlayer = new MediaPlayer();
+        try {
+            mMediaPlayer.setDataSource(this, alert);
+            audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -912,6 +927,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
                 public void onReceive(Context context, Intent intent) {
 
 
+
 //                        if (!Timer_Service.stopFlag)
 
                     {
@@ -922,7 +938,17 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
 
                             CommonCall.showExtendBokingDialog(SessionReady.this);
+                            /*try {
+                                if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
+                                    mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+                                    mMediaPlayer.setLooping(true);
 
+                                    mMediaPlayer.prepare();
+
+                                    mMediaPlayer.start();
+                                }} catch (IOException e) {
+                                e.printStackTrace();
+                            }*/
 
                         } else {
 
@@ -934,7 +960,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 
                             CommonCall.showLoader(SessionReady.this, "Completing session Please wait.");
                             if (PreferencesUtils.getData(Constants.user_type, getApplicationContext(), "").equals("trainer")) {
-                                Count = new android.os.CountDownTimer(60000, 1000) {
+                                Count = new android.os.CountDownTimer(120000, 1000) {
                                     public void onTick(long millisUntilFinished) {
 //                                textic.setText("Time Left: " + millisUntilFinished / 1000);
 
@@ -1464,7 +1490,7 @@ public class SessionReady extends AppCompatActivity implements GoogleMap.InfoWin
 //                    if (training_time == 40)
 //                        PreferencesUtils.saveData("hours", "2", getApplicationContext());
 //                    else
-//                        PreferencesUtils.saveData("hours", "4", getApplicationContext());
+//                        PreferencesUtils.saveData("hours", "2", getApplicationContext());
 
 
                     startService(new Intent(SessionReady.this, Timer_Service.class));

@@ -13,10 +13,10 @@ public class Urls {
 //    Demo API URL
 //    public static String BASEURL = "http://104.236.235.46:9002";
 
-  public static String BASEURL = "http://buddiapi.buddiadmin.com";
+//  public static String BASEURL = "http://buddiapi.buddiadmin.com";
 
 
-//    public static String BASEURL = "http://192.168.1.60:9002";
+    public static String BASEURL = "http://192.168.1.60:9002";
 
 //  public static String BASEURL= "http://192.168.1.20:9002";
 
@@ -98,6 +98,12 @@ public class Urls {
     public static String getWalletHistory ="/wallet/walletHistory";
 
     public static String getWalletWithdrawal ="/wallet/walletWithdrawal ";
+
+    public static String getSessionDuration ="/session/listSessions";
+
+    public static String getSessionDurationURL() {
+        return BASEURL + getSessionDuration;
+    }
 
     public static String getWalletWithdrawalURL() {
         return BASEURL + getWalletWithdrawal;

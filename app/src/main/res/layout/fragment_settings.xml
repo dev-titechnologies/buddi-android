@@ -5,7 +5,7 @@
     tools:context="buddiapp.com.activity.Fragment.Settings">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:fillViewport="true">
 <LinearLayout
     android:layout_width="match_parent"
@@ -203,44 +203,17 @@
         android:visibility="gone"
         android:id="@+id/duration"
         android:background="@color/ash">
-        <android.support.v7.widget.CardView
+        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/large"
+            android:id="@+id/progress_bar"/>
+        <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/medium"
-            android:layout_marginBottom="@dimen/small"
-            android:layout_marginRight="@dimen/medium"
-            android:layout_marginLeft="@dimen/medium"
-            android:elevation="10dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/medium"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:id="@+id/thirty"
-                android:onClick="setThirty()"
-                android:background="@color/white"
-                android:text="40 Minutes"/>
-        </android.support.v7.widget.CardView>
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small"
-            android:layout_marginBottom="@dimen/medium"
-            android:layout_marginRight="@dimen/medium"
-            android:layout_marginLeft="@dimen/medium"
-            android:elevation="10dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/medium"
-                android:id="@+id/hour"
-                android:textColor="@color/black"
-                android:onClick="setHour()"
-                android:gravity="center"
-                android:background="@color/white"
-                android:text="1 Hour"/>
-        </android.support.v7.widget.CardView>
+            android:nestedScrollingEnabled="true"
+            android:id="@+id/duration_list">
+        </ListView>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
