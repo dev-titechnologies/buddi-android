@@ -12,14 +12,30 @@
         android:layout_marginRight="@dimen/medium"
         android:layout_marginLeft="@dimen/medium"
         android:elevation="10dp">
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/layout">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:padding="@dimen/medium"
-            android:gravity="center"
+            android:layout_centerInParent="true"
             android:textColor="@color/black"
-            android:id="@+id/text_view"
+            android:id="@+id/text_view_name"
             android:background="@color/white"
-            android:text="40 Minutes    24$"/>
+            android:text="40 Minutes"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/medium"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/grey"
+                android:id="@+id/text_view_cost"
+                android:background="@color/white"
+                android:text=" 24$"
+                android:layout_marginRight="@dimen/medium"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

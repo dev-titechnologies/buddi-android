@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -54,20 +55,22 @@ public class DurationAdapter extends BaseAdapter {
         view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.duration_list_item, viewGroup, false);
         view.setTag(holder);
         holder = new CustomViewHolder();
-        holder.showText = view.findViewById(R.id.text_view);
+        holder.showTextName = view.findViewById(R.id.text_view_name);
+        holder.showTextCost = view.findViewById(R.id.text_view_cost);
+        holder.item = view.findViewById(R.id.layout);
         try {
             JSONObject jsonObject = dataArray.getJSONObject(i);
-            holder.showText.setTag(i);
+            holder.item.setTag(i);
 
-            holder.showText.setText(jsonObject.getString("session_name")+"\t \t \t \t"+
-            "$"+jsonObject.getString("session_cost"));
+            holder.showTextName.setText(jsonObject.getString("session_name"));
+            holder.showTextCost.setText(jsonObject.getString("session_cost"));
 
             if(selected_id.size()>0 && selected_id.contains(i+"")){
-                holder.showText.setTextColor(activity.getResources().getColor(R.color.white));
-                holder.showText.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimary));
+                holder.showTextName.setTextColor(activity.getResources().getColor(R.color.white));
+                holder.item.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimary));
             }else{
-                holder.showText.setTextColor(activity.getResources().getColor(R.color.black));
-                holder.showText.setBackgroundColor(activity.getResources().getColor(R.color.white));
+                holder.showTextName.setTextColor(activity.getResources().getColor(R.color.black));
+                holder.item.setBackgroundColor(activity.getResources().getColor(R.color.white));
             }
 
            /*if(PreferencesUtils.getData("SettingS",activity,"false").equals("true")){
@@ -81,7 +84,7 @@ public class DurationAdapter extends BaseAdapter {
                 }
             }*/
 
-            holder.showText.setOnClickListener(new View.OnClickListener() {
+            holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     selected_id.clear();
@@ -118,6 +121,7 @@ public class DurationAdapter extends BaseAdapter {
     }
 
     public class CustomViewHolder {
-        TextView showText;
+        TextView showTextName, showTextCost;
+        RelativeLayout item;
     }
 }
